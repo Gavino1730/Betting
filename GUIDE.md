@@ -17,17 +17,39 @@ A full-stack betting platform with React frontend and Express.js backend, using 
 
 ## ⚡ Quick Start (Local)
 
+### Prerequisites
+- Node.js 14+ installed
+- npm installed
+
 ### Install & Run
 
-**Windows:**
+1. **Install dependencies:**
 ```bash
-./startup.bat
+npm install
+cd client
+npm install
+cd ..
 ```
 
-**Mac/Linux:**
+2. **Create `.env` file** (in root directory):
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+3. **Start backend (Terminal 1):**
 ```bash
-chmod +x startup.sh
-./startup.sh
+npm run dev
+```
+
+4. **Start frontend (Terminal 2):**
+```bash
+npm run client
 ```
 
 Opens automatically on http://localhost:3000
@@ -41,6 +63,10 @@ Opens automatically on http://localhost:3000
 **Admin:**
 - Username: `admin`
 - Password: `12345`
+
+**Or use startup scripts:**
+- Windows: `./startup.bat`
+- Mac/Linux: `chmod +x startup.sh && ./startup.sh`
 
 ---
 
@@ -105,21 +131,27 @@ Exit Node:
 
 ### Step 4: Create `.env` File (2 minutes)
 
-Create `.env` file in root directory:
+Create `.env` file in **root directory** (same level as `package.json`):
 
 ```env
-# From Supabase Settings > API
+# Supabase Configuration
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=eyJ...your-anon-key-here
 SUPABASE_SERVICE_ROLE_KEY=eyJ...your-service-role-key-here
 
-# Create a random string
-JWT_SECRET=your-super-secret-key-12345
-
-# Local development
+# Server Configuration  
+PORT=5000
 NODE_ENV=development
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+
+# Frontend Configuration
 REACT_APP_API_URL=http://localhost:5000/api
 ```
+
+**Important:**
+- Keep `.env` file **secret** (already in `.gitignore`)
+- Change `JWT_SECRET` in production
+- Use your actual Supabase values
 
 ### Step 5: Test Locally
 
@@ -128,11 +160,16 @@ REACT_APP_API_URL=http://localhost:5000/api
 npm run dev
 
 # Terminal 2 - Frontend
-cd client
-npm start
+npm run client
 ```
 
 Visit http://localhost:3000
+
+Test the following:
+- Register new account
+- Login with credentials
+- Check balance shows 1000 Valiant Bucks
+- Place a test bet (if games exist)
 
 ### Step 6: Push to GitHub
 
@@ -146,22 +183,34 @@ git push
 
 1. Go to https://vercel.com
 2. Click "Add New..." > "Project"
-3. Select your betting-app repository
-4. **Add Environment Variables:**
-   - Copy all values from `.env` file
-   - Paste into Vercel
-5. Click **Deploy**
-6. Wait 2-3 minutes
-7. Copy your deployment URL (e.g., `https://betting-app-abc.vercel.app`)
+3. Select your betting-app GitHub repository
+4. Click "Deploy" (Vercel auto-detects settings from `vercel.json`)
+5. Wait 2-3 minutes
+6. Once deployed, copy your URL (e.g., `https://betting-app-abc.vercel.app`)
 
-### Step 8: Deploy Frontend
+**Configure Environment Variables in Vercel:**
+1. Go to project Settings > Environment Variables
+2. Add all these from your `.env` file:
+   ```
+   SUPABASE_URL
+   SUPABASE_ANON_KEY
+   SUPABASE_SERVICE_ROLE_KEY
+   JWT_SECRET
+   NODE_ENV=production
+   REACT_APP_API_URL=https://your-vercel-domain.com/api
+   ```
+3. Click "Save"
+4. Go to Deployments > Redeploy latest commit to apply changes
 
-In Vercel project settings:
-1. Go to **Settings > Environment Variables**
-2. Update `REACT_APP_API_URL` = `https://your-vercel-domain.com/api`
-3. Go to **Deployments** > Redeploy
+### Step 8: Test Deployment
 
-Your app is now live! ✅
+Visit your Vercel URL and verify:
+- [ ] Can register new account
+- [ ] Can login
+- [ ] Can view games
+- [ ] Can place bets
+- [ ] Admin login works
+- [ ] Balance updates correctly
 
 ---
 
@@ -216,6 +265,8 @@ betting/
 
 ## 🔌 API Reference
 
+All API calls use the `/api/` prefix. Local: `http://localhost:5000/api` | Production: `https://your-domain.com/api`
+
 ### Authentication
 
 ```
@@ -232,13 +283,16 @@ POST /api/auth/login
 
 ```
 GET /api/users/profile
+  Headers: { Authorization: "Bearer <token>" }
   Response: { id, username, email, balance, is_admin }
 
 GET /api/users
+  Headers: { Authorization: "Bearer <admin_token>" }
   Admin only
   Response: [{ id, username, balance, is_admin }, ...]
 
 PUT /api/users/:id/balance
+  Headers: { Authorization: "Bearer <admin_token>" }
   Admin only
   Body: { balance }
   Response: { success }
@@ -248,16 +302,18 @@ PUT /api/users/:id/balance
 
 ```
 GET /api/games
-  Response: [{ id, name, date, home_team, away_team, status }, ...]
+  Response: [{ id, name, date, home_team, away_team, home_odds, away_odds, status }, ...]
 
 POST /api/games
+  Headers: { Authorization: "Bearer <admin_token>" }
   Admin only
   Body: { name, date, home_team, away_team, home_odds, away_odds }
   Response: { id, ... }
 
 PUT /api/games/:id
+  Headers: { Authorization: "Bearer <admin_token>" }
   Admin only
-  Body: { status, outcome, ... }
+  Body: { status, outcome }
   Response: { success }
 ```
 
@@ -265,17 +321,21 @@ PUT /api/games/:id
 
 ```
 POST /api/bets
+  Headers: { Authorization: "Bearer <token>" }
   Body: { game_id, amount, bet_type, selection, odds }
-  Response: { id, amount, odds, status }
+  Response: { id, game_id, amount, odds, status }
 
 GET /api/bets
+  Headers: { Authorization: "Bearer <token>" }
   Response: [{ id, game_id, amount, odds, status, outcome }, ...]
 
 GET /api/bets/all
+  Headers: { Authorization: "Bearer <admin_token>" }
   Admin only
   Response: [all bets from all users]
 
 PUT /api/bets/:id
+  Headers: { Authorization: "Bearer <admin_token>" }
   Admin only
   Body: { status, outcome }
   Response: { success }
@@ -285,11 +345,16 @@ PUT /api/bets/:id
 
 ```
 GET /api/transactions
+  Headers: { Authorization: "Bearer <token>" }
   Response: [{ id, type, amount, description, status, created_at }, ...]
 
 POST /api/transactions
+  Headers: { Authorization: "Bearer <token>" }
   Body: { type, amount, description }
   Response: { id, ... }
+
+GET /api/health
+  Response: { status: "ok", timestamp: "2024-12-18T..." }
 ```
 
 ---
@@ -483,11 +548,25 @@ POST /api/transactions
 
 ## 💡 Next Steps
 
+### For Local Development:
 1. ✅ Install dependencies: `npm install && cd client && npm install && cd ..`
-2. ✅ Test locally: `npm run dev` (and `npm start` in client folder)
-3. ✅ Create Supabase project (Step 1 above)
-4. ✅ Set up database (Step 2)
-5. ✅ Create admin user (Step 3)
-6. ✅ Deploy to Vercel (Step 7-8)
+2. ✅ Create `.env` file with your Supabase credentials
+3. ✅ Test locally: `npm run dev` (and `npm run client` in another terminal)
+4. ✅ Verify registration, login, and betting works
 
-Your betting platform is ready to use! 🎉
+### For Production Deployment:
+1. ✅ Complete all Supabase setup (Steps 1-3)
+2. ✅ Push code to GitHub
+3. ✅ Deploy to Vercel (Step 7)
+4. ✅ Set environment variables in Vercel
+5. ✅ Test deployed app (Step 8)
+6. ✅ Optionally add custom domain
+
+**Your betting platform is ready!** 🎉
+
+### Maintenance
+- Monitor Vercel deployments for errors
+- Check Supabase dashboard for database health
+- Keep Node.js and dependencies updated
+- Regularly backup Supabase (automatic)
+- Review JWT_SECRET usage in production
