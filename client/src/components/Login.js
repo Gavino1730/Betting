@@ -4,7 +4,6 @@ import '../styles/Login.css';
 
 function Login({ onLogin, apiUrl }) {
   const [isRegister, setIsRegister] = useState(false);
-  const [isAdminLogin, setIsAdminLogin] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -23,35 +22,17 @@ function Login({ onLogin, apiUrl }) {
     setLoading(true);
 
     try {
-      // Admin login - hardcoded credentials
-      if (isAdminLogin) {
-        if (formData.username === 'admin' && formData.password === '12345') {
-          // Create a proper JWT token for admin
-          const payload = JSON.stringify({ id: 0, username: 'admin', is_admin: true });
-          const adminToken = btoa(payload); // Simple base64 encoding for client-side token
-          onLogin(adminToken, { 
-            id: 0, 
-            username: 'admin', 
-            is_admin: true,
-            balance: 0,
-            isAdminUser: true
-          });
-        } else {
-          setError('Invalid admin credentials');
-        }
+      // Regular user login
+      const endpoint = isRegister ? '/auth/register' : '/auth/login';
+      const response = await axios.post(`${apiUrl}${endpoint}`, formData);
+      
+      if (isRegister) {
+        setError('');
+        setFormData({ username: '', password: '' });
+        setIsRegister(false);
+        alert('Registration successful! Please login.');
       } else {
-        // Regular user login
-        const endpoint = isRegister ? '/auth/register' : '/auth/login';
-        const response = await axios.post(`${apiUrl}${endpoint}`, formData);
-        
-        if (isRegister) {
-          setError('');
-          setFormData({ username: '', password: '' });
-          setIsRegister(false);
-          alert('Registration successful! Please login.');
-        } else {
-          onLogin(response.data.token, response.data.user);
-        }
+        onLogin(response.data.token, response.data.user);
       }
     } catch (err) {
       setError(err.response?.data?.error || 'An error occurred');
@@ -64,30 +45,7 @@ function Login({ onLogin, apiUrl }) {
     <div className="login-container">
       <div className="login-box">
         <div className="login-header">
-          <h1>{isAdminLogin ? 'Admin Login' : (isRegister ? 'Register' : 'Login')}</h1>
-          {!isAdminLogin && !isRegister && (
-            <button 
-              onClick={() => setIsAdminLogin(true)} 
-              className="admin-link"
-              title="Admin Login"
-            >
-              Admin
-            </button>
-          )}
-          {(isAdminLogin || isRegister) && (
-            <button 
-              onClick={() => {
-                setIsAdminLogin(false);
-                setIsRegister(false);
-                setFormData({ username: '', password: '' });
-                setError('');
-              }} 
-              className="admin-link"
-              title="Back to User Login"
-            >
-              ← Back
-            </button>
-          )}
+          <h1>{isRegister ? 'Register' : 'Login'}</h1>
         </div>
         
         {error && <div className="alert alert-error">{error}</div>}
@@ -118,18 +76,16 @@ function Login({ onLogin, apiUrl }) {
           </div>
 
           <button type="submit" className="btn" disabled={loading}>
-            {loading ? 'Loading...' : (isAdminLogin ? 'Login to Admin' : (isRegister ? 'Register' : 'Login'))}
+            {loading ? 'Loading...' : (isRegister ? 'Register' : 'Login')}
           </button>
         </form>
 
-        {!isAdminLogin && (
-          <p className="toggle-form">
-            {isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
-            <button onClick={() => setIsRegister(!isRegister)} className="link-btn">
+        <p className="toggle-form">
+          {isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
+          <button onClick={() => setIsRegister(!isRegister)} className="link-btn">
               {isRegister ? 'Login' : 'Register'}
             </button>
           </p>
-        )}
       </div>
     </div>
   );

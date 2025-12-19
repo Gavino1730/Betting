@@ -73,7 +73,6 @@ function App() {
         {page === 'bets' && <BetList apiUrl={API_URL} />}
         {page === 'leaderboard' && <Leaderboard apiUrl={API_URL} />}
         {page === 'admin' && user && user.is_admin && <AdminPanel apiUrl={API_URL} />}
-        {page === 'admin' && user && user.isAdminUser && <AdminPanel apiUrl={API_URL} isAdminUser={true} />}
       </div>
     </div>
   );

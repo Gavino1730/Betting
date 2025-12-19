@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/AdminPanel.css';
 
-function AdminPanel({ apiUrl, isAdminUser }) {
+function AdminPanel({ apiUrl }) {
   const [allBets, setAllBets] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);

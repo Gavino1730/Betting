@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const bodyParser = require('body-parser');
-const db = require('./database');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,13 +11,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Initialize database
-db.init();
-
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/bets', require('./routes/bets'));
+app.use('/api/games', require('./routes/games'));
 app.use('/api/transactions', require('./routes/transactions'));
 
 // Health check
