@@ -1,3 +1,21 @@
+# Ignore root lock file to avoid frontend/backend lock file conflicts
+package-lock.json
+
+# Node modules
+node_modules/
+client/node_modules/
+
+# Ignore build outputs
+client/build/
+
+# Ignore environment files
+.env
+server/.env
+client/.env
+
+# Ignore OS files
+*.DS_Store
+Thumbs.db
 # Dependencies
 node_modules/
 npm-debug.log
