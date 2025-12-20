@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import '../styles/AdminTeams.css';
 
@@ -48,11 +48,7 @@ function AdminTeams() {
   };
 
   // Load teams on mount
-  useEffect(() => {
-    fetchTeams();
-  }, []);
-
-  const fetchTeams = async () => {
+  const fetchTeams = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -77,7 +73,11 @@ function AdminTeams() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchTeams();
+  }, [fetchTeams]);
 
   const handleSelectTeam = (team) => {
     setSelectedTeam(team);
