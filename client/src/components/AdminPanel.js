@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AdminTeams from './AdminTeams';
 import '../styles/AdminPanel.css';
 
 function AdminPanel({ apiUrl }) {
@@ -154,6 +155,9 @@ function AdminPanel({ apiUrl }) {
         </button>
         <button className={`tab-btn ${tab === 'users' ? 'active' : ''}`} onClick={() => setTab('users')}>
           Manage Users
+        </button>
+        <button className={`tab-btn ${tab === 'teams' ? 'active' : ''}`} onClick={() => setTab('teams')}>
+          Manage Teams
         </button>
       </div>
 
@@ -494,6 +498,10 @@ function AdminPanel({ apiUrl }) {
             </div>
           )}
         </div>
+      )}
+
+      {tab === 'teams' && (
+        <AdminTeams />
       )}
     </div>
   );

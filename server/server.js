@@ -17,6 +17,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/bets', require('./routes/bets'));
 app.use('/api/games', require('./routes/games'));
 app.use('/api/teams', require('./routes/teams'));
+app.use('/api/teams-admin', require('./routes/teamsAdmin'));
 app.use('/api/transactions', require('./routes/transactions'));
 
 // Health check
