@@ -4,7 +4,7 @@ import '../styles/Teams.css';
 
 function Teams() {
   const [activeTab, setActiveTab] = useState('boys');
-  const [teams, setTeams] = useState([]);
+  const [teams, setTeams] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const getHardcodedTeams = useCallback(() => {
@@ -122,22 +122,22 @@ function Teams() {
   }, []);
 
   const fetchTeams = useCallback(async () => {
+    const hardcodedData = getHardcodedTeams();
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get('/api/teams-admin', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        timeout: 3000
       });
-      if (response.data && response.data.length > 0) {
+      if (Array.isArray(response.data) && response.data.length > 0) {
         setTeams(response.data);
       } else {
-        // If API returns empty, use hardcoded data
-        setTeams(getHardcodedTeams());
+        setTeams(hardcodedData);
       }
     } catch (err) {
-      // Any error - use hardcoded data as fallback
       console.log('API fetch failed, using hardcoded data:', err.message);
-      setTeams(getHardcodedTeams());
+      setTeams(hardcodedData);
     } finally {
       setLoading(false);
     }
@@ -245,7 +245,11 @@ function Teams() {
   );
 
   if (loading) return <div className="teams-page"><p>Loading teams...</p></div>;
-  if (!teams || teams.length === 0) return <div className="teams-page"><p>No teams found</p></div>;
+  if (!Array.isArray(teams) || teams.length === 0) {
+    return <div className="teams-page"><p>No teams available</p></div>;
+  }
+
+  const selectedTeam = teams.find(t => t.id === activeTab) || teams[0];
 
   return (
     <div className="teams-page">
@@ -266,7 +270,7 @@ function Teams() {
         </button>
       </div>
 
-      {selectedTeam ? <TeamSection team={selectedTeam} /> : <p>Select a team</p>}
+      {selectedTeam ? <TeamSection team={selectedTeam} /> : <p>Team data loading...</p>}
     </div>
   );
 }
