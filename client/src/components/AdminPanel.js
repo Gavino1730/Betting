@@ -14,7 +14,7 @@ function AdminPanel({ apiUrl }) {
   
   // Game creation form
   const [gameForm, setGameForm] = useState({
-    teamType: 'NFL',
+    teamType: 'Boys Basketball',
     homeTeam: '',
     awayTeam: '',
     gameDate: '',
@@ -81,7 +81,7 @@ function AdminPanel({ apiUrl }) {
       });
       alert('Game created successfully!');
       setGameForm({
-        teamType: 'NFL',
+        teamType: 'Boys Basketball',
         homeTeam: '',
         awayTeam: '',
         gameDate: '',
@@ -171,11 +171,8 @@ function AdminPanel({ apiUrl }) {
                   onChange={handleGameFormChange}
                   required
                 >
-                  <option value="NFL">NFL</option>
-                  <option value="NBA">NBA</option>
-                  <option value="MLB">MLB</option>
-                  <option value="NHL">NHL</option>
-                  <option value="NCAA">NCAA Football</option>
+                  <option value="Boys Basketball">Boys Basketball</option>
+                  <option value="Girls Basketball">Girls Basketball</option>
                 </select>
               </div>
               <div className="form-group">

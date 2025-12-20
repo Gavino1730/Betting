@@ -1,6 +1,9 @@
 DROP TABLE IF EXISTS admin_logs CASCADE;
 DROP TABLE IF EXISTS transactions CASCADE;
 DROP TABLE IF EXISTS bets CASCADE;
+DROP TABLE IF EXISTS player_stats CASCADE;
+DROP TABLE IF EXISTS players CASCADE;
+DROP TABLE IF EXISTS teams CASCADE;
 DROP TABLE IF EXISTS games CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
@@ -12,6 +15,52 @@ CREATE TABLE IF NOT EXISTS users (
   is_admin BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS teams (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL,
+  description TEXT,
+  record_wins INT DEFAULT 0,
+  record_losses INT DEFAULT 0,
+  ranking INT,
+  coach_name TEXT,
+  coach_email TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS players (
+  id BIGSERIAL PRIMARY KEY,
+  team_id BIGINT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+  number INT,
+  name TEXT NOT NULL,
+  position TEXT,
+  height TEXT,
+  weight INT,
+  grade TEXT,
+  bio TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS player_stats (
+  id BIGSERIAL PRIMARY KEY,
+  player_id BIGINT NOT NULL REFERENCES players(id) ON DELETE CASCADE,
+  game_id BIGINT,
+  points INT DEFAULT 0,
+  rebounds INT DEFAULT 0,
+  assists INT DEFAULT 0,
+  steals INT DEFAULT 0,
+  blocks INT DEFAULT 0,
+  field_goals_made INT DEFAULT 0,
+  field_goals_attempted INT DEFAULT 0,
+  three_pointers_made INT DEFAULT 0,
+  three_pointers_attempted INT DEFAULT 0,
+  free_throws_made INT DEFAULT 0,
+  free_throws_attempted INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS games (
