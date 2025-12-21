@@ -7,6 +7,7 @@ function BetList() {
   const [bets, setBets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [filter, setFilter] = useState('all'); // all, pending, won, lost
 
   useEffect(() => {
     fetchBets();
@@ -25,49 +26,214 @@ function BetList() {
     }
   };
 
-  if (loading) return <div className="card">Loading...</div>;
+  const filteredBets = bets.filter(bet => {
+    if (filter === 'all') return true;
+    if (filter === 'pending') return bet.status === 'pending';
+    if (filter === 'won') return bet.outcome === 'won';
+    if (filter === 'lost') return bet.outcome === 'lost';
+    return true;
+  });
+
+  const stats = {
+    total: bets.length,
+    pending: bets.filter(b => b.status === 'pending').length,
+    won: bets.filter(b => b.outcome === 'won').length,
+    lost: bets.filter(b => b.outcome === 'lost').length,
+    totalWagered: bets.reduce((sum, b) => sum + parseFloat(b.amount || 0), 0),
+    totalWinnings: bets.filter(b => b.outcome === 'won').reduce((sum, b) => sum + (parseFloat(b.potential_win || 0) - parseFloat(b.amount || 0)), 0)
+  };
+
+  const getConfidenceColor = (betType) => {
+    switch(betType?.toLowerCase()) {
+      case 'low': return 'confidence-low';
+      case 'medium': return 'confidence-medium';
+      case 'high': return 'confidence-high';
+      default: return '';
+    }
+  };
+
+  const getOpponent = (bet) => {
+    if (!bet.games) return '';
+    return bet.games.home_team === bet.selected_team ? bet.games.away_team : bet.games.home_team;
+  };
+
+  if (loading) {
+    return (
+      <div className="bet-list-container">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Loading your bets...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bet-list">
-      <h2>Your Bets</h2>
-      
+    <div className="bet-list-container">
+      {/* Header Section */}
+      <div className="bet-list-header">
+        <div className="header-title">
+          <h1>My Bets</h1>
+          <p className="subtitle">Track your betting history and performance</p>
+        </div>
+      </div>
+
+      {/* Stats Overview */}
+      <div className="bet-stats-grid">
+        <div className="bet-stat-card">
+          <div className="stat-icon stat-icon-total">📊</div>
+          <div className="stat-info">
+            <span className="stat-label">Total Bets</span>
+            <span className="stat-value">{stats.total}</span>
+          </div>
+        </div>
+        <div className="bet-stat-card">
+          <div className="stat-icon stat-icon-pending">⏳</div>
+          <div className="stat-info">
+            <span className="stat-label">Pending</span>
+            <span className="stat-value">{stats.pending}</span>
+          </div>
+        </div>
+        <div className="bet-stat-card">
+          <div className="stat-icon stat-icon-won">🏆</div>
+          <div className="stat-info">
+            <span className="stat-label">Won</span>
+            <span className="stat-value">{stats.won}</span>
+          </div>
+        </div>
+        <div className="bet-stat-card">
+          <div className="stat-icon stat-icon-lost">❌</div>
+          <div className="stat-info">
+            <span className="stat-label">Lost</span>
+            <span className="stat-value">{stats.lost}</span>
+          </div>
+        </div>
+        <div className="bet-stat-card">
+          <div className="stat-icon stat-icon-wagered">💰</div>
+          <div className="stat-info">
+            <span className="stat-label">Total Wagered</span>
+            <span className="stat-value">{formatCurrency(stats.totalWagered)}</span>
+          </div>
+        </div>
+        <div className="bet-stat-card">
+          <div className="stat-icon stat-icon-profit">💵</div>
+          <div className="stat-info">
+            <span className="stat-label">Total Profit</span>
+            <span className={`stat-value ${stats.totalWinnings >= 0 ? 'profit-positive' : 'profit-negative'}`}>
+              {stats.totalWinnings >= 0 ? '+' : ''}{formatCurrency(stats.totalWinnings)}
+            </span>
+          </div>
+        </div>
+      </div>
+
       {error && <div className="alert alert-error">{error}</div>}
 
-      {bets.length === 0 ? (
-        <div className="card">No bets yet. Start by placing a bet!</div>
+      {/* Filter Tabs */}
+      <div className="bet-filters">
+        <button 
+          className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+          onClick={() => setFilter('all')}
+        >
+          All Bets ({stats.total})
+        </button>
+        <button 
+          className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
+          onClick={() => setFilter('pending')}
+        >
+          Pending ({stats.pending})
+        </button>
+        <button 
+          className={`filter-btn ${filter === 'won' ? 'active' : ''}`}
+          onClick={() => setFilter('won')}
+        >
+          Won ({stats.won})
+        </button>
+        <button 
+          className={`filter-btn ${filter === 'lost' ? 'active' : ''}`}
+          onClick={() => setFilter('lost')}
+        >
+          Lost ({stats.lost})
+        </button>
+      </div>
+
+      {/* Bets List */}
+      {filteredBets.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-icon">🎲</div>
+          <h3>No {filter !== 'all' ? filter : ''} bets found</h3>
+          <p>
+            {filter === 'all' 
+              ? "You haven't placed any bets yet. Head to the dashboard to get started!" 
+              : `You don't have any ${filter} bets at the moment.`}
+          </p>
+        </div>
       ) : (
-        <div className="bets-grid">
-          {bets.map(bet => (
-            <div key={bet.id} className="card bet-card">
-              <div className="bet-header">
-                <div>
-                  <h4>{bet.games?.team_type || 'Game'}</h4>
-                  <p className="event-desc">{bet.selected_team} vs {bet.games?.home_team === bet.selected_team ? bet.games?.away_team : bet.games?.home_team}</p>
-                  <p className="bet-confidence">{bet.bet_type?.toUpperCase()} Confidence</p>
+        <div className="bets-list">
+          {filteredBets.map(bet => (
+            <div key={bet.id} className={`bet-item ${bet.outcome ? `bet-${bet.outcome}` : 'bet-pending'}`}>
+              {/* Bet Header */}
+              <div className="bet-item-header">
+                <div className="bet-team-info">
+                  <span className="team-type-badge">{bet.games?.team_type || 'Game'}</span>
+                  <h3 className="team-name">{bet.selected_team}</h3>
+                  <span className="vs-text">vs</span>
+                  <span className="opponent-name">{getOpponent(bet)}</span>
                 </div>
-                <span className={`status status-${bet.status}`}>{bet.status === 'resolved' ? 'COMPLETED' : bet.status.toUpperCase()}</span>
+                <div className="bet-status-badge">
+                  {bet.status === 'pending' && <span className="badge badge-pending">Pending</span>}
+                  {bet.outcome === 'won' && <span className="badge badge-won">Won</span>}
+                  {bet.outcome === 'lost' && <span className="badge badge-lost">Lost</span>}
+                </div>
               </div>
-              <div className="bet-details">
-                <div className="detail-item">
-                  <span className="detail-label">Amount</span>
-                  <span className="detail-value">{formatCurrency(bet.amount)}</span>
+
+              {/* Bet Details Grid */}
+              <div className="bet-item-details">
+                <div className="detail-box">
+                  <span className="detail-label">Bet Amount</span>
+                  <span className="detail-amount">{formatCurrency(bet.amount)}</span>
                 </div>
-                <div className="detail-item">
-                  <span className="detail-label">Multiplier</span>
-                  <span className="detail-value">{bet.odds}x</span>
+                <div className="detail-box">
+                  <span className="detail-label">Confidence</span>
+                  <span className={`confidence-badge ${getConfidenceColor(bet.bet_type)}`}>
+                    {bet.bet_type?.toUpperCase()} ({bet.odds}x)
+                  </span>
                 </div>
-                <div className="detail-item">
+                <div className="detail-box">
                   <span className="detail-label">Potential Win</span>
-                  <span className="detail-value">{formatCurrency(bet.potential_win)}</span>
+                  <span className="detail-potential">{formatCurrency(bet.potential_win)}</span>
                 </div>
                 {bet.outcome && (
-                  <div className="detail-item">
-                    <span className="detail-label">Outcome</span>
-                    <span className={`detail-value outcome-${bet.outcome}`}>{bet.outcome.toUpperCase()}</span>
+                  <div className="detail-box">
+                    <span className="detail-label">Result</span>
+                    <span className={`detail-result ${bet.outcome === 'won' ? 'result-won' : 'result-lost'}`}>
+                      {bet.outcome === 'won' 
+                        ? `+${formatCurrency(parseFloat(bet.potential_win) - parseFloat(bet.amount))}`
+                        : `-${formatCurrency(bet.amount)}`}
+                    </span>
                   </div>
                 )}
               </div>
-              <small className="bet-date">{new Date(bet.created_at).toLocaleDateString()}</small>
+
+              {/* Bet Footer */}
+              <div className="bet-item-footer">
+                <span className="bet-date">
+                  📅 {new Date(bet.created_at).toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+                {bet.games?.game_date && (
+                  <span className="game-date">
+                    🏀 Game: {new Date(bet.games.game_date).toLocaleDateString('en-US', { 
+                      month: 'short', 
+                      day: 'numeric'
+                    })}
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>
