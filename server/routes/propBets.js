@@ -102,7 +102,10 @@ router.put('/:id', authenticateToken, async (req, res) => {
         // Update bet status
         await Bet.updateStatus(bet.id, 'resolved', betOutcome);
 
-        // Credit winnings if won
+        // Create notification
+        const Notification = require('../models/Notification');
+        const propBet = await PropBet.getById(req.params.id);
+        
         if (won) {
           const winnings = bet.amount * bet.odds;
           await User.updateBalance(bet.user_id, winnings);
@@ -112,7 +115,20 @@ router.put('/:id', authenticateToken, async (req, res) => {
             winnings, 
             `Won prop bet: ${bet.selected_team}`
           );
+          await Notification.create(
+            bet.user_id,
+            '🎉 Prop Bet Won!',
+            `Your prop bet "${propBet?.title}" won ${winnings} Valiant Bucks!`,
+            'bet_won'
+          );
           winningsDistributed += winnings;
+        } else {
+          await Notification.create(
+            bet.user_id,
+            '😔 Prop Bet Lost',
+            `Your prop bet "${propBet?.title}" lost.`,
+            'bet_lost'
+          );
         }
 
         betsResolved++;
@@ -215,6 +231,15 @@ router.post('/place', authenticateToken, async (req, res) => {
       'bet',
       -parsedAmount,
       `Prop bet: ${propBet.title} - ${choice.toUpperCase()}`
+    );
+
+    // Create notification
+    const Notification = require('../models/Notification');
+    await Notification.create(
+      req.user.id,
+      '✅ Prop Bet Placed',
+      `Bet ${parsedAmount} Valiant Bucks on "${propBet.title}" - ${choice.toUpperCase()} at ${odds}x odds`,
+      'bet_placed'
     );
 
     res.status(201).json({

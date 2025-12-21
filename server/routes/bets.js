@@ -59,6 +59,15 @@ router.post('/', authenticateToken, async (req, res) => {
     await User.updateBalance(req.user.id, -parsedAmount);
     await Transaction.create(req.user.id, 'bet', -parsedAmount, `${confidence} confidence bet on ${selectedTeam}: ${parsedOdds}x odds`);
 
+    // Create notification
+    const Notification = require('../models/Notification');
+    await Notification.create(
+      req.user.id,
+      '✅ Bet Placed',
+      `${confidence.charAt(0).toUpperCase() + confidence.slice(1)} confidence bet on ${selectedTeam} for ${parsedAmount} Valiant Bucks at ${parsedOdds}x odds`,
+      'bet_placed'
+    );
+
     res.status(201).json(bet);
   } catch (error) {
     console.error('Bet placement error:', error);

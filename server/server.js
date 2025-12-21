@@ -42,6 +42,7 @@ app.use('/api/prop-bets', require('./routes/propBets'));
 app.use('/api/teams', require('./routes/teams'));
 app.use('/api/teams-admin', require('./routes/teamsAdmin'));
 app.use('/api/transactions', require('./routes/transactions'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 // Health check
 app.get('/api/health', (req, res) => {

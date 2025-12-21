@@ -51,7 +51,28 @@ CREATE POLICY "allow_update_users" ON users
   FOR UPDATE USING (true) WITH CHECK (true);
 
 -- ============================================
--- 2. ADD MISSING COLUMNS
+-- 2. ADD NOTIFICATIONS TABLE
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id SERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  message TEXT NOT NULL,
+  type TEXT NOT NULL, -- 'bet_placed', 'bet_won', 'bet_lost'
+  is_read BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- RLS for notifications
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "allow_all_notifications" ON notifications;
+CREATE POLICY "allow_all_notifications" ON notifications
+  FOR ALL USING (true) WITH CHECK (true);
+
+-- ============================================
+-- 3. ADD MISSING COLUMNS
 -- ============================================
 
 -- Add is_visible to games table

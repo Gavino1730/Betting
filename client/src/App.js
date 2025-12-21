@@ -7,11 +7,14 @@ import BetList from './components/BetList';
 import Leaderboard from './components/Leaderboard';
 import Teams from './components/Teams';
 import Games from './components/Games';
+import Notifications from './components/Notifications';
+import apiClient from './utils/axios';
 
 function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [page, setPage] = useState(localStorage.getItem('currentPage') || 'dashboard');
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     // Token is now handled by axios interceptor
@@ -23,6 +26,24 @@ function App() {
       }
     }
   }, [token, user]);
+
+  useEffect(() => {
+    if (token) {
+      fetchUnreadCount();
+      // Poll for new notifications every 30 seconds
+      const interval = setInterval(fetchUnreadCount, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [token]);
+
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await apiClient.get('/notifications/unread-count');
+      setUnreadCount(response.data.count);
+    } catch (err) {
+      console.error('Error fetching unread count:', err);
+    }
+  };
 
   const handleLogin = (newToken, userData) => {
     setToken(newToken);
@@ -72,6 +93,12 @@ function App() {
           <button onClick={() => handlePageChange('bets')} className={page === 'bets' ? 'active' : ''}>
             My Bets
           </button>
+          <button onClick={() => handlePageChange('notifications')} className={page === 'notifications' ? 'active' : ''} style={{position: 'relative'}}>
+            🔔 Notifications
+            {unreadCount > 0 && (
+              <span className="notification-badge">{unreadCount}</span>
+            )}
+          </button>
           <button onClick={() => handlePageChange('leaderboard')} className={page === 'leaderboard' ? 'active' : ''}>
             Leaderboard
           </button>
@@ -97,6 +124,7 @@ function App() {
         {page === 'teams' && <Teams />}
         {page === 'bets' && <BetList />}
         {page === 'leaderboard' && <Leaderboard />}
+        {page === 'notifications' && <Notifications />}
         {page === 'admin' && user && user.is_admin && <AdminPanel />}
       </div>
     </div>
