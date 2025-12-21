@@ -45,7 +45,7 @@ function BetList() {
                   <p className="event-desc">{bet.selected_team} vs {bet.games?.home_team === bet.selected_team ? bet.games?.away_team : bet.games?.home_team}</p>
                   <p className="bet-confidence">{bet.bet_type?.toUpperCase()} Confidence</p>
                 </div>
-                <span className={`status status-${bet.status}`}>{bet.status.toUpperCase()}</span>
+                <span className={`status status-${bet.status}`}>{bet.status === 'resolved' ? 'COMPLETED' : bet.status.toUpperCase()}</span>
               </div>
               <div className="bet-details">
                 <div className="detail-item">

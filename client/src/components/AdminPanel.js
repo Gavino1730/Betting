@@ -312,7 +312,7 @@ function AdminPanel() {
       const response = await apiClient.put(`/games/${id}/outcome`, updateData);
       
       if (response.data.betsResolved > 0) {
-        alert(`Game updated! ${response.data.betsResolved} bets resolved, ${formatCurrency(response.data.winningsDistributed)} distributed.`);
+        alert(`Game updated! ${response.data.betsResolved} bets completed, ${formatCurrency(response.data.winningsDistributed)} distributed.`);
       } else {
         alert('Game status updated successfully!');
       }
@@ -811,7 +811,7 @@ function AdminPanel() {
           <div className="card">
             <h3>All Bets</h3>
             <p style={{marginBottom: '15px', color: '#b8c5d6'}}>
-              Bets are automatically resolved when you set game outcomes or prop bet results. This is a read-only view.
+              Bets are automatically completed when you set game outcomes or prop bet results. This is a read-only view.
             </p>
             <div className="bets-table-wrapper">
               <table className="bets-table">
@@ -844,7 +844,7 @@ function AdminPanel() {
                           background: bet.status === 'pending' ? '#ff9800' : '#66bb6a',
                           color: 'white'
                         }}>
-                          {bet.status}
+                          {bet.status === 'resolved' ? 'Completed' : bet.status}
                         </span>
                       </td>
                       <td>
