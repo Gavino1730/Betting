@@ -607,19 +607,18 @@ function AdminPanel() {
                   {game.result && <p><strong>Winner:</strong> {game.result}</p>}
                   {game.notes && <p><strong>Notes:</strong> {game.notes}</p>}
                   
-                  <div style={{marginTop: '15px', display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
+                  <div style={{marginTop: '15px', display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center'}}>
                     {game.status !== 'completed' && (
                       <>
-                        <button 
-                          className="btn" 
-                          style={{
-                            background: game.is_visible === false ? '#66bb6a' : '#ef5350', 
-                            padding: '8px 12px'
-                          }}
-                          onClick={() => handleToggleGameVisibility(game.id, game.is_visible !== false)}
-                        >
-                          {game.is_visible === false ? '👁️ Show' : '🚫 Hide'}
-                        </button>
+                        <label className="toggle-switch">
+                          <input 
+                            type="checkbox" 
+                            checked={game.is_visible !== false}
+                            onChange={() => handleToggleGameVisibility(game.id, game.is_visible !== false)}
+                          />
+                          <span className="toggle-slider"></span>
+                        </label>
+                        <span style={{fontSize: '0.9em', color: '#666'}}>Visible</span>
                         <button 
                           className="btn" 
                           style={{background: '#1e88e5', padding: '8px 12px'}}
