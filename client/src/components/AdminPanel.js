@@ -292,23 +292,6 @@ function AdminPanel() {
     }
   };
 
-  const handleSetGameOutcome = async (gameId, winningTeam) => {
-    const confirmed = window.confirm(
-      `Set ${winningTeam} as the winner?\n\nThis will:\n- Mark the game as completed\n- Resolve all pending bets\n- Credit winnings to users who bet on ${winningTeam}`
-    );
-    
-    if (!confirmed) return;
-
-    try {
-      const response = await apiClient.put(`/games/${gameId}/outcome`, { winningTeam });
-      alert(`Game outcome set! ${response.data.betsResolved} bets resolved, ${formatCurrency(response.data.winningsDistributed)} distributed.`);
-      fetchGames();
-      fetchAllBets();
-    } catch (err) {
-      alert(err.response?.data?.error || 'Failed to set game outcome');
-    }
-  };
-
   const handleOpenGameStatus = (game) => {
     setGameStatusModal({
       id: game.id,
