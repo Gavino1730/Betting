@@ -25,7 +25,11 @@ function Dashboard({ user }) {
       try {
         const response = await apiClient.get('/games');
         console.log('Fetched games:', response.data);
-        setGames(response.data || []);
+        // Sort games by date (earliest first)
+        const sortedGames = (response.data || []).sort((a, b) => {
+          return new Date(a.game_date) - new Date(b.game_date);
+        });
+        setGames(sortedGames);
       } catch (err) {
         console.error('Error fetching games:', err);
         setGames([]);
