@@ -6,6 +6,7 @@ import { formatCurrency } from '../utils/currency';
 function Dashboard({ user }) {
   const [balance, setBalance] = useState(user?.balance || 0);
   const [games, setGames] = useState([]);
+  const [bets, setBets] = useState([]);
   const [selectedGameId, setSelectedGameId] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
   const [confidence, setConfidence] = useState('');
@@ -13,6 +14,14 @@ function Dashboard({ user }) {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [gamesLoading, setGamesLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalBets: 0,
+    activeBets: 0,
+    wonBets: 0,
+    lostBets: 0,
+    winRate: 0,
+    totalWinnings: 0
+  });
 
   const confidenceMultipliers = {
     low: 1.2,
@@ -21,25 +30,55 @@ function Dashboard({ user }) {
   };
 
   useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const response = await apiClient.get('/games');
-        console.log('Fetched games:', response.data);
-        // Sort games by date (earliest first)
-        const sortedGames = (response.data || []).sort((a, b) => {
-          return new Date(a.game_date) - new Date(b.game_date);
-        });
-        setGames(sortedGames);
-      } catch (err) {
-        console.error('Error fetching games:', err);
-        setGames([]);
-      } finally {
-        setGamesLoading(false);
-      }
-    };
-
     fetchGames();
+    fetchBets();
   }, []);
+
+  const fetchGames = async () => {
+    try {
+      const response = await apiClient.get('/games');
+      console.log('Fetched games:', response.data);
+      // Sort games by date (earliest first)
+      const sortedGames = (response.data || []).sort((a, b) => {
+        return new Date(a.game_date) - new Date(b.game_date);
+      });
+      setGames(sortedGames);
+    } catch (err) {
+      console.error('Error fetching games:', err);
+      setGames([]);
+    } finally {
+      setGamesLoading(false);
+    }
+  };
+
+  const fetchBets = async () => {
+    try {
+      const response = await apiClient.get('/bets');
+      const userBets = response.data || [];
+      setBets(userBets);
+      
+      // Calculate stats
+      const totalBets = userBets.length;
+      const activeBets = userBets.filter(b => b.status === 'pending').length;
+      const wonBets = userBets.filter(b => b.outcome === 'won').length;
+      const lostBets = userBets.filter(b => b.outcome === 'lost').length;
+      const winRate = totalBets > 0 ? Math.round((wonBets / (wonBets + lostBets)) * 100) || 0 : 0;
+      const totalWinnings = userBets
+        .filter(b => b.outcome === 'won')
+        .reduce((sum, b) => sum + (b.potential_win - b.amount), 0);
+      
+      setStats({
+        totalBets,
+        activeBets,
+        wonBets,
+        lostBets,
+        winRate,
+        totalWinnings
+      });
+    } catch (err) {
+      console.error('Error fetching bets:', err);
+    }
+  };
 
   const selectedGame = selectedGameId ? games.find(g => g.id === parseInt(selectedGameId)) : null;
   
@@ -92,6 +131,9 @@ function Dashboard({ user }) {
       setSelectedTeam('');
       setConfidence('');
       setAmount('');
+      
+      // Refresh bets to update stats
+      fetchBets();
     } catch (err) {
       setMessage(err.response?.data?.error || 'Error placing bet');
     } finally {
@@ -99,128 +141,265 @@ function Dashboard({ user }) {
     }
   };
 
+  const upcomingGames = games.slice(0, 3); // Next 3 games
+  const recentBets = bets.slice(0, 5); // Last 5 bets
+
   return (
     <div className="dashboard">
-      <div className="card">
-        <h2>Welcome back!</h2>
-        <p>Your current balance: <span className="balance">{formatCurrency(balance)}</span></p>
+      {/* Stats Overview */}
+      <div className="stats-grid">
+        <div className="stat-card balance-card">
+          <div className="stat-icon">💰</div>
+          <div className="stat-content">
+            <h3>Current Balance</h3>
+            <p className="stat-value">${formatCurrency(balance)}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">📊</div>
+          <div className="stat-content">
+            <h3>Active Bets</h3>
+            <p className="stat-value">{stats.activeBets}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">🎯</div>
+          <div className="stat-content">
+            <h3>Win Rate</h3>
+            <p className="stat-value">{stats.winRate}%</p>
+            <p className="stat-subtitle">{stats.wonBets}W - {stats.lostBets}L</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">🏆</div>
+          <div className="stat-content">
+            <h3>Total Winnings</h3>
+            <p className="stat-value" style={{color: stats.totalWinnings >= 0 ? '#66bb6a' : '#ef5350'}}>
+              ${formatCurrency(Math.abs(stats.totalWinnings))}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="card">
-        <h3>Place a Bet</h3>
-        {message && (
-          <div className={`alert ${message.includes('Error') || message.includes('error') ? 'alert-error' : 'alert-success'}`}>
-            {message}
-          </div>
-        )}
-
-        {gamesLoading ? (
-          <p>Loading games...</p>
-        ) : games.length === 0 ? (
-          <p>No games available at the moment. Please check back later.</p>
-        ) : (
-          <form onSubmit={handlePlaceBet}>
-            <div className="form-group">
-              <label htmlFor="game">Select a Game</label>
-              <select
-                id="game"
-                value={selectedGameId}
-                onChange={(e) => {
-                  setSelectedGameId(e.target.value);
-                  setSelectedTeam('');
-                  setConfidence('');
-                }}
-                required
-              >
-                <option value="">Select a game...</option>
-                {games.map(game => (
-                  <option key={game.id} value={game.id}>
-                    {game.home_team} {game.away_team ? `vs ${game.away_team}` : ''} - {game.game_date}
-                  </option>
-                ))}
-              </select>
+      {/* Two Column Layout */}
+      <div className="dashboard-grid">
+        {/* Left Column - Place Bet */}
+        <div className="card bet-card">
+          <h3>🎲 Place a Bet</h3>
+          {message && (
+            <div className={`alert ${message.includes('Error') || message.includes('error') || message.includes('Insufficient') ? 'alert-error' : 'alert-success'}`}>
+              {message}
             </div>
+          )}
 
-            {selectedGame && (
-              <>
-                <div className="form-group">
-                  <label>Which team will win?</label>
-                  <div className="team-selection">
-                    <button
-                      type="button"
-                      className={`team-btn ${selectedTeam === selectedGame.home_team ? 'active' : ''}`}
-                      onClick={() => setSelectedTeam(selectedGame.home_team)}
-                    >
-                      {selectedGame.home_team}
-                    </button>
-                    {selectedGame.away_team && (
+          {gamesLoading ? (
+            <p>Loading games...</p>
+          ) : games.length === 0 ? (
+            <div className="empty-state">
+              <p>🏀 No games available at the moment.</p>
+              <p className="empty-subtitle">Check back soon for upcoming games!</p>
+            </div>
+          ) : (
+            <form onSubmit={handlePlaceBet} className="bet-form">
+              <div className="form-group">
+                <label htmlFor="game">🏀 Select Game</label>
+                <select
+                  id="game"
+                  value={selectedGameId}
+                  onChange={(e) => {
+                    setSelectedGameId(e.target.value);
+                    setSelectedTeam('');
+                    setConfidence('');
+                  }}
+                  required
+                  className="game-select"
+                >
+                  <option value="">Choose a game...</option>
+                  {games.map(game => (
+                    <option key={game.id} value={game.id}>
+                      {game.home_team} vs {game.away_team} • {new Date(game.game_date).toLocaleDateString()} {game.game_time}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedGame && (
+                <div className="bet-details">
+                  <div className="game-info-card">
+                    <div className="game-header">
+                      <span className="game-badge">{selectedGame.team_type}</span>
+                      <span className="game-date">{new Date(selectedGame.game_date).toLocaleDateString()} • {selectedGame.game_time}</span>
+                    </div>
+                    <div className="matchup">
+                      <div className="team-item">{selectedGame.home_team}</div>
+                      <div className="vs">VS</div>
+                      <div className="team-item">{selectedGame.away_team}</div>
+                    </div>
+                    {selectedGame.location && (
+                      <div className="game-location">📍 {selectedGame.location}</div>
+                    )}
+                  </div>
+
+                  <div className="form-group">
+                    <label>👥 Pick Your Winner</label>
+                    <div className="team-selection">
+                      <button
+                        type="button"
+                        className={`team-btn ${selectedTeam === selectedGame.home_team ? 'active' : ''}`}
+                        onClick={() => setSelectedTeam(selectedGame.home_team)}
+                      >
+                        <span className="team-name">{selectedGame.home_team}</span>
+                        <span className="team-label">Home</span>
+                      </button>
                       <button
                         type="button"
                         className={`team-btn ${selectedTeam === selectedGame.away_team ? 'active' : ''}`}
                         onClick={() => setSelectedTeam(selectedGame.away_team)}
                       >
-                        {selectedGame.away_team}
+                        <span className="team-name">{selectedGame.away_team}</span>
+                        <span className="team-label">Away</span>
                       </button>
-                    )}
+                    </div>
                   </div>
-                </div>
 
-                <div className="form-group">
-                  <label>How confident are you?</label>
-                  <div className="confidence-selection">
-                    <button
-                      type="button"
-                      className={`confidence-btn low ${confidence === 'low' ? 'active' : ''}`}
-                      onClick={() => setConfidence('low')}
-                    >
-                      <span className="confidence-label">Low</span>
-                      <span className="confidence-multiplier">1.2x</span>
-                    </button>
-                    <button
-                      type="button"
-                      className={`confidence-btn medium ${confidence === 'medium' ? 'active' : ''}`}
-                      onClick={() => setConfidence('medium')}
-                    >
-                      <span className="confidence-label">Medium</span>
-                      <span className="confidence-multiplier">1.5x</span>
-                    </button>
-                    <button
-                      type="button"
-                      className={`confidence-btn high ${confidence === 'high' ? 'active' : ''}`}
-                      onClick={() => setConfidence('high')}
-                    >
-                      <span className="confidence-label">High</span>
-                      <span className="confidence-multiplier">2.0x</span>
-                    </button>
+                  <div className="form-group">
+                    <label>💪 Confidence Level</label>
+                    <div className="confidence-selection">
+                      <button
+                        type="button"
+                        className={`confidence-btn low ${confidence === 'low' ? 'active' : ''}`}
+                        onClick={() => setConfidence('low')}
+                      >
+                        <span className="confidence-label">Low Risk</span>
+                        <span className="confidence-multiplier">1.2x</span>
+                        <span className="confidence-desc">Safe bet</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={`confidence-btn medium ${confidence === 'medium' ? 'active' : ''}`}
+                        onClick={() => setConfidence('medium')}
+                      >
+                        <span className="confidence-label">Medium</span>
+                        <span className="confidence-multiplier">1.5x</span>
+                        <span className="confidence-desc">Balanced</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={`confidence-btn high ${confidence === 'high' ? 'active' : ''}`}
+                        onClick={() => setConfidence('high')}
+                      >
+                        <span className="confidence-label">High Risk</span>
+                        <span className="confidence-multiplier">2.0x</span>
+                        <span className="confidence-desc">Go big!</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <div className="form-group">
-                  <label htmlFor="amount">Bet Amount (Valiant Bucks)</label>
-                  <input
-                    id="amount"
-                    type="number"
-                    step="0.01"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Enter bet amount"
-                    required
-                  />
-                </div>
-
-                {confidence && amount && (
-                  <div className="potential-win">
-                    Potential win: {formatCurrency(parseFloat(amount) * confidenceMultipliers[confidence])} Valiant Bucks
+                  <div className="form-group">
+                    <label htmlFor="amount">💵 Bet Amount</label>
+                    <div className="amount-input-wrapper">
+                      <span className="currency-symbol">$</span>
+                      <input
+                        id="amount"
+                        type="number"
+                        step="1"
+                        min="1"
+                        max={balance}
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder="Enter amount"
+                        required
+                        className="amount-input"
+                      />
+                      <button 
+                        type="button" 
+                        className="max-btn"
+                        onClick={() => setAmount(balance.toString())}
+                      >
+                        MAX
+                      </button>
+                    </div>
+                    <div className="amount-helpers">
+                      <button type="button" className="quick-amount" onClick={() => setAmount('10')}>$10</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('25')}>$25</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('50')}>$50</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('100')}>$100</button>
+                    </div>
                   </div>
-                )}
 
-                <button type="submit" className="btn" disabled={loading || !selectedTeam || !confidence || !amount}>
-                  {loading ? 'Processing...' : 'Place Bet'}
-                </button>
-              </>
+                  {confidence && amount && parseFloat(amount) > 0 && (
+                    <div className="potential-win-card">
+                      <div className="potential-label">Potential Payout</div>
+                      <div className="potential-amount">${formatCurrency(parseFloat(amount) * confidenceMultipliers[confidence])}</div>
+                      <div className="potential-profit">Profit: ${formatCurrency(parseFloat(amount) * (confidenceMultipliers[confidence] - 1))}</div>
+                    </div>
+                  )}
+
+                  <button type="submit" className="btn btn-bet" disabled={loading || !selectedTeam || !confidence || !amount || parseFloat(amount) <= 0}>
+                    {loading ? '⏳ Processing...' : '🎯 Place Bet'}
+                  </button>
+                </div>
+              )}
+            </form>
+          )}
+        </div>
+
+        {/* Right Column - Info */}
+        <div className="dashboard-sidebar">
+          {/* Upcoming Games */}
+          <div className="card">
+            <h3>📅 Upcoming Games</h3>
+            {upcomingGames.length > 0 ? (
+              <div className="upcoming-games-list">
+                {upcomingGames.map(game => (
+                  <div key={game.id} className="upcoming-game-item">
+                    <div className="game-teams">
+                      <span>{game.home_team}</span>
+                      <span className="vs-small">vs</span>
+                      <span>{game.away_team}</span>
+                    </div>
+                    <div className="game-meta">
+                      <span className="game-type-badge">{game.team_type?.replace(' Basketball', '')}</span>
+                      <span>{new Date(game.game_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="empty-text">No upcoming games</p>
             )}
-          </form>
-        )}
+          </div>
+
+          {/* Recent Bets */}
+          <div className="card">
+            <h3>🎲 Recent Bets</h3>
+            {recentBets.length > 0 ? (
+              <div className="recent-bets-list">
+                {recentBets.map(bet => (
+                  <div key={bet.id} className="recent-bet-item">
+                    <div className="bet-info">
+                      <div className="bet-team">{bet.selected_team}</div>
+                      <div className="bet-amount">${formatCurrency(bet.amount)}</div>
+                    </div>
+                    <div className="bet-status">
+                      <span className={`status-badge status-${bet.status === 'pending' ? 'pending' : bet.outcome}`}>
+                        {bet.status === 'pending' ? '⏳ Pending' : bet.outcome === 'won' ? '✅ Won' : '❌ Lost'}
+                      </span>
+                      {bet.outcome === 'won' && (
+                        <span className="bet-win">+${formatCurrency(bet.potential_win - bet.amount)}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="empty-text">No bets placed yet</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
