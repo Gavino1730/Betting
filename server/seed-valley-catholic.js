@@ -1,6 +1,6 @@
 /**
- * Valley Catholic Basketball Data Seeding Script
- * Run this script to populate the database with Valley Catholic team data
+ * VC Basketball Data Seeding Script
+ * Run this script to populate the database with VC team data
  * 
  * Usage: node seed-valley-catholic.js
  */
@@ -17,7 +17,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // ============================================================================
 
 const boysTeamData = {
-  name: 'Valley Catholic Boys Basketball',
+  name: 'VC Boys Basketball',
   type: 'Boys Basketball',
   description: 'Depth for days and pace that never slows. The floor is spaced with shooters, the rim is under constant threat, and there\'s no such thing as taking a possession off. The goal is simple, win state. Anything less is a failure. The team motto is BTA and they play like it. The squad is run by Bryan Fraser, an OG hooper out of Sac Town with 11 years on the sideline and zero tolerance for bad basketball. Backed by Coach John Efstathiou, a towering presence whose laugh echoes through the gym and whose clipboard slams are felt emotionally and physically.',
   record_wins: 4,
@@ -137,7 +137,7 @@ const boysPlayers = [
 const boysGames = [
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Knappa',
     game_date: '2025-12-03',
     game_time: '19:30',
@@ -149,7 +149,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Gladstone',
     game_date: '2025-12-05',
     game_time: '19:30',
@@ -162,7 +162,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Scappoose',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2025-12-09',
     game_time: '19:00',
     location: 'Away',
@@ -173,7 +173,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Pleasant Hill',
     game_date: '2025-12-12',
     game_time: '18:00',
@@ -185,7 +185,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Banks',
     game_date: '2025-12-15',
     game_time: '19:30',
@@ -197,7 +197,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Tillamook',
     game_date: '2025-12-22',
     game_time: '14:30',
@@ -207,7 +207,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Jefferson',
     game_date: '2025-12-28',
     game_time: '12:30',
@@ -217,7 +217,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Mid Pacific, HI',
     game_date: '2025-12-29',
     game_time: '11:45',
@@ -227,7 +227,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Regis',
     game_date: '2025-12-30',
     game_time: '18:45',
@@ -238,7 +238,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Western Christian',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-03',
     game_time: '15:00',
     location: 'Away',
@@ -248,7 +248,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Horizon Christian, Tualatin',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-06',
     game_time: '19:30',
     location: 'Away',
@@ -257,7 +257,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Westside Christian',
     game_date: '2026-01-08',
     game_time: '19:30',
@@ -267,7 +267,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'De La Salle North Catholic',
     game_date: '2026-01-10',
     game_time: '18:30',
@@ -278,7 +278,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Oregon Episcopal',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-13',
     game_time: '19:30',
     location: 'Away',
@@ -287,7 +287,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Catlin Gabel',
     game_date: '2026-01-16',
     game_time: '19:30',
@@ -297,7 +297,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Riverside, WLWV',
     game_date: '2026-01-20',
     game_time: '19:30',
@@ -308,7 +308,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Portland Adventist Academy',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-22',
     game_time: '19:30',
     location: 'Away',
@@ -317,7 +317,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Horizon Christian, Tualatin',
     game_date: '2026-01-24',
     game_time: '18:30',
@@ -328,7 +328,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Westside Christian',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-27',
     game_time: '19:30',
     location: 'Away',
@@ -338,7 +338,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'De La Salle North Catholic',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-30',
     game_time: '19:30',
     location: 'Away',
@@ -347,7 +347,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Oregon Episcopal',
     game_date: '2026-02-03',
     game_time: '19:30',
@@ -358,7 +358,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Catlin Gabel',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-02-06',
     game_time: '19:30',
     location: 'Away',
@@ -368,7 +368,7 @@ const boysGames = [
   {
     team_type: 'Boys Basketball',
     home_team: 'Riverside, WLWV',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-02-10',
     game_time: '18:00',
     location: 'Away',
@@ -377,7 +377,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Portland Adventist Academy',
     game_date: '2026-02-12',
     game_time: '19:30',
@@ -387,7 +387,7 @@ const boysGames = [
   },
   {
     team_type: 'Boys Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Neah Kah Nie',
     game_date: '2026-02-14',
     game_time: '12:00',
@@ -402,7 +402,7 @@ const boysGames = [
 // ============================================================================
 
 const girlsTeamData = {
-  name: 'Valley Catholic Girls Basketball',
+  name: 'VC Girls Basketball',
   type: 'Girls Basketball',
   description: 'Pure pressure from the opening tip. A relentless full court press, nonstop energy, shooters all over the floor, and substitutions so constant the other team never finds a rhythm. Games turn into chaos fast and stay that way. Led by English teacher Patrick Thomas, who somehow blends grammar, conditioning, and controlled insanity into a system that overwhelms opponents and stacks wins.',
   record_wins: 4,
@@ -515,7 +515,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Knappa',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2025-12-03',
     game_time: '18:00',
     location: 'Away',
@@ -526,7 +526,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Gladstone',
     game_date: '2025-12-05',
     game_time: '18:00',
@@ -539,7 +539,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Scappoose',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2025-12-09',
     game_time: '17:30',
     location: 'Away',
@@ -550,7 +550,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Pleasant Hill',
     game_date: '2025-12-12',
     game_time: '19:30',
@@ -562,7 +562,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Banks',
     game_date: '2025-12-15',
     game_time: '18:00',
@@ -575,7 +575,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Santiam Christian',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2025-12-22',
     game_time: '17:00',
     location: 'Away',
@@ -584,7 +584,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Regis',
     game_date: '2025-12-28',
     game_time: '19:30',
@@ -594,7 +594,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Jefferson',
     game_date: '2025-12-29',
     game_time: '15:15',
@@ -604,7 +604,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Sutherlin',
     game_date: '2025-12-30',
     game_time: '15:15',
@@ -615,7 +615,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Seaside',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-02',
     game_time: '17:30',
     location: 'Away',
@@ -625,7 +625,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Horizon Christian, Tualatin',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-06',
     game_time: '18:00',
     location: 'Away',
@@ -634,7 +634,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Westside Christian',
     game_date: '2026-01-08',
     game_time: '18:00',
@@ -644,7 +644,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'De La Salle North Catholic',
     game_date: '2026-01-10',
     game_time: '17:00',
@@ -655,7 +655,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Oregon Episcopal',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-13',
     game_time: '18:00',
     location: 'Away',
@@ -664,7 +664,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Catlin Gabel',
     game_date: '2026-01-16',
     game_time: '18:00',
@@ -675,7 +675,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Country Christian',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-19',
     game_time: '18:00',
     location: 'Away',
@@ -685,7 +685,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Portland Adventist Academy',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-22',
     game_time: '18:00',
     location: 'Away',
@@ -694,7 +694,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Horizon Christian, Tualatin',
     game_date: '2026-01-24',
     game_time: '17:00',
@@ -705,7 +705,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Westside Christian',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-27',
     game_time: '18:00',
     location: 'Away',
@@ -715,7 +715,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'De La Salle North Catholic',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-01-30',
     game_time: '18:00',
     location: 'Away',
@@ -724,7 +724,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Oregon Episcopal',
     game_date: '2026-02-03',
     game_time: '18:00',
@@ -735,7 +735,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Catlin Gabel',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-02-06',
     game_time: '18:00',
     location: 'Away',
@@ -745,7 +745,7 @@ const girlsGames = [
   {
     team_type: 'Girls Basketball',
     home_team: 'Prairie, WA',
-    away_team: 'Valley Catholic',
+    away_team: 'VC',
     game_date: '2026-02-09',
     game_time: '19:00',
     location: 'Home',
@@ -754,7 +754,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Portland Adventist Academy',
     game_date: '2026-02-12',
     game_time: '18:00',
@@ -764,7 +764,7 @@ const girlsGames = [
   },
   {
     team_type: 'Girls Basketball',
-    home_team: 'Valley Catholic',
+    home_team: 'VC',
     away_team: 'Neah Kah Nie',
     game_date: '2026-02-14',
     game_time: '10:30',
@@ -780,7 +780,7 @@ const girlsGames = [
 
 async function seedData() {
   try {
-    console.log('🏀 Starting Valley Catholic Basketball Data Seeding...\n');
+    console.log('🏀 Starting VC Basketball Data Seeding...\n');
 
     // Seed Boys Team
     console.log('📍 Seeding Boys Basketball Team...');
@@ -845,7 +845,7 @@ async function seedData() {
     console.log(`✅ ${girlsGames.length} girls games added\n`);
 
     console.log('🎉 ============================================');
-    console.log('🎉 Valley Catholic Data Seeding Complete!');
+    console.log('🎉 VC Data Seeding Complete!');
     console.log('🎉 ============================================');
     console.log(`
     Summary:
@@ -866,3 +866,4 @@ async function seedData() {
 
 // Run seeding
 seedData();
+
