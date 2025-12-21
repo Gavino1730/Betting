@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS admin_logs CASCADE;
 DROP TABLE IF EXISTS transactions CASCADE;
 DROP TABLE IF EXISTS bets CASCADE;
+DROP TABLE IF EXISTS prop_bets CASCADE;
 DROP TABLE IF EXISTS player_stats CASCADE;
 DROP TABLE IF EXISTS players CASCADE;
 DROP TABLE IF EXISTS teams CASCADE;
@@ -122,6 +123,20 @@ CREATE TABLE IF NOT EXISTS admin_logs (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS prop_bets (
+  id BIGSERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  team_type TEXT DEFAULT 'General',
+  yes_odds REAL NOT NULL,
+  no_odds REAL NOT NULL,
+  expires_at TIMESTAMP,
+  status TEXT DEFAULT 'active',
+  outcome TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Enable Row Level Security (RLS) for security
 ALTER TABLE users DISABLE ROW LEVEL SECURITY;
 ALTER TABLE teams ENABLE ROW LEVEL SECURITY;
@@ -131,6 +146,7 @@ ALTER TABLE games ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE prop_bets ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies if they exist (for idempotency)
 DROP POLICY IF EXISTS "allow_registration" ON users;
@@ -146,6 +162,8 @@ DROP POLICY IF EXISTS "allow_insert_games" ON games;
 DROP POLICY IF EXISTS "allow_create_bets" ON bets;
 DROP POLICY IF EXISTS "allow_read_own_bets" ON bets;
 DROP POLICY IF EXISTS "allow_read_own_transactions" ON transactions;
+DROP POLICY IF EXISTS "allow_read_prop_bets" ON prop_bets;
+DROP POLICY IF EXISTS "allow_insert_prop_bets" ON prop_bets;
 
 -- Simple policies without recursion
 -- Users table: Allow anyone to insert (register), users can read own data
@@ -193,3 +211,10 @@ CREATE POLICY "allow_read_own_bets" ON bets
 -- Transactions table: Users can read own
 CREATE POLICY "allow_read_own_transactions" ON transactions
   FOR SELECT USING (auth.uid() = user_id);
+
+-- Prop bets table: Public read, anyone can insert
+CREATE POLICY "allow_read_prop_bets" ON prop_bets
+  FOR SELECT USING (true);
+
+CREATE POLICY "allow_insert_prop_bets" ON prop_bets
+  FOR INSERT WITH CHECK (true);
