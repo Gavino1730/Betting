@@ -93,12 +93,6 @@ function App() {
           <button onClick={() => handlePageChange('bets')} className={page === 'bets' ? 'active' : ''}>
             My Bets
           </button>
-          <button onClick={() => handlePageChange('notifications')} className={page === 'notifications' ? 'active' : ''} style={{position: 'relative'}}>
-            🔔 Notifications
-            {unreadCount > 0 && (
-              <span className="notification-badge">{unreadCount}</span>
-            )}
-          </button>
           <button onClick={() => handlePageChange('leaderboard')} className={page === 'leaderboard' ? 'active' : ''}>
             Leaderboard
           </button>
@@ -109,6 +103,16 @@ function App() {
           )}
         </div>
         <div className="nav-right">
+          <button 
+            onClick={() => handlePageChange('notifications')} 
+            className={`notification-icon-btn ${page === 'notifications' ? 'active' : ''}`}
+            style={{position: 'relative', fontSize: '1.5rem', padding: '0.5rem'}}
+          >
+            🔔
+            {unreadCount > 0 && (
+              <span className="notification-badge">{unreadCount}</span>
+            )}
+          </button>
           <div className="user-info">
             <span className="username">{currentUser?.username || 'User'}</span>
           </div>
