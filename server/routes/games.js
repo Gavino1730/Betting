@@ -277,6 +277,87 @@ router.put('/:id/status', authenticateToken, async (req, res) => {
   }
 });
 
+// Admin: Set game outcome and resolve all bets
+router.put('/:id/outcome', authenticateToken, async (req, res) => {
+  const user = req.user;
+  if (!user.is_admin) {
+    return res.status(403).json({ error: 'Only admins can set game outcomes' });
+  }
+
+  const { winningTeam } = req.body;
+  if (!winningTeam) {
+    return res.status(400).json({ error: 'Winning team is required' });
+  }
+
+  try {
+    const Bet = require('../models/Bet');
+    const User = require('../models/User');
+    const Transaction = require('../models/Transaction');
+    const { supabase } = require('../supabase');
+
+    // Get the game
+    const game = await Game.getById(req.params.id);
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
+    }
+
+    // Update game status and result
+    await supabase
+      .from('games')
+      .update({ 
+        status: 'completed',
+        result: winningTeam,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', req.params.id);
+
+    // Get all pending bets for this game
+    const { data: bets, error: betsError } = await supabase
+      .from('bets')
+      .select('*')
+      .eq('game_id', req.params.id)
+      .eq('status', 'pending');
+
+    if (betsError) throw betsError;
+
+    let betsResolved = 0;
+    let winningsDistributed = 0;
+
+    // Process each bet
+    for (const bet of bets || []) {
+      const won = bet.selected_team === winningTeam;
+      const outcome = won ? 'won' : 'lost';
+
+      // Update bet status
+      await Bet.updateStatus(bet.id, 'resolved', outcome);
+
+      // Credit winnings if won
+      if (won) {
+        const winnings = bet.amount * bet.odds;
+        await User.updateBalance(bet.user_id, winnings);
+        await Transaction.create(
+          bet.user_id, 
+          'win', 
+          winnings, 
+          `Won bet on ${bet.selected_team} (${bet.bet_type} confidence)`
+        );
+        winningsDistributed += winnings;
+      }
+
+      betsResolved++;
+    }
+
+    res.json({ 
+      message: 'Game outcome set and bets resolved',
+      betsResolved,
+      winningsDistributed
+    });
+  } catch (err) {
+    console.error('Error setting game outcome:', err);
+    res.status(500).json({ error: 'Error setting game outcome: ' + err.message });
+  }
+});
+
 // Admin: Delete a game
 router.delete('/:id', authenticateToken, async (req, res) => {
   const user = req.user;

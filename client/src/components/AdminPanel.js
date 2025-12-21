@@ -222,6 +222,23 @@ function AdminPanel() {
     }
   };
 
+  const handleSetGameOutcome = async (gameId, winningTeam) => {
+    const confirmed = window.confirm(
+      `Set ${winningTeam} as the winner?\n\nThis will:\n- Mark the game as completed\n- Resolve all pending bets\n- Credit winnings to users who bet on ${winningTeam}`
+    );
+    
+    if (!confirmed) return;
+
+    try {
+      const response = await apiClient.put(`/games/${gameId}/outcome`, { winningTeam });
+      alert(`Game outcome set! ${response.data.betsResolved} bets resolved, ${formatCurrency(response.data.winningsDistributed)} distributed.`);
+      fetchGames();
+      fetchAllBets();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to set game outcome');
+    }
+  };
+
   if (loading) return <div className="card">Loading...</div>;
 
   return (
@@ -456,10 +473,30 @@ function AdminPanel() {
                   <p><strong>Sport:</strong> {game.team_type}</p>
                   <p><strong>Date:</strong> {game.game_date} {game.game_time ? `at ${game.game_time}` : ''}</p>
                   <p><strong>Location:</strong> {game.location || 'N/A'}</p>
-                  <p><strong>Moneyline Odds:</strong> {game.winning_odds}x / {game.losing_odds}x</p>
-                  {game.spread && <p><strong>Spread:</strong> {game.spread} ({game.spread_odds}x)</p>}
-                  {game.over_under && <p><strong>Over/Under:</strong> {game.over_under} (O: {game.over_odds}x / U: {game.under_odds}x)</p>}
+                  <p><strong>Status:</strong> {game.status}</p>
+                  {game.result && <p><strong>Winner:</strong> {game.result}</p>}
                   {game.notes && <p><strong>Notes:</strong> {game.notes}</p>}
+                  
+                  {game.status !== 'completed' && (
+                    <div style={{marginTop: '15px', display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
+                      <button 
+                        className="btn" 
+                        style={{background: '#66bb6a', padding: '8px 12px'}}
+                        onClick={() => handleSetGameOutcome(game.id, game.home_team)}
+                      >
+                        {game.home_team} Won
+                      </button>
+                      {game.away_team && (
+                        <button 
+                          className="btn" 
+                          style={{background: '#ef5350', padding: '8px 12px'}}
+                          onClick={() => handleSetGameOutcome(game.id, game.away_team)}
+                        >
+                          {game.away_team} Won
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
