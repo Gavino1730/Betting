@@ -12,6 +12,8 @@ function AdminTeams() {
   const [formData, setFormData] = useState({});
   const [newPlayer, setNewPlayer] = useState({ number: '', name: '', position: '', grade: '', height: '', bio: '' });
   const [newGame, setNewGame] = useState({ result: '', score: '', type: '', date: '', time: '', opponent: '', location: '' });
+  const [editingPlayer, setEditingPlayer] = useState(null);
+  const [editingGame, setEditingGame] = useState(null);
 
   // Hardcoded fallback teams data
   const getHardcodedTeams = useCallback(() => {
@@ -155,6 +157,37 @@ function AdminTeams() {
     }
   };
 
+  const handleEditPlayer = (player) => {
+    setEditingPlayer({ ...player, originalNumber: player.number });
+  };
+
+  const handleSaveEditPlayer = async () => {
+    try {
+      if (!editingPlayer.number || !editingPlayer.name || !editingPlayer.position || !editingPlayer.grade || !editingPlayer.height || !editingPlayer.bio) {
+        setError('All player fields are required');
+        return;
+      }
+
+      setError('');
+      await apiClient.put(`/teams-admin/${selectedTeam.id}/players/${editingPlayer.originalNumber}`, editingPlayer);
+
+      const updatedTeam = { ...selectedTeam };
+      const playerIndex = updatedTeam.players.findIndex(p => p.number === editingPlayer.originalNumber);
+      if (playerIndex !== -1) {
+        updatedTeam.players[playerIndex] = { ...editingPlayer, number: parseInt(editingPlayer.number) };
+      }
+      setSelectedTeam(updatedTeam);
+      setEditingPlayer(null);
+      setError('Player updated successfully');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update player');
+    }
+  };
+
+  const handleCancelEditPlayer = () => {
+    setEditingPlayer(null);
+  };
+
   const handleAddGame = async () => {
     try {
       if (!newGame.result || !newGame.score || !newGame.type || !newGame.date || !newGame.time || !newGame.opponent || !newGame.location) {
@@ -187,6 +220,36 @@ function AdminTeams() {
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to delete game');
     }
+  };
+
+  const handleEditGame = (game, idx) => {
+    setEditingGame({ ...game, index: idx });
+  };
+
+  const handleSaveEditGame = async () => {
+    try {
+      if (!editingGame.result || !editingGame.score || !editingGame.type || !editingGame.date || !editingGame.time || !editingGame.opponent || !editingGame.location) {
+        setError('All game fields are required');
+        return;
+      }
+
+      setError('');
+      const gameData = { ...editingGame };
+      delete gameData.index;
+      await apiClient.put(`/teams-admin/${selectedTeam.id}/schedule/${editingGame.index}`, gameData);
+
+      const updatedTeam = { ...selectedTeam };
+      updatedTeam.schedule[editingGame.index] = gameData;
+      setSelectedTeam(updatedTeam);
+      setEditingGame(null);
+      setError('Game updated successfully');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update game');
+    }
+  };
+
+  const handleCancelEditGame = () => {
+    setEditingGame(null);
   };
 
   if (loading) return <div className="admin-teams"><p>Loading teams...</p></div>;
@@ -432,18 +495,35 @@ function AdminTeams() {
                     <tbody>
                       {selectedTeam.schedule.map((game, idx) => (
                         <tr key={idx}>
-                          <td>{game.result}</td>
-                          <td>{game.score}</td>
-                          <td>{game.type}</td>
-                          <td>{game.date}</td>
-                          <td>{game.time}</td>
-                          <td>{game.opponent}</td>
-                          <td>{game.location}</td>
-                          <td>
-                            <button className="btn-delete" onClick={() => handleDeleteGame(idx)}>
-                              Delete
-                            </button>
-                          </td>
+                          {editingGame && editingGame.index === idx ? (
+                            <>
+                              <td><input type="text" value={editingGame.result} onChange={(e) => setEditingGame({ ...editingGame, result: e.target.value })} /></td>
+                              <td><input type="text" value={editingGame.score} onChange={(e) => setEditingGame({ ...editingGame, score: e.target.value })} /></td>
+                              <td><input type="text" value={editingGame.type} onChange={(e) => setEditingGame({ ...editingGame, type: e.target.value })} /></td>
+                              <td><input type="text" value={editingGame.date} onChange={(e) => setEditingGame({ ...editingGame, date: e.target.value })} /></td>
+                              <td><input type="text" value={editingGame.time} onChange={(e) => setEditingGame({ ...editingGame, time: e.target.value })} /></td>
+                              <td><input type="text" value={editingGame.opponent} onChange={(e) => setEditingGame({ ...editingGame, opponent: e.target.value })} /></td>
+                              <td><input type="text" value={editingGame.location} onChange={(e) => setEditingGame({ ...editingGame, location: e.target.value })} /></td>
+                              <td>
+                                <button className="btn-save" style={{marginRight: '5px', padding: '8px 12px', fontSize: '12px'}} onClick={handleSaveEditGame}>Save</button>
+                                <button className="btn-cancel" style={{padding: '8px 12px', fontSize: '12px'}} onClick={handleCancelEditGame}>Cancel</button>
+                              </td>
+                            </>
+                          ) : (
+                            <>
+                              <td>{game.result}</td>
+                              <td>{game.score}</td>
+                              <td>{game.type}</td>
+                              <td>{game.date}</td>
+                              <td>{game.time}</td>
+                              <td>{game.opponent}</td>
+                              <td>{game.location}</td>
+                              <td>
+                                <button className="btn-edit" style={{marginRight: '5px', padding: '8px 12px', fontSize: '12px'}} onClick={() => handleEditGame(game, idx)}>Edit</button>
+                                <button className="btn-delete" style={{padding: '8px 12px', fontSize: '12px'}} onClick={() => handleDeleteGame(idx)}>Delete</button>
+                              </td>
+                            </>
+                          )}
                         </tr>
                       ))}
                     </tbody>
@@ -506,20 +586,33 @@ function AdminTeams() {
                   <div className="players-grid">
                     {selectedTeam.players.map(player => (
                       <div key={player.number} className="player-card">
-                        <div className="player-header">
-                          <span className="jersey">#{player.number}</span>
-                          <h5>{player.name}</h5>
-                        </div>
-                        <p><strong>Position:</strong> {player.position}</p>
-                        <p><strong>Grade:</strong> {player.grade}</p>
-                        <p><strong>Height:</strong> {player.height}</p>
-                        <p><strong>Bio:</strong> {player.bio}</p>
-                        <button
-                          className="btn-delete-player"
-                          onClick={() => handleDeletePlayer(player.number)}
-                        >
-                          Remove Player
-                        </button>
+                        {editingPlayer && editingPlayer.originalNumber === player.number ? (
+                          <>
+                            <div className="player-header">
+                              <input type="number" value={editingPlayer.number} onChange={(e) => setEditingPlayer({ ...editingPlayer, number: e.target.value })} placeholder="Jersey #" style={{width: '60px'}} />
+                              <input type="text" value={editingPlayer.name} onChange={(e) => setEditingPlayer({ ...editingPlayer, name: e.target.value })} placeholder="Name" style={{flex: 1}} />
+                            </div>
+                            <p><strong>Position:</strong> <input type="text" value={editingPlayer.position} onChange={(e) => setEditingPlayer({ ...editingPlayer, position: e.target.value })} /></p>
+                            <p><strong>Grade:</strong> <input type="number" value={editingPlayer.grade} onChange={(e) => setEditingPlayer({ ...editingPlayer, grade: e.target.value })} /></p>
+                            <p><strong>Height:</strong> <input type="text" value={editingPlayer.height} onChange={(e) => setEditingPlayer({ ...editingPlayer, height: e.target.value })} /></p>
+                            <p><strong>Bio:</strong> <textarea value={editingPlayer.bio} onChange={(e) => setEditingPlayer({ ...editingPlayer, bio: e.target.value })} rows="3" style={{width: '100%'}} /></p>
+                            <button className="btn-save" style={{marginRight: '5px', marginBottom: '5px'}} onClick={handleSaveEditPlayer}>Save</button>
+                            <button className="btn-cancel" onClick={handleCancelEditPlayer}>Cancel</button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="player-header">
+                              <span className="jersey">#{player.number}</span>
+                              <h5>{player.name}</h5>
+                            </div>
+                            <p><strong>Position:</strong> {player.position}</p>
+                            <p><strong>Grade:</strong> {player.grade}</p>
+                            <p><strong>Height:</strong> {player.height}</p>
+                            <p><strong>Bio:</strong> {player.bio}</p>
+                            <button className="btn-edit" style={{marginRight: '5px', marginBottom: '5px'}} onClick={() => handleEditPlayer(player)}>Edit Player</button>
+                            <button className="btn-delete-player" onClick={() => handleDeletePlayer(player.number)}>Remove Player</button>
+                          </>
+                        )}
                       </div>
                     ))}
                   </div>

@@ -361,8 +361,42 @@
   color: #b8c5d6;
 }
 
+.schedule-list td input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 4px;
+  background: #2a2f45;
+  color: #e0e0e0;
+  font-size: 13px;
+}
+
+.schedule-list td input:focus {
+  outline: none;
+  border-color: #ffd700;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.15);
+}
+
 .schedule-list tbody tr:hover {
   background: linear-gradient(135deg, #252842 0%, #2a2f45 100%);
+}
+
+.player-card input,
+.player-card textarea {
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 4px;
+  background: #2a2f45;
+  color: #e0e0e0;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.player-card input:focus,
+.player-card textarea:focus {
+  outline: none;
+  border-color: #ffd700;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.15);
 }
 
 .players-grid {
