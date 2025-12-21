@@ -24,6 +24,7 @@ function Dashboard({ user }) {
     const fetchGames = async () => {
       try {
         const response = await apiClient.get('/games');
+        console.log('Fetched games:', response.data);
         setGames(response.data || []);
       } catch (err) {
         console.error('Error fetching games:', err);
@@ -37,6 +38,15 @@ function Dashboard({ user }) {
   }, []);
 
   const selectedGame = selectedGameId ? games.find(g => g.id === parseInt(selectedGameId)) : null;
+  
+  // Log selected game for debugging
+  useEffect(() => {
+    if (selectedGame) {
+      console.log('Selected game:', selectedGame);
+      console.log('Home team:', selectedGame.home_team);
+      console.log('Away team:', selectedGame.away_team);
+    }
+  }, [selectedGame]);
 
   const handlePlaceBet = async (e) => {
     e.preventDefault();
