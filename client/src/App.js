@@ -113,6 +113,9 @@ function App() {
               <span className="notification-badge">{unreadCount}</span>
             )}
           </button>
+          <div className="balance-display">
+            <span className="balance-amount">${currentUser?.balance || 0}</span>
+          </div>
           <div className="user-info">
             <span className="username">{currentUser?.username || 'User'}</span>
           </div>
@@ -131,6 +134,13 @@ function App() {
         {page === 'notifications' && <Notifications />}
         {page === 'admin' && user && user.is_admin && <AdminPanel />}
       </div>
+
+      <footer className="footer">
+        <div className="footer-content">
+          <p>&copy; 2024 Valiant Picks. All rights reserved.</p>
+          <p className="footer-tagline">Bet Smart. Win Big. Valiant Style.</p>
+        </div>
+      </footer>
     </div>
   );
 }
