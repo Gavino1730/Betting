@@ -52,25 +52,7 @@ function Dashboard({ user }) {
 
       const betData = {
         gameId: selectedGame.id,
-        betType,
-        selectedTeam: selectedTeam || null,
-        amount: parseFloat(amount),
-        odds: parseFloat(odds),
-      };
-
-      await apiClient.post('/bets', betData);
-
-      // Refresh user balance from server
-      const userResponse = await apiClient.get('/users/profile');
-      setBalance(userResponse.data.balance);
-
-      setMessage(`Bet placed successfully on ${selectedGame.home_team}! Potential win: ${formatCurrency(amount * odds)}`);
-      setSelectedGameId('');
-      setBetType('moneyline');
-      setSelectedTeam('');
-      setAmount('');
-      setOdds('');
-    } caselectedTeam,
+        selectedTeam,
         confidence,
         amount: parseFloat(amount),
         odds: confidenceMultipliers[confidence],
@@ -86,7 +68,25 @@ function Dashboard({ user }) {
       setSelectedGameId('');
       setSelectedTeam('');
       setConfidence('');
-      setAmountv className={`alert ${message.includes('Error') || message.includes('error') ? 'alert-error' : 'alert-success'}`}>
+      setAmount('');
+    } catch (err) {
+      setMessage(err.response?.data?.error || 'Error placing bet');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="dashboard">
+      <div className="card">
+        <h2>Welcome back!</h2>
+        <p>Your current balance: <span className="balance">{formatCurrency(balance)}</span></p>
+      </div>
+
+      <div className="card">
+        <h3>Place a Bet</h3>
+        {message && (
+          <div className={`alert ${message.includes('Error') || message.includes('error') ? 'alert-error' : 'alert-success'}`}>
             {message}
           </div>
         )}
@@ -105,7 +105,7 @@ function Dashboard({ user }) {
                 onChange={(e) => {
                   setSelectedGameId(e.target.value);
                   setSelectedTeam('');
-                  setOdds('');
+                  setConfidence('');
                 }}
                 required
               >
@@ -121,8 +121,7 @@ function Dashboard({ user }) {
             {selectedGame && (
               <>
                 <div className="form-group">
-                  <label>Bet Type</label>
-                  <div clWhich team will win?</label>
+                  <label>Which team will win?</label>
                   <div className="team-selection">
                     <button
                       type="button"
@@ -192,7 +191,8 @@ function Dashboard({ user }) {
                   </div>
                 )}
 
-                <button type="submit" className="btn" disabled={loading || !selectedTeam || !confidence || !amount
+                <button type="submit" className="btn" disabled={loading || !selectedTeam || !confidence || !amount}>
+                  {loading ? 'Processing...' : 'Place Bet'}
                 </button>
               </>
             )}
