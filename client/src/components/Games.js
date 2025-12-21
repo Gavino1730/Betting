@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../utils/axios';
 import '../styles/Games.css';
+import { formatCurrency } from '../utils/currency';
 
 function Games() {
   const [games, setGames] = useState([]);
   const [propBets, setPropBets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('games');
+  const [balance, setBalance] = useState(0);
+  const [propBetAmounts, setPropBetAmounts] = useState({});
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    fetchGames();
+    fetchPropBets();
+    fetchBalance();
+  }, []);
+
+  const fetchBalance = async () => {
+    try {
+      const response = await apiClient.get('/users/profile');
+      setBalance(response.data.balance);
+    } catch (err) {
+      console.error('Error fetching balance:', err);
+    }
+  };
 
   useEffect(() => {
     fetchGames();
@@ -44,6 +63,43 @@ function Games() {
     return date.toLocaleDateString('en-US', options);
   };
 
+  const handlePlacePropBet = async (propId, choice) => {
+    const amount = parseFloat(propBetAmounts[`${propId}-${choice}`]);
+    
+    if (!amount || amount <= 0) {
+      setMessage('Please enter a valid bet amount');
+      return;
+    }
+
+    if (amount > balance) {
+      setMessage('Insufficient balance!');
+      return;
+    }
+
+    try {
+      await apiClient.post('/prop-bets/place', {
+        propBetId: propId,
+        choice,
+        amount
+      });
+      
+      setMessage(`Bet placed successfully on ${choice.toUpperCase()}!`);
+      setPropBetAmounts({});
+      fetchBalance();
+      
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      setMessage(err.response?.data?.error || 'Failed to place bet');
+    }
+  };
+
+  const handlePropAmountChange = (propId, choice, value) => {
+    setPropBetAmounts(prev => ({
+      ...prev,
+      [`${propId}-${choice}`]: value
+    }));
+  };
+
   const activePropBets = propBets.filter(pb => pb.status === 'active');
 
   return (
@@ -51,7 +107,14 @@ function Games() {
       <div className="page-header">
         <h2>Available Bets</h2>
         <p className="page-subtitle">Browse all upcoming games and prop bets</p>
+        <p className="balance-display">Your Balance: {formatCurrency(balance)}</p>
       </div>
+
+      {message && (
+        <div className={`alert ${message.includes('Error') || message.includes('Insufficient') ? 'alert-error' : 'alert-success'}`}>
+          {message}
+        </div>
+      )}
 
       <div className="tabs">
         <button 
@@ -165,14 +228,49 @@ function Games() {
                       <p className="prop-description">{prop.description}</p>
                     )}
 
-                    <div className="prop-options">
-                      <div className="prop-option yes">
-                        <span className="option-label">YES</span>
-                        <span className="option-odds">{prop.yes_odds}x</span>
+                    <div className="prop-betting-section">
+                      <div className="prop-option-bet yes">
+                        <div className="option-header">
+                          <span className="option-label">YES</span>
+                          <span className="option-odds">{prop.yes_odds}x</span>
+                        </div>
+                        <input
+                          type="number"
+                          placeholder="Bet amount"
+                          min="0.01"
+                          step="0.01"
+                          value={propBetAmounts[`${prop.id}-yes`] || ''}
+                          onChange={(e) => handlePropAmountChange(prop.id, 'yes', e.target.value)}
+                          className="prop-bet-input"
+                        />
+                        <button
+                          className="prop-bet-btn yes-btn"
+                          onClick={() => handlePlacePropBet(prop.id, 'yes')}
+                        >
+                          Bet YES
+                        </button>
                       </div>
-                      <div className="prop-option no">
-                        <span className="option-label">NO</span>
-                        <span className="option-odds">{prop.no_odds}x</span>
+
+                      <div className="prop-option-bet no">
+                        <div className="option-header">
+                          <span className="option-label">NO</span>
+                          <span className="option-odds">{prop.no_odds}x</span>
+                        </div>
+                        <input
+                          type="number"
+                          placeholder="Bet amount"
+                          min="0.01"
+                          step="0.01"
+                          value={propBetAmounts[`${prop.id}-no`] || ''}
+                          onChange={(e) => handlePropAmountChange(prop.id, 'no', e.target.value)}
+                          className="prop-bet-input"
+                        />
+                        <button
+                          className="prop-bet-btn no-btn"
+                          onClick={() => handlePlacePropBet(prop.id, 'no')}
+                        >
+                          Bet NO
+                        </button>
                       </div>
                     </div>
 

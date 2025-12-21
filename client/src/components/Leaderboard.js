@@ -18,7 +18,8 @@ function Leaderboard() {
     try {
       // Get all users
       const usersRes = await apiClient.get('/users');
-      setUsers(usersRes.data);
+      // Filter out admin account
+      setUsers(usersRes.data.filter(u => u.username !== 'admin'));
 
       // Get all bets
       const betsRes = await apiClient.get('/bets/all');

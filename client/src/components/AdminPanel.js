@@ -202,16 +202,10 @@ function AdminPanel() {
 
   const handleToggleGameVisibility = async (gameId, currentVisibility) => {
     const newVisibility = !currentVisibility;
-    const confirmMsg = newVisibility 
-      ? 'Show this game to users for betting?' 
-      : 'Hide this game from users?';
     
-    if (!window.confirm(confirmMsg)) return;
-
     try {
       await apiClient.put(`/games/${gameId}/visibility`, { isVisible: newVisibility });
       fetchGames();
-      alert(`Game ${newVisibility ? 'shown' : 'hidden'} successfully!`);
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to toggle visibility');
     }

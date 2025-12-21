@@ -64,11 +64,20 @@ function Dashboard({ user }) {
         return;
       }
 
+      const betAmount = parseFloat(amount);
+      
+      // Validate bet amount against balance
+      if (betAmount > balance) {
+        setMessage('Insufficient balance! You cannot bet more than you have.');
+        setLoading(false);
+        return;
+      }
+
       const betData = {
         gameId: selectedGame.id,
         selectedTeam,
         confidence,
-        amount: parseFloat(amount),
+        amount: betAmount,
         odds: confidenceMultipliers[confidence],
       };
 
