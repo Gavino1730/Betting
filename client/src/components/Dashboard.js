@@ -216,7 +216,7 @@ function Dashboard({ user }) {
 
                 {odds && amount && (
                   <div className="potential-win">
-                    Potential win: {(parseFloat(amount) * parseFloat(odds)).toFixed(2)} Valiant Bucks
+                    Potential win: {formatCurrency(parseFloat(amount) * parseFloat(odds))} Valiant Bucks
                   </div>
                 )}
 
