@@ -88,6 +88,12 @@ body {
   backdrop-filter: blur(10px);
 }
 
+.notification-icon-btn {
+  position: relative;
+  font-size: 1.2rem !important;
+  padding: 0.65rem 1rem !important;
+}
+
 .nav-center button:hover,
 .nav-right button:hover {
   background: rgba(255, 255, 255, 0.15);

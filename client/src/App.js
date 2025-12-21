@@ -73,6 +73,10 @@ function App() {
   // Get user data from state or localStorage
   const currentUser = user || (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null);
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US').format(amount || 0);
+  };
+
   return (
     <div className="app">
       <nav className="navbar">
@@ -106,7 +110,6 @@ function App() {
           <button 
             onClick={() => handlePageChange('notifications')} 
             className={`notification-icon-btn ${page === 'notifications' ? 'active' : ''}`}
-            style={{position: 'relative', fontSize: '1.5rem', padding: '0.5rem'}}
           >
             🔔
             {unreadCount > 0 && (
@@ -114,7 +117,7 @@ function App() {
             )}
           </button>
           <div className="balance-display">
-            <span className="balance-amount">${currentUser?.balance || 0}</span>
+            <span className="balance-amount">${formatCurrency(currentUser?.balance)}</span>
           </div>
           <div className="user-info">
             <span className="username">{currentUser?.username || 'User'}</span>
