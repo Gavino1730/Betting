@@ -53,7 +53,7 @@ function App() {
           <img src="/assets/logo.png" alt="Valiant Picks" className="logo-img" />
           <span>Valiant Picks</span>
         </div>
-        <div className="nav-links">
+        <div className="nav-center">
           <button onClick={() => setPage('dashboard')} className={page === 'dashboard' ? 'active' : ''}>
             Dashboard
           </button>
@@ -74,6 +74,8 @@ function App() {
               Admin
             </button>
           )}
+        </div>
+        <div className="nav-right">
           <div className="user-info">
             <span className="username">{currentUser?.username || 'User'}</span>
           </div>
