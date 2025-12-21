@@ -1,0 +1,346 @@
+/* ===== GAMES PAGE ===== */
+.games-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.page-header h2 {
+  color: #ffd700;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  color: #888a9b;
+  font-size: 1.1rem;
+}
+
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #888a9b;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+  color: #e0e0e0;
+}
+
+.tab-btn.active {
+  color: #ffd700;
+  border-bottom-color: #ffd700;
+}
+
+/* ===== GAMES GRID ===== */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.game-card-display {
+  background: linear-gradient(135deg, #1e2139 0%, #252945 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.game-card-display:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.game-sport {
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.game-status {
+  color: #66bb6a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.game-matchup {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.team {
+  margin: 0.5rem 0;
+}
+
+.team-name {
+  color: #e0e0e0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.vs {
+  display: block;
+  color: #888a9b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.8rem 0;
+}
+
+.game-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #b0b2c3;
+  font-size: 0.95rem;
+}
+
+.detail-icon {
+  font-size: 1.2rem;
+}
+
+.game-notes {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background: rgba(255, 215, 0, 0.05);
+  border-left: 3px solid #ffd700;
+  border-radius: 4px;
+}
+
+.game-notes p {
+  color: #b0b2c3;
+  font-size: 0.9rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.betting-info {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.confidence-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+
+.confidence-option {
+  text-align: center;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.confidence-option .label {
+  display: block;
+  color: #888a9b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.confidence-option .multiplier {
+  display: block;
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* ===== PROP BETS GRID ===== */
+.props-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.prop-card {
+  background: linear-gradient(135deg, #1e2139 0%, #252945 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.prop-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
+}
+
+.prop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.prop-header h3 {
+  color: #e0e0e0;
+  font-size: 1.2rem;
+  margin: 0;
+  flex: 1;
+}
+
+.prop-category {
+  background: linear-gradient(135deg, #7e57c2 0%, #5e35b1 100%);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prop-description {
+  color: #b0b2c3;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.prop-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.prop-option {
+  padding: 1.2rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.prop-option.yes {
+  background: linear-gradient(135deg, rgba(102, 187, 106, 0.2) 0%, rgba(67, 160, 71, 0.2) 100%);
+  border: 2px solid rgba(102, 187, 106, 0.3);
+}
+
+.prop-option.yes:hover {
+  background: linear-gradient(135deg, rgba(102, 187, 106, 0.3) 0%, rgba(67, 160, 71, 0.3) 100%);
+  border-color: rgba(102, 187, 106, 0.5);
+}
+
+.prop-option.no {
+  background: linear-gradient(135deg, rgba(239, 83, 80, 0.2) 0%, rgba(211, 47, 47, 0.2) 100%);
+  border: 2px solid rgba(239, 83, 80, 0.3);
+}
+
+.prop-option.no:hover {
+  background: linear-gradient(135deg, rgba(239, 83, 80, 0.3) 0%, rgba(211, 47, 47, 0.3) 100%);
+  border-color: rgba(239, 83, 80, 0.5);
+}
+
+.option-label {
+  display: block;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.option-odds {
+  display: block;
+  color: #ffd700;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.prop-expires {
+  text-align: center;
+  color: #888a9b;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #888a9b;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #ffd700;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .games-grid,
+  .props-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h2 {
+    font-size: 2rem;
+  }
+
+  .confidence-options {
+    grid-template-columns: 1fr;
+  }
+}

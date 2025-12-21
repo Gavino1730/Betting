@@ -6,6 +6,7 @@ import AdminPanel from './components/AdminPanel';
 import BetList from './components/BetList';
 import Leaderboard from './components/Leaderboard';
 import Teams from './components/Teams';
+import Games from './components/Games';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -56,6 +57,9 @@ function App() {
           <button onClick={() => setPage('dashboard')} className={page === 'dashboard' ? 'active' : ''}>
             Dashboard
           </button>
+          <button onClick={() => setPage('games')} className={page === 'games' ? 'active' : ''}>
+            Browse Games
+          </button>
           <button onClick={() => setPage('teams')} className={page === 'teams' ? 'active' : ''}>
             Teams
           </button>
@@ -81,6 +85,7 @@ function App() {
 
       <div className="container">
         {page === 'dashboard' && <Dashboard user={user} />}
+        {page === 'games' && <Games />}
         {page === 'teams' && <Teams />}
         {page === 'bets' && <BetList />}
         {page === 'leaderboard' && <Leaderboard />}
