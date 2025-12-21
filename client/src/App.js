@@ -58,7 +58,7 @@ function App() {
             Dashboard
           </button>
           <button onClick={() => setPage('games')} className={page === 'games' ? 'active' : ''}>
-            Browse Games
+            Browse Bets
           </button>
           <button onClick={() => setPage('teams')} className={page === 'teams' ? 'active' : ''}>
             Teams

@@ -20,7 +20,7 @@ Full-stack sports betting website for Valiant Academy basketball. Users bet with
 1. **Betting System**: Confidence-based (Low 1.2x, Medium 1.5x, High 2.0x)
 2. **Game Management**: Admin controls game visibility, sets outcomes
 3. **Prop Bets**: Full betting interface with YES/NO options and custom odds
-4. **Browse Games**: Public page showing all available bets
+4. **Browse Bets**: Public page showing all available bets
 5. **Teams & Players**: Team rosters, schedules, stats (JSON fields)
 6. **Leaderboard**: Public rankings (filters out admin account)
 7. **Balance Validation**: Prevents overbetting
