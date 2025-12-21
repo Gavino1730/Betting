@@ -782,6 +782,25 @@ async function seedData() {
   try {
     console.log('🏀 Starting VC Basketball Data Seeding...\n');
 
+    // Check if teams already exist
+    console.log('🔍 Checking for existing teams...');
+    const { data: existingTeams, error: checkError } = await supabase
+      .from('teams')
+      .select('name')
+      .in('name', ['VC Boys Basketball', 'VC Girls Basketball']);
+
+    if (checkError) throw new Error(`Check failed: ${checkError.message}`);
+
+    if (existingTeams && existingTeams.length > 0) {
+      console.log('⚠️  WARNING: VC teams already exist in the database!');
+      console.log(`   Found ${existingTeams.length} existing team(s): ${existingTeams.map(t => t.name).join(', ')}`);
+      console.log('   To prevent duplicates, seeding has been cancelled.');
+      console.log('   If you want to re-seed, please delete existing VC teams first.\n');
+      process.exit(0);
+    }
+
+    console.log('✅ No existing VC teams found. Proceeding with seeding...\n');
+
     // Seed Boys Team
     console.log('📍 Seeding Boys Basketball Team...');
     const { data: boysTeam, error: boysTeamError } = await supabase
