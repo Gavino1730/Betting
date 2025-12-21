@@ -14,7 +14,7 @@ function AdminTeams() {
   const [newGame, setNewGame] = useState({ result: '', score: '', type: '', date: '', time: '', opponent: '', location: '' });
 
   // Hardcoded fallback teams data
-  const getHardcodedTeams = () => {
+  const getHardcodedTeams = useCallback(() => {
     return [
       {
         id: 'boys',
@@ -45,7 +45,7 @@ function AdminTeams() {
         players: []
       }
     ];
-  };
+  }, []);
 
   // Load teams on mount
   const fetchTeams = useCallback(async () => {
@@ -62,7 +62,11 @@ function AdminTeams() {
         setSelectedTeam(response.data[0]);
         setFormData(response.data[0]);
       } else {
-        throw new Error('No teams returned');
+        // API returned empty, use hardcoded
+        const hardcodedTeams = getHardcodedTeams();
+        setTeams(hardcodedTeams);
+        setSelectedTeam(hardcodedTeams[0]);
+        setFormData(hardcodedTeams[0]);
       }
     } catch (err) {
       console.log('API fetch failed, using hardcoded teams:', err.message);
@@ -73,7 +77,7 @@ function AdminTeams() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getHardcodedTeams]);
 
   useEffect(() => {
     fetchTeams();
@@ -197,7 +201,14 @@ function AdminTeams() {
     }
   };
 
-  if (loading) return <div className="admin-teams">Loading...</div>;
+  if (loading) return <div className="admin-teams"><p>Loading teams...</p></div>;
+  
+  // Ensure teams is always an array
+  const teamsToDisplay = Array.isArray(teams) ? teams : [];
+  
+  if (!teamsToDisplay || teamsToDisplay.length === 0) {
+    return <div className="admin-teams"><p>No teams available</p></div>;
+  }
 
   return (
     <div className="admin-teams">
@@ -206,7 +217,7 @@ function AdminTeams() {
       <div className="teams-selector">
         <h3>Select Team</h3>
         <div className="team-buttons">
-          {teams.map(team => (
+          {teamsToDisplay.map(team => (
             <button
               key={team.id}
               className={`team-btn ${selectedTeam?.id === team.id ? 'active' : ''}`}
