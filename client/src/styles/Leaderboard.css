@@ -4,14 +4,14 @@
 }
 
 .leaderboard h2 {
-  color: #004f9e;
+  color: #ffd700;
   margin-bottom: 2rem;
   font-size: 2.2rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  text-shadow: 0 2px 4px rgba(0, 79, 158, 0.1);
+  text-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
 }
 
 /* ===== CONTROLS ===== */
@@ -55,11 +55,11 @@
 
 /* ===== TABLE ===== */
 .leaderboard-table-wrapper {
-  background: #2a2e35;
-  border-radius: 14px;
+  background: linear-gradient(135deg, #1e2139 0%, #161b2e 100%);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  border: 2px solid #3a3f47;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 215, 0, 0.12);
   margin-bottom: 2rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -73,17 +73,17 @@
 }
 
 .leaderboard-table thead {
-  background: linear-gradient(135deg, #1a1f27 0%, #232933 100%);
-  border-bottom: 3px solid #0080d0;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
 .leaderboard-table th {
-  padding: 1.6rem 1.4rem;
+  padding: 1.4rem;
   text-align: left;
-  color: #0080d0;
+  color: #ffd700;
   font-weight: 700;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -110,8 +110,8 @@
 
 .leaderboard-table td {
   padding: 1.2rem 1.4rem;
-  border-bottom: 1px solid #3a3f47;
-  color: #d8dce4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #b8c5d6;
   font-size: 0.95rem;
 }
 
@@ -134,11 +134,12 @@
 
 .leaderboard-table tbody tr {
   transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.02) 100%);
 }
 
 .leaderboard-table tbody tr:hover {
-  background: #353b44;
-  box-shadow: inset 0 1px 3px rgba(0, 128, 208, 0.15);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0.04) 100%);
+  box-shadow: inset 0 1px 3px rgba(255, 215, 0, 0.1);
 }
 
 .leaderboard-table tbody tr.rank-1 {
@@ -213,13 +214,13 @@
 
 .user-name {
   font-weight: 700;
-  color: #0080d0;
+  color: #ffd700;
   font-size: 1rem;
 }
 
 .admin-badge {
   display: inline-block;
-  background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+  background: linear-gradient(90deg, #ef5350 0%, #d32f2f 100%);
   color: white;
   padding: 0.3rem 0.7rem;
   border-radius: 4px;
@@ -238,36 +239,36 @@
 .leaderboard-table td.balance-stat {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #27ae60;
+  color: #66bb6a;
 }
 
 .stat-value {
-  color: #d8dce4;
+  color: #b8c5d6;
   font-weight: 600;
 }
 
 .stat-won {
-  color: #27ae60;
+  color: #66bb6a;
   font-weight: 700;
 }
 
 .stat-lost {
-  color: #e74c3c;
+  color: #ef5350;
   font-weight: 700;
 }
 
 .stat-pending {
-  color: #f39c12;
+  color: #ffc107;
   font-weight: 700;
 }
 
 .stat-winning {
-  color: #27ae60;
+  color: #66bb6a;
   font-weight: 700;
 }
 
 .stat-divider {
-  color: #bdc3c7;
+  color: #888a9b;
   margin: 0 0.3rem;
 }
 
@@ -279,23 +280,23 @@
 }
 
 .overview-stat {
-  background: #2a2e35;
+  background: linear-gradient(135deg, #1e2139 0%, #161b2e 100%);
   padding: 2rem 1.8rem;
-  border-radius: 14px;
+  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border: 2px solid #3a3f47;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 215, 0, 0.12);
   transition: all 0.3s ease;
 }
 
 .overview-stat:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 128, 208, 0.25);
-  border-color: #0080d0;
+  box-shadow: 0 12px 32px rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.25);
 }
 
 .overview-stat h4 {
-  color: #8a9299;
+  color: #888a9b;
   font-size: 0.9rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -304,10 +305,11 @@
 }
 
 .overview-stat .value {
-  color: #0080d0;
+  color: #ffd700;
   font-size: 2rem;
   font-weight: 800;
   margin: 0;
+  text-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
 }
 
 /* ===== FADE IN ANIMATION ===== */

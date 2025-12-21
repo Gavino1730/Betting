@@ -7,7 +7,6 @@ function Leaderboard({ apiUrl }) {
   const [users, setUsers] = useState([]);
   const [bets, setBets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState('balance');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -65,20 +64,8 @@ function Leaderboard({ apiUrl }) {
 
   const sortedUsers = () => {
     const usersWithStats = getUsersWithStats();
-    const sorted = [...usersWithStats].sort((a, b) => {
-      switch (sortBy) {
-        case 'balance':
-          return b.balance - a.balance;
-        case 'bets':
-          return b.stats.totalBets - a.stats.totalBets;
-        case 'winnings':
-          return b.stats.totalWinnings - a.stats.totalWinnings;
-        case 'winRate':
-          return parseFloat(b.stats.winRate) - parseFloat(a.stats.winRate);
-        default:
-          return 0;
-      }
-    });
+    // Sort by balance (default)
+    const sorted = [...usersWithStats].sort((a, b) => b.balance - a.balance);
     return sorted;
   };
 
