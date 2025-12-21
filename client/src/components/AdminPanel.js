@@ -16,6 +16,8 @@ function AdminPanel() {
   const [newBalance, setNewBalance] = useState('');
   const [editingGame, setEditingGame] = useState(null);
   const [gameStatusModal, setGameStatusModal] = useState(null);
+  const [gameFilter, setGameFilter] = useState('all'); // 'all', 'boys', 'girls'
+  const [showCreateForm, setShowCreateForm] = useState(false);
   
   // Game creation form
   const [gameForm, setGameForm] = useState({
@@ -353,205 +355,201 @@ function AdminPanel() {
 
       {tab === 'games' && (
         <div className="admin-section">
-          <h3>Create New Game</h3>
-          <div style={{marginBottom: '20px'}}>
-            <button 
-              type="button" 
-              className="btn" 
-              onClick={seedGamesFromSchedule}
-              style={{marginRight: '10px', background: '#66bb6a'}}
-            >
-              Seed Games from Team Schedules
-            </button>
-            <small style={{color: '#888'}}>Import upcoming scheduled games from both teams</small>
+          {/* Filter and Action Bar */}
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px', gap: '15px', flexWrap: 'wrap'}}>
+            <div style={{display: 'flex', gap: '10px'}}>
+              <button 
+                onClick={() => setGameFilter('all')}
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: gameFilter === 'all' ? 'linear-gradient(135deg, #ffd700, #ffed4e)' : 'rgba(255, 255, 255, 0.1)',
+                  color: gameFilter === 'all' ? '#0d47a1' : 'white',
+                  fontWeight: gameFilter === 'all' ? '600' : '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                All Games ({games.length})
+              </button>
+              <button 
+                onClick={() => setGameFilter('boys')}
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: gameFilter === 'boys' ? 'linear-gradient(135deg, #2196f3, #1976d2)' : 'rgba(255, 255, 255, 0.1)',
+                  color: 'white',
+                  fontWeight: gameFilter === 'boys' ? '600' : '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Boys Basketball ({games.filter(g => g.team_type === 'Boys Basketball').length})
+              </button>
+              <button 
+                onClick={() => setGameFilter('girls')}
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: gameFilter === 'girls' ? 'linear-gradient(135deg, #e91e63, #c2185b)' : 'rgba(255, 255, 255, 0.1)',
+                  color: 'white',
+                  fontWeight: gameFilter === 'girls' ? '600' : '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Girls Basketball ({games.filter(g => g.team_type === 'Girls Basketball').length})
+              </button>
+            </div>
+            <div style={{display: 'flex', gap: '10px'}}>
+              <button 
+                type="button" 
+                className="btn" 
+                onClick={seedGamesFromSchedule}
+                style={{background: '#66bb6a', padding: '10px 20px'}}
+              >
+                📥 Seed from Schedules
+              </button>
+              <button 
+                type="button" 
+                className="btn" 
+                onClick={() => setShowCreateForm(!showCreateForm)}
+                style={{background: showCreateForm ? '#757575' : '#ffd700', color: showCreateForm ? 'white' : '#0d47a1', padding: '10px 20px'}}
+              >
+                {showCreateForm ? '✕ Close Form' : '+ Create Game'}
+              </button>
+            </div>
           </div>
-          <form onSubmit={handleCreateGame} className="game-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="teamType">Sport Type</label>
-                <select 
-                  id="teamType" 
-                  name="teamType" 
-                  value={gameForm.teamType} 
-                  onChange={handleGameFormChange}
-                  required
-                >
-                  <option value="Boys Basketball">Boys Basketball</option>
-                  <option value="Girls Basketball">Girls Basketball</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label htmlFor="homeTeam">Home Team *</label>
-                <input 
-                  id="homeTeam" 
-                  type="text" 
-                  name="homeTeam" 
-                  value={gameForm.homeTeam} 
-                  onChange={handleGameFormChange}
-                  required 
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="awayTeam">Away Team</label>
-                <input 
-                  id="awayTeam" 
-                  type="text" 
-                  name="awayTeam" 
-                  value={gameForm.awayTeam} 
-                  onChange={handleGameFormChange}
-                />
-              </div>
+
+          {/* Create Game Form (Collapsible) */}
+          {showCreateForm && (
+            <div style={{background: 'rgba(255, 215, 0, 0.05)', padding: '25px', borderRadius: '12px', marginBottom: '25px', border: '2px solid rgba(255, 215, 0, 0.3)'}}>
+              <h3 style={{marginTop: 0}}>Create New Game</h3>
+              <form onSubmit={handleCreateGame} className="game-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="teamType">Sport Type</label>
+                    <select 
+                      id="teamType" 
+                      name="teamType" 
+                      value={gameForm.teamType} 
+                      onChange={handleGameFormChange}
+                      required
+                    >
+                      <option value="Boys Basketball">Boys Basketball</option>
+                      <option value="Girls Basketball">Girls Basketball</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="homeTeam">Home Team *</label>
+                    <input 
+                      id="homeTeam" 
+                      type="text" 
+                      name="homeTeam" 
+                      value={gameForm.homeTeam} 
+                      onChange={handleGameFormChange}
+                      required 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="awayTeam">Away Team</label>
+                    <input 
+                      id="awayTeam" 
+                      type="text" 
+                      name="awayTeam" 
+                      value={gameForm.awayTeam} 
+                      onChange={handleGameFormChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="gameDate">Game Date *</label>
+                    <input 
+                      id="gameDate" 
+                      type="date" 
+                      name="gameDate" 
+                      value={gameForm.gameDate} 
+                      onChange={handleGameFormChange}
+                      required 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="gameTime">Game Time</label>
+                    <input 
+                      id="gameTime" 
+                      type="time" 
+                      name="gameTime" 
+                      value={gameForm.gameTime} 
+                      onChange={handleGameFormChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="location">Location</label>
+                    <input 
+                      id="location" 
+                      type="text" 
+                      name="location" 
+                      value={gameForm.location} 
+                      onChange={handleGameFormChange}
+                      placeholder="Home or Away"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="winningOdds">Winning Odds *</label>
+                    <input 
+                      id="winningOdds" 
+                      type="number" 
+                      step="0.01" 
+                      name="winningOdds" 
+                      value={gameForm.winningOdds} 
+                      onChange={handleGameFormChange}
+                      placeholder="1.95"
+                      required 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="losingOdds">Losing Odds *</label>
+                    <input 
+                      id="losingOdds" 
+                      type="number" 
+                      step="0.01" 
+                      name="losingOdds" 
+                      value={gameForm.losingOdds} 
+                      onChange={handleGameFormChange}
+                      placeholder="1.95"
+                      required 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="notes">Notes</label>
+                    <input 
+                      id="notes" 
+                      type="text"
+                      name="notes" 
+                      value={gameForm.notes} 
+                      onChange={handleGameFormChange}
+                      placeholder="Optional notes"
+                    />
+                  </div>
+                </div>
+
+                <button type="submit" className="btn">Create Game</button>
+              </form>
             </div>
+          )}
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="gameDate">Game Date *</label>
-                <input 
-                  id="gameDate" 
-                  type="date" 
-                  name="gameDate" 
-                  value={gameForm.gameDate} 
-                  onChange={handleGameFormChange}
-                  required 
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="gameTime">Game Time</label>
-                <input 
-                  id="gameTime" 
-                  type="time" 
-                  name="gameTime" 
-                  value={gameForm.gameTime} 
-                  onChange={handleGameFormChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="location">Location</label>
-                <input 
-                  id="location" 
-                  type="text" 
-                  name="location" 
-                  value={gameForm.location} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., New York, NY"
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="winningOdds">Winning Odds *</label>
-                <input 
-                  id="winningOdds" 
-                  type="number" 
-                  step="0.01" 
-                  name="winningOdds" 
-                  value={gameForm.winningOdds} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., 1.95"
-                  required 
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="losingOdds">Losing Odds *</label>
-                <input 
-                  id="losingOdds" 
-                  type="number" 
-                  step="0.01" 
-                  name="losingOdds" 
-                  value={gameForm.losingOdds} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., 1.95"
-                  required 
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="spread">Point Spread</label>
-                <input 
-                  id="spread" 
-                  type="number" 
-                  step="0.5" 
-                  name="spread" 
-                  value={gameForm.spread} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., -3.5"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="spreadOdds">Spread Odds</label>
-                <input 
-                  id="spreadOdds" 
-                  type="number" 
-                  step="0.01" 
-                  name="spreadOdds" 
-                  value={gameForm.spreadOdds} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., 1.91"
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="overUnder">Over/Under Total</label>
-                <input 
-                  id="overUnder" 
-                  type="number" 
-                  step="0.5" 
-                  name="overUnder" 
-                  value={gameForm.overUnder} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., 45.5"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="overOdds">Over Odds</label>
-                <input 
-                  id="overOdds" 
-                  type="number" 
-                  step="0.01" 
-                  name="overOdds" 
-                  value={gameForm.overOdds} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., 1.91"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="underOdds">Under Odds</label>
-                <input 
-                  id="underOdds" 
-                  type="number" 
-                  step="0.01" 
-                  name="underOdds" 
-                  value={gameForm.underOdds} 
-                  onChange={handleGameFormChange}
-                  placeholder="e.g., 1.91"
-                />
-              </div>
-            </div>
-
-            <div className="form-group full-width">
-              <label htmlFor="notes">Notes</label>
-              <textarea 
-                id="notes" 
-                name="notes" 
-                value={gameForm.notes} 
-                onChange={handleGameFormChange}
-                placeholder="Add any additional notes about this game"
-                rows="3"
-              />
-            </div>
-
-            <button type="submit" className="btn">Create Game</button>
-          </form>
-
-          <h3>Active Games</h3>
+          {/* Edit Game Form */}
           {editingGame && (
-            <div className="game-card" style={{background: '#2a2f45', border: '2px solid #ffd700'}}>
-              <h4>Edit Game</h4>
+            <div style={{background: 'rgba(30, 136, 229, 0.1)', padding: '25px', borderRadius: '12px', marginBottom: '25px', border: '2px solid #1e88e5'}}>
+              <h3 style={{marginTop: 0}}>✏️ Edit Game</h3>
               <form onSubmit={handleUpdateGame} className="game-form">
                 <div className="form-row">
                   <div className="form-group">
@@ -585,74 +583,111 @@ function AdminPanel() {
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group">
+                  <div className="form-group full-width">
                     <label>Notes</label>
-                    <textarea name="notes" value={editingGame.notes} onChange={handleEditingGameChange} rows="2" />
+                    <input type="text" name="notes" value={editingGame.notes || ''} onChange={handleEditingGameChange} />
                   </div>
                 </div>
-                <div style={{display: 'flex', gap: '10px', marginTop: '10px'}}>
-                  <button type="submit" className="btn" style={{background: '#66bb6a'}}>Save Changes</button>
+                <div style={{display: 'flex', gap: '10px', marginTop: '15px'}}>
+                  <button type="submit" className="btn" style={{background: '#66bb6a'}}>💾 Save Changes</button>
                   <button type="button" className="btn" style={{background: '#757575'}} onClick={() => setEditingGame(null)}>Cancel</button>
                 </div>
               </form>
             </div>
           )}
           
-          {games.length === 0 ? (
-            <p>No games created yet</p>
+          {/* Games List */}
+          <h3 style={{marginBottom: '20px'}}>
+            {gameFilter === 'all' && 'All Games'}
+            {gameFilter === 'boys' && 'Boys Basketball Games'}
+            {gameFilter === 'girls' && 'Girls Basketball Games'}
+          </h3>
+          
+          {games.filter(game => {
+            if (gameFilter === 'boys') return game.team_type === 'Boys Basketball';
+            if (gameFilter === 'girls') return game.team_type === 'Girls Basketball';
+            return true;
+          }).length === 0 ? (
+            <p style={{textAlign: 'center', padding: '40px', color: '#888'}}>
+              {gameFilter === 'all' ? 'No games created yet. Click "Create Game" or "Seed from Schedules" to get started.' : `No ${gameFilter} games found.`}
+            </p>
           ) : (
-            <div className="games-list">
-              {games.map(game => (
-                <div key={game.id} className="game-card">
-                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px'}}>
-                    <h4 style={{margin: 0}}>{game.home_team} {game.away_team ? `vs ${game.away_team}` : ''}</h4>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px'}}>
+              {games.filter(game => {
+                if (gameFilter === 'boys') return game.team_type === 'Boys Basketball';
+                if (gameFilter === 'girls') return game.team_type === 'Girls Basketball';
+                return true;
+              }).map(game => (
+                <div key={game.id} style={{
+                  background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  border: `2px solid ${game.team_type === 'Boys Basketball' ? '#2196f3' : '#e91e63'}`,
+                  transition: 'transform 0.2s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                >
+                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px'}}>
+                    <div>
+                      <h4 style={{margin: '0 0 5px 0', color: '#ffd700'}}>{game.home_team} {game.away_team ? `vs ${game.away_team}` : ''}</h4>
+                      <span style={{
+                        fontSize: '0.75rem',
+                        padding: '3px 8px',
+                        borderRadius: '4px',
+                        background: game.team_type === 'Boys Basketball' ? 'rgba(33, 150, 243, 0.2)' : 'rgba(233, 30, 99, 0.2)',
+                        color: game.team_type === 'Boys Basketball' ? '#64b5f6' : '#f48fb1',
+                        border: `1px solid ${game.team_type === 'Boys Basketball' ? '#2196f3' : '#e91e63'}`
+                      }}>
+                        {game.team_type}
+                      </span>
+                    </div>
                     <span style={{
-                      padding: '4px 12px',
-                      borderRadius: '12px',
-                      fontSize: '0.75rem',
+                      padding: '5px 12px',
+                      borderRadius: '20px',
+                      fontSize: '0.7rem',
                       fontWeight: 'bold',
                       background: game.is_visible === false ? '#ef5350' : '#66bb6a',
                       color: 'white'
                     }}>
-                      {game.is_visible === false ? 'HIDDEN' : 'VISIBLE'}
+                      {game.is_visible === false ? '👁️ HIDDEN' : '👁️ VISIBLE'}
                     </span>
                   </div>
-                  <p><strong>Sport:</strong> {game.team_type}</p>
-                  <p><strong>Date:</strong> {game.game_date} {game.game_time ? `at ${game.game_time}` : ''}</p>
-                  <p><strong>Location:</strong> {game.location || 'N/A'}</p>
-                  <p><strong>Status:</strong> {game.status}</p>
-                  {game.result && <p><strong>Winner:</strong> {game.result}</p>}
-                  {game.notes && <p><strong>Notes:</strong> {game.notes}</p>}
                   
-                  <div style={{marginTop: '15px', display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center'}}>
-                    {game.status !== 'completed' && (
-                      <>
-                        <label className="toggle-switch">
-                          <input 
-                            type="checkbox" 
-                            checked={game.is_visible !== false}
-                            onChange={() => handleToggleGameVisibility(game.id, game.is_visible !== false)}
-                          />
-                          <span className="toggle-slider"></span>
-                        </label>
-                        <span style={{fontSize: '0.85em', color: '#666', marginRight: '8px'}}>Visible</span>
-                        <button 
-                          className="btn" 
-                          style={{background: '#1e88e5', padding: '5px 10px', fontSize: '0.85em', minWidth: 'auto', width: 'auto', flex: 'none'}}
-                          onClick={() => handleEditGame(game)}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          className="btn" 
-                          style={{background: '#9c27b0', padding: '5px 10px', fontSize: '0.85em', minWidth: 'auto', width: 'auto', flex: 'none'}}
-                          onClick={() => handleOpenGameStatus(game)}
-                        >
-                          Manage Status
-                        </button>
-                      </>
-                    )}
+                  <div style={{fontSize: '0.9rem', color: '#b8c5d6', marginBottom: '15px'}}>
+                    <p style={{margin: '5px 0'}}><strong>📅</strong> {game.game_date} {game.game_time ? `at ${game.game_time}` : ''}</p>
+                    <p style={{margin: '5px 0'}}><strong>📍</strong> {game.location || 'TBD'}</p>
+                    <p style={{margin: '5px 0'}}><strong>Status:</strong> {game.status}</p>
+                    {game.result && <p style={{margin: '5px 0', color: '#66bb6a'}}><strong>Winner:</strong> {game.result}</p>}
                   </div>
+                  
+                  {game.status !== 'completed' && (
+                    <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
+                      <label className="toggle-switch">
+                        <input 
+                          type="checkbox" 
+                          checked={game.is_visible !== false}
+                          onChange={() => handleToggleGameVisibility(game.id, game.is_visible !== false)}
+                        />
+                        <span className="toggle-slider"></span>
+                      </label>
+                      <button 
+                        className="btn" 
+                        style={{background: '#1e88e5', padding: '8px 14px', fontSize: '0.85em', flex: '1'}}
+                        onClick={() => handleEditGame(game)}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button 
+                        className="btn" 
+                        style={{background: '#9c27b0', padding: '8px 14px', fontSize: '0.85em', flex: '1'}}
+                        onClick={() => handleOpenGameStatus(game)}
+                      >
+                        ⚙️ Set Outcome
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
