@@ -428,52 +428,11 @@ function AdminTeams() {
 
           {activeTab === 'schedule' && (
             <div className="tab-content">
-              <h3>Game Schedule</h3>
-              <div className="add-game-form">
-                <h4>Add New Game</h4>
-                <div className="game-form-grid">
-                  <input
-                    type="text"
-                    placeholder="Result (W/L/Scheduled)"
-                    value={newGame.result}
-                    onChange={(e) => setNewGame({ ...newGame, result: e.target.value })}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Score (e.g., 83-58)"
-                    value={newGame.score}
-                    onChange={(e) => setNewGame({ ...newGame, score: e.target.value })}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Type (League/Non League/Tournament)"
-                    value={newGame.type}
-                    onChange={(e) => setNewGame({ ...newGame, type: e.target.value })}
-                  />
-                  <input
-                    type="date"
-                    value={newGame.date}
-                    onChange={(e) => setNewGame({ ...newGame, date: e.target.value })}
-                  />
-                  <input
-                    type="time"
-                    value={newGame.time}
-                    onChange={(e) => setNewGame({ ...newGame, time: e.target.value })}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Opponent"
-                    value={newGame.opponent}
-                    onChange={(e) => setNewGame({ ...newGame, opponent: e.target.value })}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Location (Home/Away)"
-                    value={newGame.location}
-                    onChange={(e) => setNewGame({ ...newGame, location: e.target.value })}
-                  />
-                  <button className="btn-add" onClick={handleAddGame}>Add Game</button>
-                </div>
+              <h3>Game Schedule (View Only)</h3>
+              <div style={{background: 'rgba(33, 150, 243, 0.1)', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid rgba(33, 150, 243, 0.3)'}}>
+                <p style={{margin: 0, color: '#64b5f6'}}>
+                  📋 <strong>To manage games:</strong> Use the "Manage Games" tab to create, edit, and set betting odds for games.
+                </p>
               </div>
 
               <div className="schedule-list">
@@ -489,41 +448,18 @@ function AdminTeams() {
                         <th>Time</th>
                         <th>Opponent</th>
                         <th>Location</th>
-                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {selectedTeam.schedule.map((game, idx) => (
                         <tr key={idx}>
-                          {editingGame && editingGame.index === idx ? (
-                            <>
-                              <td><input type="text" value={editingGame.result} onChange={(e) => setEditingGame({ ...editingGame, result: e.target.value })} /></td>
-                              <td><input type="text" value={editingGame.score} onChange={(e) => setEditingGame({ ...editingGame, score: e.target.value })} /></td>
-                              <td><input type="text" value={editingGame.type} onChange={(e) => setEditingGame({ ...editingGame, type: e.target.value })} /></td>
-                              <td><input type="text" value={editingGame.date} onChange={(e) => setEditingGame({ ...editingGame, date: e.target.value })} /></td>
-                              <td><input type="text" value={editingGame.time} onChange={(e) => setEditingGame({ ...editingGame, time: e.target.value })} /></td>
-                              <td><input type="text" value={editingGame.opponent} onChange={(e) => setEditingGame({ ...editingGame, opponent: e.target.value })} /></td>
-                              <td><input type="text" value={editingGame.location} onChange={(e) => setEditingGame({ ...editingGame, location: e.target.value })} /></td>
-                              <td>
-                                <button className="btn-save" style={{marginRight: '5px', padding: '8px 12px', fontSize: '12px'}} onClick={handleSaveEditGame}>Save</button>
-                                <button className="btn-cancel" style={{padding: '8px 12px', fontSize: '12px'}} onClick={handleCancelEditGame}>Cancel</button>
-                              </td>
-                            </>
-                          ) : (
-                            <>
-                              <td>{game.result}</td>
-                              <td>{game.score}</td>
-                              <td>{game.type}</td>
-                              <td>{game.date}</td>
-                              <td>{game.time}</td>
-                              <td>{game.opponent}</td>
-                              <td>{game.location}</td>
-                              <td>
-                                <button className="btn-edit" style={{marginRight: '5px', padding: '8px 12px', fontSize: '12px'}} onClick={() => handleEditGame(game, idx)}>Edit</button>
-                                <button className="btn-delete" style={{padding: '8px 12px', fontSize: '12px'}} onClick={() => handleDeleteGame(idx)}>Delete</button>
-                              </td>
-                            </>
-                          )}
+                          <td>{game.result}</td>
+                          <td>{game.score}</td>
+                          <td>{game.type}</td>
+                          <td>{game.date}</td>
+                          <td>{game.time}</td>
+                          <td>{game.opponent}</td>
+                          <td>{game.location}</td>
                         </tr>
                       ))}
                     </tbody>
