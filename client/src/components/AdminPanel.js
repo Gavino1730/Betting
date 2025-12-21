@@ -15,6 +15,7 @@ function AdminPanel() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [newBalance, setNewBalance] = useState('');
   const [editingGame, setEditingGame] = useState(null);
+  const [gameStatusModal, setGameStatusModal] = useState(null);
   
   // Game creation form
   const [gameForm, setGameForm] = useState({
@@ -305,6 +306,49 @@ function AdminPanel() {
       fetchAllBets();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to set game outcome');
+    }
+  };
+
+  const handleOpenGameStatus = (game) => {
+    setGameStatusModal({
+      id: game.id,
+      homeTeam: game.home_team,
+      awayTeam: game.away_team,
+      status: game.status || 'upcoming',
+      homeScore: game.home_score || '',
+      awayScore: game.away_score || '',
+      winner: game.result || ''
+    });
+  };
+
+  const handleUpdateGameStatus = async () => {
+    try {
+      const { id, status, homeScore, awayScore, winner } = gameStatusModal;
+      
+      const updateData = {
+        status,
+        homeScore: homeScore ? parseInt(homeScore) : undefined,
+        awayScore: awayScore ? parseInt(awayScore) : undefined
+      };
+
+      // If status is completed and winner is set, resolve bets
+      if (status === 'completed' && winner) {
+        updateData.winningTeam = winner;
+      }
+
+      const response = await apiClient.put(`/games/${id}/outcome`, updateData);
+      
+      if (response.data.betsResolved > 0) {
+        alert(`Game updated! ${response.data.betsResolved} bets resolved, ${formatCurrency(response.data.winningsDistributed)} distributed.`);
+      } else {
+        alert('Game status updated successfully!');
+      }
+      
+      setGameStatusModal(null);
+      fetchGames();
+      fetchAllBets();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to update game');
     }
   };
 
@@ -628,20 +672,11 @@ function AdminPanel() {
                         </button>
                         <button 
                           className="btn" 
-                          style={{background: '#66bb6a', padding: '5px 10px', fontSize: '0.85em'}}
-                          onClick={() => handleSetGameOutcome(game.id, game.home_team)}
+                          style={{background: '#9c27b0', padding: '5px 10px', fontSize: '0.85em'}}
+                          onClick={() => handleOpenGameStatus(game)}
                         >
-                          {game.home_team} Won
+                          Manage Status
                         </button>
-                        {game.away_team && (
-                          <button 
-                            className="btn" 
-                            style={{background: '#ef5350', padding: '5px 10px', fontSize: '0.85em'}}
-                            onClick={() => handleSetGameOutcome(game.id, game.away_team)}
-                          >
-                            {game.away_team} Won
-                          </button>
-                        )}
                       </>
                     )}
                   </div>
@@ -912,6 +947,72 @@ function AdminPanel() {
 
       {tab === 'teams' && (
         <AdminTeams />
+      )}
+
+      {/* Game Status Management Modal */}
+      {gameStatusModal && (
+        <div className="modal-overlay" onClick={() => setGameStatusModal(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Manage Game Status</h3>
+            <p><strong>{gameStatusModal.homeTeam} vs {gameStatusModal.awayTeam}</strong></p>
+            
+            <div className="form-group">
+              <label>Game Status</label>
+              <select 
+                value={gameStatusModal.status}
+                onChange={(e) => setGameStatusModal({...gameStatusModal, status: e.target.value})}
+              >
+                <option value="upcoming">Scheduled</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>{gameStatusModal.homeTeam} Score</label>
+                <input
+                  type="number"
+                  value={gameStatusModal.homeScore}
+                  onChange={(e) => setGameStatusModal({...gameStatusModal, homeScore: e.target.value})}
+                  placeholder="0"
+                />
+              </div>
+              <div className="form-group">
+                <label>{gameStatusModal.awayTeam} Score</label>
+                <input
+                  type="number"
+                  value={gameStatusModal.awayScore}
+                  onChange={(e) => setGameStatusModal({...gameStatusModal, awayScore: e.target.value})}
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            {gameStatusModal.status === 'completed' && (
+              <div className="form-group">
+                <label>Winner (resolves bets)</label>
+                <select 
+                  value={gameStatusModal.winner}
+                  onChange={(e) => setGameStatusModal({...gameStatusModal, winner: e.target.value})}
+                >
+                  <option value="">-- Select Winner --</option>
+                  <option value={gameStatusModal.homeTeam}>{gameStatusModal.homeTeam}</option>
+                  <option value={gameStatusModal.awayTeam}>{gameStatusModal.awayTeam}</option>
+                </select>
+              </div>
+            )}
+
+            <div className="modal-buttons">
+              <button className="btn" onClick={handleUpdateGameStatus}>
+                Update Game
+              </button>
+              <button className="btn btn-secondary" onClick={() => setGameStatusModal(null)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

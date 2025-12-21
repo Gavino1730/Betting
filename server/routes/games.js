@@ -309,10 +309,7 @@ router.put('/:id/outcome', authenticateToken, async (req, res) => {
     return res.status(403).json({ error: 'Only admins can set game outcomes' });
   }
 
-  const { winningTeam } = req.body;
-  if (!winningTeam) {
-    return res.status(400).json({ error: 'Winning team is required' });
-  }
+  const { winningTeam, homeScore, awayScore, status } = req.body;
 
   try {
     const Bet = require('../models/Bet');
@@ -326,54 +323,78 @@ router.put('/:id/outcome', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Game not found' });
     }
 
-    // Update game status and result
+    // Build update object
+    const updateData = {
+      updated_at: new Date().toISOString()
+    };
+
+    // If status is provided, update it
+    if (status) {
+      updateData.status = status;
+    }
+
+    // If scores are provided, update them
+    if (homeScore !== undefined) {
+      updateData.home_score = parseInt(homeScore);
+    }
+    if (awayScore !== undefined) {
+      updateData.away_score = parseInt(awayScore);
+    }
+
+    // If marking as completed with a winner, resolve bets
+    if (winningTeam) {
+      updateData.status = 'completed';
+      updateData.result = winningTeam;
+    }
+
+    // Update game
     await supabase
       .from('games')
-      .update({ 
-        status: 'completed',
-        result: winningTeam,
-        updated_at: new Date().toISOString()
-      })
+      .update(updateData)
       .eq('id', req.params.id);
-
-    // Get all pending bets for this game
-    const { data: bets, error: betsError } = await supabase
-      .from('bets')
-      .select('*')
-      .eq('game_id', req.params.id)
-      .eq('status', 'pending');
-
-    if (betsError) throw betsError;
 
     let betsResolved = 0;
     let winningsDistributed = 0;
 
-    // Process each bet
-    for (const bet of bets || []) {
-      const won = bet.selected_team === winningTeam;
-      const outcome = won ? 'won' : 'lost';
+    // Only resolve bets if a winner was declared
+    if (winningTeam) {
+      // Get all pending bets for this game
+      const { data: bets, error: betsError } = await supabase
+        .from('bets')
+        .select('*')
+        .eq('game_id', req.params.id)
+        .eq('status', 'pending');
 
-      // Update bet status
-      await Bet.updateStatus(bet.id, 'resolved', outcome);
+      if (betsError) throw betsError;
 
-      // Credit winnings if won
-      if (won) {
-        const winnings = bet.amount * bet.odds;
-        await User.updateBalance(bet.user_id, winnings);
-        await Transaction.create(
-          bet.user_id, 
-          'win', 
-          winnings, 
-          `Won bet on ${bet.selected_team} (${bet.bet_type} confidence)`
-        );
-        winningsDistributed += winnings;
+      // Process each bet
+      for (const bet of bets || []) {
+        const won = bet.selected_team === winningTeam;
+        const outcome = won ? 'won' : 'lost';
+
+        // Update bet status
+        await Bet.updateStatus(bet.id, 'resolved', outcome);
+
+        // Credit winnings if won
+        // Credit winnings if won
+        if (won) {
+          const winnings = bet.amount * bet.odds;
+          await User.updateBalance(bet.user_id, winnings);
+          await Transaction.create(
+            bet.user_id, 
+            'win', 
+            winnings, 
+            `Won bet on ${bet.selected_team} (${bet.bet_type} confidence)`
+          );
+          winningsDistributed += winnings;
+        }
+
+        betsResolved++;
       }
-
-      betsResolved++;
     }
 
     res.json({ 
-      message: 'Game outcome set and bets resolved',
+      message: winningTeam ? 'Game outcome set and bets resolved' : 'Game updated successfully',
       betsResolved,
       winningsDistributed
     });
