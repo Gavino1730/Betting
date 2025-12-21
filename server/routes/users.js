@@ -24,7 +24,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-router.get('/', authenticateToken, adminOnly, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const users = await User.getAll();
     res.json(users);
