@@ -124,10 +124,19 @@ function Teams() {
     try {
       setLoading(true);
       const response = await apiClient.get('/teams-admin', {
-        timeout: 3000
+        timeout: 5000
       });
       if (Array.isArray(response.data) && response.data.length > 0) {
-        setTeams(response.data);
+        // Map API data and add IDs for tab selection
+        const teamsData = response.data.map(team => ({
+          ...team,
+          id: team.type === 'Boys Basketball' ? 'boys' : 'girls',
+          // Parse schedule JSON if it's a string
+          schedule: typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule,
+          // Parse players JSON if it's a string
+          players: typeof team.players === 'string' ? JSON.parse(team.players) : team.players
+        }));
+        setTeams(teamsData);
       } else {
         setTeams(hardcodedData);
       }
