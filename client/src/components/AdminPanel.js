@@ -265,16 +265,6 @@ function AdminPanel() {
     }
   };
 
-  const handleUpdateBet = async (betId, status, outcome) => {
-    try {
-      await apiClient.put(`/bets/${betId}`, { status, outcome });
-      fetchAllBets();
-      alert('Bet updated successfully!');
-    } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update bet');
-    }
-  };
-
   const handleUpdateUserBalance = async (userId) => {
     try {
       const balance = parseFloat(newBalance);
