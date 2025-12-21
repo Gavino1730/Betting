@@ -12,6 +12,15 @@ function Games() {
   const [propBetAmounts, setPropBetAmounts] = useState({});
   const [message, setMessage] = useState('');
   const [teamFilter, setTeamFilter] = useState('all');
+  const [selectedTeams, setSelectedTeams] = useState({});
+  const [selectedConfidence, setSelectedConfidence] = useState({});
+  const [betAmounts, setBetAmounts] = useState({});
+
+  const confidenceMultipliers = {
+    low: 1.2,
+    medium: 1.5,
+    high: 2.0
+  };
 
   useEffect(() => {
     fetchGames();
@@ -99,6 +108,42 @@ function Games() {
       ...prev,
       [`${propId}-${choice}`]: value
     }));
+  };
+
+  const handlePlaceGameBet = async (gameId) => {
+    const team = selectedTeams[gameId];
+    const confidence = selectedConfidence[gameId];
+    const amount = parseFloat(betAmounts[gameId]);
+
+    if (!team || !confidence || !amount) {
+      setMessage('Please select team, confidence, and enter amount');
+      return;
+    }
+
+    if (amount > balance) {
+      setMessage('Insufficient balance!');
+      return;
+    }
+
+    try {
+      await apiClient.post('/bets', {
+        gameId,
+        selectedTeam: team,
+        confidence,
+        amount,
+        odds: confidenceMultipliers[confidence]
+      });
+
+      setMessage(`Bet placed successfully on ${team}!`);
+      setSelectedTeams(prev => ({ ...prev, [gameId]: '' }));
+      setSelectedConfidence(prev => ({ ...prev, [gameId]: '' }));
+      setBetAmounts(prev => ({ ...prev, [gameId]: '' }));
+      fetchBalance();
+
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      setMessage(err.response?.data?.error || 'Failed to place bet');
+    }
   };
 
   const activePropBets = propBets.filter(pb => pb.status === 'active');
@@ -222,21 +267,82 @@ function Games() {
                       </div>
                     )}
 
-                    <div className="betting-info">
-                      <div className="confidence-options">
-                        <div className="confidence-option">
-                          <span className="label">Low</span>
-                          <span className="multiplier">1.2x</span>
-                        </div>
-                        <div className="confidence-option">
-                          <span className="label">Medium</span>
-                          <span className="multiplier">1.5x</span>
-                        </div>
-                        <div className="confidence-option">
-                          <span className="label">High</span>
-                          <span className="multiplier">2.0x</span>
-                        </div>
+                    <div className="betting-section">
+                      <div className="team-selection" style={{marginBottom: '15px'}}>
+                        <button
+                          type="button"
+                          className={`team-btn ${selectedTeams[game.id] === game.home_team ? 'active' : ''}`}
+                          style={{flex: 1, padding: '10px', background: selectedTeams[game.id] === game.home_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s'}}
+                          onClick={() => setSelectedTeams({...selectedTeams, [game.id]: game.home_team})}
+                        >
+                          {game.home_team}
+                        </button>
+                        {game.away_team && (
+                          <button
+                            type="button"
+                            className={`team-btn ${selectedTeams[game.id] === game.away_team ? 'active' : ''}`}
+                            style={{flex: 1, padding: '10px', background: selectedTeams[game.id] === game.away_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', marginLeft: '10px'}}
+                            onClick={() => setSelectedTeams({...selectedTeams, [game.id]: game.away_team})}
+                          >
+                            {game.away_team}
+                          </button>
+                        )}
                       </div>
+
+                      <div className="confidence-options" style={{marginBottom: '15px', display: 'flex', gap: '8px'}}>
+                        <button
+                          type="button"
+                          className={`confidence-btn ${selectedConfidence[game.id] === 'low' ? 'active' : ''}`}
+                          style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'low' ? '#66bb6a' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                          onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'low'})}
+                        >
+                          <div>Low</div>
+                          <div style={{fontSize: '0.85em'}}>1.2x</div>
+                        </button>
+                        <button
+                          type="button"
+                          className={`confidence-btn ${selectedConfidence[game.id] === 'medium' ? 'active' : ''}`}
+                          style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'medium' ? '#ff9800' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                          onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'medium'})}
+                        >
+                          <div>Medium</div>
+                          <div style={{fontSize: '0.85em'}}>1.5x</div>
+                        </button>
+                        <button
+                          type="button"
+                          className={`confidence-btn ${selectedConfidence[game.id] === 'high' ? 'active' : ''}`}
+                          style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'high' ? '#ef5350' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                          onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'high'})}
+                        >
+                          <div>High</div>
+                          <div style={{fontSize: '0.85em'}}>2.0x</div>
+                        </button>
+                      </div>
+
+                      <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                        <input
+                          type="number"
+                          placeholder="Bet amount"
+                          min="0.01"
+                          step="0.01"
+                          value={betAmounts[game.id] || ''}
+                          onChange={(e) => setBetAmounts({...betAmounts, [game.id]: e.target.value})}
+                          style={{flex: 1, padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', fontSize: '1em'}}
+                        />
+                        <button
+                          onClick={() => handlePlaceGameBet(game.id)}
+                          disabled={!selectedTeams[game.id] || !selectedConfidence[game.id] || !betAmounts[game.id]}
+                          style={{padding: '10px 20px', background: '#1e88e5', border: 'none', borderRadius: '8px', color: 'white', cursor: 'pointer', fontWeight: 'bold', opacity: (!selectedTeams[game.id] || !selectedConfidence[game.id] || !betAmounts[game.id]) ? 0.5 : 1}}
+                        >
+                          Bet
+                        </button>
+                      </div>
+
+                      {selectedConfidence[game.id] && betAmounts[game.id] && (
+                        <div style={{marginTop: '10px', textAlign: 'center', color: '#ffd700', fontWeight: 'bold'}}>
+                          Potential Win: {formatCurrency(parseFloat(betAmounts[game.id]) * confidenceMultipliers[selectedConfidence[game.id]])}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))
