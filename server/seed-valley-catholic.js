@@ -44,21 +44,6 @@ const boysSchedule = [
   { result: 'Scheduled', score: '-', type: 'Non League', date: '2/14/26', time: 'Noon', opponent: 'Neah Kah Nie', location: 'Home' }
 ];
 
-const boysTeamData = {
-  name: 'VC Boys Basketball',
-  type: 'Boys Basketball',
-  description: 'Depth for days and pace that never slows. The floor is spaced with shooters, the rim is under constant threat, and there\'s no such thing as taking a possession off. The goal is simple, win state. Anything less is a failure. The team motto is BTA and they play like it. The squad is run by Bryan Fraser, an OG hooper out of Sac Town with 11 years on the sideline and zero tolerance for bad basketball. Backed by Coach John Efstathiou, a towering presence whose laugh echoes through the gym and whose clipboard slams are felt emotionally and physically.',
-  record_wins: 4,
-  record_losses: 1,
-  league_record: '0-0',
-  ranking: 3,
-  coach_name: 'Bryan Fraser',
-  coach_email: 'bfraser@valleycs.org',
-  coach_bio: 'Head Coach Bryan Fraser is an OG hooper out of Sacramento with 11 years on the sideline and zero tolerance for bad basketball.',
-  schedule: boysSchedule,
-  players: boysPlayers
-};
-
 const boysPlayers = [
   {
     number: 1,
@@ -165,6 +150,21 @@ const boysPlayers = [
     bio: 'Big body. Screens so lethal they should be illegal. You hit one and question your life choices.'
   }
 ];
+
+const boysTeamData = {
+  name: 'VC Boys Basketball',
+  type: 'Boys Basketball',
+  description: 'Depth for days and pace that never slows. The floor is spaced with shooters, the rim is under constant threat, and there\'s no such thing as taking a possession off. The goal is simple, win state. Anything less is a failure. The team motto is BTA and they play like it. The squad is run by Bryan Fraser, an OG hooper out of Sac Town with 11 years on the sideline and zero tolerance for bad basketball. Backed by Coach John Efstathiou, a towering presence whose laugh echoes through the gym and whose clipboard slams are felt emotionally and physically.',
+  record_wins: 4,
+  record_losses: 1,
+  league_record: '0-0',
+  ranking: 3,
+  coach_name: 'Bryan Fraser',
+  coach_email: 'bfraser@valleycs.org',
+  coach_bio: 'Head Coach Bryan Fraser is an OG hooper out of Sacramento with 11 years on the sideline and zero tolerance for bad basketball.',
+  schedule: boysSchedule,
+  players: boysPlayers
+};
 
 const boysGames = [
   {
@@ -461,21 +461,6 @@ const girlsSchedule = [
   { result: 'Scheduled', score: '-', type: 'Non League', date: '2/14/26', time: '10:30 am', opponent: 'Neah Kah Nie', location: 'Home' }
 ];
 
-const girlsTeamData = {
-  name: 'VC Girls Basketball',
-  type: 'Girls Basketball',
-  description: 'Pure pressure from the opening tip. A relentless full court press, nonstop energy, shooters all over the floor, and substitutions so constant the other team never finds a rhythm. Games turn into chaos fast and stay that way. Led by English teacher Patrick Thomas, who somehow blends grammar, conditioning, and controlled insanity into a system that overwhelms opponents and stacks wins.',
-  record_wins: 4,
-  record_losses: 1,
-  league_record: '0-0',
-  ranking: 8,
-  coach_name: 'Patrick Thomas',
-  coach_email: 'pthomas@valleycs.org',
-  coach_bio: 'Head Coach Patrick Thomas is an English teacher who somehow blends grammar, conditioning, and controlled insanity into a system that overwhelms opponents and stacks wins.',
-  schedule: girlsSchedule,
-  players: girlsPlayers
-};
-
 const girlsPlayers = [
   {
     number: 2,
@@ -574,6 +559,21 @@ const girlsPlayers = [
     bio: 'Hurt but still locked in. Brings energy, vibes, and support from the sidelines.'
   }
 ];
+
+const girlsTeamData = {
+  name: 'VC Girls Basketball',
+  type: 'Girls Basketball',
+  description: 'Pure pressure from the opening tip. A relentless full court press, nonstop energy, shooters all over the floor, and substitutions so constant the other team never finds a rhythm. Games turn into chaos fast and stay that way. Led by English teacher Patrick Thomas, who somehow blends grammar, conditioning, and controlled insanity into a system that overwhelms opponents and stacks wins.',
+  record_wins: 4,
+  record_losses: 1,
+  league_record: '0-0',
+  ranking: 8,
+  coach_name: 'Patrick Thomas',
+  coach_email: 'pthomas@valleycs.org',
+  coach_bio: 'Head Coach Patrick Thomas is an English teacher who somehow blends grammar, conditioning, and controlled insanity into a system that overwhelms opponents and stacks wins.',
+  schedule: girlsSchedule,
+  players: girlsPlayers
+};
 
 const girlsGames = [
   {
