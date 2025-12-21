@@ -36,6 +36,8 @@ CREATE POLICY "allow_all_teams" ON teams
 
 -- Users table: Allow reading all users (for leaderboard)
 DROP POLICY IF EXISTS "allow_read_all_users" ON users;
+DROP POLICY IF EXISTS "allow_registration" ON users;
+DROP POLICY IF EXISTS "allow_update_users" ON users;
 
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
@@ -44,6 +46,9 @@ CREATE POLICY "allow_read_all_users" ON users
 
 CREATE POLICY "allow_registration" ON users
   FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "allow_update_users" ON users
+  FOR UPDATE USING (true) WITH CHECK (true);
 
 -- ============================================
 -- 2. ADD MISSING COLUMNS
