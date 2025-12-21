@@ -84,59 +84,58 @@ function Leaderboard() {
       <h2>🏆 Leaderboard</h2>
       {error && <div className="alert alert-error">{error}</div>}
 
-      <div className="leaderboard-table-wrapper">
-        <table className="leaderboard-table">
-          <thead>
-            <tr>
-              <th className="rank">Rank</th>
-              <th className="username">User</th>
-              <th className="stat">Balance</th>
-              <th className="stat">Total Bets</th>
-              <th className="stat">Record</th>
-              <th className="stat">Win Rate</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rankedUsers.map((user, index) => (
-              <tr key={user.id} className={`rank-${index + 1}`}>
-                <td className="rank">
-                  <span className="rank-badge">
-                    {index === 0 && '🥇'}
-                    {index === 1 && '🥈'}
-                    {index === 2 && '🥉'}
-                    {index > 2 && `#${index + 1}`}
-                  </span>
-                </td>
-                <td className="username">
-                  <span className="user-name">{user.username}</span>
-                  {user.is_admin && <span className="admin-badge">ADMIN</span>}
-                </td>
-                <td className="stat balance-stat">
-                  <strong>{formatCurrency(user.balance)}</strong>
-                </td>
-                <td className="stat">
-                  <span className="stat-value">{user.stats.totalBets}</span>
-                </td>
-                <td className="stat record-stat">
-                  <span className="stat-won">{user.stats.wonBets}W</span>
-                  <span className="stat-divider">-</span>
-                  <span className="stat-lost">{user.stats.lostBets}L</span>
+      <div className="leaderboard-container">
+        {rankedUsers.map((user, index) => (
+          <div key={user.id} className={`leaderboard-card rank-${index + 1}`}>
+            <div className="rank-section">
+              <div className="rank-badge">
+                {index === 0 && '🥇'}
+                {index === 1 && '🥈'}
+                {index === 2 && '🥉'}
+                {index > 2 && `#${index + 1}`}
+              </div>
+            </div>
+            
+            <div className="user-section">
+              <div className="user-name">{user.username}</div>
+              {user.is_admin && <span className="admin-badge">ADMIN</span>}
+            </div>
+            
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-label">Balance</div>
+                <div className="stat-value balance">{formatCurrency(user.balance)}</div>
+              </div>
+              
+              <div className="stat-item">
+                <div className="stat-label">Total Bets</div>
+                <div className="stat-value">{user.stats.totalBets}</div>
+              </div>
+              
+              <div className="stat-item">
+                <div className="stat-label">Record</div>
+                <div className="stat-value record">
+                  <span className="wins">{user.stats.wonBets}W</span>
+                  <span className="divider">-</span>
+                  <span className="losses">{user.stats.lostBets}L</span>
                   {user.stats.pendingBets > 0 && (
                     <>
-                      <span className="stat-divider">-</span>
-                      <span className="stat-pending">{user.stats.pendingBets}P</span>
+                      <span className="divider">-</span>
+                      <span className="pending">{user.stats.pendingBets}P</span>
                     </>
                   )}
-                </td>
-                <td className="stat">
-                  <span className={`win-rate ${parseFloat(user.stats.winRate) >= 50 ? 'positive' : 'negative'}`}>
-                    {user.stats.winRate}%
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </div>
+              </div>
+              
+              <div className="stat-item">
+                <div className="stat-label">Win Rate</div>
+                <div className={`stat-value win-rate ${parseFloat(user.stats.winRate) >= 50 ? 'positive' : 'negative'}`}>
+                  {user.stats.winRate}%
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="leaderboard-stats">
