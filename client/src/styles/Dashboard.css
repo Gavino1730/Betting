@@ -35,52 +35,91 @@
 }
 
 .balance-card {
-  background: linear-gradient(135deg, #27ae60 0%, #16a085 100%);
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   color: white;
-  padding: 2rem;
-  border-radius: 12px;
+  padding: 2.5rem;
+  border-radius: 16px;
   text-align: center;
-  box-shadow: 0 8px 16px rgba(39, 174, 96, 0.2);
+  box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
   margin-bottom: 2rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.balance-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 .balance-card h3 {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  position: relative;
+  z-index: 1;
 }
 
 .balance-card .amount {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 700;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .potential-win {
   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
-  padding: 1.5rem;
-  border-radius: 10px;
+  padding: 1.8rem;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
-  border-left: 4px solid #f39c12;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+  border-left: 5px solid #f39c12;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-left: 5px solid #f39c12;
+  box-shadow: 0 6px 16px rgba(52, 152, 219, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.potential-win::before {
+  content: '⭐';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  font-size: 80px;
+  opacity: 0.1;
+  pointer-events: none;
 }
 
 .potential-win h4 {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
 }
 
 .potential-win p {
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 700;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .event-desc {
@@ -115,26 +154,49 @@
 
 .stat-box {
   background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
+  padding: 1.8rem;
+  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-top: 3px solid #004f9e;
+  box-shadow: 0 3px 10px rgba(0, 79, 158, 0.1);
+  border: 2px solid #e8f0f7;
+  border-top: 4px solid #004f9e;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.stat-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #004f9e, #0080d0);
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 79, 158, 0.15);
+  border-color: #d0e0f0;
 }
 
 .stat-box h4 {
-  color: #7f8c8d;
+  color: #5a6c7d;
   font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 .stat-box .value {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #004f9e;
+  background: linear-gradient(135deg, #004f9e, #0080d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ===== BET LIST ===== */
@@ -151,13 +213,31 @@
 
 .bet-card {
   background: white;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #004f9e;
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  border-left: 5px solid #004f9e;
+  border: 2px solid #e8f0f7;
+  border-left: 5px solid #004f9e;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+}
+
+.bet-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #004f9e, #0080d0);
+}
+
+.bet-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 79, 158, 0.15);
+  border-color: #d0e0f0;
 }
 
 .bet-card:hover {

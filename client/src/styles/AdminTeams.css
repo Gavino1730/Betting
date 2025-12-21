@@ -2,11 +2,15 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  background: linear-gradient(135deg, #f8f9fc 0%, #e8ecf2 100%);
 }
 
 .admin-teams h2 {
   color: #004f9e;
   margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0, 79, 158, 0.1);
 }
 
 .teams-selector {
@@ -29,52 +33,61 @@
   border: 2px solid #004f9e;
   background: white;
   color: #004f9e;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 79, 158, 0.1);
 }
 
 .team-btn:hover {
-  background: #f0f7ff;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f0ff 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 79, 158, 0.15);
 }
 
 .team-btn.active {
-  background: #004f9e;
+  background: linear-gradient(135deg, #004f9e 0%, #0080d0 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(0, 79, 158, 0.3);
 }
 
 .message {
   padding: 15px;
-  border-radius: 4px;
+  border-radius: 10px;
   margin-bottom: 20px;
   font-weight: 600;
 }
 
 .message.error {
-  background: #ffe6e6;
-  color: #cc0000;
-  border-left: 4px solid #cc0000;
+  background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+  color: #8b0000;
+  border-left: 5px solid #cc0000;
+  border: 2px solid #ffb3b3;
+  border-left: 5px solid #cc0000;
 }
 
 .message.success {
-  background: #e6ffe6;
-  color: #009900;
-  border-left: 4px solid #009900;
+  background: linear-gradient(135deg, #e6ffe6 0%, #ccffcc 100%);
+  color: #006600;
+  border-left: 5px solid #009900;
+  border: 2px solid #b3ffb3;
+  border-left: 5px solid #009900;
 }
 
 .team-editor {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  border: 2px solid #e8f0f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 79, 158, 0.1);
   overflow: hidden;
 }
 
 .editor-tabs {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid #e0e0e0;
-  background: #f9f9f9;
+  border-bottom: 3px solid #e8f0f7;
+  background: linear-gradient(135deg, #f8f9fc 0%, #eff2f8 100%);
 }
 
 .editor-tab {
@@ -91,11 +104,13 @@
 
 .editor-tab:hover {
   color: #004f9e;
+  background: rgba(0, 79, 158, 0.03);
 }
 
 .editor-tab.active {
   color: #004f9e;
-  border-bottom-color: #004f9e;
+  border-bottom-color: #0080d0;
+  background: linear-gradient(135deg, rgba(0, 79, 158, 0.08) 0%, rgba(0, 128, 208, 0.08) 100%);
 }
 
 .tab-content {
@@ -128,17 +143,21 @@
 .form-group input,
 .form-group textarea {
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid #d0d8e0;
+  border-radius: 8px;
   font-family: inherit;
   font-size: 14px;
+  background: #f8f9fc;
+  color: #1a1a1a;
+  transition: all 0.3s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #004f9e;
-  box-shadow: 0 0 0 3px rgba(0, 79, 158, 0.1);
+  border-color: #0080d0;
+  box-shadow: 0 0 0 4px rgba(0, 128, 208, 0.15);
+  background: white;
 }
 
 .form-group textarea {
@@ -160,30 +179,35 @@
 .btn-delete-player {
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
-  font-weight: 600;
+  border-radius: 8px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .btn-save {
-  background: #004f9e;
+  background: linear-gradient(135deg, #004f9e 0%, #0080d0 100%);
   color: white;
+  box-shadow: 0 2px 6px rgba(0, 79, 158, 0.2);
 }
 
 .btn-save:hover {
-  background: #003d7a;
+  background: linear-gradient(135deg, #003d7a 0%, #0065a0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 79, 158, 0.3);
 }
 
 .btn-cancel,
 .btn-edit {
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e5e5e5 100%);
   color: #333;
+  border: 2px solid #d0d8e0;
 }
 
 .btn-cancel:hover,
 .btn-edit:hover {
-  background: #e0e0e0;
+  background: linear-gradient(135deg, #e0e0e0 0%, #d5d5d5 100%);
+  transform: translateY(-2px);
 }
 
 .btn-edit {
@@ -191,56 +215,69 @@
 }
 
 .btn-add {
-  background: #004f9e;
+  background: linear-gradient(135deg, #004f9e 0%, #0080d0 100%);
   color: white;
   grid-column: 1 / -1;
+  box-shadow: 0 2px 6px rgba(0, 79, 158, 0.2);
 }
 
 .btn-add:hover {
-  background: #003d7a;
+  background: linear-gradient(135deg, #003d7a 0%, #0065a0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 79, 158, 0.3);
 }
 
 .btn-delete,
 .btn-delete-player {
-  background: #cc0000;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
   padding: 8px 12px;
   font-size: 12px;
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
 }
 
 .btn-delete:hover,
 .btn-delete-player:hover {
-  background: #990000;
+  background: linear-gradient(135deg, #c0392b 0%, #922b21 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
 }
 
 .team-info-display {
-  background: #f9f9f9;
+  background: linear-gradient(135deg, #f8f9fc 0%, #eff2f8 100%);
   padding: 20px;
-  border-radius: 6px;
+  border-radius: 10px;
+  border: 2px solid #e8f0f7;
+  border-left: 5px solid #0080d0;
 }
 
 .team-info-display p {
   margin: 12px 0;
   line-height: 1.6;
+  color: #333;
 }
 
 .team-info-display strong {
   color: #004f9e;
+  font-weight: 700;
 }
 
 .add-game-form,
 .add-player-form {
-  background: #f9f9f9;
+  background: linear-gradient(135deg, #f8f9fc 0%, #eff2f8 100%);
   padding: 20px;
-  border-radius: 6px;
+  border-radius: 10px;
   margin-bottom: 30px;
+  border: 2px solid #e8f0f7;
+  border-left: 5px solid #27ae60;
 }
 
 .add-game-form h4,
 .add-player-form h4 {
-  color: #333;
+  color: #004f9e;
   margin-top: 0;
   margin-bottom: 15px;
+  font-weight: 700;
 }
 
 .game-form-grid,
@@ -254,16 +291,19 @@
 .player-form-grid input,
 .player-form-grid textarea {
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid #d0d8e0;
+  border-radius: 8px;
   font-family: inherit;
+  background: white;
+  color: #1a1a1a;
 }
 
 .game-form-grid input:focus,
 .player-form-grid input:focus,
 .player-form-grid textarea:focus {
   outline: none;
-  border-color: #004f9e;
+  border-color: #0080d0;
+  box-shadow: 0 0 0 4px rgba(0, 128, 208, 0.15);
 }
 
 .player-form-grid {
@@ -283,30 +323,34 @@
 
 .schedule-list,
 .roster-list {
-  background: #f9f9f9;
+  background: linear-gradient(135deg, #f8f9fc 0%, #eff2f8 100%);
   padding: 20px;
-  border-radius: 6px;
+  border-radius: 10px;
+  border: 2px solid #e8f0f7;
 }
 
 .schedule-list h4,
 .roster-list h4 {
-  color: #333;
+  color: #004f9e;
   margin-top: 0;
   margin-bottom: 15px;
+  font-weight: 700;
 }
 
 .schedule-list table {
   width: 100%;
   border-collapse: collapse;
   background: white;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .schedule-list th {
-  background: #004f9e;
+  background: linear-gradient(135deg, #004f9e 0%, #0080d0 100%);
   color: white;
   padding: 12px;
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 13px;
 }
 
@@ -314,10 +358,11 @@
   padding: 12px;
   border-bottom: 1px solid #eee;
   font-size: 14px;
+  color: #333;
 }
 
 .schedule-list tbody tr:hover {
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #f5f7fc 0%, #eff2f8 100%);
 }
 
 .players-grid {
@@ -329,8 +374,16 @@
 .player-card {
   background: white;
   padding: 20px;
-  border-radius: 6px;
-  border-left: 4px solid #004f9e;
+  border-radius: 10px;
+  border: 2px solid #e8f0f7;
+  border-left: 5px solid #0080d0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.player-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 79, 158, 0.15);
+  transform: translateY(-2px);
 }
 
 .player-card .player-header {
@@ -341,32 +394,36 @@
 }
 
 .player-card .jersey {
-  background: #004f9e;
+  background: linear-gradient(135deg, #004f9e 0%, #0080d0 100%);
   color: white;
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 8px;
   font-weight: 700;
   font-size: 18px;
+  box-shadow: 0 2px 8px rgba(0, 79, 158, 0.2);
 }
 
 .player-card h5 {
   color: #004f9e;
   margin: 0;
   flex: 1;
+  font-weight: 700;
 }
 
 .player-card p {
   margin: 10px 0;
   font-size: 13px;
   line-height: 1.5;
+  color: #333;
 }
 
 .player-card p strong {
-  color: #333;
+  color: #004f9e;
+  font-weight: 700;
 }
 
 .btn-delete-player {
