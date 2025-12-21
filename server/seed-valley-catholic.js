@@ -16,15 +16,47 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // BOYS BASKETBALL DATA
 // ============================================================================
 
+const boysSchedule = [
+  { result: 'W', score: '83-58', type: 'Non League', date: '12/3/25', time: '7:30 pm', opponent: 'Knappa', location: 'Away' },
+  { result: 'W', score: '88-41', type: 'Non League', date: '12/5/25', time: '7:30 pm', opponent: 'Gladstone', location: 'Home' },
+  { result: 'L', score: '69-90', type: 'Non League', date: '12/9/25', time: '7:00 pm', opponent: 'Scappoose', location: 'Away' },
+  { result: 'W', score: '73-45', type: 'Non League', date: '12/12/25', time: '6:00 pm', opponent: 'Pleasant Hill', location: 'Home' },
+  { result: 'W', score: '87-65', type: 'Non League', date: '12/15/25', time: '7:30 pm', opponent: 'Banks', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '12/22/25', time: '2:30 pm', opponent: 'Tillamook', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Tournament', date: '12/28/25', time: '12:30 pm', opponent: 'Jefferson', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Tournament', date: '12/29/25', time: '11:45 am', opponent: 'Mid Pacific, HI', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Tournament', date: '12/30/25', time: '6:45 pm', opponent: 'Regis', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '1/3/26', time: '3:00 pm', opponent: 'Western Christian', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/6/26', time: '7:30 pm', opponent: 'Horizon Christian, Tualatin', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/8/26', time: '7:30 pm', opponent: 'Westside Christian', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/10/26', time: '6:30 pm', opponent: 'De La Salle North Catholic', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/13/26', time: '7:30 pm', opponent: 'Oregon Episcopal', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/16/26', time: '7:30 pm', opponent: 'Catlin Gabel', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/20/26', time: '7:30 pm', opponent: 'Riverside, WLWV', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/22/26', time: '7:30 pm', opponent: 'Portland Adventist Academy', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/24/26', time: '6:30 pm', opponent: 'Horizon Christian, Tualatin', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/27/26', time: '7:30 pm', opponent: 'Westside Christian', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/30/26', time: '7:30 pm', opponent: 'De La Salle North Catholic', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '2/3/26', time: '7:30 pm', opponent: 'Oregon Episcopal', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '2/6/26', time: '7:30 pm', opponent: 'Catlin Gabel', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '2/10/26', time: '6:00 pm', opponent: 'Riverside, WLWV', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '2/12/26', time: '7:30 pm', opponent: 'Portland Adventist Academy', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '2/14/26', time: 'Noon', opponent: 'Neah Kah Nie', location: 'Home' }
+];
+
 const boysTeamData = {
   name: 'VC Boys Basketball',
   type: 'Boys Basketball',
   description: 'Depth for days and pace that never slows. The floor is spaced with shooters, the rim is under constant threat, and there\'s no such thing as taking a possession off. The goal is simple, win state. Anything less is a failure. The team motto is BTA and they play like it. The squad is run by Bryan Fraser, an OG hooper out of Sac Town with 11 years on the sideline and zero tolerance for bad basketball. Backed by Coach John Efstathiou, a towering presence whose laugh echoes through the gym and whose clipboard slams are felt emotionally and physically.',
   record_wins: 4,
   record_losses: 1,
+  league_record: '0-0',
   ranking: 3,
   coach_name: 'Bryan Fraser',
-  coach_email: 'bfraser@valleycs.org'
+  coach_email: 'bfraser@valleycs.org',
+  coach_bio: 'Head Coach Bryan Fraser is an OG hooper out of Sacramento with 11 years on the sideline and zero tolerance for bad basketball.',
+  schedule: boysSchedule,
+  players: boysPlayers
 };
 
 const boysPlayers = [
@@ -401,15 +433,47 @@ const boysGames = [
 // GIRLS BASKETBALL DATA
 // ============================================================================
 
+const girlsSchedule = [
+  { result: 'W', score: '44-31', type: 'Non League', date: '12/3/25', time: '6:00 pm', opponent: 'Knappa', location: 'Away' },
+  { result: 'W', score: '56-7', type: 'Non League', date: '12/5/25', time: '6:00 pm', opponent: 'Gladstone', location: 'Home' },
+  { result: 'W', score: '44-16', type: 'Non League', date: '12/9/25', time: '5:30 pm', opponent: 'Scappoose', location: 'Away' },
+  { result: 'W', score: '57-28', type: 'Non League', date: '12/12/25', time: '7:30 pm', opponent: 'Pleasant Hill', location: 'Home' },
+  { result: 'L', score: '25-46', type: 'Non League', date: '12/15/25', time: '6:00 pm', opponent: 'Banks', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '12/22/25', time: '5:00 pm', opponent: 'Santiam Christian', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'Tournament', date: '12/28/25', time: '7:30 pm', opponent: 'Regis', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Tournament', date: '12/29/25', time: '3:15 pm', opponent: 'Jefferson', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Tournament', date: '12/30/25', time: '3:15 pm', opponent: 'Sutherlin', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '1/2/26', time: '5:30 pm', opponent: 'Seaside', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/6/26', time: '6:00 pm', opponent: 'Horizon Christian, Tualatin', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/8/26', time: '6:00 pm', opponent: 'Westside Christian', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/10/26', time: '5:00 pm', opponent: 'De La Salle North Catholic', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/13/26', time: '6:00 pm', opponent: 'Oregon Episcopal', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/16/26', time: '6:00 pm', opponent: 'Catlin Gabel', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '1/19/26', time: '6:00 pm', opponent: 'Country Christian', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/22/26', time: '6:00 pm', opponent: 'Portland Adventist Academy', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/24/26', time: '5:00 pm', opponent: 'Horizon Christian, Tualatin', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/27/26', time: '6:00 pm', opponent: 'Westside Christian', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '1/30/26', time: '6:00 pm', opponent: 'De La Salle North Catholic', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '2/3/26', time: '6:00 pm', opponent: 'Oregon Episcopal', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '2/6/26', time: '6:00 pm', opponent: 'Catlin Gabel', location: 'Away' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '2/9/26', time: '7:00 pm', opponent: 'Prairie, WA', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'League', date: '2/12/26', time: '6:00 pm', opponent: 'Portland Adventist Academy', location: 'Home' },
+  { result: 'Scheduled', score: '-', type: 'Non League', date: '2/14/26', time: '10:30 am', opponent: 'Neah Kah Nie', location: 'Home' }
+];
+
 const girlsTeamData = {
   name: 'VC Girls Basketball',
   type: 'Girls Basketball',
   description: 'Pure pressure from the opening tip. A relentless full court press, nonstop energy, shooters all over the floor, and substitutions so constant the other team never finds a rhythm. Games turn into chaos fast and stay that way. Led by English teacher Patrick Thomas, who somehow blends grammar, conditioning, and controlled insanity into a system that overwhelms opponents and stacks wins.',
   record_wins: 4,
   record_losses: 1,
+  league_record: '0-0',
   ranking: 8,
   coach_name: 'Patrick Thomas',
-  coach_email: 'pthomas@valleycs.org'
+  coach_email: 'pthomas@valleycs.org',
+  coach_bio: 'Head Coach Patrick Thomas is an English teacher who somehow blends grammar, conditioning, and controlled insanity into a system that overwhelms opponents and stacks wins.',
+  schedule: girlsSchedule,
+  players: girlsPlayers
 };
 
 const girlsPlayers = [
