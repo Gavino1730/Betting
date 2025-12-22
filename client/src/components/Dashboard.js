@@ -375,7 +375,7 @@ function Dashboard({ user }) {
                   </div>
 
                   {confidence && amount && parseFloat(amount) > 0 && (
-                    <div className="potential-{`recent-bet-item ${bet.outcome === 'won' ? 'win-animation' : ''} ${bet.outcome === 'lost' ? 'loss-animation' : ''}`}
+                    <div className="potential-win-card">
                       <div className="potential-label">Potential Payout</div>
                       <div className="potential-amount">{formatCurrency(parseFloat(amount) * confidenceMultipliers[confidence])}</div>
                       <div className="potential-profit">Profit: {formatCurrency(parseFloat(amount) * (confidenceMultipliers[confidence] - 1))}</div>

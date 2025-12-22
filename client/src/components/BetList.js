@@ -178,7 +178,7 @@ function BetList() {
             </span>
           </div>
         </div>
-      </div> ${bet.outcome === 'won' ? 'win-animation' : ''} ${bet.outcome === 'lost' ? 'loss-animation' : ''}
+      </div>
 
       {error && <div className="alert alert-error">{error}</div>}
 
