@@ -31,8 +31,8 @@ function App() {
   useEffect(() => {
     if (token) {
       fetchUnreadCount();
-      // Poll for new notifications every 30 seconds
-      const interval = setInterval(fetchUnreadCount, 30000);
+      // Lighten load: poll notifications every 2 minutes instead of 30s
+      const interval = setInterval(fetchUnreadCount, 120000);
       return () => clearInterval(interval);
     }
   }, [token]);

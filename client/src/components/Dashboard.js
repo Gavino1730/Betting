@@ -166,8 +166,8 @@ function Dashboard({ user }) {
   useEffect(() => {
     fetchGames();
     fetchBets();
-    // Poll for bet updates every 10 seconds
-    const interval = setInterval(fetchBets, 10000);
+    // Lighten load: poll for bet updates every 30 seconds
+    const interval = setInterval(fetchBets, 30000);
     return () => clearInterval(interval);
   }, [fetchGames, fetchBets]);
 
