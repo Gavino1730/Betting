@@ -372,7 +372,7 @@ function Dashboard({ user }) {
                   <div key={bet.id} className="recent-bet-item">
                     <div className="bet-info">
                       <div className="bet-team">{bet.selected_team}</div>
-                      <div className="bet-amount">{formatCurrency(bet.amount)}</div>
+                      <div className="bet-amount">{bet.amount}</div>
                     </div>
                     <div className="bet-status">
                       <span className={`status-badge status-${bet.status === 'pending' ? 'pending' : bet.outcome}`}>
