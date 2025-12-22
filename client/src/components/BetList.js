@@ -104,13 +104,15 @@ function BetList() {
   const formatPlacedAt = (createdAt) => {
     const date = new Date(createdAt);
     if (Number.isNaN(date.getTime())) return 'Placed date unknown';
-    return date.toLocaleString('en-US', {
+    return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
       hour: 'numeric',
-      minute: '2-digit'
-    });
+      minute: '2-digit',
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timeZoneName: 'short'
+    }).format(date);
   };
 
   if (loading) {
@@ -291,7 +293,7 @@ function BetList() {
 
               {/* Bet Footer */}
               <div className="bet-item-footer">
-                <span className="bet-date">📅 {formatPlacedAt(bet.created_at)}</span>
+                <span className="bet-date">📅 Pick placed on: {formatPlacedAt(bet.created_at)}</span>
                 {bet.games?.game_date && (
                   <span className="game-date">
                     🏀 Game: {(parseLocalDateOnly(bet.games.game_date) || new Date(bet.games.game_date)).toLocaleDateString('en-US', { 
