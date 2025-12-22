@@ -123,6 +123,17 @@ function Dashboard({ user }) {
     }
   }, []);
 
+  const fetchProfile = useCallback(async () => {
+    try {
+      const response = await apiClient.get('/users/profile');
+      if (response?.data?.balance !== undefined) {
+        setBalance(response.data.balance);
+      }
+    } catch (err) {
+      console.error('Error fetching profile:', err);
+    }
+  }, []);
+
   const fetchBets = useCallback(async () => {
     try {
       const response = await apiClient.get('/bets');
@@ -179,12 +190,13 @@ function Dashboard({ user }) {
   }, [previousBets]);
 
   useEffect(() => {
+    fetchProfile();
     fetchGames();
     fetchBets();
     // Lighten load: poll for bet updates every 30 seconds
     const interval = setInterval(fetchBets, 30000);
     return () => clearInterval(interval);
-  }, [fetchGames, fetchBets]);
+  }, [fetchGames, fetchBets, fetchProfile]);
 
   const selectedGame = selectedGameId ? games.find(g => g.id === parseInt(selectedGameId)) : null;
   const selectedGameLocked = selectedGame ? isGameLocked(selectedGame) : false;
@@ -449,31 +461,33 @@ function Dashboard({ user }) {
                         id="amount"
                         type="number"
                         step="1"
-                        min="1"
+                        min={balance > 0 ? 1 : 0}
                         max={balance}
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                        placeholder="Enter amount"
+                        placeholder={balance > 0 ? 'Enter amount' : 'Balance too low'}
                         required
                         className="amount-input"
+                        disabled={balance <= 0}
                       />
                       <button 
                         type="button" 
                         className="max-btn"
-                        onClick={() => setAmount(balance.toString())}
+                        onClick={() => balance > 0 && setAmount(balance.toString())}
+                        disabled={balance <= 0}
                       >
                         MAX
                       </button>
                     </div>
                     <div className="amount-helpers">
-                      <button type="button" className="quick-amount" onClick={() => setAmount('10')}>10</button>
-                      <button type="button" className="quick-amount" onClick={() => setAmount('25')}>25</button>
-                      <button type="button" className="quick-amount" onClick={() => setAmount('50')}>50</button>
-                      <button type="button" className="quick-amount" onClick={() => setAmount('100')}>100</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('10')} disabled={balance < 10}>10</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('25')} disabled={balance < 25}>25</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('50')} disabled={balance < 50}>50</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('100')} disabled={balance < 100}>100</button>
                     </div>
                   </div>
 
-                  {confidence && amount && parseFloat(amount) > 0 && (
+                  {confidence && amount && parseFloat(amount) > 0 && balance > 0 && (
                     <div className="potential-win-card">
                       <div className="potential-label">Potential Payout</div>
                       <div className="potential-amount">{formatCurrency(parseFloat(amount) * confidenceMultipliers[confidence])}</div>
@@ -481,7 +495,7 @@ function Dashboard({ user }) {
                     </div>
                   )}
 
-                  <button type="submit" className="btn btn-bet" disabled={loading || !selectedTeam || !confidence || !amount || parseFloat(amount) <= 0 || selectedGameLocked}>
+                  <button type="submit" className="btn btn-bet" disabled={loading || !selectedTeam || !confidence || !amount || parseFloat(amount) <= 0 || selectedGameLocked || balance <= 0}>
                     {loading ? '⏳ Processing...' : '🎯 Place Pick'}
                   </button>
                 </div>
