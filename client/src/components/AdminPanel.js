@@ -1119,65 +1119,182 @@ function AdminPanel() {
 
       {/* Game Status Management Modal */}
       {gameStatusModal && (
-        <div className="modal-overlay" onClick={() => setGameStatusModal(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Manage Game Status</h3>
-            <p><strong>{gameStatusModal.homeTeam} vs {gameStatusModal.awayTeam}</strong></p>
+        <div 
+          className="modal-overlay" 
+          onClick={() => setGameStatusModal(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            backdropFilter: 'blur(5px)'
+          }}
+        >
+          <div 
+            className="modal-content" 
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)',
+              padding: '2rem',
+              borderRadius: '14px',
+              border: '2px solid rgba(255, 215, 0, 0.3)',
+              boxShadow: '0 12px 48px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.15)',
+              maxWidth: '500px',
+              width: '90%',
+              maxHeight: '85vh',
+              overflowY: 'auto'
+            }}
+          >
+            <h3 style={{color: '#ffd700', marginBottom: '1rem', textShadow: '0 2px 4px rgba(255, 215, 0, 0.2)'}}>
+              ⚙️ Manage Game Status
+            </h3>
+            <p style={{color: '#b8c5d6', marginBottom: '1.5rem', fontSize: '1rem'}}>
+              <strong style={{color: '#ffd700'}}>{gameStatusModal.homeTeam} vs {gameStatusModal.awayTeam}</strong>
+            </p>
             
-            <div className="form-group">
-              <label>Game Status</label>
+            <div className="form-group" style={{marginBottom: '1.5rem'}}>
+              <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>Game Status</label>
               <select 
                 value={gameStatusModal.status}
                 onChange={(e) => setGameStatusModal({...gameStatusModal, status: e.target.value})}
+                style={{
+                  width: '100%',
+                  padding: '0.8rem',
+                  background: '#0f1419',
+                  border: '2px solid rgba(255, 215, 0, 0.2)',
+                  borderRadius: '8px',
+                  color: '#ffd700',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
               >
-                <option value="upcoming">Scheduled</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
+                <option value="upcoming" style={{background: '#0f1419', color: '#ffd700'}}>📅 Scheduled</option>
+                <option value="in_progress" style={{background: '#0f1419', color: '#ffd700'}}>🏀 In Progress</option>
+                <option value="completed" style={{background: '#0f1419', color: '#ffd700'}}>✅ Completed</option>
               </select>
             </div>
 
-            <div className="form-row">
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem'}}>
               <div className="form-group">
-                <label>{gameStatusModal.homeTeam} Score</label>
+                <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
+                  {gameStatusModal.homeTeam} Score
+                </label>
                 <input
                   type="number"
                   value={gameStatusModal.homeScore}
                   onChange={(e) => setGameStatusModal({...gameStatusModal, homeScore: e.target.value})}
                   placeholder="0"
+                  style={{
+                    width: '100%',
+                    padding: '0.8rem',
+                    background: '#0f1419',
+                    border: '2px solid rgba(255, 215, 0, 0.2)',
+                    borderRadius: '8px',
+                    color: '#b8c5d6',
+                    fontSize: '1rem',
+                    transition: 'all 0.3s ease'
+                  }}
                 />
               </div>
               <div className="form-group">
-                <label>{gameStatusModal.awayTeam} Score</label>
+                <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
+                  {gameStatusModal.awayTeam} Score
+                </label>
                 <input
                   type="number"
                   value={gameStatusModal.awayScore}
                   onChange={(e) => setGameStatusModal({...gameStatusModal, awayScore: e.target.value})}
                   placeholder="0"
+                  style={{
+                    width: '100%',
+                    padding: '0.8rem',
+                    background: '#0f1419',
+                    border: '2px solid rgba(255, 215, 0, 0.2)',
+                    borderRadius: '8px',
+                    color: '#b8c5d6',
+                    fontSize: '1rem',
+                    transition: 'all 0.3s ease'
+                  }}
                 />
               </div>
             </div>
 
             {gameStatusModal.status === 'completed' && (
-              <div className="form-group">
-                <label>Winner (resolves bets)</label>
+              <div className="form-group" style={{marginBottom: '2rem'}}>
+                <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
+                  🏆 Winner (resolves bets)
+                </label>
                 <select 
                   value={gameStatusModal.winner}
                   onChange={(e) => setGameStatusModal({...gameStatusModal, winner: e.target.value})}
+                  style={{
+                    width: '100%',
+                    padding: '0.8rem',
+                    background: '#0f1419',
+                    border: '2px solid rgba(102, 187, 106, 0.3)',
+                    borderRadius: '8px',
+                    color: '#66bb6a',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
                 >
-                  <option value="">-- Select Winner --</option>
-                  <option value={gameStatusModal.homeTeam}>{gameStatusModal.homeTeam}</option>
-                  <option value={gameStatusModal.awayTeam}>{gameStatusModal.awayTeam}</option>
+                  <option value="" style={{background: '#0f1419', color: '#888'}}>-- Select Winner --</option>
+                  <option value={gameStatusModal.homeTeam} style={{background: '#0f1419', color: '#66bb6a'}}>
+                    {gameStatusModal.homeTeam} (Home)
+                  </option>
+                  <option value={gameStatusModal.awayTeam} style={{background: '#0f1419', color: '#66bb6a'}}>
+                    {gameStatusModal.awayTeam} (Away)
+                  </option>
                 </select>
               </div>
             )}
 
-            <div className="modal-buttons">
-              <button className="btn" onClick={handleUpdateGameStatus}>
-                Update Game
+            <div style={{display: 'flex', gap: '1rem', marginTop: '2rem'}}>
+              <button 
+                className="btn" 
+                onClick={handleUpdateGameStatus}
+                style={{
+                  flex: 1,
+                  background: 'linear-gradient(135deg, #66bb6a 0%, #43a047 100%)',
+                  color: 'white',
+                  padding: '0.9rem 1.5rem',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  fontSize: '1rem',
+                  boxShadow: '0 4px 12px rgba(102, 187, 106, 0.3)'
+                }}
+              >
+                ✅ Update Game
               </button>
-              <button className="btn btn-secondary" onClick={() => setGameStatusModal(null)}>
-                Cancel
-              </button>
+              <button 
+                className="btn btn-secondary" 
+                onClick={() => setGameStatusModal(null)}
+                style={{
+                  flex: 1,
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: '#b8c5d6',
+                  padding: '0.9rem 1.5rem',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  fontSize: '1rem'
+                }}
+              >
             </div>
           </div>
         </div>
