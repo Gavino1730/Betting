@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import apiClient from '../utils/axios';
 import '../styles/Games.css';
 import { formatCurrency } from '../utils/currency';
@@ -31,7 +31,7 @@ function Games() {
   }, []);
 
   useEffect(() => {
-    const intervalId = setInterval(() => setNow(Date.now()), 1000);
+    const intervalId = setInterval(() => setNow(Date.now()), 3000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -69,8 +69,18 @@ function Games() {
     }
   };
 
+  const parseLocalDateOnly = (dateStr) => {
+    const [year, month, day] = (dateStr || '').split('-').map(Number);
+    if (Number.isInteger(year) && Number.isInteger(month) && Number.isInteger(day)) {
+      return new Date(year, month - 1, day);
+    }
+    const parsed = new Date(dateStr);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
+    const date = parseLocalDateOnly(dateString);
+    if (!date) return 'Date TBD';
     const options = { weekday: 'short', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
   };
@@ -78,8 +88,8 @@ function Games() {
   const buildDateFromParts = (game) => {
     if (!game?.game_date) return null;
 
-    const date = new Date(game.game_date);
-    if (Number.isNaN(date.getTime())) return null;
+    const date = parseLocalDateOnly(game.game_date);
+    if (!date) return null;
 
     if (game.game_time) {
       const parts = game.game_time.split(':').map(Number);
@@ -203,7 +213,7 @@ function Games() {
     }
   };
 
-  const activePropBets = propBets.filter(pb => pb.status === 'active');
+  const activePropBets = useMemo(() => propBets.filter(pb => pb.status === 'active'), [propBets]);
 
   return (
     <div className="games-page">
