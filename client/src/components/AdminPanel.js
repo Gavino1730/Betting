@@ -1032,10 +1032,10 @@ function AdminPanel() {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>User ID</th>
-                    <th>Game/Prop</th>
-                    <th>Selected</th>
-                    <th>Amount</th>
+                    <th>User</th>
+                    <th>Game / Prop</th>
+                    <th>Selection</th>
+                    <th>Stake</th>
                     <th>Odds</th>
                     <th>Status</th>
                     <th>Outcome</th>
@@ -1046,38 +1046,69 @@ function AdminPanel() {
                     <tr key={bet.id}>
                       <td>{bet.id}</td>
                       <td>{bet.user_id}</td>
-                      <td>{bet.game_id}</td>
+                      <td>{bet.game_id || 'Prop'}</td>
                       <td>{bet.selected_team}</td>
                       <td>{formatCurrency(bet.amount)}</td>
                       <td>{bet.odds}x</td>
                       <td>
-                        <span style={{
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                          fontSize: '0.85em',
-                          background: bet.status === 'pending' ? '#ff9800' : '#66bb6a',
-                          color: 'white'
-                        }}>
-                          {bet.status === 'resolved' ? 'Completed' : bet.status}
+                        <span className={`chip chip-${bet.status === 'resolved' ? 'completed' : bet.status}`}>
+                          {bet.status === 'resolved' ? 'Completed' : bet.status || 'pending'}
                         </span>
                       </td>
                       <td>
                         {bet.outcome ? (
-                          <span style={{
-                            padding: '4px 8px',
-                            borderRadius: '4px',
-                            fontSize: '0.85em',
-                            background: bet.outcome === 'won' ? '#66bb6a' : '#ef5350',
-                            color: 'white'
-                          }}>
+                          <span className={`chip chip-${bet.outcome === 'won' ? 'won' : 'lost'}`}>
                             {bet.outcome}
                           </span>
-                        ) : '-'}
+                        ) : '—'}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            <div className="bets-mobile-list">
+              {allBets.map(bet => (
+                <div key={bet.id} className="bet-card">
+                  <div className="bet-card-row">
+                    <span className="bet-label">User</span>
+                    <span className="bet-value">{bet.user_id}</span>
+                  </div>
+                  <div className="bet-card-row">
+                    <span className="bet-label">Game / Prop</span>
+                    <span className="bet-value">{bet.game_id || 'Prop'}</span>
+                  </div>
+                  <div className="bet-card-row">
+                    <span className="bet-label">Selection</span>
+                    <span className="bet-value">{bet.selected_team}</span>
+                  </div>
+                  <div className="bet-card-row two-col">
+                    <div>
+                      <span className="bet-label">Stake</span>
+                      <div className="bet-value">{formatCurrency(bet.amount)}</div>
+                    </div>
+                    <div>
+                      <span className="bet-label">Odds</span>
+                      <div className="bet-value">{bet.odds}x</div>
+                    </div>
+                  </div>
+                  <div className="bet-card-row two-col">
+                    <div>
+                      <span className="bet-label">Status</span>
+                      <div className={`chip chip-compact ${bet.status === 'resolved' ? 'chip-completed' : 'chip-pending'}`}>
+                        {bet.status === 'resolved' ? 'Completed' : bet.status || 'pending'}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="bet-label">Outcome</span>
+                      <div className={`chip chip-compact ${bet.outcome === 'won' ? 'chip-won' : bet.outcome === 'lost' ? 'chip-lost' : 'chip-neutral'}`}>
+                        {bet.outcome || '—'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </>
