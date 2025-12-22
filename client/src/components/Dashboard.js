@@ -168,7 +168,9 @@ function Dashboard({ user }) {
   };
 
   const upcomingGames = games.slice(0, 3); // Next 3 games
-  const recentBets = bets.slice(0, 5); // Last 5 bets
+  const recentActivity = [...bets]
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .slice(0, 6); // Last 6 events
 
   return (
     <div className="dashboard">
@@ -424,30 +426,39 @@ function Dashboard({ user }) {
             )}
           </div>
 
-          {/* Recent Bets */}
+          {/* Recent Activity */}
           <div className="card">
-            <h3>🎲 Recent Bets</h3>
-            {recentBets.length > 0 ? (
+            <h3>📝 Recent Activity</h3>
+            {recentActivity.length > 0 ? (
               <div className="recent-bets-list">
-                {recentBets.map(bet => (
-                  <div key={bet.id} className="recent-bet-item">
+                {recentActivity.map(activity => (
+                  <div key={activity.id} className="recent-bet-item">
                     <div className="bet-info">
-                      <div className="bet-team">{bet.selected_team}</div>
-                      <div className="bet-amount">{bet.amount}</div>
+                      <div className="bet-team">{activity.selected_team}</div>
+                      <div className="bet-amount">{activity.amount}</div>
                     </div>
                     <div className="bet-status">
-                      <span className={`status-badge status-${bet.status === 'pending' ? 'pending' : bet.outcome}`}>
-                        {bet.status === 'pending' ? '⏳ Pending' : bet.outcome === 'won' ? '✅ Won' : '❌ Lost'}
+                      <span className={`status-badge status-${activity.status === 'pending' ? 'pending' : activity.outcome}`}>
+                        {activity.status === 'pending'
+                          ? '⏳ Pending'
+                          : activity.outcome === 'won'
+                          ? '✅ Won'
+                          : '❌ Lost'}
                       </span>
-                      {bet.outcome === 'won' && (
-                        <span className="bet-win">+{formatCurrency(bet.potential_win - bet.amount)}</span>
+                      {activity.outcome === 'won' && (
+                        <span className="bet-win">+{formatCurrency(activity.potential_win - activity.amount)}</span>
+                      )}
+                      {activity.status === 'pending' && (
+                        <span className="bet-win" style={{ color: '#ffd700' }}>
+                          Possible: {formatCurrency(activity.potential_win - activity.amount)}
+                        </span>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="empty-text">No picks placed yet</p>
+              <p className="empty-text">No recent activity</p>
             )}
           </div>
         </div>
