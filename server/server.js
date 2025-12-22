@@ -6,22 +6,27 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+// Default off unless explicitly enabled
+const RATE_LIMIT_ENABLED = process.env.RATE_LIMIT_ENABLED === 'true';
+const RATE_LIMIT_WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS || `${15 * 60 * 1000}`, 10);
+const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || '5000', 10);
+const AUTH_RATE_LIMIT_MAX = parseInt(process.env.AUTH_RATE_LIMIT_MAX || '100', 10);
 
 // Trust proxy - Required for Railway and other proxy services
 app.set('trust proxy', 1);
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5000, // Relaxed: allow up to 5k requests per IP per window
+const limiter = RATE_LIMIT_ENABLED ? rateLimit({
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: RATE_LIMIT_MAX,
   message: 'Too many requests, please try again later.'
-});
+}) : null;
 
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100, // Relaxed: allow up to 100 auth attempts per IP per window
+const authLimiter = RATE_LIMIT_ENABLED ? rateLimit({
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: AUTH_RATE_LIMIT_MAX,
   message: 'Too many authentication attempts, please try again later.'
-});
+}) : null;
 
 // Middleware
 app.use(cors({
@@ -33,11 +38,17 @@ app.use(cors({
   credentials: true
 }));
 app.use(bodyParser.json({ limit: '10mb' }));
-app.use(limiter);
+if (limiter) {
+  app.use(limiter);
+}
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/auth', authLimiter, require('./routes/auth'));
+if (authLimiter) {
+  app.use('/api/auth', authLimiter, require('./routes/auth'));
+} else {
+  app.use('/api/auth', require('./routes/auth'));
+}
 app.use('/api/users', require('./routes/users'));
 app.use('/api/bets', require('./routes/bets'));
 app.use('/api/games', require('./routes/games'));
