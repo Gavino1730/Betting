@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import apiClient from '../utils/axios';
 import '../styles/Games.css';
 import { formatCurrency } from '../utils/currency';
+import { formatTime } from '../utils/time';
 
 function Games() {
   const [games, setGames] = useState([]);
@@ -250,7 +251,7 @@ function Games() {
                       {game.game_time && (
                         <div className="detail-item">
                           <span className="detail-icon">⏰</span>
-                          <span className="detail-text">{game.game_time}</span>
+                          <span className="detail-text">{formatTime(game.game_time)}</span>
                         </div>
                       )}
                       {game.location && (

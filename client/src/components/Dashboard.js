@@ -3,6 +3,7 @@ import apiClient from '../utils/axios';
 import '../styles/Dashboard.css';
 import '../styles/Confetti.css';
 import { formatCurrency } from '../utils/currency';
+import { formatTime } from '../utils/time';
 import Confetti from './Confetti';
 
 function Dashboard({ user }) {
@@ -264,7 +265,7 @@ function Dashboard({ user }) {
                   <option value="">Choose a game...</option>
                   {games.map(game => (
                     <option key={game.id} value={game.id}>
-                      {game.home_team} vs {game.away_team} • {new Date(game.game_date).toLocaleDateString()} {game.game_time}
+                      {game.home_team} vs {game.away_team} • {new Date(game.game_date).toLocaleDateString()} {formatTime(game.game_time)}
                     </option>
                   ))}
                 </select>
@@ -275,7 +276,7 @@ function Dashboard({ user }) {
                   <div className="game-info-card">
                     <div className="game-header">
                       <span className="game-badge">{selectedGame.team_type}</span>
-                      <span className="game-date">{new Date(selectedGame.game_date).toLocaleDateString()} • {selectedGame.game_time}</span>
+                      <span className="game-date">{new Date(selectedGame.game_date).toLocaleDateString()} • {formatTime(selectedGame.game_time)}</span>
                     </div>
                     <div className="matchup">
                       <div className="team-item">{selectedGame.home_team}</div>

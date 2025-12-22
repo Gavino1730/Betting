@@ -3,6 +3,7 @@ import apiClient from '../utils/axios';
 import AdminTeams from './AdminTeams';
 import '../styles/AdminPanel.css';
 import { formatCurrency } from '../utils/currency';
+import { formatTime } from '../utils/time';
 
 function AdminPanel() {
   const [allBets, setAllBets] = useState([]);
@@ -778,7 +779,7 @@ function AdminPanel() {
                   </div>
                   
                   <div style={{fontSize: '0.9rem', color: '#b8c5d6', marginBottom: '15px'}}>
-                    <p style={{margin: '5px 0'}}><strong>📅</strong> {game.game_date} {game.game_time ? `at ${game.game_time}` : ''}</p>
+                    <p style={{margin: '5px 0'}}><strong>📅</strong> {game.game_date} {game.game_time ? `at ${formatTime(game.game_time)}` : ''}</p>
                     <p style={{margin: '5px 0'}}><strong>📍</strong> {game.location || 'TBD'}</p>
                     <p style={{margin: '5px 0'}}><strong>Status:</strong> {game.status}</p>
                     {game.result && <p style={{margin: '5px 0', color: '#66bb6a'}}><strong>Winner:</strong> {game.result}</p>}
@@ -940,7 +941,18 @@ function AdminPanel() {
                   {propBet.description && <p>{propBet.description}</p>}
                   <p><strong>Category:</strong> {propBet.team_type}</p>
                   <p><strong>Odds:</strong> Yes: {propBet.yes_odds}x | No: {propBet.no_odds}x</p>
-                  {propBet.expires_at && <p><strong>Expires:</strong> {new Date(propBet.expires_at).toLocaleString()}</p>}
+                  {propBet.expires_at && (
+                    <p>
+                      <strong>Expires:</strong>{' '}
+                      {new Date(propBet.expires_at).toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  )}
                   <p><strong>Status:</strong> {propBet.status}</p>
                   {propBet.outcome && <p><strong>Outcome:</strong> {propBet.outcome}</p>}
                   <div style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
