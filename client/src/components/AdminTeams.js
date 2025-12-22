@@ -99,24 +99,42 @@ function AdminTeams() {
   const handleSaveTeamInfo = async () => {
     try {
       setError('');
+      
+      // Parse ranking to extract just the number
+      let rankingValue = formData.ranking;
+      if (typeof rankingValue === 'string') {
+        // Extract number from "Rank #3" format
+        const match = rankingValue.match(/\d+/);
+        rankingValue = match ? parseInt(match[0]) : parseInt(rankingValue);
+      } else {
+        rankingValue = parseInt(rankingValue);
+      }
+
       const updates = {
-        record_wins: parseInt(formData.record_wins),
-        record_losses: parseInt(formData.record_losses),
-        league_record: formData.league_record,
-        ranking: parseInt(formData.ranking),
-        coach_name: formData.coach_name,
-        assistant_coach: formData.assistant_coach,
-        coach_bio: formData.coach_bio,
-        description: formData.description,
-        team_motto: formData.team_motto
+        record_wins: parseInt(formData.record_wins) || 0,
+        record_losses: parseInt(formData.record_losses) || 0,
+        league_record: formData.league_record || '0-0',
+        ranking: rankingValue,
+        coach_name: formData.coach_name || '',
+        assistant_coach: formData.assistant_coach || '',
+        coach_bio: formData.coach_bio || '',
+        description: formData.description || '',
+        team_motto: formData.team_motto || ''
       };
 
       await apiClient.put(`/teams-admin/${selectedTeam.id}`, updates);
 
-      setSelectedTeam(prev => ({ ...prev, ...updates }));
+      // Update local state
+      const updatedTeam = { ...selectedTeam, ...updates, ranking: `Rank #${rankingValue}` };
+      setSelectedTeam(updatedTeam);
+      setFormData(updatedTeam);
       setEditMode(false);
-      setError('Team info updated successfully');
+      setError('✅ Team info updated successfully');
+      
+      // Refresh teams list
+      fetchTeams();
     } catch (err) {
+      console.error('Update error:', err);
       setError(err.response?.data?.error || 'Failed to update team info');
     }
   };
