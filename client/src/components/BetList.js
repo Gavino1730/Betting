@@ -101,8 +101,19 @@ function BetList() {
     return Number.isNaN(parsed.getTime()) ? null : parsed;
   };
 
+  const PACIFIC_TZ = 'America/Los_Angeles';
+
+  const parseUtcDate = (dateStr) => {
+    if (!dateStr) return null;
+    const hasTz = /[zZ]|[+-]\d\d:?\d\d$/.test(dateStr);
+    const iso = dateStr.includes('T') ? dateStr : `${dateStr}T00:00:00`;
+    const withTz = hasTz ? iso : `${iso}Z`;
+    const parsed = new Date(withTz);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
   const formatPlacedAt = (createdAt) => {
-    const date = new Date(createdAt);
+    const date = parseUtcDate(createdAt) || new Date(createdAt);
     if (Number.isNaN(date.getTime())) return 'Placed date unknown';
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
@@ -110,7 +121,7 @@ function BetList() {
       year: 'numeric',
       hour: 'numeric',
       minute: '2-digit',
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timeZone: PACIFIC_TZ,
       timeZoneName: 'short'
     }).format(date);
   };
