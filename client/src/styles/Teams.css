@@ -571,22 +571,6 @@
   .roster-section {
     margin-bottom: 1rem;
   }
-    margin-bottom: 2rem;
-    border-radius: 10px;
-  }
-
-  .team-stats {
-    gap: 1rem;
-  }
-
-  .stat {
-    min-width: 150px;
-  }
-
-  .team-description,
-  .coaching-staff {
-    padding: 0.8rem 0;
-  }
 
   .coach-info {
     flex-wrap: wrap;
@@ -604,20 +588,9 @@
   }
 }
 
-@media (max-width: 480px) {
-  .teams-page {
-    padding: 0.5rem;
-  }
+/* Second 480px media query removed - duplicates consolidated above */
 
-  .teams-page h1 {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-  }
-
-  .tabs {
-    gap: 0.3rem;
-    margin-bottom: 1rem;
-  }
+@media (max-width: 359px) {
 
   .tab-button {
     padding: 0.6rem 0.8rem;
