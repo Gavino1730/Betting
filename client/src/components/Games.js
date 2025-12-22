@@ -260,7 +260,27 @@ function Games() {
       )}
 
       {loading ? (
-        <div className="loading">Loading...</div>
+        <div className="games-grid">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <div className="game-card-display skeleton-card" key={idx}>
+              <div className="skeleton-row">
+                <span className="skeleton-badge" />
+                <span className="skeleton-pill" />
+              </div>
+              <div className="skeleton-block" style={{height: '24px', marginTop: '10px'}} />
+              <div className="skeleton-block" style={{height: '18px', width: '60%', marginTop: '6px'}} />
+              <div className="skeleton-stack" style={{marginTop: '16px'}}>
+                <span className="skeleton-line" />
+                <span className="skeleton-line short" />
+                <span className="skeleton-line" />
+              </div>
+              <div className="skeleton-stack" style={{marginTop: '16px'}}>
+                <span className="skeleton-line" />
+                <span className="skeleton-line short" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <>
           {activeTab === 'games' && (

@@ -314,7 +314,12 @@ function Dashboard({ user }) {
           )}
 
           {gamesLoading ? (
-            <p>Loading games...</p>
+            <div className="skeleton-stack" style={{gap: '12px'}}>
+              <span className="skeleton-line" style={{height: '14px', width: '60%'}} />
+              <span className="skeleton-line" style={{height: '14px', width: '50%'}} />
+              <span className="skeleton-line" style={{height: '44px', width: '100%', borderRadius: '10px'}} />
+              <span className="skeleton-line" style={{height: '44px', width: '100%', borderRadius: '10px'}} />
+            </div>
           ) : games.length === 0 ? (
             <div className="empty-state">
               <p>🏀 No games available at the moment.</p>
