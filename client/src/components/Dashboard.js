@@ -39,7 +39,7 @@ function Dashboard({ user }) {
 
   useEffect(() => {
     // Update less frequently to reduce re-renders and improve interaction latency
-    const intervalId = setInterval(() => setNow(Date.now()), 3000);
+    const intervalId = setInterval(() => setNow(Date.now()), 5000);
     return () => clearInterval(intervalId);
   }, []);
 
