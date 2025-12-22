@@ -93,6 +93,9 @@ function AdminTeams() {
 
   const handleSelectTeam = (team) => {
     console.log('Selecting team:', team);
+    console.log('Selected team ID:', team.id, 'Type:', typeof team.id);
+    console.log('Current selected team ID:', selectedTeam?.id, 'Type:', typeof selectedTeam?.id);
+    
     // Extract numeric ranking from "Rank #3" format
     let numericRanking = team.ranking;
     if (typeof numericRanking === 'string') {
@@ -105,6 +108,7 @@ function AdminTeams() {
       ranking: numericRanking
     };
     
+    console.log('Setting selected team to:', cleanedTeam);
     setSelectedTeam(cleanedTeam);
     setFormData(cleanedTeam);
     setEditMode(false);
@@ -242,6 +246,9 @@ function AdminTeams() {
 
       <div className="teams-selector">
         <h3>Select Team</h3>
+        <div style={{fontSize: '12px', color: '#ffd700', marginBottom: '10px'}}>
+          Debug: Total teams: {teamsToDisplay.length}, Selected ID: {selectedTeam?.id} (type: {typeof selectedTeam?.id})
+        </div>
         <div className="team-buttons">
           {teamsToDisplay.map(team => (
             <button
