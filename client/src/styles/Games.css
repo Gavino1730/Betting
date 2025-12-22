@@ -249,7 +249,8 @@
   }
 
   /* Fix bet input and button sizing */
-  input[type="number"] {
+  input[type="number"],
+  .prop-bet-input {
     padding: 1rem !important;
     font-size: 1rem !important;
     min-height: 48px;
@@ -257,7 +258,10 @@
 
   button[type="submit"],
   .bet-button,
-  .place-bet-btn {
+  .place-bet-btn,
+  .prop-bet-btn,
+  .yes-btn,
+  .no-btn {
     padding: 1rem 1.5rem !important;
     font-size: 1rem !important;
     min-height: 48px;
