@@ -146,9 +146,6 @@ function App() {
         <div className="mobile-menu-header">
           <div className="mobile-user-info">
             <div className="mobile-user-name">👤 {currentUser?.username || 'User'}</div>
-            <div className="mobile-balance">
-              💰 {formatCurrency(currentUser?.balance)} VB
-            </div>
           </div>
           <button
             className="mobile-close-btn"
