@@ -60,7 +60,10 @@ function Dashboard({ user }) {
   };
 
   const fetchBets = async () => {
-    tr
+    try {
+      const response = await apiClient.get('/bets');
+      const userBets = response.data || [];
+
       // Check for newly resolved bets
       if (previousBets.length > 0) {
         userBets.forEach(newBet => {
@@ -84,11 +87,8 @@ function Dashboard({ user }) {
           }
         });
       }
-      
+
       setPreviousBets(userBets);
-      y {
-      const response = await apiClient.get('/bets');
-      const userBets = response.data || [];
       setBets(userBets);
       
       // Calculate stats
@@ -142,25 +142,6 @@ function Dashboard({ user }) {
         selectedTeam,
         confidence,
         amount: betAmount,
-      <Confetti show={showConfetti} onComplete={() => setShowConfetti(false)} />
-      
-      {winNotification && (
-        <div className="win-notification">
-          <span className="win-notification-emoji">🎉</span>
-          <div>You Won!</div>
-          <div className="win-notification-amount">+{formatCurrency(winNotification.amount)}</div>
-          <div style={{fontSize: '1.2rem', marginTop: '0.5rem'}}>{winNotification.team}</div>
-        </div>
-      )}
-      
-      {lossNotification && (
-        <div className="loss-notification">
-          <span className="loss-notification-emoji">😔</span>
-          <div>Better luck next time!</div>
-          <div style={{fontSize: '1rem', marginTop: '0.5rem', opacity: 0.9}}>-{formatCurrency(lossNotification.amount)}</div>
-        </div>
-      )}
-      
         odds: confidenceMultipliers[confidence],
       };
 
@@ -190,6 +171,25 @@ function Dashboard({ user }) {
 
   return (
     <div className="dashboard">
+      <Confetti show={showConfetti} onComplete={() => setShowConfetti(false)} />
+      
+      {winNotification && (
+        <div className="win-notification">
+          <span className="win-notification-emoji">🎉</span>
+          <div>You Won!</div>
+          <div className="win-notification-amount">+{formatCurrency(winNotification.amount)}</div>
+          <div style={{fontSize: '1.2rem', marginTop: '0.5rem'}}>{winNotification.team}</div>
+        </div>
+      )}
+      
+      {lossNotification && (
+        <div className="loss-notification">
+          <span className="loss-notification-emoji">😔</span>
+          <div>Better luck next time!</div>
+          <div style={{fontSize: '1rem', marginTop: '0.5rem', opacity: 0.9}}>-{formatCurrency(lossNotification.amount)}</div>
+        </div>
+      )}
+      
       {/* Stats Overview */}
       <div className="stats-grid">
         <div className="stat-card balance-card">

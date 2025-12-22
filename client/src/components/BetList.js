@@ -78,27 +78,7 @@ function BetList() {
     totalWagered: bets.reduce((sum, b) => sum + parseFloat(b.amount || 0), 0),
     totalWinnings: bets.filter(b => b.outcome === 'won').reduce((sum, b) => sum + (parseFloat(b.potential_win || 0) - parseFloat(b.amount || 0)), 0)
   };
-
-  cons<Confetti show={showConfetti} onComplete={() => setShowConfetti(false)} />
-      
-      {winNotification && (
-        <div className="win-notification">
-          <span className="win-notification-emoji">🎉</span>
-          <div>You Won!</div>
-          <div className="win-notification-amount">+{formatCurrency(winNotification.amount)}</div>
-          <div style={{fontSize: '1.2rem', marginTop: '0.5rem'}}>{winNotification.team}</div>
-        </div>
-      )}
-      
-      {lossNotification && (
-        <div className="loss-notification">
-          <span className="loss-notification-emoji">😔</span>
-          <div>Better luck next time!</div>
-          <div style={{fontSize: '1rem', marginTop: '0.5rem', opacity: 0.9}}>-{formatCurrency(lossNotification.amount)}</div>
-        </div>
-      )}
-      
-      t getConfidenceColor = (betType) => {
+  const getConfidenceColor = (betType) => {
     switch(betType?.toLowerCase()) {
       case 'low': return 'confidence-low';
       case 'medium': return 'confidence-medium';
@@ -125,6 +105,25 @@ function BetList() {
 
   return (
     <div className="bet-list-container">
+      <Confetti show={showConfetti} onComplete={() => setShowConfetti(false)} />
+      
+      {winNotification && (
+        <div className="win-notification">
+          <span className="win-notification-emoji">🎉</span>
+          <div>You Won!</div>
+          <div className="win-notification-amount">+{formatCurrency(winNotification.amount)}</div>
+          <div style={{fontSize: '1.2rem', marginTop: '0.5rem'}}>{winNotification.team}</div>
+        </div>
+      )}
+      
+      {lossNotification && (
+        <div className="loss-notification">
+          <span className="loss-notification-emoji">😔</span>
+          <div>Better luck next time!</div>
+          <div style={{fontSize: '1rem', marginTop: '0.5rem', opacity: 0.9}}>-{formatCurrency(lossNotification.amount)}</div>
+        </div>
+      )}
+      
       {/* Header Section */}
       <div className="bet-list-header">
         <div className="header-title">
