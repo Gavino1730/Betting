@@ -191,6 +191,13 @@ function Dashboard({ user }) {
         </div>
       )}
       
+      <div className="dashboard-intro card">
+        <h2 className="intro-title">Welcome to Valiant Picks</h2>
+        <p className="intro-body">
+          Make friendly picks on Valiant games, back your teams, and stay up to date on how the Valiants are doing across sports. It’s all for fun—track your picks, climb the leaderboard, and maybe snag some prizes along the way.
+        </p>
+      </div>
+
       {/* Stats Overview */}
       <div className="stats-grid">
         <div className="stat-card balance-card">
