@@ -45,6 +45,7 @@ router.put('/:teamId', authenticateToken, adminOnly, async (req, res) => {
       'league_record',
       'ranking',
       'coach_name',
+      'assistant_coach',
       'coach_bio',
       'description',
       'team_motto',
