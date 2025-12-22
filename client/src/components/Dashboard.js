@@ -291,7 +291,6 @@ function Dashboard({ user }) {
                   <div className="form-group">
                     <label htmlFor="amount">💵 Bet Amount</label>
                     <div className="amount-input-wrapper">
-                      <span className="currency-symbol">$</span>
                       <input
                         id="amount"
                         type="number"
@@ -313,10 +312,10 @@ function Dashboard({ user }) {
                       </button>
                     </div>
                     <div className="amount-helpers">
-                      <button type="button" className="quick-amount" onClick={() => setAmount('10')}>$10</button>
-                      <button type="button" className="quick-amount" onClick={() => setAmount('25')}>$25</button>
-                      <button type="button" className="quick-amount" onClick={() => setAmount('50')}>$50</button>
-                      <button type="button" className="quick-amount" onClick={() => setAmount('100')}>$100</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('10')}>10</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('25')}>25</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('50')}>50</button>
+                      <button type="button" className="quick-amount" onClick={() => setAmount('100')}>100</button>
                     </div>
                   </div>
 
