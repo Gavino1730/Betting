@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import apiClient from '../utils/axios';
 import '../styles/Dashboard.css';
 import '../styles/Confetti.css';
@@ -36,15 +36,7 @@ function Dashboard({ user }) {
     high: 2.0
   };
 
-  useEffect(() => {
-    fetchGames();
-    fetchBets();
-    // Poll for bet updates every 10 seconds
-    const interval = setInterval(fetchBets, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const fetchGames = async () => {
+  const fetchGames = useCallback(async () => {
     try {
       const response = await apiClient.get('/games');
       // Sort games by date (earliest first)
@@ -58,9 +50,9 @@ function Dashboard({ user }) {
     } finally {
       setGamesLoading(false);
     }
-  };
+  }, []);
 
-  const fetchBets = async () => {
+  const fetchBets = useCallback(async () => {
     try {
       const response = await apiClient.get('/bets');
       const userBets = response.data || [];
@@ -113,7 +105,15 @@ function Dashboard({ user }) {
     } catch (err) {
       console.error('Error fetching bets:', err);
     }
-  };
+  }, [previousBets]);
+
+  useEffect(() => {
+    fetchGames();
+    fetchBets();
+    // Poll for bet updates every 10 seconds
+    const interval = setInterval(fetchBets, 10000);
+    return () => clearInterval(interval);
+  }, [fetchGames, fetchBets]);
 
   const selectedGame = selectedGameId ? games.find(g => g.id === parseInt(selectedGameId)) : null;
 
