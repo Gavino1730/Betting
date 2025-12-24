@@ -293,32 +293,41 @@ function Dashboard({ user }) {
       </div>
 
       {/* Stats Overview */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon">📊</div>
-          <div className="stat-content">
-            <h3>Active Picks</h3>
-            <p className="stat-value">{stats.activeBets}</p>
-          </div>
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '15px', marginBottom: '30px'}}>
+        <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #2196f3', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}> 
+          <div style={{fontSize: '1.8rem', marginBottom: '8px'}}>📊</div>
+          <p style={{margin: '0 0 5px 0', color: '#64b5f6', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase'}}>Total Picks</p>
+          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: '#ffd700'}}>{stats.totalBets}</p>
         </div>
         
-        <div className="stat-card">
-          <div className="stat-icon">🎯</div>
-          <div className="stat-content">
-            <h3>Win Rate</h3>
-            <p className="stat-value">{stats.winRate}%</p>
-            <p className="stat-subtitle">{stats.wonBets}W - {stats.lostBets}L</p>
-          </div>
+        <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #ff9800', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+          <div style={{fontSize: '1.8rem', marginBottom: '8px'}}>⏳</div>
+          <p style={{margin: '0 0 5px 0', color: '#ffb74d', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase'}}>Pending</p>
+          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: '#ffb74d'}}>{stats.activeBets}</p>
         </div>
         
-        <div className="stat-card">
-          <div className="stat-icon">🏆</div>
-          <div className="stat-content">
-            <h3>Total Winnings</h3>
-            <p className="stat-value" style={{color: stats.totalWinnings >= 0 ? '#66bb6a' : '#ef5350'}}>
-              {formatCurrency(Math.abs(stats.totalWinnings))}
-            </p>
-          </div>
+        <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #66bb6a', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+          <div style={{fontSize: '1.8rem', marginBottom: '8px'}}>🏆</div>
+          <p style={{margin: '0 0 5px 0', color: '#81c784', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase'}}>Won</p>
+          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: '#81c784'}}>{stats.wonBets}</p>
+        </div>
+        
+        <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #ef5350', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+          <div style={{fontSize: '1.8rem', marginBottom: '8px'}}>❌</div>
+          <p style={{margin: '0 0 5px 0', color: '#e57373', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase'}}>Lost</p>
+          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: '#e57373'}}>{stats.lostBets}</p>
+        </div>
+        
+        <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #9c27b0', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+          <div style={{fontSize: '1.8rem', marginBottom: '8px'}}>💰</div>
+          <p style={{margin: '0 0 5px 0', color: '#ce93d8', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase'}}>Wagered</p>
+          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: '#ce93d8'}}>{formatCurrency(userBets.reduce((sum, b) => sum + (b.amount || 0), 0))}</p>
+        </div>
+        
+        <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: `2px solid ${stats.totalWinnings >= 0 ? '#66bb6a' : '#ef5350'}`, textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+          <div style={{fontSize: '1.8rem', marginBottom: '8px'}}>💵</div>
+          <p style={{margin: '0 0 5px 0', color: stats.totalWinnings >= 0 ? '#81c784' : '#e57373', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase'}}>Profit</p>
+          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: stats.totalWinnings >= 0 ? '#81c784' : '#ef5350'}}>{stats.totalWinnings >= 0 ? '+' : ''}{formatCurrency(stats.totalWinnings)}</p>
         </div>
       </div>
 

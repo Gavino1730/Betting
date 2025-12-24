@@ -123,7 +123,7 @@ function Teams() {
     const hardcodedData = getHardcodedTeams();
     try {
       setLoading(true);
-      const response = await apiClient.get('/teams-admin', {
+      const response = await apiClient.get('/teams', {
         timeout: 5000
       });
       if (Array.isArray(response.data) && response.data.length > 0) {

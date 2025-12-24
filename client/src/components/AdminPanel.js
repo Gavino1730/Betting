@@ -1026,22 +1026,22 @@ function AdminPanel() {
 
       {tab === 'bets' && (
         <>
-          <div className="stats">
-            <div className="stat-card">
-              <h4>Total Picks</h4>
-              <p>{allBets.length}</p>
+          <div className="stats" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px'}}>
+            <div className="stat-card" style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '25px', borderRadius: '12px', border: '2px solid #2196f3', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}> 
+              <h4 style={{margin: '0 0 10px 0', color: '#64b5f6', fontSize: '0.9rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px'}}>📊 Total Picks</h4>
+              <p style={{margin: '0', fontSize: '2.5rem', fontWeight: 'bold', color: '#ffd700'}}>{allBets.length}</p>
             </div>
-            <div className="stat-card">
-              <h4>Pending</h4>
-              <p>{allBets.filter(b => b.status === 'pending').length}</p>
+            <div className="stat-card" style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '25px', borderRadius: '12px', border: '2px solid #ff9800', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+              <h4 style={{margin: '0 0 10px 0', color: '#ffb74d', fontSize: '0.9rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px'}}>⏳ Pending</h4>
+              <p style={{margin: '0', fontSize: '2.5rem', fontWeight: 'bold', color: '#ffb74d'}}>{allBets.filter(b => b.status === 'pending').length}</p>
             </div>
-            <div className="stat-card">
-              <h4>Won</h4>
-              <p>{allBets.filter(b => b.outcome === 'won').length}</p>
+            <div className="stat-card" style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '25px', borderRadius: '12px', border: '2px solid #66bb6a', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+              <h4 style={{margin: '0 0 10px 0', color: '#81c784', fontSize: '0.9rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px'}}>✅ Won</h4>
+              <p style={{margin: '0', fontSize: '2.5rem', fontWeight: 'bold', color: '#81c784'}}>{allBets.filter(b => b.outcome === 'won').length}</p>
             </div>
-            <div className="stat-card">
-              <h4>Lost</h4>
-              <p>{allBets.filter(b => b.outcome === 'lost').length}</p>
+            <div className="stat-card" style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '25px', borderRadius: '12px', border: '2px solid #ef5350', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+              <h4 style={{margin: '0 0 10px 0', color: '#e57373', fontSize: '0.9rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px'}}>❌ Lost</h4>
+              <p style={{margin: '0', fontSize: '2.5rem', fontWeight: 'bold', color: '#e57373'}}>{allBets.filter(b => b.outcome === 'lost').length}</p>
             </div>
           </div>
 
