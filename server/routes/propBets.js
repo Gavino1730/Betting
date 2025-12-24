@@ -35,27 +35,15 @@ router.post('/', authenticateToken, async (req, res) => {
     return res.status(403).json({ error: 'Only admins can create prop bets' });
   }
 
-  const { title, description, teamType, options = [], optionOdds = {}, yesOdds, noOdds, expiresAt } = req.body;
+  const { title, description, teamType, yesOdds, noOdds, expiresAt } = req.body;
 
   // Validate required fields
   if (!title) {
     return res.status(400).json({ error: 'Missing required field: title' });
   }
 
-  // If custom options provided, use those; otherwise use legacy yes/no format
-  let finalOptions = options;
-  let finalOptionOdds = optionOdds;
-
-  if (!options || options.length === 0) {
-    // Legacy: use yesOdds/noOdds if options not provided
-    if (!yesOdds || !noOdds) {
-      return res.status(400).json({ error: 'Either provide options with optionOdds or provide yesOdds and noOdds' });
-    }
-    finalOptions = ['Yes', 'No'];
-    finalOptionOdds = {
-      'Yes': parseFloat(yesOdds),
-      'No': parseFloat(noOdds)
-    };
+  if (!yesOdds || !noOdds) {
+    return res.status(400).json({ error: 'Both yesOdds and noOdds are required' });
   }
 
   try {
@@ -63,8 +51,8 @@ router.post('/', authenticateToken, async (req, res) => {
       title,
       description,
       teamType: teamType || 'General',
-      options: finalOptions,
-      optionOdds: finalOptionOdds,
+      yesOdds,
+      noOdds,
       expiresAt
     });
 
@@ -191,9 +179,12 @@ router.post('/place', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Invalid bet amount' });
     }
 
-    if (choice !== 'yes' && choice !== 'no') {
-      return res.status(400).json({ error: 'Choice must be "yes" or "no"' });
+    // Allow any non-empty choice string (supports both yes/no and custom options like "vc", "tillamook")
+    if (!choice || typeof choice !== 'string' || choice.trim().length === 0) {
+      return res.status(400).json({ error: 'Invalid choice provided' });
     }
+
+    const normalizedChoice = choice.toLowerCase().trim();
 
     // Check prop bet exists and is active
     const propBet = await PropBet.getById(propBetId);
@@ -222,8 +213,20 @@ router.post('/place', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Insufficient balance' });
     }
 
-    // Calculate potential win
-    const odds = choice === 'yes' ? propBet.yes_odds : propBet.no_odds;
+    // Calculate potential win - support both custom options and legacy yes/no
+    let odds = 1.5; // Default fallback
+    
+    if (propBet.options && propBet.options.length > 0 && propBet.option_odds) {
+      // Custom options - find matching option case-insensitively
+      const matchedOption = propBet.options.find(opt => opt.toLowerCase() === normalizedChoice);
+      if (matchedOption && propBet.option_odds[matchedOption]) {
+        odds = parseFloat(propBet.option_odds[matchedOption]);
+      }
+    } else {
+      // Legacy yes/no format
+      odds = normalizedChoice === 'yes' ? propBet.yes_odds : propBet.no_odds;
+    }
+
     const potentialWin = parsedAmount * odds;
 
     // Create bet record (using bets table with special marker for prop bets)
@@ -233,8 +236,8 @@ router.post('/place', authenticateToken, async (req, res) => {
       .insert({
         user_id: req.user.id,
         game_id: propBetId, // Store prop bet ID in game_id field
-        bet_type: `prop-${choice}`, // Mark as prop bet
-        selected_team: choice.toUpperCase(),
+        bet_type: `prop-${normalizedChoice}`, // Mark as prop bet with choice
+        selected_team: choice, // Store original choice (preserves case and formatting)
         amount: parsedAmount,
         odds: odds,
         status: 'pending',
@@ -253,7 +256,7 @@ router.post('/place', authenticateToken, async (req, res) => {
       req.user.id,
       'bet',
       -parsedAmount,
-      `Prop bet: ${propBet.title} - ${choice.toUpperCase()}`
+      `Prop bet: ${propBet.title} - ${choice}`
     );
 
     // Create notification

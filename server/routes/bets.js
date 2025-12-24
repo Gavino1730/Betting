@@ -48,7 +48,12 @@ router.post('/', authenticateToken, async (req, res) => {
     const getGameStartDate = (gameRecord) => {
       if (!gameRecord?.game_date) return null;
 
-      const date = new Date(gameRecord.game_date);
+      // Parse as local date to avoid UTC shifting that pushes the day forward/backward
+      const [year, month, day] = (gameRecord.game_date || '').split('-').map(Number);
+      const date = Number.isInteger(year) && Number.isInteger(month) && Number.isInteger(day)
+        ? new Date(year, month - 1, day)
+        : new Date(gameRecord.game_date);
+
       if (Number.isNaN(date.getTime())) return null;
 
       if (gameRecord.game_time) {
@@ -134,11 +139,16 @@ router.get('/all', async (req, res) => {
 // Admin: Settle a bet (mark as resolved with outcome)
 router.put('/:id', authenticateToken, adminOnly, async (req, res) => {
   try {
-    const { status, outcome } = req.body;
+    const { status, outcome, selectedTeam } = req.body;
     const bet = await Bet.findById(req.params.id);
     
     if (!bet) {
       return res.status(404).json({ error: 'Bet not found' });
+    }
+
+    // Update selected team if provided
+    if (selectedTeam && selectedTeam !== bet.selected_team) {
+      await Bet.updateSelectedTeam(req.params.id, selectedTeam);
     }
 
     // Handle bet settlement - update user balance if won (BEFORE updating status)

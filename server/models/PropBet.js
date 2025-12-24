@@ -15,17 +15,9 @@ const PropBet = {
         noOdds
       } = propBetData;
 
-      // If options not provided but yesOdds/noOdds are, use legacy format
-      let finalOptions = options;
-      let finalOptionOdds = optionOdds;
-
-      if (!options || options.length === 0) {
-        finalOptions = ['Yes', 'No'];
-        finalOptionOdds = {
-          'Yes': parseFloat(yesOdds || 1.5),
-          'No': parseFloat(noOdds || 1.5)
-        };
-      }
+      // Always use yes/no format for database storage
+      const finalYesOdds = yesOdds ? parseFloat(yesOdds) : (optionOdds['Yes'] ? parseFloat(optionOdds['Yes']) : 1.5);
+      const finalNoOdds = noOdds ? parseFloat(noOdds) : (optionOdds['No'] ? parseFloat(optionOdds['No']) : 1.5);
 
       const { data, error } = await supabase
         .from('prop_bets')
@@ -33,8 +25,8 @@ const PropBet = {
           title,
           description,
           team_type: teamType,
-          options: finalOptions,
-          option_odds: finalOptionOdds,
+          yes_odds: finalYesOdds,
+          no_odds: finalNoOdds,
           expires_at: expiresAt,
           status: 'active'
         }])

@@ -106,6 +106,25 @@
     gap: 1rem;
   }
 
+  /* Amount input mobile - fix MAX button overlap */
+  .amount-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .amount-input {
+    padding: 1rem 2.5rem 1rem 2.5rem !important;
+    width: 100% !important;
+  }
+
+  .max-btn {
+    position: static;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+
   /* Games page mobile */
   .page-header {
     margin-bottom: 1.5rem;
@@ -240,6 +259,44 @@
   .editor-tab {
     width: 100%;
     padding: 0.7rem;
+  }
+
+  /* Prop bets mobile */
+  .props-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .prop-card {
+    padding: 1rem;
+  }
+
+  .prop-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .prop-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .prop-betting-section {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .prop-option-bet {
+    padding: 1rem;
+  }
+
+  .prop-bet-input {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .prop-bet-btn {
+    padding: 0.6rem;
+    font-size: 0.85rem;
   }
 
   /* Form layouts */

@@ -19,6 +19,9 @@ function AdminPanel() {
   const [gameStatusModal, setGameStatusModal] = useState(null);
   const [gameFilter, setGameFilter] = useState('all'); // 'all', 'boys', 'girls'
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingBet, setEditingBet] = useState(null);
+  const [editingBetOutcome, setEditingBetOutcome] = useState('');
+  const [editingBetTeam, setEditingBetTeam] = useState('');
   
   // Game creation form
   const [gameForm, setGameForm] = useState({
@@ -388,6 +391,28 @@ function AdminPanel() {
       alert('User balance updated!');
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to update balance');
+    }
+  };
+
+  const handleUpdateBet = async (betId) => {
+    if (!editingBetOutcome) {
+      alert('Please select an outcome');
+      return;
+    }
+
+    try {
+      await apiClient.put(`/bets/${betId}`, {
+        status: 'resolved',
+        outcome: editingBetOutcome,
+        selectedTeam: editingBetTeam || undefined
+      });
+      fetchAllBets();
+      setEditingBet(null);
+      setEditingBetOutcome('');
+      setEditingBetTeam('');
+      alert('Pick updated successfully!');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to update pick');
     }
   };
 
@@ -1025,7 +1050,7 @@ function AdminPanel() {
           <div className="card">
             <h3>All Picks</h3>
             <p style={{marginBottom: '15px', color: '#b8c5d6'}}>
-              Picks are automatically completed when you set game outcomes or prop pick results. This is a read-only view.
+              Picks are automatically completed when you set game outcomes or prop pick results. You can also manually resolve picks below.
             </p>
             <div className="bets-table-wrapper">
               <table className="bets-table">
@@ -1039,6 +1064,7 @@ function AdminPanel() {
                     <th>Odds</th>
                     <th>Status</th>
                     <th>Outcome</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1061,6 +1087,21 @@ function AdminPanel() {
                             {bet.outcome}
                           </span>
                         ) : '—'}
+                      </td>
+                      <td>
+                        {bet.status !== 'resolved' && (
+                          <button 
+                            className="btn" 
+                            style={{padding: '4px 8px', fontSize: '0.85rem'}}
+                            onClick={() => {
+                              setEditingBet(bet);
+                              setEditingBetOutcome('');
+                              setEditingBetTeam(bet.selected_team);
+                            }}
+                          >
+                            Manage
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -1107,10 +1148,132 @@ function AdminPanel() {
                       </div>
                     </div>
                   </div>
+                  {bet.status !== 'resolved' && (
+                    <div className="bet-card-row" style={{marginTop: '1rem'}}>
+                      <button 
+                        className="btn" 
+                        style={{width: '100%', padding: '0.75rem'}}
+                        onClick={() => {
+                          setEditingBet(bet);
+                          setEditingBetOutcome('');
+                          setEditingBetTeam(bet.selected_team);
+                        }}
+                      >
+                        Manage Pick
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
+
+          {editingBet && (
+            <div className="modal-overlay" onClick={() => setEditingBet(null)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h3 style={{marginBottom: '1.5rem'}}>Manage Pick #{editingBet.id}</h3>
+                
+                <div style={{marginBottom: '1.5rem'}}>
+                  <p><strong>User:</strong> {editingBet.user_id}</p>
+                  <p><strong>Selection:</strong> {editingBet.selected_team}</p>
+                  <p><strong>Stake:</strong> {formatCurrency(editingBet.amount)}</p>
+                  <p><strong>Odds:</strong> {editingBet.odds}x</p>
+                </div>
+
+                <div style={{marginBottom: '1rem'}}>
+                  <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 'bold'}}>
+                    Adjust Selection (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter team/option name"
+                    value={editingBetTeam}
+                    onChange={(e) => setEditingBetTeam(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      borderRadius: '6px',
+                      border: '1px solid #444',
+                      background: '#1a1a1a',
+                      color: '#fff',
+                      marginBottom: '1rem'
+                    }}
+                  />
+                </div>
+
+                <div style={{marginBottom: '1.5rem'}}>
+                  <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 'bold'}}>
+                    Pick Outcome
+                  </label>
+                  <div style={{display: 'flex', gap: '1rem'}}>
+                    <button
+                      onClick={() => setEditingBetOutcome('won')}
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem',
+                        borderRadius: '6px',
+                        border: editingBetOutcome === 'won' ? '2px solid #66bb6a' : '1px solid #444',
+                        background: editingBetOutcome === 'won' ? 'rgba(102, 187, 106, 0.2)' : '#2a2a2a',
+                        color: editingBetOutcome === 'won' ? '#66bb6a' : '#b0b0b0',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      ✓ WON
+                    </button>
+                    <button
+                      onClick={() => setEditingBetOutcome('lost')}
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem',
+                        borderRadius: '6px',
+                        border: editingBetOutcome === 'lost' ? '2px solid #ef5350' : '1px solid #444',
+                        background: editingBetOutcome === 'lost' ? 'rgba(239, 83, 80, 0.2)' : '#2a2a2a',
+                        color: editingBetOutcome === 'lost' ? '#ef5350' : '#b0b0b0',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      ✗ LOST
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{display: 'flex', gap: '1rem'}}>
+                  <button
+                    onClick={() => handleUpdateBet(editingBet.id)}
+                    style={{
+                      flex: 1,
+                      padding: '0.75rem',
+                      borderRadius: '6px',
+                      background: '#1e88e5',
+                      color: '#fff',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    Save Changes
+                  </button>
+                  <button
+                    onClick={() => setEditingBet(null)}
+                    style={{
+                      flex: 1,
+                      padding: '0.75rem',
+                      borderRadius: '6px',
+                      background: '#555',
+                      color: '#fff',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
 

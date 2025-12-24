@@ -74,6 +74,20 @@ class Bet {
     }
   }
 
+  static async updateSelectedTeam(betId, selectedTeam) {
+    try {
+      const { error } = await supabase
+        .from('bets')
+        .update({ selected_team: selectedTeam, updated_at: new Date().toISOString() })
+        .eq('id', betId);
+
+      if (error) throw error;
+      return { changes: 1 };
+    } catch (err) {
+      throw new Error(`Error updating bet selected team: ${err.message}`);
+    }
+  }
+
   static async updateStatus(betId, status, outcome = null) {
     try {
       const updateData = { status, updated_at: new Date().toISOString() };
