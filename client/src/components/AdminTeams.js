@@ -260,9 +260,10 @@ function AdminTeams() {
       
       setSelectedTeam(response.data);
       setEditingGameIdx(null);
-      alert('Game result updated!');
+      alert('✅ Game result updated!');
     } catch (err) {
-      alert('Failed to update game: ' + err.message);
+      console.error('Schedule update error:', err);
+      alert('❌ Failed to update game: ' + (err.response?.data?.error || err.message));
     }
   };
 

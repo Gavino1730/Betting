@@ -67,19 +67,42 @@ router.put('/:id', authenticateToken, async (req, res) => {
   }
 
   try {
-    const updates = {
-      name: req.body.name,
-      type: req.body.type,
-      description: req.body.description,
-      record_wins: req.body.recordWins,
-      record_losses: req.body.recordLosses,
-      ranking: req.body.ranking,
-      coach_name: req.body.coachName,
-      coach_email: req.body.coachEmail
-    };
+    const updates = {};
+    
+    // Add fields if they exist in request
+    if (req.body.name !== undefined) updates.name = req.body.name;
+    if (req.body.type !== undefined) updates.type = req.body.type;
+    if (req.body.description !== undefined) updates.description = req.body.description;
+    if (req.body.recordWins !== undefined) updates.record_wins = req.body.recordWins;
+    if (req.body.recordLosses !== undefined) updates.record_losses = req.body.recordLosses;
+    if (req.body.ranking !== undefined) updates.ranking = req.body.ranking;
+    if (req.body.coachName !== undefined) updates.coach_name = req.body.coachName;
+    if (req.body.coachEmail !== undefined) updates.coach_email = req.body.coachEmail;
+    
+    // Handle schedule - convert to JSON string if it's an array
+    if (req.body.schedule !== undefined) {
+      updates.schedule = typeof req.body.schedule === 'string' 
+        ? req.body.schedule 
+        : JSON.stringify(req.body.schedule);
+    }
+    
+    // Handle players - convert to JSON string if it's an array
+    if (req.body.players !== undefined) {
+      updates.players = typeof req.body.players === 'string'
+        ? req.body.players
+        : JSON.stringify(req.body.players);
+    }
 
     const team = await Team.update(req.params.id, updates);
-    res.json({ message: 'Team updated', team });
+    
+    // Parse JSON fields for response
+    const response = {
+      ...team,
+      schedule: team.schedule ? (typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule) : [],
+      players: team.players ? (typeof team.players === 'string' ? JSON.parse(team.players) : team.players) : []
+    };
+    
+    res.json(response);
   } catch (err) {
     res.status(500).json({ error: 'Error updating team: ' + err.message });
   }

@@ -1277,59 +1277,139 @@ function AdminPanel() {
 
       {tab === 'users' && (
         <div className="card">
-          <h3>All Users</h3>
+          <h3>👥 User Management</h3>
+          <div style={{background: 'rgba(33, 150, 243, 0.1)', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid rgba(33, 150, 243, 0.3)'}}>
+            <p style={{margin: '0 0 5px 0', color: '#64b5f6'}}>
+              <strong>📊 Total Users:</strong> {users.length}
+            </p>
+            <p style={{margin: '0 0 5px 0', color: '#64b5f6'}}>
+              <strong>🧑‍💼 Admins:</strong> {users.filter(u => u.is_admin).length}
+            </p>
+            <p style={{margin: '0', color: '#64b5f6'}}>
+              <strong>💰 Total Balance:</strong> {formatCurrency(users.reduce((sum, u) => sum + (u.balance || 0), 0))}
+            </p>
+          </div>
+
           <div className="users-table-wrapper">
             <table className="users-table">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Username</th>
+                  <th>Email</th>
                   <th>Balance</th>
-                  <th>Admin</th>
+                  <th>Status</th>
+                  <th>Bets Placed</th>
+                  <th>Joined</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map(u => (
-                  <tr key={u.id}>
-                    <td>{u.id}</td>
-                    <td>{u.username}</td>
-                    <td>{formatCurrency(u.balance)}</td>
-                    <td>{u.is_admin ? 'Yes' : 'No'}</td>
-                    <td>
-                      <button onClick={() => {
-                        setSelectedUser(u.id);
-                        setNewBalance(u.balance.toString());
-                      }}>
-                        Edit Balance
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {users.map(u => {
+                  const userBetsCount = allBets.filter(b => b.user_id === u.id).length;
+                  const userWinnings = allBets
+                    .filter(b => b.user_id === u.id && b.outcome === 'won')
+                    .reduce((sum, b) => sum + (b.potential_win - b.amount), 0);
+                  
+                  return (
+                    <tr key={u.id} style={{borderLeft: u.is_admin ? '4px solid #ffd700' : 'none'}}>
+                      <td>
+                        <div style={{fontWeight: '600', color: u.is_admin ? '#ffd700' : '#b8c5d6'}}>
+                          {u.is_admin && '👑 '}{u.username}
+                        </div>
+                      </td>
+                      <td style={{fontSize: '0.9em', color: '#888'}}>{u.email}</td>
+                      <td>
+                        <span style={{fontWeight: 'bold', color: '#66bb6a', fontSize: '1.1em'}}>
+                          {formatCurrency(u.balance)}
+                        </span>
+                      </td>
+                      <td>
+                        <span style={{padding: '4px 12px', borderRadius: '20px', fontSize: '0.8em', fontWeight: '600', background: u.is_admin ? 'rgba(255, 215, 0, 0.2)' : 'rgba(102, 187, 106, 0.2)', color: u.is_admin ? '#ffd700' : '#66bb6a'}}>
+                          {u.is_admin ? '👑 Admin' : '👤 User'}
+                        </span>
+                      </td>
+                      <td>
+                        <div style={{fontSize: '0.9em'}}>
+                          <div style={{color: '#b8c5d6'}}>{userBetsCount} bets</div>
+                          <div style={{color: userWinnings >= 0 ? '#66bb6a' : '#ef5350', fontSize: '0.85em'}}>
+                            {userWinnings >= 0 ? '+' : ''}{formatCurrency(userWinnings)}
+                          </div>
+                        </div>
+                      </td>
+                      <td style={{fontSize: '0.9em', color: '#888'}}>
+                        {new Date(u.created_at).toLocaleDateString()}
+                      </td>
+                      <td>
+                        <button 
+                          className="btn"
+                          style={{background: '#1e88e5', padding: '6px 12px', fontSize: '0.8em', marginRight: '5px'}}
+                          onClick={() => {
+                            setSelectedUser(u.id);
+                            setNewBalance(u.balance.toString());
+                          }}
+                        >
+                          💰 Balance
+                        </button>
+                        <button 
+                          className="btn"
+                          style={{background: '#9c27b0', padding: '6px 12px', fontSize: '0.8em'}}
+                          onClick={() => {
+                            setSelectedUser(u.id);
+                          }}
+                        >
+                          ⚙️ Options
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
 
           {selectedUser && (
             <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
-              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <h3>Update Balance for User {selectedUser}</h3>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{minWidth: '400px'}}>
+                <h3 style={{marginBottom: '20px', color: '#ffd700'}}>⚙️ User Options</h3>
+                
+                <div style={{marginBottom: '20px', background: 'rgba(30, 136, 229, 0.1)', padding: '15px', borderRadius: '8px', border: '1px solid rgba(30, 136, 229, 0.3)'}}>
+                  <p style={{margin: '5px 0', color: '#b8c5d6'}}>
+                    <strong>Username:</strong> {users.find(u => u.id === selectedUser)?.username}
+                  </p>
+                  <p style={{margin: '5px 0', color: '#b8c5d6'}}>
+                    <strong>Current Balance:</strong> <span style={{color: '#66bb6a', fontWeight: 'bold'}}>{formatCurrency(users.find(u => u.id === selectedUser)?.balance || 0)}</span>
+                  </p>
+                  <p style={{margin: '0', color: '#b8c5d6'}}>
+                    <strong>Status:</strong> {users.find(u => u.id === selectedUser)?.is_admin ? '👑 Admin' : '👤 Regular User'}
+                  </p>
+                </div>
+
                 <div className="form-group">
-                  <label htmlFor="balance">New Balance</label>
+                  <label htmlFor="balance">💰 Update Balance</label>
                   <input
                     id="balance"
                     type="number"
                     step="0.01"
                     value={newBalance}
                     onChange={(e) => setNewBalance(e.target.value)}
+                    style={{width: '100%', padding: '10px', background: '#1e2139', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', color: '#fff'}}
                   />
                 </div>
-                <div className="modal-buttons">
-                  <button className="btn" onClick={() => handleUpdateUserBalance(selectedUser)}>
-                    Update
+
+                <div className="modal-buttons" style={{display: 'flex', gap: '10px'}}>
+                  <button 
+                    className="btn" 
+                    style={{flex: 1, background: '#66bb6a'}}
+                    onClick={() => handleUpdateUserBalance(selectedUser)}
+                  >
+                    ✅ Save Balance
                   </button>
-                  <button className="btn btn-secondary" onClick={() => setSelectedUser(null)}>
-                    Cancel
+                  <button 
+                    className="btn btn-secondary"
+                    style={{flex: 1, background: '#ef5350'}}
+                    onClick={() => setSelectedUser(null)}
+                  >
+                    ❌ Close
                   </button>
                 </div>
               </div>
