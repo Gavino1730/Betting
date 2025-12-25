@@ -331,6 +331,7 @@ function Dashboard({ user }) {
           <div className="stat-emoji">💵</div>
           <p className="stat-label" style={{color: stats.totalWinnings >= 0 ? '#81c784' : '#e57373'}}>Profit</p>
           <p className="stat-value" style={{color: stats.totalWinnings >= 0 ? '#81c784' : '#ef5350'}}>{stats.totalWinnings >= 0 ? '+' : ''}{formatCurrency(stats.totalWinnings)}</p>
+        </div>
       </div>
 
       {/* Two Column Layout */}
