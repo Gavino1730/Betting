@@ -139,7 +139,14 @@ function Login({ onLogin, apiUrl }) {
     <div className="login-container">
       <div className="login-box">
         <div className="logo-section">
-          <img src="/assets/logo.png" alt="Valiant Picks Logo" className="login-logo" />
+          <img 
+            src="/assets/logo.png" 
+            alt="Valiant Picks Logo" 
+            className="login-logo" 
+            width="200" 
+            height="200"
+            loading="eager"
+          />
           <h2 className="brand-name">Valiant Picks</h2>
           <p className="brand-tagline">Your Premium Betting Platform</p>
         </div>

@@ -157,6 +157,7 @@
   grid-template-columns: 1fr 400px;
   gap: 2rem;
   margin-bottom: 2rem;
+  contain: layout;
 }
 
 @media (max-width: 1200px) {
@@ -171,6 +172,8 @@
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   overflow: visible;
+  min-height: 320px;
+  contain: layout;
 }
 
 .card.bet-card {

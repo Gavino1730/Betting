@@ -178,30 +178,31 @@
   display: block;
   margin-bottom: 0.8rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #ffffff;
   font-size: 0.95rem;
 }
 
 .form-group input {
   width: 100%;
   padding: 1rem 1.2rem;
-  border: 2px solid #d0d8e0;
+  border: 2px solid #004f9e;
   border-radius: 10px;
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.3s ease;
-  background: #f8f9fc;
+  background: #0f172a;
+  color: #ffffff;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #0080d0;
-  box-shadow: 0 0 0 4px rgba(0, 128, 208, 0.15);
-  background: white;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+  background: #1a2847;
 }
 
 .form-group input::placeholder {
-  color: #95a5a6;
+  color: #6b7280;
 }
 
 .password-input-wrapper {
