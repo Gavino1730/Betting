@@ -113,7 +113,8 @@ function AdminTeams() {
         console.error('Error parsing schedule:', e);
       }
     }
-  }, [selectedTeam?.id, selectedTeam?.schedule]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTeam?.id]);
 
   const handleSelectTeam = (team) => {
     // Extract numeric ranking from "Rank #3" format
