@@ -22,7 +22,7 @@ function Confetti({ show, onComplete }) {
           style={{
             left: `${Math.random() * 100}%`,
             animationDelay: `${Math.random() * 0.5}s`,
-            backgroundColor: ['#ffd700', '#66bb6a', '#1e88e5', '#ef5350', '#ff9800'][Math.floor(Math.random() * 5)],
+            backgroundColor: ['#1f4e99', '#66bb6a', '#3b82f6', '#ef5350', '#ff9800'][Math.floor(Math.random() * 5)],
             transform: `rotate(${Math.random() * 360}deg)`,
           }}
         />

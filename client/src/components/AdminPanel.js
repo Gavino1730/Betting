@@ -24,6 +24,7 @@ function AdminPanel() {
   const [editingBetTeam, setEditingBetTeam] = useState('');
   
   // Game creation form
+  const [showCompletedGames, setShowCompletedGames] = useState(false);
   const [gameForm, setGameForm] = useState({
     teamType: 'Boys Basketball',
     homeTeam: '',
@@ -509,8 +510,8 @@ function AdminPanel() {
                   padding: '10px 20px',
                   borderRadius: '8px',
                   border: 'none',
-                  background: gameFilter === 'all' ? 'linear-gradient(135deg, #ffd700, #ffed4e)' : 'rgba(255, 255, 255, 0.1)',
-                  color: gameFilter === 'all' ? '#0d47a1' : 'white',
+                  background: gameFilter === 'all' ? 'linear-gradient(135deg, #1f4e99, #3b82f6)' : 'rgba(255, 255, 255, 0.1)',
+                  color: gameFilter === 'all' ? '#ffffff' : 'white',
                   fontWeight: gameFilter === 'all' ? '600' : '500',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease'
@@ -586,7 +587,7 @@ function AdminPanel() {
                 type="button" 
                 className="btn" 
                 onClick={() => setShowCreateForm(!showCreateForm)}
-                style={{background: showCreateForm ? '#757575' : '#ffd700', color: showCreateForm ? 'white' : '#0d47a1', padding: '10px 20px'}}
+                style={{background: showCreateForm ? '#757575' : '#1f4e99', color: showCreateForm ? 'white' : '#ffffff', padding: '10px 20px'}}
               >
                 {showCreateForm ? '✕ Close Form' : '+ Create Game'}
               </button>
@@ -595,7 +596,7 @@ function AdminPanel() {
 
           {/* Create Game Form (Collapsible) */}
           {showCreateForm && (
-            <div style={{background: 'rgba(255, 215, 0, 0.05)', padding: '25px', borderRadius: '12px', marginBottom: '25px', border: '2px solid rgba(255, 215, 0, 0.3)'}}>
+            <div style={{background: 'rgba(31, 78, 153, 0.05)', padding: '25px', borderRadius: '12px', marginBottom: '25px', border: '2px solid rgba(31, 78, 153, 0.3)'}}>
               <h3 style={{marginTop: 0}}>Create New Game</h3>
               <form onSubmit={handleCreateGame} className="game-form">
                 <div className="form-row">
@@ -767,25 +768,25 @@ function AdminPanel() {
           
           {/* Games List */}
           <h3 style={{marginBottom: '20px'}}>
-            {gameFilter === 'all' && 'All Games'}
-            {gameFilter === 'boys' && 'Boys Basketball Games'}
-            {gameFilter === 'girls' && 'Girls Basketball Games'}
+            {gameFilter === 'all' && 'Active Games'}
+            {gameFilter === 'boys' && 'Active Boys Basketball Games'}
+            {gameFilter === 'girls' && 'Active Girls Basketball Games'}
           </h3>
           
           {games.filter(game => {
-            if (gameFilter === 'boys') return game.team_type === 'Boys Basketball';
-            if (gameFilter === 'girls') return game.team_type === 'Girls Basketball';
-            return true;
+            if (gameFilter === 'boys') return game.team_type === 'Boys Basketball' && !game.result;
+            if (gameFilter === 'girls') return game.team_type === 'Girls Basketball' && !game.result;
+            return !game.result;
           }).length === 0 ? (
             <p style={{textAlign: 'center', padding: '40px', color: '#888'}}>
-              {gameFilter === 'all' ? 'No games created yet. Click "Create Game" or "Seed from Schedules" to get started.' : `No ${gameFilter} games found.`}
+              {gameFilter === 'all' ? 'No active games. Click "Create Game" or "Seed from Schedules" to get started.' : `No active ${gameFilter} games found.`}
             </p>
           ) : (
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px'}}>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px', marginBottom: '40px'}}>
               {games.filter(game => {
-                if (gameFilter === 'boys') return game.team_type === 'Boys Basketball';
-                if (gameFilter === 'girls') return game.team_type === 'Girls Basketball';
-                return true;
+                if (gameFilter === 'boys') return game.team_type === 'Boys Basketball' && !game.result;
+                if (gameFilter === 'girls') return game.team_type === 'Girls Basketball' && !game.result;
+                return !game.result;
               }).map(game => (
                 <div key={game.id} style={{
                   background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)',
@@ -800,7 +801,7 @@ function AdminPanel() {
                 >
                   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px'}}>
                     <div>
-                      <h4 style={{margin: '0 0 5px 0', color: '#ffd700'}}>{game.home_team} {game.away_team ? `vs ${game.away_team}` : ''}</h4>
+                      <h4 style={{margin: '0 0 5px 0', color: '#1f4e99'}}>{game.home_team} {game.away_team ? `vs ${game.away_team}` : ''}</h4>
                       <span style={{
                         fontSize: '0.75rem',
                         padding: '3px 8px',
@@ -857,6 +858,98 @@ function AdminPanel() {
                     </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Completed Games Section */}
+          {games.filter(game => {
+            if (gameFilter === 'boys') return game.team_type === 'Boys Basketball' && game.result;
+            if (gameFilter === 'girls') return game.team_type === 'Girls Basketball' && game.result;
+            return game.result;
+          }).length > 0 && (
+            <div style={{marginTop: '50px', paddingTop: '30px', borderTop: '2px solid rgba(31, 78, 153, 0.2)'}}>
+              <button
+                onClick={() => setShowCompletedGames(!showCompletedGames)}
+                style={{
+                  width: '100%',
+                  padding: '15px 20px',
+                  marginBottom: '20px',
+                  background: 'linear-gradient(135deg, rgba(31, 78, 153, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%)',
+                  border: '2px solid rgba(31, 78, 153, 0.3)',
+                  borderRadius: '12px',
+                  color: '#1f4e99',
+                  fontWeight: '700',
+                  fontSize: '1.1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(135deg, rgba(31, 78, 153, 0.25) 0%, rgba(59, 130, 246, 0.25) 100%)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(135deg, rgba(31, 78, 153, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%)'}
+              >
+                {showCompletedGames ? '▼' : '▶'} Completed Games ({games.filter(game => {
+                  if (gameFilter === 'boys') return game.team_type === 'Boys Basketball' && game.result;
+                  if (gameFilter === 'girls') return game.team_type === 'Girls Basketball' && game.result;
+                  return game.result;
+                }).length})
+              </button>
+
+              {showCompletedGames && (
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px'}}>
+                  {games.filter(game => {
+                    if (gameFilter === 'boys') return game.team_type === 'Boys Basketball' && game.result;
+                    if (gameFilter === 'girls') return game.team_type === 'Girls Basketball' && game.result;
+                    return game.result;
+                  }).map(game => (
+                    <div key={game.id} style={{
+                      background: 'linear-gradient(135deg, rgba(102, 187, 106, 0.1) 0%, rgba(67, 160, 71, 0.1) 100%)',
+                      padding: '20px',
+                      borderRadius: '12px',
+                      border: `2px solid rgba(102, 187, 106, 0.3)`,
+                      transition: 'transform 0.2s ease',
+                      opacity: 0.8
+                    }}
+                    onMouseEnter={(e) => {e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.opacity = '1'}}
+                    onMouseLeave={(e) => {e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.opacity = '0.8'}}
+                    >
+                      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px'}}>
+                        <div>
+                          <h4 style={{margin: '0 0 5px 0', color: '#81c784'}}>{game.home_team} {game.away_team ? `vs ${game.away_team}` : ''}</h4>
+                          <span style={{
+                            fontSize: '0.75rem',
+                            padding: '3px 8px',
+                            borderRadius: '4px',
+                            background: 'rgba(102, 187, 106, 0.2)',
+                            color: '#81c784',
+                            border: '1px solid #66bb6a'
+                          }}>
+                            ✅ COMPLETED
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div style={{fontSize: '0.9rem', color: '#b8c5d6', marginBottom: '15px'}}>
+                        <p style={{margin: '5px 0'}}><strong>📅</strong> {game.game_date} {game.game_time ? `at ${formatTime(game.game_time)}` : ''}</p>
+                        <p style={{margin: '5px 0'}}><strong>📍</strong> {game.location || 'TBD'}</p>
+                        {game.result && <p style={{margin: '5px 0', color: '#66bb6a', fontWeight: '600'}}><strong>🏆 Winner:</strong> {game.result}</p>}
+                      </div>
+                      
+                      <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
+                        <button 
+                          className="btn" 
+                          style={{background: '#757575', padding: '8px 14px', fontSize: '0.85em', flex: '1'}}
+                          onClick={() => handleDeleteGame(game.id)}
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -976,45 +1069,67 @@ function AdminPanel() {
 
           <h3>Active Prop Picks</h3>
           {propBets.length === 0 ? (
-            <p>No prop picks created yet</p>
+            <p style={{color: '#b8c5d6'}}>No prop picks created yet</p>
           ) : (
-            <div className="games-list">
+            <div className="prop-bets-grid">
               {propBets.map(propBet => (
-                <div key={propBet.id} className="game-card">
-                  <h4>{propBet.title}</h4>
-                  {propBet.description && <p>{propBet.description}</p>}
-                  <p><strong>Category:</strong> {propBet.team_type}</p>
-                  <p><strong>Odds:</strong> Yes: {propBet.yes_odds}x | No: {propBet.no_odds}x</p>
-                  {propBet.expires_at && (
-                    <p>
-                      <strong>Expires:</strong>{' '}
-                      {new Date(propBet.expires_at).toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: 'numeric',
-                        minute: '2-digit'
-                      })}
-                    </p>
-                  )}
-                  <p><strong>Status:</strong> {propBet.status}</p>
-                  {propBet.outcome && <p><strong>Outcome:</strong> {propBet.outcome}</p>}
-                  <div style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <div key={propBet.id} className="prop-bet-card">
+                  <div className="prop-card-header">
+                    <h4 style={{margin: '0 0 8px 0', color: '#1f4e99', fontSize: '1.2rem'}}>{propBet.title}</h4>
+                    <div className="prop-status-badge" style={{background: propBet.status === 'active' ? 'rgba(102, 187, 106, 0.2)' : 'rgba(239, 83, 80, 0.2)', color: propBet.status === 'active' ? '#66bb6a' : '#ef5350', padding: '4px 12px', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 600}}>
+                      {propBet.status.toUpperCase()}
+                    </div>
+                  </div>
+                  
+                  {propBet.description && <p style={{color: '#b8c5d6', marginBottom: '12px', fontSize: '0.95rem'}}>{propBet.description}</p>}
+                  
+                  <div className="prop-card-info">
+                    <div className="info-row">
+                      <span className="info-label">Category:</span>
+                      <span className="info-value">{propBet.team_type}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">Odds:</span>
+                      <span className="info-value">YES: <strong style={{color: '#66bb6a'}}>{propBet.yes_odds}x</strong> | NO: <strong style={{color: '#ef5350'}}>{propBet.no_odds}x</strong></span>
+                    </div>
+                    {propBet.expires_at && (
+                      <div className="info-row">
+                        <span className="info-label">Expires:</span>
+                        <span className="info-value">
+                          {new Date(propBet.expires_at).toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      </div>
+                    )}
+                    {propBet.outcome && (
+                      <div className="info-row">
+                        <span className="info-label">Outcome:</span>
+                        <span className="info-value" style={{color: propBet.outcome === 'yes' ? '#66bb6a' : '#ef5350', fontWeight: 600}}>{propBet.outcome.toUpperCase()}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="prop-card-actions">
                     {propBet.status === 'active' && (
                       <>
-                        <button className="btn" style={{background: '#66bb6a', padding: '8px 12px'}} onClick={() => handleUpdatePropBet(propBet.id, 'resolved', 'yes')}>
-                          Resolve Yes
+                        <button className="prop-action-btn resolve-yes" onClick={() => handleUpdatePropBet(propBet.id, 'resolved', 'yes')}>
+                          ✅ Resolve YES
                         </button>
-                        <button className="btn" style={{background: '#ef5350', padding: '8px 12px'}} onClick={() => handleUpdatePropBet(propBet.id, 'resolved', 'no')}>
-                          Resolve No
+                        <button className="prop-action-btn resolve-no" onClick={() => handleUpdatePropBet(propBet.id, 'resolved', 'no')}>
+                          ❌ Resolve NO
                         </button>
-                        <button className="btn" style={{background: '#ffc107', padding: '8px 12px'}} onClick={() => handleUpdatePropBet(propBet.id, 'cancelled', null)}>
-                          Cancel
+                        <button className="prop-action-btn cancel" onClick={() => handleUpdatePropBet(propBet.id, 'cancelled', null)}>
+                          ⚠️ Cancel
                         </button>
                       </>
                     )}
-                    <button className="btn" style={{background: '#757575', padding: '8px 12px'}} onClick={() => handleDeletePropBet(propBet.id)}>
-                      Delete
+                    <button className="prop-action-btn delete" onClick={() => handleDeletePropBet(propBet.id)}>
+                      🗑️ Delete
                     </button>
                   </div>
                 </div>
@@ -1029,7 +1144,7 @@ function AdminPanel() {
           <div className="stats" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px'}}>
             <div className="stat-card" style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '25px', borderRadius: '12px', border: '2px solid #2196f3', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}> 
               <h4 style={{margin: '0 0 10px 0', color: '#64b5f6', fontSize: '0.9rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px'}}>📊 Total Picks</h4>
-              <p style={{margin: '0', fontSize: '2.5rem', fontWeight: 'bold', color: '#ffd700'}}>{allBets.length}</p>
+              <p style={{margin: '0', fontSize: '2.5rem', fontWeight: 'bold', color: '#1f4e99'}}>{allBets.length}</p>
             </div>
             <div className="stat-card" style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '25px', borderRadius: '12px', border: '2px solid #ff9800', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
               <h4 style={{margin: '0 0 10px 0', color: '#ffb74d', fontSize: '0.9rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px'}}>⏳ Pending</h4>
@@ -1311,9 +1426,9 @@ function AdminPanel() {
                     .reduce((sum, b) => sum + (b.potential_win - b.amount), 0);
                   
                   return (
-                    <tr key={u.id} style={{borderLeft: u.is_admin ? '4px solid #ffd700' : 'none'}}>
+                    <tr key={u.id} style={{borderLeft: u.is_admin ? '4px solid #1f4e99' : 'none'}}>
                       <td>
-                        <div style={{fontWeight: '600', color: u.is_admin ? '#ffd700' : '#b8c5d6'}}>
+                        <div style={{fontWeight: '600', color: u.is_admin ? '#1f4e99' : '#b8c5d6'}}>
                           {u.is_admin && '👑 '}{u.username}
                         </div>
                       </td>
@@ -1324,7 +1439,7 @@ function AdminPanel() {
                         </span>
                       </td>
                       <td>
-                        <span style={{padding: '4px 12px', borderRadius: '20px', fontSize: '0.8em', fontWeight: '600', background: u.is_admin ? 'rgba(255, 215, 0, 0.2)' : 'rgba(102, 187, 106, 0.2)', color: u.is_admin ? '#ffd700' : '#66bb6a'}}>
+                        <span style={{padding: '4px 12px', borderRadius: '20px', fontSize: '0.8em', fontWeight: '600', background: u.is_admin ? 'rgba(31, 78, 153, 0.2)' : 'rgba(102, 187, 106, 0.2)', color: u.is_admin ? '#1f4e99' : '#66bb6a'}}>
                           {u.is_admin ? '👑 Admin' : '👤 User'}
                         </span>
                       </td>
@@ -1370,7 +1485,7 @@ function AdminPanel() {
           {selectedUser && (
             <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
               <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{minWidth: '400px'}}>
-                <h3 style={{marginBottom: '20px', color: '#ffd700'}}>⚙️ User Options</h3>
+                <h3 style={{marginBottom: '20px', color: '#1f4e99'}}>⚙️ User Options</h3>
                 
                 <div style={{marginBottom: '20px', background: 'rgba(30, 136, 229, 0.1)', padding: '15px', borderRadius: '8px', border: '1px solid rgba(30, 136, 229, 0.3)'}}>
                   <p style={{margin: '5px 0', color: '#b8c5d6'}}>
@@ -1448,23 +1563,23 @@ function AdminPanel() {
               background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)',
               padding: '2rem',
               borderRadius: '14px',
-              border: '2px solid rgba(255, 215, 0, 0.3)',
-              boxShadow: '0 12px 48px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.15)',
+              border: '2px solid rgba(31, 78, 153, 0.3)',
+              boxShadow: '0 12px 48px rgba(0, 0, 0, 0.5), 0 0 40px rgba(31, 78, 153, 0.15)',
               maxWidth: '500px',
               width: '90%',
               maxHeight: '85vh',
               overflowY: 'auto'
             }}
           >
-            <h3 style={{color: '#ffd700', marginBottom: '1rem', textShadow: '0 2px 4px rgba(255, 215, 0, 0.2)'}}>
+            <h3 style={{color: '#1f4e99', marginBottom: '1rem', textShadow: '0 2px 4px rgba(31, 78, 153, 0.2)'}}>
               ⚙️ Manage Game Status
             </h3>
             <p style={{color: '#b8c5d6', marginBottom: '1.5rem', fontSize: '1rem'}}>
-              <strong style={{color: '#ffd700'}}>{gameStatusModal.homeTeam} vs {gameStatusModal.awayTeam}</strong>
+              <strong style={{color: '#1f4e99'}}>{gameStatusModal.homeTeam} vs {gameStatusModal.awayTeam}</strong>
             </p>
             
             <div className="form-group" style={{marginBottom: '1.5rem'}}>
-              <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>Game Status</label>
+              <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>Game Status</label>
               <select 
                 value={gameStatusModal.status}
                 onChange={(e) => setGameStatusModal({...gameStatusModal, status: e.target.value})}
@@ -1472,24 +1587,24 @@ function AdminPanel() {
                   width: '100%',
                   padding: '0.8rem',
                   background: '#0f1419',
-                  border: '2px solid rgba(255, 215, 0, 0.2)',
+                  border: '2px solid rgba(31, 78, 153, 0.2)',
                   borderRadius: '8px',
-                  color: '#ffd700',
+                  color: '#1f4e99',
                   fontSize: '1rem',
                   fontWeight: '600',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease'
                 }}
               >
-                <option value="upcoming" style={{background: '#0f1419', color: '#ffd700'}}>📅 Scheduled</option>
-                <option value="in_progress" style={{background: '#0f1419', color: '#ffd700'}}>🏀 In Progress</option>
-                <option value="completed" style={{background: '#0f1419', color: '#ffd700'}}>✅ Completed</option>
+                <option value="upcoming" style={{background: '#0f1419', color: '#1f4e99'}}>📅 Scheduled</option>
+                <option value="in_progress" style={{background: '#0f1419', color: '#1f4e99'}}>🏀 In Progress</option>
+                <option value="completed" style={{background: '#0f1419', color: '#1f4e99'}}>✅ Completed</option>
               </select>
             </div>
 
             <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem'}}>
               <div className="form-group">
-                <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
+                <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
                   {gameStatusModal.homeTeam} Score
                 </label>
                 <input
@@ -1501,7 +1616,7 @@ function AdminPanel() {
                     width: '100%',
                     padding: '0.8rem',
                     background: '#0f1419',
-                    border: '2px solid rgba(255, 215, 0, 0.2)',
+                    border: '2px solid rgba(31, 78, 153, 0.2)',
                     borderRadius: '8px',
                     color: '#b8c5d6',
                     fontSize: '1rem',
@@ -1510,7 +1625,7 @@ function AdminPanel() {
                 />
               </div>
               <div className="form-group">
-                <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
+                <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
                   {gameStatusModal.awayTeam} Score
                 </label>
                 <input
@@ -1522,7 +1637,7 @@ function AdminPanel() {
                     width: '100%',
                     padding: '0.8rem',
                     background: '#0f1419',
-                    border: '2px solid rgba(255, 215, 0, 0.2)',
+                    border: '2px solid rgba(31, 78, 153, 0.2)',
                     borderRadius: '8px',
                     color: '#b8c5d6',
                     fontSize: '1rem',
@@ -1534,7 +1649,7 @@ function AdminPanel() {
 
             {gameStatusModal.status === 'completed' && (
               <div className="form-group" style={{marginBottom: '2rem'}}>
-                <label style={{color: '#ffd700', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
+                <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
                   🏆 Winner (resolves bets)
                 </label>
                 <select 

@@ -190,10 +190,10 @@
   .leaderboard-table tr {
     display: block;
     margin-bottom: 1rem;
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(31, 78, 153, 0.1);
     border-radius: 8px;
     padding: 0.8rem;
-    background: rgba(255, 215, 0, 0.05);
+    background: rgba(31, 78, 153, 0.05);
   }
 
   .leaderboard-table td {
@@ -207,7 +207,7 @@
     content: attr(data-label);
     float: left;
     font-weight: bold;
-    color: #ffd700;
+    color: #1f4e99;
   }
 
   .leaderboard-table .rank {

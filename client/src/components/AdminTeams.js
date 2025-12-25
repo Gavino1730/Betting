@@ -93,11 +93,29 @@ function AdminTeams() {
     fetchTeams();
   }, [fetchTeams]);
 
+  // Ensure schedule is properly parsed when selectedTeam changes
+  useEffect(() => {
+    if (selectedTeam && selectedTeam.schedule) {
+      try {
+        const parsedSchedule = typeof selectedTeam.schedule === 'string' 
+          ? JSON.parse(selectedTeam.schedule) 
+          : Array.isArray(selectedTeam.schedule) 
+            ? selectedTeam.schedule 
+            : [];
+        
+        if (JSON.stringify(selectedTeam.schedule) !== JSON.stringify(parsedSchedule)) {
+          setSelectedTeam(prev => ({
+            ...prev,
+            schedule: parsedSchedule
+          }));
+        }
+      } catch (e) {
+        console.error('Error parsing schedule:', e);
+      }
+    }
+  }, [selectedTeam?.id]);
+
   const handleSelectTeam = (team) => {
-    console.log('Selecting team:', team);
-    console.log('Selected team ID:', team.id, 'Type:', typeof team.id);
-    console.log('Current selected team ID:', selectedTeam?.id, 'Type:', typeof selectedTeam?.id);
-    
     // Extract numeric ranking from "Rank #3" format
     let numericRanking = team.ranking;
     if (typeof numericRanking === 'string') {
@@ -299,9 +317,6 @@ function AdminTeams() {
 
       <div className="teams-selector">
         <h3>Select Team</h3>
-        <div style={{fontSize: '12px', color: '#ffd700', marginBottom: '10px'}}>
-          Debug: Total teams: {teamsToDisplay.length}, Selected ID: {selectedTeam?.id} (type: {typeof selectedTeam?.id})
-        </div>
         <div className="team-buttons">
           {teamsToDisplay.map(team => (
             <button
@@ -610,7 +625,7 @@ function AdminTeams() {
       {editingGameIdx !== null && selectedTeam && (
         <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000}}>
           <div style={{background: '#161b2e', padding: '30px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', minWidth: '350px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)'}}>
-            <h3 style={{marginTop: 0, marginBottom: '20px', color: '#ffd700'}}>Edit Game Result</h3>
+            <h3 style={{marginTop: 0, marginBottom: '20px', color: '#1f4e99'}}>Edit Game Result</h3>
             
             <div style={{marginBottom: '20px'}}>
               <label style={{display: 'block', marginBottom: '8px', color: '#b8c5d6', fontWeight: '600'}}>Result</label>

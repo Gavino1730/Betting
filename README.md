@@ -215,11 +215,12 @@ For detailed setup and troubleshooting, see [AUTO_COMMIT_GUIDE.md](AUTO_COMMIT_G
 ## 🎨 Design System
 
 ### Colors
-- Primary Blue: #004f9e
-- Dark Blue: #003d7a
-- Gold: #ffd700
-- Green: #66bb6a
-- Red: #ef5350
+- Primary Blue (Valiant): #1f4e99
+- Accent Blue: #2563eb
+- Light Blue: #3b82f6
+- Green (Success): #66bb6a
+- Red (Danger): #ef5350
+- White: #ffffff
 - Background: #0f1419
 
 ### Typography

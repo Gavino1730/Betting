@@ -78,7 +78,7 @@ function App() {
   return (
     <div className="app">
       <nav className="navbar">
-        <div className="nav-brand">
+        <div className="nav-brand" onClick={() => handlePageChange('dashboard')} style={{ cursor: 'pointer' }}>
           <img src="/assets/transparent.png" alt="Valiant Picks" className="logo-img" />
           <span>Valiant Picks</span>
         </div>

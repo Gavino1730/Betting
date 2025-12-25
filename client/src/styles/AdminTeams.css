@@ -6,11 +6,11 @@
 }
 
 .admin-teams h2 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-bottom: 30px;
   font-size: 2rem;
   font-weight: 800;
-  text-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+  text-shadow: 0 2px 8px rgba(31, 78, 153, 0.2);
 }
 
 .teams-selector {
@@ -18,7 +18,7 @@
 }
 
 .teams-selector h3 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-bottom: 15px;
 }
 
@@ -30,9 +30,9 @@
 
 .team-btn {
   padding: 10px 20px;
-  border: 2px solid rgba(255, 215, 0, 0.3);
+  border: 2px solid rgba(31, 78, 153, 0.3);
   background: #1e2139;
-  color: #ffd700;
+  color: #1f4e99;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 700;
@@ -43,7 +43,7 @@
 .team-btn:hover {
   background: linear-gradient(135deg, #252842 0%, #2a2f45 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(31, 78, 153, 0.2);
 }
 
 .team-btn.active {
@@ -80,7 +80,7 @@
 .team-editor {
   background: linear-gradient(135deg, #1e2139 0%, #161b2e 100%);
   border-radius: 14px;
-  border: 2px solid rgba(255, 215, 0, 0.12);
+  border: 2px solid rgba(31, 78, 153, 0.12);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
@@ -88,7 +88,7 @@
 .editor-tabs {
   display: flex;
   gap: 0;
-  border-bottom: 3px solid rgba(255, 215, 0, 0.12);
+  border-bottom: 3px solid rgba(31, 78, 153, 0.12);
   background: linear-gradient(135deg, #252842 0%, #1e2139 100%);
 }
 
@@ -105,14 +105,14 @@
 }
 
 .editor-tab:hover {
-  color: #ffd700;
-  background: rgba(255, 215, 0, 0.05);
+  color: #1f4e99;
+  background: rgba(31, 78, 153, 0.05);
 }
 
 .editor-tab.active {
-  color: #ffd700;
-  border-bottom-color: #ffd700;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+  color: #1f4e99;
+  border-bottom-color: #1f4e99;
+  background: linear-gradient(135deg, rgba(31, 78, 153, 0.1) 0%, rgba(31, 78, 153, 0.05) 100%);
 }
 
 .tab-content {
@@ -120,7 +120,7 @@
 }
 
 .tab-content h3 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-bottom: 20px;
 }
 
@@ -146,7 +146,7 @@
 .form-group textarea,
 .form-group select {
   padding: 10px;
-  border: 2px solid rgba(255, 215, 0, 0.2);
+  border: 2px solid rgba(31, 78, 153, 0.2);
   border-radius: 8px;
   font-family: inherit;
   font-size: 14px;
@@ -165,8 +165,8 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #ffd700;
-  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+  border-color: #1f4e99;
+  box-shadow: 0 0 0 4px rgba(31, 78, 153, 0.15);
   background: #2a2f45;
 }
 
@@ -196,22 +196,22 @@
 }
 
 .btn-save {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #0f1419;
-  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, #1f4e99 0%, #3b82f6 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(31, 78, 153, 0.3);
 }
 
 .btn-save:hover {
-  background: linear-gradient(135deg, #ffed4e 0%, #fff176 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(31, 78, 153, 0.5);
 }
 
 .btn-cancel,
 .btn-edit {
   background: linear-gradient(135deg, #2a2f45 0%, #252842 100%);
   color: #b8c5d6;
-  border: 2px solid rgba(255, 215, 0, 0.2);
+  border: 2px solid rgba(31, 78, 153, 0.2);
 }
 
 .btn-cancel:hover,
@@ -225,16 +225,16 @@
 }
 
 .btn-add {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #0f1419;
+  background: linear-gradient(135deg, #1f4e99 0%, #3b82f6 100%);
+  color: #ffffff;
   grid-column: 1 / -1;
-  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 2px 6px rgba(31, 78, 153, 0.3);
 }
 
 .btn-add:hover {
-  background: linear-gradient(135deg, #ffed4e 0%, #fff176 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(31, 78, 153, 0.5);
 }
 
 .btn-delete,
@@ -257,8 +257,8 @@
   background: linear-gradient(135deg, #252842 0%, #1e2139 100%);
   padding: 20px;
   border-radius: 10px;
-  border: 2px solid rgba(255, 215, 0, 0.12);
-  border-left: 5px solid #ffd700;
+  border: 2px solid rgba(31, 78, 153, 0.12);
+  border-left: 5px solid #1f4e99;
 }
 
 .team-info-display p {
@@ -268,7 +268,7 @@
 }
 
 .team-info-display strong {
-  color: #ffd700;
+  color: #1f4e99;
   font-weight: 700;
 }
 
@@ -278,13 +278,13 @@
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 30px;
-  border: 2px solid rgba(255, 215, 0, 0.12);
+  border: 2px solid rgba(31, 78, 153, 0.12);
   border-left: 5px solid #66bb6a;
 }
 
 .add-game-form h4,
 .add-player-form h4 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-top: 0;
   margin-bottom: 15px;
   font-weight: 700;
@@ -301,7 +301,7 @@
 .player-form-grid input,
 .player-form-grid textarea {
   padding: 10px;
-  border: 2px solid rgba(255, 215, 0, 0.2);
+  border: 2px solid rgba(31, 78, 153, 0.2);
   border-radius: 8px;
   font-family: inherit;
   background: #2a2f45;
@@ -312,8 +312,8 @@
 .player-form-grid input:focus,
 .player-form-grid textarea:focus {
   outline: none;
-  border-color: #ffd700;
-  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+  border-color: #1f4e99;
+  box-shadow: 0 0 0 4px rgba(31, 78, 153, 0.15);
 }
 
 .player-form-grid {
@@ -336,12 +336,12 @@
   background: linear-gradient(135deg, #252842 0%, #1e2139 100%);
   padding: 20px;
   border-radius: 10px;
-  border: 2px solid rgba(255, 215, 0, 0.12);
+  border: 2px solid rgba(31, 78, 153, 0.12);
 }
 
 .schedule-list h4,
 .roster-list h4 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-top: 0;
   margin-bottom: 15px;
   font-weight: 700;
@@ -356,8 +356,8 @@
 }
 
 .schedule-list th {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #0f1419;
+  background: linear-gradient(135deg, #1f4e99 0%, #3b82f6 100%);
+  color: #ffffff;
   padding: 12px;
   text-align: left;
   font-weight: 700;
@@ -374,7 +374,7 @@
 .schedule-list td input {
   width: 100%;
   padding: 6px 8px;
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid rgba(31, 78, 153, 0.3);
   border-radius: 4px;
   background: #2a2f45;
   color: #e0e0e0;
@@ -383,8 +383,8 @@
 
 .schedule-list td input:focus {
   outline: none;
-  border-color: #ffd700;
-  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.15);
+  border-color: #1f4e99;
+  box-shadow: 0 0 0 2px rgba(31, 78, 153, 0.15);
 }
 
 .schedule-list tbody tr:hover {
@@ -394,7 +394,7 @@
 .player-card input,
 .player-card textarea {
   padding: 6px 8px;
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid rgba(31, 78, 153, 0.3);
   border-radius: 4px;
   background: #2a2f45;
   color: #e0e0e0;
@@ -405,8 +405,8 @@
 .player-card input:focus,
 .player-card textarea:focus {
   outline: none;
-  border-color: #ffd700;
-  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.15);
+  border-color: #1f4e99;
+  box-shadow: 0 0 0 2px rgba(31, 78, 153, 0.15);
 }
 
 .players-grid {
@@ -419,14 +419,14 @@
   background: #1e2139;
   padding: 20px;
   border-radius: 10px;
-  border: 2px solid rgba(255, 215, 0, 0.12);
-  border-left: 5px solid #ffd700;
+  border: 2px solid rgba(31, 78, 153, 0.12);
+  border-left: 5px solid #1f4e99;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
 }
 
 .player-card:hover {
-  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(31, 78, 153, 0.2);
   transform: translateY(-2px);
 }
 
@@ -438,8 +438,8 @@
 }
 
 .player-card .jersey {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #0f1419;
+  background: linear-gradient(135deg, #1f4e99 0%, #3b82f6 100%);
+  color: #ffffff;
   width: 50px;
   height: 50px;
   display: flex;
@@ -448,11 +448,11 @@
   border-radius: 8px;
   font-weight: 700;
   font-size: 18px;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(31, 78, 153, 0.3);
 }
 
 .player-card h5 {
-  color: #ffd700;
+  color: #1f4e99;
   margin: 0;
   flex: 1;
   font-weight: 700;
@@ -466,7 +466,7 @@
 }
 
 .player-card p strong {
-  color: #ffd700;
+  color: #1f4e99;
   font-weight: 700;
 }
 

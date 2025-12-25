@@ -288,7 +288,7 @@ function Dashboard({ user }) {
       <div className="dashboard-intro card">
         <h2 className="intro-title">Welcome to Valiant Picks</h2>
         <p className="intro-body">
-          Make friendly picks on Valiant games, support your Valiants, and stay up to date on how the Valiants are doing across sports. It’s all for fun track, climb the leaderboard, no real money, and not meant to cause any trouble. Enjoy the game!
+          Make friendly picks on Valiant games, support your Valiants, and stay up to date on how the Valiants are doing across sports. It's all for fun—track your picks, climb the leaderboard, and compete. No real money involved, just friendly competition. Enjoy the game!
         </p>
       </div>
 
@@ -297,7 +297,7 @@ function Dashboard({ user }) {
         <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #2196f3', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}> 
           <div style={{fontSize: '1.8rem', marginBottom: '8px'}}>📊</div>
           <p style={{margin: '0 0 5px 0', color: '#64b5f6', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase'}}>Total Picks</p>
-          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: '#ffd700'}}>{stats.totalBets}</p>
+          <p style={{margin: '0', fontSize: '1.8rem', fontWeight: 'bold', color: '#1f4e99'}}>{stats.totalBets}</p>
         </div>
         
         <div style={{background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #ff9800', textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s ease'}} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
@@ -561,7 +561,7 @@ function Dashboard({ user }) {
                         <span className="bet-win">+{formatCurrency(activity.potential_win - activity.amount)}</span>
                       )}
                       {activity.status === 'pending' && (
-                        <span className="bet-win" style={{ color: '#ffd700' }}>
+                        <span className="bet-win" style={{ color: '#1f4e99' }}>
                           Possible: {formatCurrency(activity.potential_win - activity.amount)}
                         </span>
                       )}

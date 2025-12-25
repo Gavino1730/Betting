@@ -15,7 +15,7 @@
   right: -10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(31, 78, 153, 0.15) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -42,7 +42,7 @@
   position: relative;
   z-index: 1;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(31, 78, 153, 0.15);
   position: relative;
   overflow: hidden;
 }
@@ -54,21 +54,21 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(31, 78, 153, 0.6), transparent);
 }
 
 .logo-section {
   text-align: center;
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  border-bottom: 1px solid rgba(31, 78, 153, 0.2);
 }
 
 .login-logo {
   width: 80px;
   height: 80px;
   margin-bottom: 1rem;
-  filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.2));
+  filter: drop-shadow(0 4px 8px rgba(31, 78, 153, 0.2));
   animation: logoFloat 3s ease-in-out infinite;
 }
 
@@ -85,7 +85,7 @@
   margin: 0 0 0.5rem 0;
   font-size: 1.8rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  background: linear-gradient(135deg, #1f4e99, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -330,7 +330,7 @@ form {
   max-width: 400px;
   width: 90%;
   animation: slideUp 0.3s ease;
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(31, 78, 153, 0.2);
 }
 
 @keyframes slideUp {
@@ -345,7 +345,7 @@ form {
 }
 
 .modal-content h3 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-bottom: 1.5rem;
   font-size: 1.3rem;
 }

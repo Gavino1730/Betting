@@ -278,7 +278,7 @@ function Games() {
           {/* Prop Bets Section - Now Featured First */}
           <div style={{marginBottom: '4rem', padding: '0 1rem'}}>
             <div style={{textAlign: 'center', marginBottom: '2rem'}}>
-              <h3 style={{fontSize: '2rem', marginBottom: '0.5rem', color: '#ffd700', fontWeight: 800}}>🎯 FEATURED PROP PICKS</h3>
+              <h3 style={{fontSize: '2rem', marginBottom: '0.5rem', color: '#1f4e99', fontWeight: 800}}>🎯 FEATURED PROP PICKS</h3>
               <p style={{color: '#b8c5d6', fontSize: '1.1rem'}}>Special betting opportunities available now</p>
             </div>
             {activePropBets.length === 0 ? (
@@ -410,11 +410,11 @@ function Games() {
           </div>
 
           {/* Divider */}
-          <div style={{height: '2px', background: 'linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent)', margin: '3rem 0'}} />
+          <div style={{height: '2px', background: 'linear-gradient(90deg, transparent, rgba(31, 78, 153, 0.3), transparent)', margin: '3rem 0'}} />
 
           {/* Games Section */}
           <div style={{marginBottom: '3rem'}}>
-            <h3 style={{fontSize: '1.5rem', marginBottom: '1.5rem', color: '#ffd700'}}>🏀 Team Bets ({games.length})</h3>
+            <h3 style={{fontSize: '1.5rem', marginBottom: '1.5rem', color: '#1f4e99'}}>🏀 Team Bets ({games.length})</h3>
             <div className="games-grid">
               {games.length === 0 ? (
                 <div className="empty-state">
@@ -554,7 +554,7 @@ function Games() {
                       </div>
 
                       {selectedConfidence[game.id] && betAmounts[game.id] && (
-                        <div style={{marginTop: '10px', textAlign: 'center', color: '#ffd700', fontWeight: 'bold'}}>
+                        <div style={{marginTop: '10px', textAlign: 'center', color: '#1f4e99', fontWeight: 'bold'}}>
                           Potential Win: {formatCurrency(parseFloat(betAmounts[game.id]) * confidenceMultipliers[selectedConfidence[game.id]])}
                         </div>
                       )}

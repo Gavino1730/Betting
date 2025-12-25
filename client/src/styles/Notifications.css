@@ -37,12 +37,12 @@
 
 .notification-card:hover {
   transform: translateX(4px);
-  border-color: rgba(255, 215, 0, 0.3);
+  border-color: rgba(31, 78, 153, 0.3);
 }
 
 .notification-card.unread {
-  border-left: 4px solid #ffd700;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, #161b2e 100%);
+  border-left: 4px solid #1f4e99;
+  background: linear-gradient(135deg, rgba(31, 78, 153, 0.1) 0%, #161b2e 100%);
 }
 
 .notification-icon {
@@ -77,9 +77,9 @@
   right: 1.5rem;
   width: 10px;
   height: 10px;
-  background: #ffd700;
+  background: #1f4e99;
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 8px rgba(31, 78, 153, 0.6);
 }
 
 @media (max-width: 768px) {

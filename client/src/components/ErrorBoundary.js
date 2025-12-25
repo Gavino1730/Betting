@@ -33,7 +33,7 @@ class ErrorBoundary extends React.Component {
           padding: '20px',
           textAlign: 'center'
         }}>
-          <h1 style={{ color: '#ffd700', marginBottom: '20px' }}>Something went wrong</h1>
+          <h1 style={{ color: '#1f4e99', marginBottom: '20px' }}>Something went wrong</h1>
           <p style={{ marginBottom: '30px', maxWidth: '500px' }}>
             We encountered an unexpected error. Please try refreshing the page.
           </p>
@@ -41,8 +41,8 @@ class ErrorBoundary extends React.Component {
             onClick={this.handleReset}
             style={{
               padding: '12px 24px',
-              backgroundColor: '#ffd700',
-              color: '#0f1419',
+              backgroundColor: '#1f4e99',
+              color: '#ffffff',
               border: 'none',
               borderRadius: '8px',
               fontSize: '16px',

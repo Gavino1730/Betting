@@ -31,7 +31,7 @@ body {
   box-shadow: 0 8px 32px rgba(13, 71, 161, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3);
   gap: 1.5rem;
   position: relative;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .nav-brand {
@@ -45,10 +45,7 @@ body {
 }
 
 .nav-brand span {
-  background: linear-gradient(90deg, #ffd700, #ffed4e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -99,15 +96,15 @@ body {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(31, 78, 153, 0.2);
 }
 
 .nav-center button.active {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: #0d47a1;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #ffffff;
   font-weight: 600;
-  border-color: #ffd700;
-  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+  border-color: #2563eb;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
 }
 
 .logout-btn {
@@ -124,15 +121,15 @@ body {
   display: flex;
   align-items: center;
   padding: 0.65rem 1.4rem;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 237, 78, 0.1));
-  border: 1px solid rgba(255, 215, 0, 0.4);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(59, 130, 246, 0.1));
+  border: 1px solid rgba(37, 99, 235, 0.4);
   border-radius: 8px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
 }
 
 .username {
-  color: #ffd700;
+  color: #ffffff;
   font-weight: 700;
   font-size: 0.95rem;
   white-space: nowrap;
@@ -181,7 +178,7 @@ body {
   color: white;
   padding: 2rem;
   margin-top: auto;
-  border-top: 1px solid rgba(255, 215, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 -4px 16px rgba(13, 71, 161, 0.3);
 }
 
@@ -198,7 +195,7 @@ body {
 }
 
 .footer-tagline {
-  color: #ffd700;
+  color: #ffffff;
   font-weight: 600;
   font-style: italic;
 }
@@ -231,19 +228,19 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.2), transparent);
 }
 
 .card:hover {
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 215, 0, 0.2);
+  border-color: rgba(31, 78, 153, 0.2);
   transform: translateY(-2px);
 }
 
 .card h1,
 .card h2,
 .card h3 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: 700;
@@ -260,7 +257,7 @@ body {
 }
 
 .card h4 {
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
@@ -272,8 +269,8 @@ body {
 }
 
 .btn {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #0d47a1;
+  background: linear-gradient(135deg, #1f4e99 0%, #2563eb 100%);
+  color: #ffffff;
   border: 2px solid transparent;
   padding: 0.85rem 2rem;
   border-radius: 8px;
@@ -281,14 +278,14 @@ body {
   font-size: 0.95rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(31, 78, 153, 0.3);
   letter-spacing: 0.3px;
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(255, 215, 0, 0.4);
-  background: linear-gradient(135deg, #ffed4e 0%, #ffff72 100%);
+  box-shadow: 0 6px 24px rgba(31, 78, 153, 0.4);
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
 }
 
 .btn:active {
@@ -345,7 +342,7 @@ body {
   display: block;
   margin-bottom: 0.6rem;
   font-weight: 600;
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -380,8 +377,8 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: rgba(255, 215, 0, 0.5);
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+  border-color: rgba(31, 78, 153, 0.5);
+  box-shadow: 0 0 0 3px rgba(31, 78, 153, 0.1);
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -435,8 +432,8 @@ table {
 }
 
 table thead {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
-  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, rgba(31, 78, 153, 0.1) 0%, rgba(31, 78, 153, 0.05) 100%);
+  border-bottom: 2px solid rgba(31, 78, 153, 0.3);
 }
 
 .mobile-close-btn {
@@ -452,7 +449,7 @@ table thead {
 table th {
   padding: 1rem;
   text-align: left;
-  color: #ffd700;
+  color: #1f4e99;
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
@@ -471,8 +468,8 @@ table tbody tr {
 }
 
 table tbody tr:hover {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0.04) 100%);
-  border-color: rgba(255, 215, 0, 0.2);
+  background: linear-gradient(135deg, rgba(31, 78, 153, 0.08) 0%, rgba(31, 78, 153, 0.04) 100%);
+  border-color: rgba(31, 78, 153, 0.2);
 }
 
 /* ===== MOBILE MENU ===== */
@@ -556,7 +553,7 @@ table tbody tr:hover {
 .mobile-menu-header {
   padding: 1.5rem 1.25rem;
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
-  border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .mobile-user-info {
@@ -574,10 +571,7 @@ table tbody tr:hover {
 .mobile-balance {
   font-size: 1.3rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #ffd700, #ffed4e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #66bb6a;
 }
 
 .mobile-close-btn:focus-visible {
@@ -611,12 +605,12 @@ table tbody tr:hover {
 
 .mobile-menu-nav button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-left-color: rgba(255, 215, 0, 0.5);
+  border-left-color: rgba(31, 78, 153, 0.5);
 }
 
 .mobile-menu-nav button.active {
-  background: rgba(255, 215, 0, 0.15);
-  border-left-color: #ffd700;
+  background: rgba(31, 78, 153, 0.15);
+  border-left-color: #1f4e99;
   color: white;
   font-weight: 700;
 }
@@ -880,7 +874,7 @@ table tbody tr:hover {
   }
 
   table tbody tr:hover {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.04) 0%, rgba(255, 215, 0, 0.02) 100%);
+    background: linear-gradient(135deg, rgba(31, 78, 153, 0.04) 0%, rgba(31, 78, 153, 0.02) 100%);
   }
 
   input,
@@ -909,6 +903,6 @@ table tbody tr:hover {
   }
 
   a {
-    -webkit-tap-highlight-color: rgba(255, 215, 0, 0.1);
+    -webkit-tap-highlight-color: rgba(31, 78, 153, 0.1);
   }
 }

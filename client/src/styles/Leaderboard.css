@@ -6,14 +6,14 @@
 }
 
 .leaderboard h2 {
-  color: #ffd700;
+  color: #1f4e99;
   margin-bottom: 2rem;
   font-size: 2.2rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  text-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+  text-shadow: 0 2px 8px rgba(31, 78, 153, 0.2);
 }
 
 /* ===== LEADERBOARD CARDS ===== */
@@ -28,7 +28,7 @@
   background: linear-gradient(135deg, #1e2139 0%, #161b2e 100%);
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(31, 78, 153, 0.12);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   display: grid;
   grid-template-columns: 80px 200px 1fr;
@@ -39,15 +39,15 @@
 
 .leaderboard-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
-  border-color: rgba(255, 215, 0, 0.25);
+  box-shadow: 0 8px 24px rgba(31, 78, 153, 0.2);
+  border-color: rgba(31, 78, 153, 0.25);
 }
 
 /* Top 3 special styling */
 .leaderboard-card.rank-1 {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, #1e2139 100%);
-  border-left: 5px solid #ffd700;
-  border-color: rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, rgba(31, 78, 153, 0.15) 0%, #1e2139 100%);
+  border-left: 5px solid #1f4e99;
+  border-color: rgba(31, 78, 153, 0.3);
 }
 
 .leaderboard-card.rank-2 {
@@ -75,17 +75,17 @@
   height: 60px;
   border-radius: 50%;
   background: linear-gradient(135deg, #2a2f45, #1e2332);
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 1.5rem;
   font-weight: 700;
-  border: 2px solid rgba(255, 215, 0, 0.3);
+  border: 2px solid rgba(31, 78, 153, 0.3);
 }
 
 .leaderboard-card.rank-1 .rank-badge {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: #0f1419;
-  border-color: #ffd700;
-  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+  background: linear-gradient(135deg, #1f4e99, #3b82f6);
+  color: #ffffff;
+  border-color: #1f4e99;
+  box-shadow: 0 4px 16px rgba(31, 78, 153, 0.4);
 }
 
 .leaderboard-card.rank-2 .rank-badge {
@@ -110,7 +110,7 @@
 .user-name {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #ffd700;
+  color: #1f4e99;
 }
 
 .admin-badge {
@@ -212,14 +212,14 @@
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(31, 78, 153, 0.12);
   transition: all 0.3s ease;
 }
 
 .overview-stat:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(255, 215, 0, 0.15);
-  border-color: rgba(255, 215, 0, 0.25);
+  box-shadow: 0 12px 32px rgba(31, 78, 153, 0.15);
+  border-color: rgba(31, 78, 153, 0.25);
 }
 
 .overview-stat h4 {
@@ -234,7 +234,7 @@
 .overview-stat .value {
   font-size: 2rem;
   font-weight: 800;
-  color: #ffd700;
+  color: #1f4e99;
   margin: 0;
 }
 
@@ -319,7 +319,7 @@
     background: rgba(255, 255, 255, 0.05);
     padding: 1rem;
     border-radius: 10px;
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(31, 78, 153, 0.1);
     text-align: center;
   }
 

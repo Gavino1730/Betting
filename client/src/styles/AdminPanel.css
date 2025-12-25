@@ -215,9 +215,9 @@
 }
 
 .mobile-admin-pill.active {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: #0d47a1;
-  border-color: rgba(255, 215, 0, 0.6);
+  background: linear-gradient(135deg, #1f4e99, #3b82f6);
+  color: #ffffff;
+  border-color: rgba(31, 78, 153, 0.6);
 }
 
 .pill-icon {
@@ -258,5 +258,174 @@
 
   .pill-label {
     font-size: 0.85rem;
+  }
+}
+
+/* Prop Bets Grid */
+.prop-bets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.prop-bet-card {
+  background: linear-gradient(135deg, #1e2139 0%, #252945 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.prop-bet-card:hover {
+  border-color: rgba(31, 78, 153, 0.3);
+  box-shadow: 0 12px 32px rgba(31, 78, 153, 0.15);
+  transform: translateY(-2px);
+}
+
+.prop-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.prop-card-header h4 {
+  flex: 1;
+  margin: 0;
+  color: #1f4e99;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.prop-status-badge {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.prop-card-info {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.info-label {
+  color: #9fb3c8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 85px;
+}
+
+.info-value {
+  color: #e9f1ff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.prop-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.prop-action-btn {
+  flex: 1;
+  min-width: 110px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.prop-action-btn.resolve-yes {
+  background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+  color: #fff;
+}
+
+.prop-action-btn.resolve-yes:hover {
+  background: linear-gradient(135deg, #81c784 0%, #4caf50 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 187, 106, 0.3);
+}
+
+.prop-action-btn.resolve-no {
+  background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+  color: #fff;
+}
+
+.prop-action-btn.resolve-no:hover {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 83, 80, 0.3);
+}
+
+.prop-action-btn.cancel {
+  background: linear-gradient(135deg, #ffc107 0%, #fb8c00 100%);
+  color: #0d1b2a;
+}
+
+.prop-action-btn.cancel:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+.prop-action-btn.delete {
+  background: linear-gradient(135deg, #757575 0%, #616161 100%);
+  color: #fff;
+}
+
+.prop-action-btn.delete:hover {
+  background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(117, 117, 117, 0.3);
+}
+
+@media (max-width: 768px) {
+  .prop-bets-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .prop-action-btn {
+    flex: auto;
+    font-size: 0.8rem;
+    padding: 8px 10px;
   }
 }

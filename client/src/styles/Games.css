@@ -13,7 +13,7 @@
 }
 
 .page-header h2 {
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   font-weight: 700;
@@ -25,7 +25,7 @@
 }
 
 .balance-display {
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 1.3rem;
   font-weight: 700;
   margin-top: 1rem;
@@ -81,8 +81,8 @@
 }
 
 .tab-btn.active {
-  color: #ffd700;
-  border-bottom-color: #ffd700;
+  color: #1f4e99;
+  border-bottom-color: #1f4e99;
 }
 
 /* ===== GAMES GRID ===== */
@@ -103,8 +103,8 @@
 
 .game-card-display:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 215, 0, 0.3);
-  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
+  border-color: rgba(31, 78, 153, 0.3);
+  box-shadow: 0 8px 24px rgba(31, 78, 153, 0.2);
 }
 
 .game-header {
@@ -350,8 +350,8 @@
 .game-notes {
   margin: 1rem 0;
   padding: 0.8rem;
-  background: rgba(255, 215, 0, 0.05);
-  border-left: 3px solid #ffd700;
+  background: rgba(31, 78, 153, 0.05);
+  border-left: 3px solid #1f4e99;
   border-radius: 4px;
 }
 
@@ -450,7 +450,7 @@
 
 .confidence-option .multiplier {
   display: block;
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 1.1rem;
   font-weight: 700;
 }
@@ -478,8 +478,8 @@
 
 .prop-card.featured {
   padding: 2rem;
-  border: 2px solid rgba(255, 215, 0, 0.2);
-  box-shadow: 0 8px 32px rgba(255, 215, 0, 0.15);
+  border: 2px solid rgba(31, 78, 153, 0.2);
+  box-shadow: 0 8px 32px rgba(31, 78, 153, 0.15);
   background: linear-gradient(135deg, #1e2139 0%, #252945 100%);
   position: relative;
   overflow: hidden;
@@ -492,13 +492,13 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+  background: linear-gradient(90deg, transparent, #1f4e99, transparent);
 }
 
 .prop-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 215, 0, 0.3);
-  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
+  border-color: rgba(31, 78, 153, 0.3);
+  box-shadow: 0 8px 24px rgba(31, 78, 153, 0.2);
 }
 
 .prop-header {
@@ -524,7 +524,7 @@
 
 .prop-card.featured .prop-header h3 {
   font-size: 1.4rem;
-  color: #ffd700;
+  color: #1f4e99;
   font-weight: 800;
 }
 
@@ -627,7 +627,7 @@
 
 .prop-bet-input:focus {
   outline: none;
-  border-color: #ffd700;
+  border-color: #1f4e99;
 }
 
 .prop-bet-btn {
@@ -709,16 +709,16 @@
 .option-label {
   display: block;
   color: #e0e0e0;
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 800;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .option-odds {
   display: block;
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -746,7 +746,7 @@
 .loading {
   text-align: center;
   padding: 4rem 2rem;
-  color: #ffd700;
+  color: #1f4e99;
   font-size: 1.2rem;
   font-weight: 600;
 }

@@ -31,8 +31,8 @@
 .spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid rgba(255, 215, 0, 0.2);
-  border-top: 4px solid #ffd700;
+  border: 4px solid rgba(31, 78, 153, 0.2);
+  border-top: 4px solid #1f4e99;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -54,7 +54,7 @@
 
 .header-title h1 {
   font-size: 2.5rem;
-  color: #ffd700;
+  color: #1f4e99;
   margin: 0 0 0.5rem 0;
   font-weight: 700;
 }
@@ -82,13 +82,13 @@
   gap: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(31, 78, 153, 0.15);
 }
 
 .bet-stat-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 215, 0, 0.3);
+  border-color: rgba(31, 78, 153, 0.3);
 }
 
 .stat-icon {
@@ -100,7 +100,7 @@
   justify-content: center;
   border-radius: 12px;
   flex-shrink: 0;
-  background: rgba(255, 215, 0, 0.1);
+  background: rgba(31, 78, 153, 0.1);
 }
 
 .stat-info {
@@ -120,7 +120,7 @@
 .stat-value {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #ffd700;
+  color: #1f4e99;
 }
 
 .profit-positive {
@@ -141,12 +141,12 @@
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(31, 78, 153, 0.15);
 }
 
 .filter-btn {
   padding: 0.75rem 1.5rem;
-  border: 2px solid rgba(255, 215, 0, 0.2);
+  border: 2px solid rgba(31, 78, 153, 0.2);
   background: rgba(30, 33, 57, 0.5);
   border-radius: 8px;
   font-size: 1rem;
@@ -159,17 +159,17 @@
 }
 
 .filter-btn:hover {
-  border-color: #ffd700;
-  color: #ffd700;
-  background: rgba(255, 215, 0, 0.1);
+  border-color: #1f4e99;
+  color: #1f4e99;
+  background: rgba(31, 78, 153, 0.1);
   transform: translateY(-2px);
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  border-color: #ffd700;
-  color: #0f1419;
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  background: linear-gradient(135deg, #1f4e99 0%, #3b82f6 100%);
+  border-color: #1f4e99;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(31, 78, 153, 0.4);
 }
 
 /* Empty State */
@@ -179,7 +179,7 @@
   background: linear-gradient(135deg, #1e2139 0%, #161b2e 100%);
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(31, 78, 153, 0.15);
 }
 
 .empty-icon {
@@ -189,7 +189,7 @@
 
 .empty-state h3 {
   font-size: 1.5rem;
-  color: #ffd700;
+  color: #1f4e99;
   margin: 0 0 0.5rem 0;
 }
 
@@ -213,14 +213,14 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   border-left: 4px solid transparent;
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(31, 78, 153, 0.15);
   border-left-width: 4px;
 }
 
 .bet-item:hover {
   transform: translateX(4px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 215, 0, 0.3);
+  border-color: rgba(31, 78, 153, 0.3);
 }
 
 .bet-item.bet-pending {
@@ -244,7 +244,7 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(255, 215, 0, 0.1);
+  border-bottom: 2px solid rgba(31, 78, 153, 0.1);
 }
 
 .bet-team-info {
@@ -267,7 +267,7 @@
 .team-name {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #ffd700;
+  color: #1f4e99;
   margin: 0;
 }
 
@@ -341,7 +341,7 @@
 .detail-potential {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #ffd700;
+  color: #1f4e99;
 }
 
 .detail-potential {
@@ -394,7 +394,7 @@
   align-items: center;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 2px solid rgba(255, 215, 0, 0.1);
+  border-top: 2px solid rgba(31, 78, 153, 0.1);
   font-size: 0.9rem;
   color: #888a9b;
 }
