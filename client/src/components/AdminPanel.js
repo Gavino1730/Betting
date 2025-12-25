@@ -259,6 +259,20 @@ function AdminPanel() {
     }
   };
 
+  const handleDeleteGame = async (gameId) => {
+    if (!window.confirm('Are you sure you want to delete this completed game? All related bets will be refunded.')) {
+      return;
+    }
+    
+    try {
+      await apiClient.delete(`/games/${gameId}`);
+      fetchGames();
+      alert('Game deleted successfully');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete game');
+    }
+  };
+
   const handlePropBetFormChange = (e) => {
     const { name, value, type, checked } = e.target;
     setPropBetForm(prev => ({
