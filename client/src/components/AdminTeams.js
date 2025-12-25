@@ -105,9 +105,21 @@ function AdminTeams() {
       numericRanking = match ? parseInt(match[0]) : numericRanking;
     }
     
+    // Parse schedule if it's a string
+    let parsedSchedule = [];
+    if (team.schedule) {
+      try {
+        parsedSchedule = typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule;
+      } catch (e) {
+        console.error('Error parsing schedule:', e);
+        parsedSchedule = [];
+      }
+    }
+    
     const cleanedTeam = {
       ...team,
-      ranking: numericRanking
+      ranking: numericRanking,
+      schedule: parsedSchedule
     };
     
     console.log('Setting selected team to:', cleanedTeam);
@@ -475,7 +487,7 @@ function AdminTeams() {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedTeam.schedule.map((game, idx) => (
+                      {(Array.isArray(selectedTeam.schedule) ? selectedTeam.schedule : []).map((game, idx) => (
                         <tr key={idx}>
                           <td>{game.result}</td>
                           <td>{game.score}</td>
