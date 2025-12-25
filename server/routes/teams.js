@@ -93,17 +93,45 @@ router.put('/:id', authenticateToken, async (req, res) => {
         : JSON.stringify(req.body.players);
     }
 
+    console.log(`Updating team ${req.params.id} with:`, updates);
+
     const team = await Team.update(req.params.id, updates);
     
-    // Parse JSON fields for response
+    if (!team) {
+      return res.status(404).json({ error: 'Team not found' });
+    }
+    
+    // Parse JSON fields for response - safely handle both string and object formats
+    let schedule = [];
+    let players = [];
+    
+    try {
+      if (team.schedule) {
+        schedule = typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule;
+      }
+    } catch (parseErr) {
+      console.error('Error parsing schedule:', parseErr);
+      schedule = [];
+    }
+    
+    try {
+      if (team.players) {
+        players = typeof team.players === 'string' ? JSON.parse(team.players) : team.players;
+      }
+    } catch (parseErr) {
+      console.error('Error parsing players:', parseErr);
+      players = [];
+    }
+    
     const response = {
       ...team,
-      schedule: team.schedule ? (typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule) : [],
-      players: team.players ? (typeof team.players === 'string' ? JSON.parse(team.players) : team.players) : []
+      schedule,
+      players
     };
     
     res.json(response);
   } catch (err) {
+    console.error('Error updating team:', err);
     res.status(500).json({ error: 'Error updating team: ' + err.message });
   }
 });
