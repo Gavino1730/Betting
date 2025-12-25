@@ -12,40 +12,36 @@ class Team {
   }
 
   static async getAll() {
-    const { data, error } = await supabase
-      .from('teams')
-      .select('*')
-      .order('name');
+    try {
+      const { data, error } = await supabase
+        .from('teams')
+        .select('*')
+        .order('name');
 
-    if (error) throw error;
-    
-    // Parse JSON fields for all teams
-    return data.map(team => {
-      let parsedSchedule = [];
-      let parsedPlayers = [];
+      if (error) throw error;
       
-      try {
-        if (team.schedule) {
-          parsedSchedule = typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule;
+      // Parse JSON fields for all teams
+      return data.map(team => {
+        let parsedSchedule = [];
+        
+        try {
+          if (team.schedule) {
+            parsedSchedule = typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule;
+          }
+        } catch (e) {
+          console.error('Error parsing schedule for team', team.id, ':', e);
+          parsedSchedule = [];
         }
-      } catch (e) {
-        console.error('Error parsing schedule for team', team.id, ':', e);
-      }
-      
-      try {
-        if (team.players) {
-          parsedPlayers = typeof team.players === 'string' ? JSON.parse(team.players) : team.players;
-        }
-      } catch (e) {
-        console.error('Error parsing players for team', team.id, ':', e);
-      }
-      
-      return {
-        ...team,
-        schedule: parsedSchedule,
-        players: parsedPlayers
-      };
-    });
+        
+        return {
+          ...team,
+          schedule: parsedSchedule || []
+        };
+      });
+    } catch (err) {
+      console.error('Error in Team.getAll():', err);
+      throw err;
+    }
   }
 
   static async getById(id) {

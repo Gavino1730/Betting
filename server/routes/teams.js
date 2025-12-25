@@ -8,15 +8,11 @@ const { authenticateToken } = require('../middleware/auth');
 router.get('/', async (req, res) => {
   try {
     const teams = await Team.getAll();
-    // Fetch players for each team
-    const teamsWithPlayers = await Promise.all(
-      teams.map(async (team) => {
-        const players = await Player.getByTeam(team.id);
-        return { ...team, players };
-      })
-    );
-    res.json(teamsWithPlayers);
+    // Note: Team.getAll() already returns teams with parsed schedule/players
+    // Just return the teams as-is
+    res.json(teams);
   } catch (err) {
+    console.error('Error fetching teams:', err);
     res.status(500).json({ error: 'Error fetching teams: ' + err.message });
   }
 });
