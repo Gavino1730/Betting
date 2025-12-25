@@ -113,7 +113,7 @@ function AdminTeams() {
         console.error('Error parsing schedule:', e);
       }
     }
-  }, [selectedTeam?.id]);
+  }, [selectedTeam?.id, selectedTeam?.schedule]);
 
   const handleSelectTeam = (team) => {
     // Extract numeric ranking from "Rank #3" format
