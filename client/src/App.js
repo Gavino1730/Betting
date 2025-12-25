@@ -236,13 +236,6 @@ function App() {
         {page === 'notifications' && <Notifications />}
         {page === 'admin' && user && user.is_admin && <AdminPanel />}
       </div>
-
-      <footer className="footer">
-        <div className="footer-content">
-          <p>&copy; 2026 Valiant Picks. All rights reserved.</p>
-          <p className="footer-tagline">Pick Smart. Win Big. Valiant Style.</p>
-        </div>
-      </footer>
     </div>
     </ToastProvider>
   );
