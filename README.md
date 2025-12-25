@@ -16,7 +16,7 @@ Create `server/.env`:
 PORT=5000
 JWT_SECRET=change-this-to-random-text-in-production
 SUPABASE_URL=your-supabase-url-here
-SUPABASE_KEY=your-supabase-anon-key-here
+SUPABASE_ANON_KEY=your-supabase-anon-key-here
 NODE_ENV=development
 ```
 

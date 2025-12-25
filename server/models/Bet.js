@@ -43,9 +43,13 @@ class Bet {
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error in findByUserId:', error);
+        throw error;
+      }
       return data || [];
     } catch (err) {
+      console.error('findByUserId exception:', err);
       throw new Error(`Error fetching user bets: ${err.message}`);
     }
   }
