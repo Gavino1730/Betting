@@ -141,6 +141,11 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
+    // If it's a cached response, return it immediately
+    if (error.isCached) {
+      return Promise.resolve(error.response);
+    }
+    
     // Handle 401 errors (token expired or invalid)
     if (error.response?.status === 401) {
       // Try to refresh the token
