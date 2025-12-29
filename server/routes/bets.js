@@ -48,7 +48,7 @@ router.post('/', authenticateToken, async (req, res) => {
     const getGameStartDate = (gameRecord) => {
       if (!gameRecord?.game_date) return null;
 
-      // Parse as local date to avoid UTC shifting that pushes the day forward/backward
+      // Parse as local date to avoid UTC shifting
       const [year, month, day] = (gameRecord.game_date || '').split('-').map(Number);
       const date = Number.isInteger(year) && Number.isInteger(month) && Number.isInteger(day)
         ? new Date(year, month - 1, day)
@@ -65,8 +65,15 @@ router.post('/', authenticateToken, async (req, res) => {
           date.setMilliseconds(0);
         }
       }
-
-      return date;
+      
+      // Add timezone offset to convert from PST/PDT (assumed game time) to UTC
+      // Oregon is UTC-8 (PST) or UTC-7 (PDT)
+      // If server is in different timezone, this compensates
+      const localOffset = new Date().getTimezoneOffset(); // minutes difference from UTC
+      const oregonOffset = 480; // PST is UTC-8 (480 minutes)
+      const offsetDiff = (localOffset - oregonOffset) * 60 * 1000; // convert to milliseconds
+      
+      return new Date(date.getTime() + offsetDiff);
     };
 
     const startDate = getGameStartDate(game);
@@ -79,7 +86,9 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Betting closed: game already started or finished' });
     }
 
-    if (startDate && Date.now() >= startDate.getTime()) {
+    // Allow betting until 5 minutes after scheduled start time (accounts for timezone issues and late starts)
+    const BETTING_GRACE_PERIOD = 5 * 60 * 1000; // 5 minutes in milliseconds
+    if (startDate && Date.now() >= (startDate.getTime() + BETTING_GRACE_PERIOD)) {
       return res.status(400).json({ error: 'Betting closed: game already started' });
     }
 
