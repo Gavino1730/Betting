@@ -251,10 +251,22 @@ function AdminPanel() {
   const handleToggleGameVisibility = async (gameId, currentVisibility) => {
     const newVisibility = !currentVisibility;
     
+    // Optimistic update
+    setGames(prevGames => 
+      prevGames.map(g => 
+        g.id === gameId ? { ...g, is_visible: newVisibility } : g
+      )
+    );
+    
     try {
       await apiClient.put(`/games/${gameId}/visibility`, { isVisible: newVisibility });
-      fetchGames();
     } catch (err) {
+      // Revert on error
+      setGames(prevGames => 
+        prevGames.map(g => 
+          g.id === gameId ? { ...g, is_visible: currentVisibility } : g
+        )
+      );
       alert(err.response?.data?.error || 'Failed to toggle visibility');
     }
   };

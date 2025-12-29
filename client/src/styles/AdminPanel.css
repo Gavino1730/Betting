@@ -1,5 +1,41 @@
 /* AdminPanel styles are in Dashboard.css for consistency */
 
+/* Desktop Tab Navigation */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #888a9b;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: #e0e0e0;
+  background: rgba(31, 78, 153, 0.1);
+}
+
+.tab-btn.active {
+  color: #1f4e99;
+  border-bottom-color: #1f4e99;
+  font-weight: 700;
+}
+
 /* Toggle Switch */
 .toggle-switch {
   position: relative;

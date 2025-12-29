@@ -58,14 +58,30 @@ function AdminTeams() {
         timeout: 3000
       });
       if (Array.isArray(response.data) && response.data.length > 0) {
-        // Clean up ranking format for all teams
+        // Clean up ranking format and parse schedules for all teams
         const cleanedTeams = response.data.map(team => {
           let numericRanking = team.ranking;
           if (typeof numericRanking === 'string') {
             const match = numericRanking.match(/\d+/);
             numericRanking = match ? parseInt(match[0]) : numericRanking;
           }
-          return { ...team, ranking: numericRanking };
+          
+          // Parse schedule if it's a string
+          let parsedSchedule = [];
+          if (team.schedule) {
+            try {
+              parsedSchedule = typeof team.schedule === 'string' ? JSON.parse(team.schedule) : team.schedule;
+            } catch (e) {
+              console.error('Error parsing schedule for team:', team.name, e);
+              parsedSchedule = [];
+            }
+          }
+          
+          return { 
+            ...team, 
+            ranking: numericRanking,
+            schedule: parsedSchedule 
+          };
         });
         
         setTeams(cleanedTeams);
