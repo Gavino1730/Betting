@@ -202,6 +202,7 @@ function Dashboard({ user }) {
   const selectedGame = selectedGameId ? games.find(g => g.id === parseInt(selectedGameId)) : null;
   const selectedGameLocked = selectedGame ? isGameLocked(selectedGame) : false;
   const selectedGameCountdown = selectedGame ? getCountdown(buildGameStartDate(selectedGame)) : null;
+  const hasExistingBetOnSelectedGame = selectedGame ? bets.some(bet => bet.game_id === selectedGame.id) : false;
 
   const handlePlaceBet = async (e) => {
     e.preventDefault();
@@ -279,7 +280,7 @@ function Dashboard({ user }) {
       <Confetti show={showConfetti} onComplete={() => setShowConfetti(false)} />
       
       {/* Reserve space for notifications to prevent layout shift */}
-      <div style={{minHeight: winNotification || lossNotification ? 'auto' : '80px', marginBottom: '1rem'}}>
+      <div style={{minHeight: winNotification || lossNotification ? 'auto' : '0px', marginBottom: winNotification || lossNotification ? '1rem' : '0'}}>
         {winNotification && (
           <div className="win-notification">
             <span className="win-notification-emoji">🎉</span>
@@ -375,7 +376,9 @@ function Dashboard({ user }) {
                 <div className="bet-details">
                   <div className="game-info-card">
                     <div className="game-header">
-                      <span className="game-badge">{selectedGame.team_type}</span>
+                      <span className={`game-badge ${selectedGame.team_type?.toLowerCase().includes('boys') ? 'boys' : selectedGame.team_type?.toLowerCase().includes('girls') ? 'girls' : ''}`}>
+                        {selectedGame.team_type?.toLowerCase().includes('boys') ? '🏀 ' : selectedGame.team_type?.toLowerCase().includes('girls') ? '🏀 ' : ''}{selectedGame.team_type}
+                      </span>
                       <span className="game-date">{parseLocalDateOnly(selectedGame.game_date)?.toLocaleDateString() || 'Date TBD'} • {formatTime(selectedGame.game_time)}</span>
                     </div>
                     {selectedGameCountdown && (
@@ -488,17 +491,29 @@ function Dashboard({ user }) {
                     </div>
                   </div>
 
-                  {confidence && amount && parseFloat(amount) > 0 && balance > 0 && (
-                    <div className="potential-win-card">
-                      <div className="potential-label">Potential Payout</div>
-                      <div className="potential-amount">{formatCurrency(parseFloat(amount) * confidenceMultipliers[confidence])}</div>
-                      <div className="potential-profit">Profit: {formatCurrency(parseFloat(amount) * (confidenceMultipliers[confidence] - 1))}</div>
+                  {hasExistingBetOnSelectedGame ? (
+                    <div style={{padding: '12px', background: 'rgba(102, 187, 106, 0.15)', border: '1px solid rgba(102, 187, 106, 0.4)', borderRadius: '8px', textAlign: 'center', color: '#66bb6a', fontWeight: 'bold', marginTop: '1rem'}}>
+                      ✓ Bet Already Placed
                     </div>
-                  )}
+                  ) : selectedGameLocked ? (
+                    <div style={{padding: '12px', background: 'rgba(239, 83, 80, 0.15)', border: '1px solid rgba(239, 83, 80, 0.4)', borderRadius: '8px', textAlign: 'center', color: '#ef5350', fontWeight: 'bold', marginTop: '1rem'}}>
+                      🔒 Betting Closed
+                    </div>
+                  ) : (
+                    <>
+                      {confidence && amount && parseFloat(amount) > 0 && balance > 0 && (
+                        <div className="potential-win-card">
+                          <div className="potential-label">Potential Payout</div>
+                          <div className="potential-amount">{formatCurrency(parseFloat(amount) * confidenceMultipliers[confidence])}</div>
+                          <div className="potential-profit">Profit: {formatCurrency(parseFloat(amount) * (confidenceMultipliers[confidence] - 1))}</div>
+                        </div>
+                      )}
 
-                  <button type="submit" className="btn btn-bet" disabled={loading || !selectedTeam || !confidence || !amount || parseFloat(amount) <= 0 || selectedGameLocked || balance <= 0}>
-                    {loading ? '⏳ Processing...' : '🎯 Place Pick'}
-                  </button>
+                      <button type="submit" className="btn btn-bet" disabled={loading || !selectedTeam || !confidence || !amount || parseFloat(amount) <= 0 || balance <= 0}>
+                        {loading ? '⏳ Processing...' : '🎯 Place Pick'}
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </form>
@@ -520,7 +535,9 @@ function Dashboard({ user }) {
                       <span>{game.away_team}</span>
                     </div>
                     <div className="game-meta">
-                      <span className="game-type-badge">{game.team_type?.replace(' Basketball', '')}</span>
+                      <span className={`game-type-badge ${game.team_type?.toLowerCase().includes('boys') ? 'boys' : game.team_type?.toLowerCase().includes('girls') ? 'girls' : ''}`}>
+                        {game.team_type?.toLowerCase().includes('boys') ? '🏀 ' : game.team_type?.toLowerCase().includes('girls') ? '🏀 ' : ''}{game.team_type?.replace(' Basketball', '')}
+                      </span>
                       <span>{parseLocalDateOnly(game.game_date)?.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || 'TBD'}</span>
                     </div>
                   </div>

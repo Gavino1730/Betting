@@ -321,7 +321,9 @@ function Games() {
                   <div key={`prop-${prop.id}`} className="prop-card">
                     <div className="prop-header">
                       <h3>{prop.title}</h3>
-                      <span className="prop-category">{prop.team_type}</span>
+                      <span className={`prop-category ${prop.team_type?.toLowerCase().includes('boys') ? 'boys' : prop.team_type?.toLowerCase().includes('girls') ? 'girls' : ''}`}>
+                        {prop.team_type?.toLowerCase().includes('boys') ? '🏀 ' : prop.team_type?.toLowerCase().includes('girls') ? '🏀 ' : ''}{prop.team_type}
+                      </span>
                     </div>
                     
                     {prop.description && (
@@ -447,7 +449,9 @@ function Games() {
                     return (
                   <div key={game.id} className="game-card-display">
                     <div className="game-header">
-                      <span className="game-sport">{game.team_type}</span>
+                      <span className={`game-sport ${game.team_type?.toLowerCase().includes('boys') ? 'boys' : game.team_type?.toLowerCase().includes('girls') ? 'girls' : ''}`}>
+                        {game.team_type?.toLowerCase().includes('boys') ? '🏀 ' : game.team_type?.toLowerCase().includes('girls') ? '🏀 ' : ''}{game.team_type}
+                      </span>
                       <span className="game-status">{game.status}</span>
                     </div>
                     
@@ -549,6 +553,10 @@ function Games() {
                         <div style={{padding: '12px', background: 'rgba(102, 187, 106, 0.15)', border: '1px solid rgba(102, 187, 106, 0.4)', borderRadius: '8px', textAlign: 'center', color: '#66bb6a', fontWeight: 'bold'}}>
                           ✓ Bet Already Placed
                         </div>
+                      ) : gameLocked ? (
+                        <div style={{padding: '12px', background: 'rgba(239, 83, 80, 0.15)', border: '1px solid rgba(239, 83, 80, 0.4)', borderRadius: '8px', textAlign: 'center', color: '#ef5350', fontWeight: 'bold'}}>
+                          🔒 Betting Closed
+                        </div>
                       ) : (
                         <>
                           <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
@@ -577,7 +585,7 @@ function Games() {
                         </>
                       )}
 
-                      {selectedConfidence[game.id] && betAmounts[game.id] && (
+                      {selectedConfidence[game.id] && betAmounts[game.id] && !gameLocked && !hasExistingBet(game.id) && (
                         <div style={{marginTop: '10px', textAlign: 'center', color: '#1f4e99', fontWeight: 'bold'}}>
                           Potential Win: {formatCurrency(parseFloat(betAmounts[game.id]) * confidenceMultipliers[selectedConfidence[game.id]])}
                         </div>

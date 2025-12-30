@@ -125,6 +125,18 @@
   white-space: nowrap;
 }
 
+.game-sport.boys {
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  box-shadow: 0 3px 10px rgba(30, 136, 229, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.game-sport.girls {
+  background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+  box-shadow: 0 3px 10px rgba(233, 30, 99, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
 .game-status {
   color: #66bb6a;
   font-size: 0.85rem;
@@ -538,6 +550,18 @@
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
+}
+
+.prop-category.boys {
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  box-shadow: 0 2px 8px rgba(30, 136, 229, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.prop-category.girls {
+  background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+  box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
 }
 
 .prop-description {

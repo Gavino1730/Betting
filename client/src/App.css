@@ -29,8 +29,8 @@ body {
   background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
   color: white;
   padding: 1rem 2rem;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  justify-content: center;
   align-items: center;
   box-shadow: 0 8px 32px rgba(13, 71, 161, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3);
   gap: 1.5rem;
@@ -50,6 +50,8 @@ body {
   gap: 0.75rem;
   letter-spacing: -0.5px;
   flex-shrink: 0;
+  position: absolute;
+  left: 2rem;
 }
 
 .nav-brand span {
@@ -77,6 +79,8 @@ body {
   align-items: center;
   justify-content: flex-end;
   flex-wrap: nowrap;
+  position: absolute;
+  right: 2rem;
 }
 
 .nav-center button,
@@ -675,6 +679,7 @@ table tbody tr:hover {
   .navbar {
     padding: 1rem 1rem;
     gap: 1rem;
+    display: grid;
     grid-template-columns: auto 1fr auto;
     justify-items: stretch;
     position: -webkit-sticky;
@@ -688,6 +693,8 @@ table tbody tr:hover {
     font-size: 1.1rem;
     gap: 0.75rem;
     flex-shrink: 0;
+    position: static;
+    left: auto;
   }
 
   .logo-img {
@@ -698,6 +705,8 @@ table tbody tr:hover {
   .nav-center,
   .nav-right {
     display: none;
+    position: static;
+    right: auto;
   }
 
   /* Show mobile menu toggle */
