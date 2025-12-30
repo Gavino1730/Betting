@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import apiClient from '../utils/axios';
 import '../styles/Dashboard.css';
 import '../styles/Confetti.css';
@@ -30,6 +30,7 @@ function Dashboard({ user }) {
     totalWinnings: 0
   });
   const [now, setNow] = useState(Date.now());
+  const messageRef = useRef(null);
 
   const confidenceMultipliers = {
     low: 1.2,
@@ -249,10 +250,19 @@ function Dashboard({ user }) {
       setConfidence('');
       setAmount('');
       
+      // Scroll to message
+      setTimeout(() => {
+        messageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+      
       // Refresh bets to update stats
       fetchBets();
     } catch (err) {
       setMessage(err.response?.data?.error || 'Error placing pick');
+      // Scroll to message on error too
+      setTimeout(() => {
+        messageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
     } finally {
       setLoading(false);
     }
@@ -340,7 +350,7 @@ function Dashboard({ user }) {
         <div className="card bet-card">
           <h3>🎲 Place a Pick</h3>
           {message && (
-            <div className={`alert ${message.includes('Error') || message.includes('error') || message.includes('Insufficient') ? 'alert-error' : 'alert-success'}`}>
+            <div ref={messageRef} className={`alert ${message.includes('Error') || message.includes('error') || message.includes('Insufficient') ? 'alert-error' : 'alert-success'}`}>
               {message}
             </div>
           )}

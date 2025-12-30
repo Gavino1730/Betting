@@ -781,27 +781,37 @@
 
 /* Alerts */
 .alert {
-  padding: 1rem 1.2rem;
-  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  border-radius: 10px;
   margin-bottom: 1.5rem;
-  font-weight: 500;
-  animation: slideDown 0.3s ease;
-  min-height: 2.5rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  animation: slideDown 0.3s ease, pulse 0.5s ease;
+  min-height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
 .alert-success {
-  background: rgba(102, 187, 106, 0.15);
-  border: 1px solid rgba(102, 187, 106, 0.3);
+  background: rgba(102, 187, 106, 0.2);
+  border: 2px solid #66bb6a;
   color: #66bb6a;
+  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
 }
 
 .alert-error {
-  background: rgba(239, 83, 80, 0.15);
-  border: 1px solid rgba(239, 83, 80, 0.3);
+  background: rgba(239, 83, 80, 0.2);
+  border: 2px solid #ef5350;
   color: #ef5350;
+  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.3);
 }
 
 /* Form Groups */
