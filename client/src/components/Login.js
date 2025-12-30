@@ -155,9 +155,9 @@ function Login({ onLogin, apiUrl }) {
         <div className="info-section">
           <div className="info-card">
             <div className="info-icon">🎮</div>
-            <h3>Virtual Betting, Real Excitement</h3>
+            <h3>Virtual Picks, Real Excitement</h3>
             <p>
-              Place bets on Valiant Academy basketball games using virtual <strong>Valiant Bucks</strong> – no real money involved!
+              Make predictions on Valiant Academy basketball games using virtual <strong>Valiant Bucks</strong> – no real money involved!
             </p>
           </div>
           <div className="info-features">
