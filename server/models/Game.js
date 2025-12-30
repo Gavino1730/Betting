@@ -38,7 +38,7 @@ const Game = {
           over_odds: overOdds,
           under_odds: underOdds,
           notes,
-          team_id: teamId || 'boys'
+          team_id: teamId || null
         }])
         .select()
         .single();
