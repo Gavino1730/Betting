@@ -20,8 +20,6 @@ body {
   flex-direction: column;
   background: linear-gradient(180deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
   scrollbar-gutter: stable;
-  overflow-x: hidden;
-  overflow-y: auto;
   width: 100%;
   position: relative;
 }
