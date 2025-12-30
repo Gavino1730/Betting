@@ -12,6 +12,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #e0e0e0;
   background-color: #0f1419;
+  margin: 0;
+  overflow-x: hidden; /* prevent horizontal scroll on small phones */
 }
 
 .app {
@@ -703,6 +705,25 @@ table tbody tr:hover {
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 1400px) and (min-width: 1101px) {
+  .nav-center {
+    padding: 0 5rem;
+  }
+
+  .nav-right {
+    gap: 0.45rem;
+  }
+
+  /* Make balance pill more compact so it doesn't crowd nav */
+  .balance-display {
+    padding: 0.45rem 0.75rem;
+  }
+
+  .balance-label {
+    display: none;
+  }
+}
+
 @media (max-width: 1100px) and (min-width: 769px) {
   .navbar {
     padding: 0.9rem 1.25rem;
