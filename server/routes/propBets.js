@@ -45,7 +45,7 @@ router.post('/', authenticateToken, async (req, res) => {
   // Support both old format (yesOdds/noOdds) and new format (options/optionOdds)
   let finalYesOdds, finalNoOdds, finalOptionOdds;
   
-  if (options && optionOdds) {
+  if (options && options.length >= 2 && optionOdds) {
     // New format: custom options
     finalOptionOdds = optionOdds;
     // Extract yes/no odds for backward compatibility
@@ -67,6 +67,7 @@ router.post('/', authenticateToken, async (req, res) => {
       teamType: teamType || 'General',
       yesOdds: finalYesOdds,
       noOdds: finalNoOdds,
+      options,
       optionOdds: finalOptionOdds,
       expiresAt
     });

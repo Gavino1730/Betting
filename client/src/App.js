@@ -237,13 +237,6 @@ function App() {
             onClick={() => handlePageChange('notifications')} 
             className={page === 'notifications' ? 'active' : ''}
           >
-            <span className="menu-icon">🏆</span>
-            Leaderboard
-          </button>
-          <button 
-            onClick={() => handlePageChange('notifications')} 
-            className={page === 'notifications' ? 'active' : ''}
-          >
             <span className="menu-icon">🔔</span>
             Notifications
             {unreadCount > 0 && (

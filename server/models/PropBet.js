@@ -15,9 +15,14 @@ const PropBet = {
         noOdds
       } = propBetData;
 
-      // Always use yes/no format for database storage
-      const finalYesOdds = yesOdds ? parseFloat(yesOdds) : (optionOdds['Yes'] ? parseFloat(optionOdds['Yes']) : 1.5);
-      const finalNoOdds = noOdds ? parseFloat(noOdds) : (optionOdds['No'] ? parseFloat(optionOdds['No']) : 1.5);
+      // Always keep yes/no columns for backward compatibility,
+      // but also persist custom options + odds when provided.
+      const finalYesOdds = yesOdds
+        ? parseFloat(yesOdds)
+        : (optionOdds['Yes'] ? parseFloat(optionOdds['Yes']) : 1.5);
+      const finalNoOdds = noOdds
+        ? parseFloat(noOdds)
+        : (optionOdds['No'] ? parseFloat(optionOdds['No']) : 1.5);
 
       const { data, error } = await supabase
         .from('prop_bets')
@@ -27,6 +32,10 @@ const PropBet = {
           team_type: teamType,
           yes_odds: finalYesOdds,
           no_odds: finalNoOdds,
+          // These JSON columns are used by the frontend to render
+          // custom options instead of default YES/NO.
+          options: options && options.length ? options : null,
+          option_odds: optionOdds && Object.keys(optionOdds).length ? optionOdds : null,
           expires_at: expiresAt,
           status: 'active'
         }])

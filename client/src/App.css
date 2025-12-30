@@ -706,12 +706,26 @@ table tbody tr:hover {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1400px) and (min-width: 1101px) {
+  .navbar {
+    padding: 0.9rem 1.5rem;
+  }
+
+  /* Shift center menu slightly left and tighten spacing */
   .nav-center {
-    padding: 0 5rem;
+    padding: 0 4rem;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  .nav-center button,
+  .nav-right button {
+    padding: 0.5rem 0.95rem;
+    font-size: 0.85rem;
   }
 
   .nav-right {
     gap: 0.45rem;
+    right: 1.5rem;
   }
 
   /* Make balance pill more compact so it doesn't crowd nav */
