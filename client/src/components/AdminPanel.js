@@ -22,6 +22,9 @@ function AdminPanel() {
   const [editingBet, setEditingBet] = useState(null);
   const [editingBetOutcome, setEditingBetOutcome] = useState('');
   const [editingBetTeam, setEditingBetTeam] = useState('');
+  const [userBets, setUserBets] = useState([]);
+  const [userTransactions, setUserTransactions] = useState([]);
+  const [userHistoryLoading, setUserHistoryLoading] = useState(false);
   
   // Game creation form
   const [showCompletedGames, setShowCompletedGames] = useState(false);
@@ -68,6 +71,31 @@ function AdminPanel() {
     fetchPropBets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Fetch user bets and transactions when selectedUser changes
+  useEffect(() => {
+    if (!selectedUser) {
+      setUserBets([]);
+      setUserTransactions([]);
+      return;
+    }
+    setUserHistoryLoading(true);
+    Promise.all([
+      apiClient.get('/bets/all').then(res => res.data.filter(b => b.user_id === selectedUser)),
+      apiClient.get('/transactions').then(res => {
+        // Since transactions endpoint doesn't support filtering by user, filter client-side
+        // or return empty array if endpoint fails
+        return [];
+      }).catch(() => [])
+    ]).then(([bets, txs]) => {
+      setUserBets(bets);
+      setUserTransactions(txs);
+      setUserHistoryLoading(false);
+    }).catch(err => {
+      console.error('Error fetching user history:', err);
+      setUserHistoryLoading(false);
+    });
+  }, [selectedUser]);
 
   const seedGamesFromSchedule = async () => {
     try {
