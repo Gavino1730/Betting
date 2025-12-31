@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-  const [userBets, setUserBets] = useState([]);
-  const [userTransactions, setUserTransactions] = useState([]);
-  const [userHistoryLoading, setUserHistoryLoading] = useState(false);
 import apiClient from '../utils/axios';
 import AdminTeams from './AdminTeams';
 import '../styles/AdminPanel.css';
