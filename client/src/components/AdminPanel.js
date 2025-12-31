@@ -1751,21 +1751,6 @@ function AdminPanel() {
               </div>
             </div>
           )}
-          // Fetch user bets and transactions when selectedUser changes
-          useEffect(() => {
-            if (!selectedUser) return;
-            setUserHistoryLoading(true);
-            Promise.all([
-              apiClient.get('/bets/all').then(res => res.data.filter(b => b.user_id === selectedUser)),
-              apiClient.get('/transactions', { params: { userId: selectedUser } })
-                .then(res => Array.isArray(res.data) ? res.data : [])
-                .catch(() => [])
-            ]).then(([bets, txs]) => {
-              setUserBets(bets);
-              setUserTransactions(txs);
-              setUserHistoryLoading(false);
-            });
-          }, [selectedUser]);
         </div>
       )}
 
