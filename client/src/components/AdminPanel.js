@@ -905,8 +905,8 @@ function AdminPanel() {
                     {game.result && <p style={{margin: '5px 0', color: '#66bb6a'}}><strong>Winner:</strong> {game.result}</p>}
                   </div>
                   
-                  <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
-                    <label className="toggle-switch">
+                  <div style={{display: 'flex', gap: '8px', alignItems: 'center', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
+                    <label className="toggle-switch" style={{marginRight: 'auto'}}>
                       <input 
                         type="checkbox" 
                         checked={game.is_visible !== false}
@@ -916,17 +916,17 @@ function AdminPanel() {
                     </label>
                     <button 
                       className="btn" 
-                      style={{background: '#1e88e5', padding: '8px 14px', fontSize: '0.85em', flex: '1'}}
+                      style={{background: '#1e88e5', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
                       onClick={() => handleEditGame(game)}
                     >
                       ✏️ Edit
                     </button>
                       <button 
                         className="btn" 
-                        style={{background: '#9c27b0', padding: '8px 14px', fontSize: '0.85em', flex: '1'}}
+                        style={{background: '#9c27b0', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
                         onClick={() => handleOpenGameStatus(game)}
                       >
-                        ⚙️ Set Outcome
+                        ⚙️ Outcome
                       </button>
                     </div>
                 </div>
@@ -1020,8 +1020,8 @@ function AdminPanel() {
                         {game.result && <p style={{margin: '5px 0', color: '#66bb6a', fontWeight: '600'}}><strong>🏆 Winner:</strong> {game.result}</p>}
                       </div>
                       
-                      <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
-                        <label className="toggle-switch">
+                      <div style={{display: 'flex', gap: '8px', alignItems: 'center', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
+                        <label className="toggle-switch" style={{marginRight: 'auto'}}>
                           <input 
                             type="checkbox" 
                             checked={game.is_visible !== false}
@@ -1031,14 +1031,14 @@ function AdminPanel() {
                         </label>
                         <button 
                           className="btn" 
-                          style={{background: '#1e88e5', padding: '8px 14px', fontSize: '0.85em', flex: '1'}}
+                          style={{background: '#1e88e5', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
                           onClick={() => handleEditGame(game)}
                         >
                           ✏️ Edit
                         </button>
                         <button 
                           className="btn" 
-                          style={{background: '#757575', padding: '8px 14px', fontSize: '0.85em', flex: '1'}}
+                          style={{background: '#757575', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
                           onClick={() => handleDeleteGame(game.id)}
                         >
                           🗑️ Delete
@@ -1555,7 +1555,7 @@ function AdminPanel() {
                       <td>
                         <button 
                           className="btn"
-                          style={{background: '#1e88e5', padding: '10px 16px', fontSize: '0.9em', marginRight: '8px', minWidth: '110px'}}
+                          style={{background: '#1e88e5', padding: '6px 10px', fontSize: '0.8em', marginRight: '6px', whiteSpace: 'nowrap'}}
                           onClick={() => {
                             setSelectedUser(u.id);
                             setNewBalance(u.balance.toString());
@@ -1565,7 +1565,7 @@ function AdminPanel() {
                         </button>
                         <button 
                           className="btn"
-                          style={{background: '#9c27b0', padding: '10px 16px', fontSize: '0.9em', minWidth: '110px'}}
+                          style={{background: '#9c27b0', padding: '6px 10px', fontSize: '0.8em', whiteSpace: 'nowrap'}}
                           onClick={() => {
                             setSelectedUser(u.id);
                           }}
@@ -1633,7 +1633,7 @@ function AdminPanel() {
                   <div className="user-card-actions">
                     <button 
                       className="btn"
-                      style={{background: '#1e88e5'}}
+                      style={{background: '#1e88e5', flex: '1'}}
                       onClick={() => {
                         setSelectedUser(u.id);
                         setNewBalance(u.balance.toString());
@@ -1643,7 +1643,7 @@ function AdminPanel() {
                     </button>
                     <button 
                       className="btn"
-                      style={{background: '#9c27b0'}}
+                      style={{background: '#9c27b0', flex: '1'}}
                       onClick={() => {
                         setSelectedUser(u.id);
                       }}
