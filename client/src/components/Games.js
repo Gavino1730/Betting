@@ -530,7 +530,7 @@ function Games() {
                     )}
 
                     <div className="betting-section">
-                      <div className="team-selection" style={{display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'center', flexWrap: 'wrap'}}>
+                      <div className="team-selection" style={{display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', width: '100%'}}>
                         <button
                           type="button"
                           className={`team-btn ${selectedTeams[game.id] === game.home_team ? 'active' : ''}`}
