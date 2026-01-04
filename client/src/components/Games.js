@@ -530,11 +530,11 @@ function Games() {
                     )}
 
                     <div className="betting-section">
-                      <div className="team-selection" style={{marginBottom: '15px'}}>
+                      <div className="team-selection" style={{display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'center'}}>
                         <button
                           type="button"
                           className={`team-btn ${selectedTeams[game.id] === game.home_team ? 'active' : ''}`}
-                          style={{flex: 1, padding: '10px', background: selectedTeams[game.id] === game.home_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s'}}
+                          style={{flex: 1, minWidth: '140px', maxWidth: '200px', padding: '12px', background: selectedTeams[game.id] === game.home_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', fontWeight: '600', fontSize: '1em', textAlign: 'center'}}
                           onClick={() => setSelectedTeams({...selectedTeams, [game.id]: game.home_team})}
                         >
                           {game.home_team}
@@ -543,7 +543,7 @@ function Games() {
                           <button
                             type="button"
                             className={`team-btn ${selectedTeams[game.id] === game.away_team ? 'active' : ''}`}
-                            style={{flex: 1, padding: '10px', background: selectedTeams[game.id] === game.away_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', marginLeft: '10px'}}
+                            style={{flex: 1, minWidth: '140px', maxWidth: '200px', padding: '12px', background: selectedTeams[game.id] === game.away_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', fontWeight: '600', fontSize: '1em', textAlign: 'center'}}
                             onClick={() => setSelectedTeams({...selectedTeams, [game.id]: game.away_team})}
                           >
                             {game.away_team}
@@ -551,38 +551,38 @@ function Games() {
                         )}
                       </div>
 
-                      <div className="confidence-options" style={{marginBottom: '15px', display: 'flex', gap: '8px'}}>
+                      <div className="confidence-options" style={{display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'center'}}>
                         <Tooltip text="Safest bet - 1.2x return" position="top">
                           <button
                             type="button"
                             className={`confidence-btn ${selectedConfidence[game.id] === 'low' ? 'active' : ''}`}
-                            style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'low' ? '#66bb6a' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                            style={{flex: 1, minWidth: '110px', maxWidth: '150px', padding: '10px 8px', background: selectedConfidence[game.id] === 'low' ? '#66bb6a' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontWeight: '600', minHeight: '56px'}}
                             onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'low'})}
                           >
-                            <div>Low</div>
-                            <div style={{fontSize: '0.85em'}}>1.2x</div>
+                            <div style={{lineHeight: '1.2'}}>Low</div>
+                            <div style={{fontSize: '0.85em', marginTop: '2px'}}>1.2x</div>
                           </button>
                         </Tooltip>
                         <Tooltip text="Balanced risk & reward - 1.5x return" position="top">
                           <button
                             type="button"
                             className={`confidence-btn ${selectedConfidence[game.id] === 'medium' ? 'active' : ''}`}
-                            style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'medium' ? '#ff9800' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                            style={{flex: 1, minWidth: '110px', maxWidth: '150px', padding: '10px 8px', background: selectedConfidence[game.id] === 'medium' ? '#ff9800' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontWeight: '600', minHeight: '56px'}}
                             onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'medium'})}
                           >
-                            <div>Medium</div>
-                            <div style={{fontSize: '0.85em'}}>1.5x</div>
+                            <div style={{lineHeight: '1.2'}}>Medium</div>
+                            <div style={{fontSize: '0.85em', marginTop: '2px'}}>1.5x</div>
                           </button>
                         </Tooltip>
                         <Tooltip text="Risky but rewarding - 2.0x return" position="top">
                           <button
                             type="button"
                             className={`confidence-btn ${selectedConfidence[game.id] === 'high' ? 'active' : ''}`}
-                            style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'high' ? '#ef5350' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                            style={{flex: 1, minWidth: '110px', maxWidth: '150px', padding: '10px 8px', background: selectedConfidence[game.id] === 'high' ? '#ef5350' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontWeight: '600', minHeight: '56px'}}
                             onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'high'})}
                           >
-                            <div>High</div>
-                            <div style={{fontSize: '0.85em'}}>2.0x</div>
+                            <div style={{lineHeight: '1.2'}}>High</div>
+                            <div style={{fontSize: '0.85em', marginTop: '2px'}}>2.0x</div>
                           </button>
                         </Tooltip>
                       </div>
