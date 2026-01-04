@@ -88,7 +88,7 @@ class User {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, username, balance, is_admin, created_at')
+        .select('id, username, email, balance, is_admin, created_at')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
