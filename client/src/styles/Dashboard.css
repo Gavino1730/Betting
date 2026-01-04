@@ -488,9 +488,6 @@
 }
 
 .team-selection .team-btn {
-  background: linear-gradient(135deg, #1e2139 0%, #161b2e 100%);
-  border: 2px solid rgba(41, 182, 246, 0.25);
-  color: white;
   padding: 1.2rem;
   border-radius: 12px;
   cursor: pointer;
@@ -500,19 +497,45 @@
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
+  color: white;
+  border: 2px solid;
 }
 
-.team-selection .team-btn:hover {
-  border-color: rgba(41, 182, 246, 0.6);
+/* Home Team Button */
+.team-selection .team-btn:first-child {
+  background: linear-gradient(135deg, #1b4d2e 0%, #0f2818 100%);
+  border-color: rgba(129, 199, 132, 0.4);
+}
+
+.team-selection .team-btn:first-child:hover {
+  border-color: rgba(129, 199, 132, 0.7);
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.team-selection .team-btn.active {
-  background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
-  border-color: #29b6f6;
-  color: #ffffff;
-  box-shadow: 0 8px 24px rgba(33, 150, 243, 0.4);
+.team-selection .team-btn:first-child.active {
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  border-color: #81c784;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Away Team Button */
+.team-selection .team-btn:last-child {
+  background: linear-gradient(135deg, #4a2c42 0%, #2d1b3d 100%);
+  border-color: rgba(206, 147, 216, 0.4);
+}
+
+.team-selection .team-btn:last-child:hover {
+  border-color: rgba(206, 147, 216, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.team-selection .team-btn:last-child.active {
+  background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+  border-color: #ce93d8;
+  box-shadow: 0 8px 24px rgba(186, 104, 200, 0.4);
   transform: translateY(-2px);
 }
 
