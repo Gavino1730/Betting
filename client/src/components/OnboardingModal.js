@@ -25,7 +25,17 @@ function OnboardingModal() {
         <button className="onboarding-close" onClick={handleClose}>✕</button>
 
         <div className="onboarding-header">
-          <h1>🎯 Welcome to Valiant Picks!</h1>
+          <div className="onboarding-header-brand">
+            <img 
+              src="/assets/transparent.png" 
+              alt="Valiant Picks" 
+              className="onboarding-logo"
+              width="40"
+              height="40"
+            />
+            <span className="onboarding-brand-text">Valiant Picks</span>
+          </div>
+          <h1>🎯 Welcome!</h1>
           <p>Learn the basics before you start playing</p>
         </div>
 

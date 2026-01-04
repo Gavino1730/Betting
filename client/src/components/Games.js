@@ -530,11 +530,11 @@ function Games() {
                     )}
 
                     <div className="betting-section">
-                      <div className="team-selection" style={{display: 'flex', gap: '10px', marginBottom: '15px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', width: '100%'}}>
+                      <div className="team-selection" style={{display: 'flex', gap: '10px', marginBottom: '15px', width: '100%'}}>
                         <button
                           type="button"
                           className={`team-btn ${selectedTeams[game.id] === game.home_team ? 'active' : ''}`}
-                          style={{minWidth: '140px', maxWidth: '200px', padding: '12px', background: selectedTeams[game.id] === game.home_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', fontWeight: '600', fontSize: '1em', textAlign: 'center'}}
+                          style={{flex: 1, padding: '12px', background: selectedTeams[game.id] === game.home_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', fontWeight: '600', fontSize: '1em', textAlign: 'center'}}
                           onClick={() => setSelectedTeams({...selectedTeams, [game.id]: game.home_team})}
                         >
                           {game.home_team}
@@ -543,7 +543,7 @@ function Games() {
                           <button
                             type="button"
                             className={`team-btn ${selectedTeams[game.id] === game.away_team ? 'active' : ''}`}
-                            style={{minWidth: '140px', maxWidth: '200px', padding: '12px', background: selectedTeams[game.id] === game.away_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', fontWeight: '600', fontSize: '1em', textAlign: 'center'}}
+                            style={{flex: 1, padding: '12px', background: selectedTeams[game.id] === game.away_team ? '#1e88e5' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', transition: 'all 0.3s', fontWeight: '600', fontSize: '1em', textAlign: 'center'}}
                             onClick={() => setSelectedTeams({...selectedTeams, [game.id]: game.away_team})}
                           >
                             {game.away_team}
