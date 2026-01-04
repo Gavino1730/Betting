@@ -6,12 +6,12 @@
 }
 
 .teams-page h1 {
-  color: #1f4e99;
+  color: #ffffff;
   margin-bottom: 30px;
   text-align: center;
   font-size: 2.2rem;
   font-weight: 800;
-  text-shadow: 0 2px 4px rgba(0, 79, 158, 0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .tabs {
@@ -27,25 +27,28 @@
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
-  color: #b8c5d6;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   border-radius: 8px 8px 0 0;
   position: relative;
+  opacity: 0.7;
 }
 
 .tab-button:hover {
-  color: #1f4e99;
-  background: rgba(31, 78, 153, 0.1);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
+  opacity: 1;
 }
 
 .tab-button.active {
-  color: #1f4e99;
-  border-bottom-color: #1f4e99;
-  background: linear-gradient(135deg, rgba(31, 78, 153, 0.15) 0%, rgba(31, 78, 153, 0.05) 100%);
+  color: #ffffff;
+  border-bottom-color: #ffffff;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 1;
 }
 
 .team-section {
@@ -76,7 +79,7 @@
 }
 
 .team-header h2 {
-  color: #1f4e99;
+  color: #ffffff;
   margin: 0 0 15px 0;
   font-size: 1.8rem;
   font-weight: 800;
@@ -96,7 +99,7 @@
 .stat .label {
   font-size: 12px;
   font-weight: 600;
-  color: #888a9b;
+  color: #e0e0e0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -104,7 +107,7 @@
 .stat .value {
   font-size: 20px;
   font-weight: bold;
-  color: #1f4e99;
+  color: #ffffff;
 }
 
 .coaching-staff {
@@ -117,7 +120,7 @@
 }
 
 .coaching-staff h3 {
-  color: #1f4e99;
+  color: #ffffff;
   margin-top: 0;
   margin-bottom: 15px;
   font-weight: 700;
@@ -137,7 +140,7 @@
 }
 
 .coach strong {
-  color: #1f4e99;
+  color: #ffffff;
   font-size: 16px;
   display: block;
   margin-bottom: 4px;
@@ -145,7 +148,7 @@
 }
 
 .coach p {
-  color: #b8c5d6;
+  color: #e0e0e0;
   margin: 0;
   font-size: 14px;
   font-weight: 600;
@@ -154,7 +157,7 @@
 }
 
 .coach-bio {
-  color: #b8c5d6;
+  color: #e0e0e0;
   line-height: 1.6;
   font-size: 14px;
   margin: 0;
@@ -170,7 +173,7 @@
 }
 
 .team-description h3 {
-  color: #1f4e99;
+  color: #ffffff;
   margin-top: 0;
   margin-bottom: 12px;
   font-weight: 700;
@@ -179,15 +182,15 @@
 
 .team-description p {
   line-height: 1.6;
-  color: #b8c5d6;
+  color: #e0e0e0;
   margin: 0;
 }
 
 .team-motto {
   margin-top: 15px;
   padding-top: 15px;
-  border-top: 1px solid rgba(31, 78, 153, 0.2);
-  color: #1f4e99;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -196,7 +199,7 @@
 }
 
 .schedule-section h3 {
-  color: #1f4e99;
+  color: #ffffff;
   margin-bottom: 15px;
   font-weight: 700;
   font-size: 1.2rem;
@@ -215,8 +218,8 @@
   display: grid;
   grid-template-columns: 70px 100px 100px 100px 100px 1fr 80px;
   gap: 15px;
-  background: linear-gradient(135deg, rgba(31, 78, 153, 0.2) 0%, rgba(31, 78, 153, 0.1) 100%);
-  color: #1f4e99;
+  background: linear-gradient(135deg, rgba(31, 78, 153, 0.3) 0%, rgba(31, 78, 153, 0.2) 100%);
+  color: #ffffff;
   padding: 12px 15px;
   font-weight: 600;
   font-size: 13px;
@@ -228,7 +231,7 @@
   gap: 15px;
   padding: 12px 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: #b8c5d6;
+  color: #ffffff;
   align-items: center;
   font-size: 13px;
   transition: all 0.2s ease;
@@ -259,11 +262,11 @@
 
 .schedule-row .result {
   font-weight: 600;
-  color: #1f4e99;
+  color: #ffffff;
 }
 
 .roster-section h3 {
-  color: #1f4e99;
+  color: #ffffff;
   margin-bottom: 20px;
   font-weight: 700;
   font-size: 1.2rem;
@@ -314,7 +317,7 @@
 
 .player-name {
   font-size: 18px;
-  color: #1f4e99;
+  color: #ffffff;
   flex: 1;
   font-weight: 700;
 }
@@ -322,7 +325,7 @@
 .player-position,
 .player-grade,
 .player-height {
-  color: #888a9b;
+  color: #e0e0e0;
   font-size: 13px;
   font-weight: normal;
 }
@@ -340,7 +343,7 @@
 }
 
 .player-bio {
-  color: #b8c5d6;
+  color: #e0e0e0;
   font-size: 14px;
   line-height: 1.6;
   margin: 0;
