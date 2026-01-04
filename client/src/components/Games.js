@@ -3,6 +3,8 @@ import apiClient from '../utils/axios';
 import '../styles/Games.css';
 import { formatCurrency } from '../utils/currency';
 import { formatTime } from '../utils/time';
+import Tooltip from './Tooltip';
+import BetConfirmation from './BetConfirmation';
 
 function Games() {
   const [games, setGames] = useState([]);
@@ -18,6 +20,8 @@ function Games() {
   const [now, setNow] = useState(Date.now());
   const [userBets, setUserBets] = useState([]);
   const [betSuccess, setBetSuccess] = useState({});
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [pendingBet, setPendingBet] = useState(null);
 
   const confidenceMultipliers = {
     low: 1.2,
@@ -188,14 +192,14 @@ function Games() {
     }));
   };
 
-  const handlePlaceGameBet = async (gameId, isLocked) => {
+  const handlePlaceGameBet = (gameId, isLocked) => {
     if (isLocked) {
-      setMessage('Betting closed for this game');
+      setMessage('Picking closed for this game');
       return;
     }
 
     if (hasExistingBet(gameId)) {
-      setMessage('You have already placed a bet on this game');
+      setMessage('You have already placed a pick on this game');
       return;
     }
 
@@ -213,29 +217,47 @@ function Games() {
       return;
     }
 
+    // Show confirmation modal instead of placing immediately
+    setPendingBet({
+      gameId,
+      team,
+      confidence,
+      amount,
+      odds: confidenceMultipliers[confidence]
+    });
+    setConfirmationOpen(true);
+  };
+
+  const handleConfirmBet = async () => {
+    if (!pendingBet) return;
+
     try {
       await apiClient.post('/bets', {
-        gameId,
-        selectedTeam: team,
-        confidence,
-        amount,
-        odds: confidenceMultipliers[confidence]
+        gameId: pendingBet.gameId,
+        selectedTeam: pendingBet.team,
+        confidence: pendingBet.confidence,
+        amount: pendingBet.amount,
+        odds: pendingBet.odds
       });
 
-      setBetSuccess(prev => ({ ...prev, [gameId]: true }));
+      setBetSuccess(prev => ({ ...prev, [pendingBet.gameId]: true }));
       setTimeout(() => {
-        setBetSuccess(prev => ({ ...prev, [gameId]: false }));
+        setBetSuccess(prev => ({ ...prev, [pendingBet.gameId]: false }));
       }, 3000);
       
-      setSelectedTeams(prev => ({ ...prev, [gameId]: '' }));
-      setSelectedConfidence(prev => ({ ...prev, [gameId]: '' }));
-      setBetAmounts(prev => ({ ...prev, [gameId]: '' }));
+      setSelectedTeams(prev => ({ ...prev, [pendingBet.gameId]: '' }));
+      setSelectedConfidence(prev => ({ ...prev, [pendingBet.gameId]: '' }));
+      setBetAmounts(prev => ({ ...prev, [pendingBet.gameId]: '' }));
       fetchBalance();
       fetchUserBets();
+      setConfirmationOpen(false);
+      setPendingBet(null);
 
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
       setMessage(err.response?.data?.error || 'Failed to place pick');
+      setConfirmationOpen(false);
+      setPendingBet(null);
     }
   };
 
@@ -530,33 +552,39 @@ function Games() {
                       </div>
 
                       <div className="confidence-options" style={{marginBottom: '15px', display: 'flex', gap: '8px'}}>
-                        <button
-                          type="button"
-                          className={`confidence-btn ${selectedConfidence[game.id] === 'low' ? 'active' : ''}`}
-                          style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'low' ? '#66bb6a' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
-                          onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'low'})}
-                        >
-                          <div>Low</div>
-                          <div style={{fontSize: '0.85em'}}>1.2x</div>
-                        </button>
-                        <button
-                          type="button"
-                          className={`confidence-btn ${selectedConfidence[game.id] === 'medium' ? 'active' : ''}`}
-                          style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'medium' ? '#ff9800' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
-                          onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'medium'})}
-                        >
-                          <div>Medium</div>
-                          <div style={{fontSize: '0.85em'}}>1.5x</div>
-                        </button>
-                        <button
-                          type="button"
-                          className={`confidence-btn ${selectedConfidence[game.id] === 'high' ? 'active' : ''}`}
-                          style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'high' ? '#ef5350' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
-                          onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'high'})}
-                        >
-                          <div>High</div>
-                          <div style={{fontSize: '0.85em'}}>2.0x</div>
-                        </button>
+                        <Tooltip text="Safest bet - 1.2x return" position="top">
+                          <button
+                            type="button"
+                            className={`confidence-btn ${selectedConfidence[game.id] === 'low' ? 'active' : ''}`}
+                            style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'low' ? '#66bb6a' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                            onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'low'})}
+                          >
+                            <div>Low</div>
+                            <div style={{fontSize: '0.85em'}}>1.2x</div>
+                          </button>
+                        </Tooltip>
+                        <Tooltip text="Balanced risk & reward - 1.5x return" position="top">
+                          <button
+                            type="button"
+                            className={`confidence-btn ${selectedConfidence[game.id] === 'medium' ? 'active' : ''}`}
+                            style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'medium' ? '#ff9800' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                            onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'medium'})}
+                          >
+                            <div>Medium</div>
+                            <div style={{fontSize: '0.85em'}}>1.5x</div>
+                          </button>
+                        </Tooltip>
+                        <Tooltip text="Risky but rewarding - 2.0x return" position="top">
+                          <button
+                            type="button"
+                            className={`confidence-btn ${selectedConfidence[game.id] === 'high' ? 'active' : ''}`}
+                            style={{flex: 1, padding: '8px', background: selectedConfidence[game.id] === 'high' ? '#ef5350' : 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'white', cursor: 'pointer', fontSize: '0.9em'}}
+                            onClick={() => setSelectedConfidence({...selectedConfidence, [game.id]: 'high'})}
+                          >
+                            <div>High</div>
+                            <div style={{fontSize: '0.85em'}}>2.0x</div>
+                          </button>
+                        </Tooltip>
                       </div>
 
                       {hasExistingBet(game.id) ? (
@@ -610,6 +638,22 @@ function Games() {
           </div>
         </>
       )}
+      
+      <BetConfirmation
+        isOpen={confirmationOpen}
+        bet={pendingBet ? {
+          team: pendingBet.team,
+          amount: pendingBet.amount,
+          confidence: pendingBet.confidence,
+          odds: pendingBet.odds
+        } : null}
+        potentialWin={pendingBet ? pendingBet.amount * pendingBet.odds : 0}
+        onConfirm={handleConfirmBet}
+        onCancel={() => {
+          setConfirmationOpen(false);
+          setPendingBet(null);
+        }}
+      />
     </div>
   );
 }

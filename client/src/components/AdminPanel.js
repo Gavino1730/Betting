@@ -905,8 +905,8 @@ function AdminPanel() {
                     {game.result && <p style={{margin: '5px 0', color: '#66bb6a'}}><strong>Winner:</strong> {game.result}</p>}
                   </div>
                   
-                  <div style={{display: 'flex', gap: '8px', alignItems: 'center', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
-                    <label className="toggle-switch" style={{marginRight: 'auto'}}>
+                  <div style={{display: 'flex', gap: '12px', alignItems: 'center', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)', flexWrap: 'wrap'}}>
+                    <label className="toggle-switch" style={{flexShrink: 0}}>
                       <input 
                         type="checkbox" 
                         checked={game.is_visible !== false}
@@ -916,14 +916,14 @@ function AdminPanel() {
                     </label>
                     <button 
                       className="btn" 
-                      style={{background: '#1e88e5', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
+                      style={{background: '#1e88e5', padding: '8px 16px', fontSize: '0.85em', whiteSpace: 'nowrap', flex: 1, minWidth: '100px'}}
                       onClick={() => handleEditGame(game)}
                     >
                       ✏️ Edit
                     </button>
                       <button 
                         className="btn" 
-                        style={{background: '#9c27b0', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
+                        style={{background: '#9c27b0', padding: '8px 16px', fontSize: '0.85em', whiteSpace: 'nowrap', flex: 1, minWidth: '100px'}}
                         onClick={() => handleOpenGameStatus(game)}
                       >
                         ⚙️ Outcome
@@ -1020,8 +1020,8 @@ function AdminPanel() {
                         {game.result && <p style={{margin: '5px 0', color: '#66bb6a', fontWeight: '600'}}><strong>🏆 Winner:</strong> {game.result}</p>}
                       </div>
                       
-                      <div style={{display: 'flex', gap: '8px', alignItems: 'center', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
-                        <label className="toggle-switch" style={{marginRight: 'auto'}}>
+                      <div style={{display: 'flex', gap: '12px', alignItems: 'center', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)', flexWrap: 'wrap'}}>
+                        <label className="toggle-switch" style={{flexShrink: 0}}>
                           <input 
                             type="checkbox" 
                             checked={game.is_visible !== false}
@@ -1031,14 +1031,14 @@ function AdminPanel() {
                         </label>
                         <button 
                           className="btn" 
-                          style={{background: '#1e88e5', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
+                          style={{background: '#1e88e5', padding: '8px 16px', fontSize: '0.85em', whiteSpace: 'nowrap', flex: 1, minWidth: '100px'}}
                           onClick={() => handleEditGame(game)}
                         >
                           ✏️ Edit
                         </button>
                         <button 
                           className="btn" 
-                          style={{background: '#757575', padding: '6px 12px', fontSize: '0.75em', whiteSpace: 'nowrap'}}
+                          style={{background: '#757575', padding: '8px 16px', fontSize: '0.85em', whiteSpace: 'nowrap', flex: 1, minWidth: '100px'}}
                           onClick={() => handleDeleteGame(game.id)}
                         >
                           🗑️ Delete

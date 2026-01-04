@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import './App.css';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import OnboardingModal from './components/OnboardingModal';
 import { ToastProvider } from './components/ToastProvider';
 import './styles/Toast.css';
 import apiClient from './utils/axios';
@@ -72,6 +73,7 @@ function App() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('currentPage');
+    localStorage.removeItem('hasSeenOnboarding');
     setPage('dashboard');
   };
 
@@ -273,6 +275,8 @@ function App() {
           {page === 'admin' && user && user.is_admin && <AdminPanel />}
         </Suspense>
       </div>
+      
+      {token && <OnboardingModal />}
     </div>
     </ToastProvider>
   );
