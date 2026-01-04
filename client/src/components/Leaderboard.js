@@ -8,6 +8,7 @@ function Leaderboard() {
   const [bets, setBets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sortBy, setSortBy] = useState('balance'); // balance, wins, winRate
 
 
   useEffect(() => {
@@ -47,6 +48,7 @@ function Leaderboard() {
     const totalWinnings = userBets
       .filter(b => b.outcome === 'won')
       .reduce((sum, b) => sum + (b.potential_win || 0), 0);
+    const netProfit = totalWinnings - totalWagered;
     const winRate = totalBets > 0 ? ((wonBets / totalBets) * 100).toFixed(1) : 0;
 
     return {
@@ -56,6 +58,7 @@ function Leaderboard() {
       pendingBets,
       totalWagered,
       totalWinnings,
+      netProfit,
       winRate,
     };
   };
@@ -67,91 +70,162 @@ function Leaderboard() {
     }));
   };
 
-  const sortedUsers = () => {
+  const getSortedUsers = () => {
     const usersWithStats = getUsersWithStats();
-    // Sort by balance (default)
-    const sorted = [...usersWithStats].sort((a, b) => b.balance - a.balance);
-    return sorted;
+    const sorted = [...usersWithStats];
+    
+    switch(sortBy) {
+      case 'wins':
+        return sorted.sort((a, b) => b.stats.wonBets - a.stats.wonBets);
+      case 'winRate':
+        return sorted.sort((a, b) => parseFloat(b.stats.winRate) - parseFloat(a.stats.winRate));
+      case 'profit':
+        return sorted.sort((a, b) => b.stats.netProfit - a.stats.netProfit);
+      case 'balance':
+      default:
+        return sorted.sort((a, b) => b.balance - a.balance);
+    }
   };
 
   if (loading) {
     return (
-      <div className="card leaderboard">
-        <h2>Loading Leaderboard...</h2>
+      <div className="leaderboard-page">
+        <div style={{textAlign: 'center', padding: '40px', color: '#b8c5d6'}}>
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Loading Leaderboard...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
-  const rankedUsers = sortedUsers();
+  const rankedUsers = getSortedUsers();
+  const totalPicks = bets.length;
+  const totalWagered = bets.reduce((sum, b) => sum + (b.amount || 0), 0);
+  const totalWinnings = bets.filter(b => b.outcome === 'won').reduce((sum, b) => sum + (b.potential_win || 0), 0);
 
   return (
-    <div className="leaderboard">
-      <h2>🏆 Leaderboard</h2>
+    <div className="leaderboard-page">
+      <div className="leaderboard-header">
+        <h1>🏆 Leaderboard</h1>
+        <p className="subtitle">Track your picks and compete with other players</p>
+      </div>
+
       {error && <div className="alert alert-error">{error}</div>}
 
+      {/* Overview Stats */}
+      <div className="overview-stats">
+        <div className="stat-card">
+          <div className="stat-card-value">{users.length}</div>
+          <div className="stat-card-label">Active Players</div>
+          <div className="stat-card-icon">👥</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-value">{totalPicks}</div>
+          <div className="stat-card-label">Total Picks</div>
+          <div className="stat-card-icon">🎲</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-value">{formatCurrency(totalWagered)}</div>
+          <div className="stat-card-label">Total Wagered</div>
+          <div className="stat-card-icon">💰</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-value" style={{color: '#66bb6a'}}>{formatCurrency(totalWinnings)}</div>
+          <div className="stat-card-label">Total Winnings</div>
+          <div className="stat-card-icon">🎉</div>
+        </div>
+      </div>
+
+      {/* Sort Controls */}
+      <div className="sort-controls">
+        <button 
+          className={`sort-btn ${sortBy === 'balance' ? 'active' : ''}`}
+          onClick={() => setSortBy('balance')}
+        >
+          💵 Balance
+        </button>
+        <button 
+          className={`sort-btn ${sortBy === 'wins' ? 'active' : ''}`}
+          onClick={() => setSortBy('wins')}
+        >
+          ✅ Wins
+        </button>
+        <button 
+          className={`sort-btn ${sortBy === 'winRate' ? 'active' : ''}`}
+          onClick={() => setSortBy('winRate')}
+        >
+          📊 Win Rate
+        </button>
+        <button 
+          className={`sort-btn ${sortBy === 'profit' ? 'active' : ''}`}
+          onClick={() => setSortBy('profit')}
+        >
+          📈 Profit
+        </button>
+      </div>
+
+      {/* Leaderboard Table/Cards */}
       <div className="leaderboard-container">
-        {rankedUsers.map((user, index) => (
-          <div key={user.id} className={`leaderboard-card rank-${index + 1}`}>
-            <div className="rank-section">
-              <div className="rank-badge">
-                {index === 0 && '🥇'}
-                {index === 1 && '🥈'}
-                {index === 2 && '🥉'}
-                {index > 2 && `#${index + 1}`}
-              </div>
-            </div>
-            
-            <div className="user-section">
-              <div className="user-name">{user.username}</div>
-              {user.is_admin && <span className="admin-badge">ADMIN</span>}
-            </div>
-            
-            <div className="stats-grid">
-              <div className="stat-item">
-                <div className="stat-label">Balance</div>
-                <div className="stat-value balance">{formatCurrency(user.balance)}</div>
-              </div>
-              
-              <div className="stat-item">
-                <div className="stat-label">Total Picks</div>
-                <div className="stat-value">{user.stats.totalBets}</div>
-              </div>
-              
-              <div className="stat-item">
-                <div className="stat-label">Record</div>
-                <div className="stat-value record">
-                  <span className="wins">{user.stats.wonBets}W</span>
-                  <span className="divider">-</span>
-                  <span className="losses">{user.stats.lostBets}L</span>
-                  {user.stats.pendingBets > 0 && (
-                    <>
-                      <span className="divider">-</span>
-                      <span className="pending">{user.stats.pendingBets}P</span>
-                    </>
-                  )}
+        {rankedUsers.length === 0 ? (
+          <div className="empty-state">
+            <p>No players yet. Be the first to place a pick!</p>
+          </div>
+        ) : (
+          rankedUsers.map((user, index) => (
+            <div key={user.id} className={`leaderboard-row rank-${index + 1}`}>
+              <div className="rank-cell">
+                <div className="rank-number">
+                  {index === 0 && '🥇'}
+                  {index === 1 && '🥈'}
+                  {index === 2 && '🥉'}
+                  {index > 2 && `#${index + 1}`}
                 </div>
               </div>
               
-              <div className="stat-item">
-                <div className="stat-label">Win Rate</div>
-                <div className={`stat-value win-rate ${parseFloat(user.stats.winRate) >= 50 ? 'positive' : 'negative'}`}>
+              <div className="user-cell">
+                <div className="user-info">
+                  <div className="user-name">{user.username}</div>
+                  {user.is_admin && <span className="admin-badge">ADMIN</span>}
+                </div>
+              </div>
+              
+              <div className="stats-cell balance-cell">
+                <div className="cell-label">Balance</div>
+                <div className="cell-value balance">{formatCurrency(user.balance)}</div>
+              </div>
+
+              <div className="stats-cell">
+                <div className="cell-label">Record</div>
+                <div className="cell-value record">
+                  <span className="wins">{user.stats.wonBets}W</span>
+                  <span className="separator">•</span>
+                  <span className="losses">{user.stats.lostBets}L</span>
+                </div>
+              </div>
+
+              <div className="stats-cell">
+                <div className="cell-label">Win Rate</div>
+                <div className={`cell-value win-rate ${parseFloat(user.stats.winRate) >= 50 ? 'positive' : parseFloat(user.stats.winRate) === 0 ? 'neutral' : 'negative'}`}>
                   {user.stats.winRate}%
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
 
-      <div className="leaderboard-stats">
-        <div className="overview-stat">
-          <h4>Total Users</h4>
-          <p className="value">{users.length}</p>
-        </div>
-        <div className="overview-stat">
-          <h4>Total Picks Placed</h4>
-          <p className="value">{bets.length}</p>
-        </div>
+              <div className="stats-cell">
+                <div className="cell-label">Profit</div>
+                <div className={`cell-value profit ${user.stats.netProfit >= 0 ? 'positive' : 'negative'}`}>
+                  {user.stats.netProfit >= 0 ? '+' : ''}{formatCurrency(user.stats.netProfit)}
+                </div>
+              </div>
+
+              <div className="stats-cell picks-cell">
+                <div className="cell-label">Picks</div>
+                <div className="cell-value">{user.stats.totalBets}</div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

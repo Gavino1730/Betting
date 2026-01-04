@@ -390,7 +390,7 @@ function Games() {
                             </div>
                             <input
                               type="number"
-                              placeholder="Bet amount"
+                              placeholder="Pick amount"
                               min="0.01"
                               step="0.01"
                               value={propBetAmounts[`${prop.id}-yes`] || ''}
@@ -403,7 +403,7 @@ function Games() {
                               onClick={() => handlePlacePropBet(prop.id, 'yes', propLocked)}
                               disabled={propLocked}
                             >
-                              {propLocked ? 'Closed' : 'Bet YES'}
+                              {propLocked ? 'Closed' : 'Pick YES'}
                             </button>
                           </div>
 
@@ -414,7 +414,7 @@ function Games() {
                             </div>
                             <input
                               type="number"
-                              placeholder="Bet amount"
+                              placeholder="Pick amount"
                               min="0.01"
                               step="0.01"
                               value={propBetAmounts[`${prop.id}-no`] || ''}
@@ -427,7 +427,7 @@ function Games() {
                               onClick={() => handlePlacePropBet(prop.id, 'no', propLocked)}
                               disabled={propLocked}
                             >
-                              {propLocked ? 'Closed' : 'Bet NO'}
+                              {propLocked ? 'Closed' : 'Pick NO'}
                             </button>
                           </div>
                         </>
@@ -497,7 +497,7 @@ function Games() {
                         </div>
                       )}
                       <div className={`countdown-chip ${gameLocked ? 'countdown-closed' : ''}`}>
-                        {countdown.isPast ? 'Betting closed' : `Starts in ${countdown.label}`}
+                        {countdown.isPast ? 'Picking closed' : `Starts in ${countdown.label}`}
                       </div>
                     </div>
 
@@ -561,18 +561,18 @@ function Games() {
 
                       {hasExistingBet(game.id) ? (
                         <div style={{padding: '12px', background: 'rgba(102, 187, 106, 0.15)', border: '1px solid rgba(102, 187, 106, 0.4)', borderRadius: '8px', textAlign: 'center', color: '#66bb6a', fontWeight: 'bold'}}>
-                          ✓ Bet Already Placed
+                          ✓ Pick Already Placed
                         </div>
                       ) : gameLocked ? (
                         <div style={{padding: '12px', background: 'rgba(239, 83, 80, 0.15)', border: '1px solid rgba(239, 83, 80, 0.4)', borderRadius: '8px', textAlign: 'center', color: '#ef5350', fontWeight: 'bold'}}>
-                          🔒 Betting Closed
+                          🔒 Picking Closed
                         </div>
                       ) : (
                         <>
                           <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
                             <input
                               type="number"
-                              placeholder="Bet amount"
+                              placeholder="Pick amount"
                               min="0.01"
                               step="0.01"
                               value={betAmounts[game.id] || ''}
@@ -584,7 +584,7 @@ function Games() {
                               disabled={gameLocked || !selectedTeams[game.id] || !selectedConfidence[game.id] || !betAmounts[game.id]}
                               style={{padding: '10px 20px', background: betSuccess[game.id] ? '#66bb6a' : '#1e88e5', border: 'none', borderRadius: '8px', color: 'white', cursor: 'pointer', fontWeight: 'bold', opacity: (gameLocked || !selectedTeams[game.id] || !selectedConfidence[game.id] || !betAmounts[game.id]) ? 0.5 : 1, transition: 'all 0.3s ease'}}
                             >
-                              {betSuccess[game.id] ? '✓ Success!' : gameLocked ? 'Closed' : 'Bet'}
+                              {betSuccess[game.id] ? '✓ Success!' : gameLocked ? 'Closed' : 'Pick'}
                             </button>
                           </div>
                           {betSuccess[game.id] && (
