@@ -3,6 +3,7 @@ import './App.css';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import OnboardingModal from './components/OnboardingModal';
+import Footer from './components/Footer';
 import { ToastProvider } from './components/ToastProvider';
 import './styles/Toast.css';
 import apiClient from './utils/axios';
@@ -16,7 +17,7 @@ const Teams = lazy(() => import('./components/Teams'));
 const Games = lazy(() => import('./components/Games'));
 const Notifications = lazy(() => import('./components/Notifications'));
 const HowToUse = lazy(() => import('./components/HowToUse'));
-const Statistics = lazy(() => import('./components/Statistics'));
+const About = lazy(() => import('./components/About'));
 
 // Simple loading fallback
 const LoadingSpinner = () => (
@@ -223,13 +224,6 @@ function App() {
             How to Use
           </button>
           <button 
-            onClick={() => handlePageChange('stats')} 
-            className={page === 'stats' ? 'active' : ''}
-          >
-            <span className="menu-icon">📊</span>
-            Statistics
-          </button>
-          <button 
             onClick={() => handlePageChange('notifications')} 
             className={page === 'notifications' ? 'active' : ''}
           >
@@ -272,10 +266,12 @@ function App() {
           {page === 'leaderboard' && <Leaderboard />}
           {page === 'notifications' && <Notifications />}
           {page === 'howto' && <HowToUse onNavigate={handlePageChange} />}
-          {page === 'stats' && <Statistics />}
+          {page === 'about' && <About />}
           {page === 'admin' && user && user.is_admin && <AdminPanel />}
         </Suspense>
       </div>
+
+      {token && <Footer onNavigate={handlePageChange} />}
       
       {token && <OnboardingModal />}
     </div>

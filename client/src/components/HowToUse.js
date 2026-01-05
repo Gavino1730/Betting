@@ -14,7 +14,7 @@ function HowToUse({ onNavigate }) {
         <div className="section-icon">🎮</div>
         <h2>What is Valiant Picks?</h2>
         <p className="section-description">
-          Valiant Picks is a fun, virtual prediction platform for Valiant Academy basketball games. 
+          Valiant Picks is a fun, virtual prediction platform for Valiants sports games. 
           Use your <strong className="highlight">Valiant Bucks</strong> (virtual currency) to make predictions on game outcomes, 
           compete with your friends on the leaderboard, and show your school spirit!
         </p>

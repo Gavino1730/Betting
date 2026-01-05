@@ -1,9 +1,9 @@
 import React from 'react';
-import '../styles/Statistics.css';
+import '../styles/About.css';
 
-function Statistics() {
+function About() {
   const stats = {
-    commits: 325,
+    revisions: 325,
     developer: 'Gavin Galan',
     files: {
       javascript: 45,
@@ -47,46 +47,79 @@ function Statistics() {
       startDate: 'December 17, 2025',
       endDate: 'January 4, 2026',
       daysElapsed: 18,
-      hoursEstimate: '180-220',
-      hoursPerDay: '10-12',
       totalFiles: 52337,
       totalFolders: 7731
     }
   };
 
   return (
-    <div className="statistics-page">
-      <div className="stats-header">
-        <h1>📊 Project Statistics</h1>
-        <p>Valiant Picks Development Overview</p>
+    <div className="about-page">
+      <div className="about-header">
+        <h1>ℹ️ About Valiant Picks</h1>
+        <p>Project Overview & Development Details</p>
       </div>
 
-      <div className="stats-container">
-        {/* Git Stats */}
-        <section className="stats-section">
-          <h2>📈 Development History</h2>
-          <div className="stats-grid">
-            <div className="stat-card highlight">
-              <div className="stat-number">{stats.commits}</div>
-              <div className="stat-label">Total Commits</div>
+      <div className="about-container">
+        {/* Mission Section */}
+        <section className="about-section mission-section">
+          <h2>🎯 Our Mission</h2>
+          <div className="mission-content">
+            <p>
+              Valiant Picks was created with a simple but powerful goal: <strong>to bring our community together</strong> and foster genuine engagement with Valiants sports.
+            </p>
+            
+            <div className="mission-grid">
+              <div className="mission-card">
+                <div className="mission-icon">👥</div>
+                <h3>Build Community</h3>
+                <p>Connect teachers, students, parents, and players in a shared experience that goes beyond the game.</p>
+              </div>
+              <div className="mission-card">
+                <div className="mission-icon">🏟️</div>
+                <h3>Increase Attendance</h3>
+                <p>Give everyone a reason to show up to games and support our teams with increased excitement and friendly competition.</p>
+              </div>
+              <div className="mission-card">
+                <div className="mission-icon">⚡</div>
+                <h3>Boost Engagement</h3>
+                <p>Create a fun, accessible way for everyone to get involved with sports teams and stay invested in their success.</p>
+              </div>
+              <div className="mission-card">
+                <div className="mission-icon">🤝</div>
+                <h3>Strengthen Connections</h3>
+                <p>Foster meaningful bonds between players, supporters, and the wider community through interactive participation.</p>
+              </div>
             </div>
-            <div className="stat-card">
-              <div className="stat-number">1</div>
-              <div className="stat-label">Developer</div>
+
+            <p className="mission-closer">
+              By combining the excitement of sports with a virtual betting platform, Valiant Picks transforms how we experience games together. 
+              It's not just about predictions—it's about building a vibrant community where everyone feels invested, supported, and connected.
+            </p>
+          </div>
+        </section>
+
+        {/* Git Stats */}
+        <section className="about-section">
+          <h2>📈 Development History</h2>
+          <div className="sole-creator">
+            <div className="creator-title">✨ Entirely Created By</div>
+            <div className="creator-name">{stats.developer}</div>
+            <div className="creator-subtitle">All {stats.revisions} revisions across {Object.values(stats.files).reduce((a, b) => a + b, 0)} tracked files</div>
+          </div>
+          <div className="about-grid">
+            <div className="stat-card highlight">
+              <div className="stat-number">{stats.revisions}</div>
+              <div className="stat-label">Total Revisions</div>
             </div>
             <div className="stat-card">
               <div className="stat-number">{Object.values(stats.files).reduce((a, b) => a + b, 0)}</div>
               <div className="stat-label">Tracked Files</div>
             </div>
           </div>
-          <div className="developers-list">
-            <h3>👨‍💻 Created By</h3>
-            <div className="creator-badge">{stats.developer}</div>
-          </div>
         </section>
 
         {/* Timeline */}
-        <section className="stats-section timeline-section">
+        <section className="about-section timeline-section">
           <h2>⏱️ Development Timeline</h2>
           <div className="timeline-content">
             <div className="timeline-item">
@@ -105,14 +138,6 @@ function Statistics() {
               <div className="timeline-stat-label">Days</div>
             </div>
             <div className="timeline-stat-card">
-              <div className="timeline-stat-number">{stats.timeline.hoursEstimate}</div>
-              <div className="timeline-stat-label">Hours Estimated</div>
-            </div>
-            <div className="timeline-stat-card">
-              <div className="timeline-stat-number">{stats.timeline.hoursPerDay}</div>
-              <div className="timeline-stat-label">Hours/Day</div>
-            </div>
-            <div className="timeline-stat-card">
               <div className="timeline-stat-number">{stats.timeline.totalFiles.toLocaleString()}</div>
               <div className="timeline-stat-label">Total Files</div>
             </div>
@@ -124,7 +149,7 @@ function Statistics() {
         </section>
 
         {/* Language Breakdown */}
-        <section className="stats-section">
+        <section className="about-section">
           <h2>💻 Language Breakdown</h2>
           <div className="language-charts">
             {stats.languages.map((lang, idx) => (
@@ -146,7 +171,7 @@ function Statistics() {
         </section>
 
         {/* Files by Type */}
-        <section className="stats-section">
+        <section className="about-section">
           <h2>📁 Files by Type</h2>
           <div className="files-grid">
             <div className="file-card">
@@ -183,7 +208,7 @@ function Statistics() {
         </section>
 
         {/* Architecture */}
-        <section className="stats-section">
+        <section className="about-section">
           <h2>🏗️ Architecture Breakdown</h2>
           <div className="architecture-grid">
             {stats.components.map((comp, idx) => (
@@ -196,7 +221,7 @@ function Statistics() {
         </section>
 
         {/* Tech Stack */}
-        <section className="stats-section">
+        <section className="about-section">
           <h2>🛠️ Tech Stack</h2>
           <div className="tech-table">
             <table>
@@ -221,8 +246,8 @@ function Statistics() {
         </section>
 
         {/* Deployment */}
-        <section className="stats-section">
-          <h2>� Versions</h2>
+        <section className="about-section">
+          <h2>🔄 Versions</h2>
           <div className="deployment-cards">
             <div className="deploy-card">
               <div className="deploy-label">Backend API</div>
@@ -240,12 +265,12 @@ function Statistics() {
         </section>
 
         {/* Summary */}
-        <section className="stats-section summary-section">
+        <section className="about-section summary-section">
           <h2>✨ Project Overview</h2>
           <div className="summary-content">
             <p>
               <strong>Valiant Picks</strong> is a full-stack sports betting web application developed from the ground up by <strong>Gavin Galan</strong>. 
-              Built for Valiant Academy basketball, this application enables users to place confidence-based bets on games with virtual Valiant Bucks, 
+              Built for Valiants sports, this application enables users to place confidence-based bets on games with virtual Valiant Bucks, 
               manage teams and player rosters, track betting history, and compete on a public leaderboard.
             </p>
             
@@ -313,4 +338,4 @@ function Statistics() {
   );
 }
 
-export default Statistics;
+export default About;

@@ -176,7 +176,7 @@ function Login({ onLogin, apiUrl }) {
             <div className="info-icon">🎮</div>
             <h3>Virtual Picks, Real Excitement</h3>
             <p>
-              Make predictions on Valiant Academy basketball games using virtual <strong>Valiant Bucks</strong> – no real money involved!
+              Make predictions on Valiants sports games using virtual <strong>Valiant Bucks</strong> – no real money involved!
             </p>
           </div>
           <div className="info-features">
@@ -201,7 +201,7 @@ function Login({ onLogin, apiUrl }) {
           onClick={() => setShowHowToUse(true)}
           type="button"
         >
-          📖 How to Use Valiant Picks
+          � How to Use Valiant Picks
         </button>
 
         {!isRegister && (
