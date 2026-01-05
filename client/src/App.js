@@ -178,13 +178,6 @@ function App() {
 
       {/* Mobile Slide-out Menu */}
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
-        <div className="mobile-menu-header">
-          <div className="mobile-user-info">
-            <div className="mobile-user-name">👤 {currentUser?.username || 'User'}</div>
-            <div className="mobile-balance">💰 {formatCurrency(currentUser?.balance || 0)}</div>
-          </div>
-        </div>
-        
         <div className="mobile-menu-nav">
           <button 
             onClick={() => handlePageChange('dashboard')} 
@@ -250,6 +243,12 @@ function App() {
         </div>
 
         <div className="mobile-menu-footer">
+          <div className="mobile-menu-header">
+            <div className="mobile-user-info">
+              <div className="mobile-user-name">👤 {currentUser?.username || 'User'}</div>
+              <div className="mobile-balance">💰 {formatCurrency(currentUser?.balance || 0)}</div>
+            </div>
+          </div>
           <button onClick={handleLogout} className="mobile-logout-btn">
             🚪 Logout
           </button>
