@@ -1567,10 +1567,10 @@ function AdminPanel() {
                         <button 
                           className="btn"
                           style={{background: '#9c27b0', padding: '6px 10px', fontSize: '0.8em', whiteSpace: 'nowrap'}}
-                          onClick={() => {
+                          onClick={(e) => {
                             setSelectedUser(u.id);
                             setNewBalance(u.balance.toString());
-                            const rect = event.currentTarget.getBoundingClientRect();
+                            const rect = e.currentTarget.getBoundingClientRect();
                             setMenuPosition({ x: rect.left, y: rect.bottom + 10 });
                           }}
                         >
