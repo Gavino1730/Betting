@@ -5,7 +5,7 @@ function Terms() {
   return (
     <div className="terms-page">
       <div className="terms-header">
-        <h1>⚖️ Terms of Service</h1>
+        <h1>⚖️ Terms & Guidelines</h1>
         <p>Last Updated: January 4, 2026</p>
       </div>
 
