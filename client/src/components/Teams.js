@@ -213,6 +213,33 @@ function Teams() {
         </button>
       </div>
 
+      <div className="desktop-roster-section">
+        <button 
+          className="expand-roster-btn"
+          onClick={() => setRosterExpanded(!rosterExpanded)}
+        >
+          {rosterExpanded ? '▼' : '▶'} Varsity Roster
+        </button>
+        {rosterExpanded && (
+          <div className="roster-table">
+            {(team.players || []).map(player => (
+              <div key={player.number} className="player-row">
+                <div className="player-header">
+                  <span className="player-number">#{player.number}</span>
+                  <span className="player-name">{player.name}</span>
+                  <span className="player-position">{player.position}</span>
+                  <span className="player-grade">Grade {player.grade}</span>
+                  <span className="player-height">{player.height}</span>
+                </div>
+                <div className="player-bio">
+                  {player.bio}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {contentTab === 'roster' && (
         <div className="roster-section mobile-roster">
           <h3>Varsity Roster</h3>
@@ -251,44 +278,19 @@ function Teams() {
             {(team.schedule || []).map((game, idx) => (
               <div key={idx} className={`schedule-row ${game.result === 'W' ? 'win' : game.result === 'L' ? 'loss' : 'scheduled'}`}>
                 <div className="result">{game.result}</div>
-                <div>{game.score}</div>
-                <div>{game.type}</div>
-                <div>{game.date}</div>
-                <div>{game.time}</div>
-                <div>{game.opponent}</div>
-                <div>{game.location}</div>
+                <div className="mobile-content">
+                  <strong>{game.date}</strong>
+                  <span>{game.opponent}</span>
+                </div>
+                <div className="location-badge">{game.location}</div>
+                <div className="desktop-only">{game.score}</div>
+                <div className="desktop-only">{game.type}</div>
+                <div className="desktop-only">{game.time}</div>
               </div>
             ))}
           </div>
         </div>
       )}
-
-      <div className="desktop-roster-section">
-        <button 
-          className="expand-roster-btn"
-          onClick={() => setRosterExpanded(!rosterExpanded)}
-        >
-          {rosterExpanded ? '▼' : '▶'} Varsity Roster
-        </button>
-        {rosterExpanded && (
-          <div className="roster-table">
-            {(team.players || []).map(player => (
-              <div key={player.number} className="player-row">
-                <div className="player-header">
-                  <span className="player-number">#{player.number}</span>
-                  <span className="player-name">{player.name}</span>
-                  <span className="player-position">{player.position}</span>
-                  <span className="player-grade">Grade {player.grade}</span>
-                  <span className="player-height">{player.height}</span>
-                </div>
-                <div className="player-bio">
-                  {player.bio}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 
