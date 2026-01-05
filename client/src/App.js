@@ -225,6 +225,20 @@ function App() {
             How to Use
           </button>
           <button 
+            onClick={() => handlePageChange('about')} 
+            className={page === 'about' ? 'active' : ''}
+          >
+            <span className="menu-icon">ℹ️</span>
+            About
+          </button>
+          <button 
+            onClick={() => handlePageChange('terms')} 
+            className={page === 'terms' ? 'active' : ''}
+          >
+            <span className="menu-icon">⚖️</span>
+            Terms
+          </button>
+          <button 
             onClick={() => handlePageChange('notifications')} 
             className={page === 'notifications' ? 'active' : ''}
           >

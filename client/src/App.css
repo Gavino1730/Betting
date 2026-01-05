@@ -717,8 +717,8 @@ table tbody tr:hover {
 
 .mobile-menu-header {
   padding: 1rem 1rem;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  border-bottom: none;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -808,7 +808,7 @@ table tbody tr:hover {
 }
 
 .mobile-menu-footer {
-  padding: 1rem 1.25rem 5rem 1.25rem;
+  padding: 1rem 1.25rem 7rem 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 

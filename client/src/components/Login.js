@@ -4,11 +4,13 @@ import { validateUsername, validatePassword, validateEmail, getPasswordStrength 
 import '../styles/Login.css';
 import HowToUse from './HowToUse';
 import About from './About';
+import Terms from './Terms';
 
 function Login({ onLogin, apiUrl }) {
   const [isRegister, setIsRegister] = useState(false);
   const [showHowToUse, setShowHowToUse] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -143,6 +145,13 @@ function Login({ onLogin, apiUrl }) {
   if (showHowToUse) {
     return (
       <div className="login-container">
+        <button 
+          className="fixed-close-btn"
+          onClick={() => setShowHowToUse(false)}
+          aria-label="Close"
+        >
+          ✕
+        </button>
         <div className="howto-wrapper">
           <button 
             className="back-to-login-btn"
@@ -160,6 +169,13 @@ function Login({ onLogin, apiUrl }) {
   if (showAbout) {
     return (
       <div className="login-container">
+        <button 
+          className="fixed-close-btn"
+          onClick={() => setShowAbout(false)}
+          aria-label="Close"
+        >
+          ✕
+        </button>
         <div className="howto-wrapper">
           <button 
             className="back-to-login-btn"
@@ -168,6 +184,30 @@ function Login({ onLogin, apiUrl }) {
             ← Back to Login
           </button>
           <About />
+        </div>
+      </div>
+    );
+  }
+
+  // If showing Terms page, render that instead
+  if (showTerms) {
+    return (
+      <div className="login-container">
+        <button 
+          className="fixed-close-btn"
+          onClick={() => setShowTerms(false)}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+        <div className="howto-wrapper">
+          <button 
+            className="back-to-login-btn"
+            onClick={() => setShowTerms(false)}
+          >
+            ← Back to Login
+          </button>
+          <Terms />
         </div>
       </div>
     );
@@ -230,6 +270,15 @@ function Login({ onLogin, apiUrl }) {
           style={{marginTop: '0.5rem'}}
         >
           ℹ️ About Valiant Picks
+        </button>
+
+        <button 
+          className="how-to-use-link"
+          onClick={() => setShowTerms(true)}
+          type="button"
+          style={{marginTop: '0.5rem'}}
+        >
+          ⚖️ Terms & Guidelines
         </button>
 
         {!isRegister && (

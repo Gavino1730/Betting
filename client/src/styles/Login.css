@@ -487,6 +487,36 @@ form {
   transform: translateY(0);
 }
 
+.fixed-close-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(13, 71, 161, 0.9);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(13, 71, 161, 0.4);
+}
+
+.fixed-close-btn:hover {
+  background: rgba(13, 71, 161, 1);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(13, 71, 161, 0.5);
+}
+
+.fixed-close-btn:active {
+  transform: scale(0.95);
+}
+
 .link-btn {
   background: none;
   border: none;
@@ -769,6 +799,7 @@ form {
 
   .toggle-form {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     gap: 6px;
     font-size: 13px;
