@@ -16,6 +16,7 @@ const Teams = lazy(() => import('./components/Teams'));
 const Games = lazy(() => import('./components/Games'));
 const Notifications = lazy(() => import('./components/Notifications'));
 const HowToUse = lazy(() => import('./components/HowToUse'));
+const Statistics = lazy(() => import('./components/Statistics'));
 
 // Simple loading fallback
 const LoadingSpinner = () => (
@@ -222,6 +223,13 @@ function App() {
             How to Use
           </button>
           <button 
+            onClick={() => handlePageChange('stats')} 
+            className={page === 'stats' ? 'active' : ''}
+          >
+            <span className="menu-icon">📊</span>
+            Statistics
+          </button>
+          <button 
             onClick={() => handlePageChange('notifications')} 
             className={page === 'notifications' ? 'active' : ''}
           >
@@ -264,6 +272,7 @@ function App() {
           {page === 'leaderboard' && <Leaderboard />}
           {page === 'notifications' && <Notifications />}
           {page === 'howto' && <HowToUse onNavigate={handlePageChange} />}
+          {page === 'stats' && <Statistics />}
           {page === 'admin' && user && user.is_admin && <AdminPanel />}
         </Suspense>
       </div>
