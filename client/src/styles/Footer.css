@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .footer-link {
@@ -97,7 +97,7 @@
   }
 
   .footer-links {
-    gap: 0.6rem;
+    gap: 0.4rem;
     font-size: 0.8rem;
   }
 
