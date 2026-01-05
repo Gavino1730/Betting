@@ -58,6 +58,13 @@
   letter-spacing: 0.3px;
 }
 
+.footer-disclaimer {
+  font-size: 0.7rem !important;
+  color: #666b7a !important;
+  margin-top: 0.5rem !important;
+  font-style: italic;
+}
+
 /* Footer Responsive */
 @media (max-width: 768px) {
   .footer {

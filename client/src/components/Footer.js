@@ -23,6 +23,7 @@ function Footer({ onNavigate }) {
         </div>
         <div className="footer-credit">
           <p>© 2026 Valiant Picks. Built by Gavin Galan.</p>
+          <p className="footer-disclaimer">Valiant Picks is an independent platform and is not affiliated with, endorsed by, or associated with any school, organization, or institution.</p>
         </div>
       </div>
     </footer>
