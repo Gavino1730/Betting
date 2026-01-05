@@ -4,7 +4,7 @@ import '../styles/Statistics.css';
 function Statistics() {
   const stats = {
     commits: 325,
-    developers: ['Gavino1730 (324)', 'Gavin Galan (1)'],
+    developer: 'Gavin Galan',
     files: {
       javascript: 45,
       css: 17,
@@ -39,9 +39,18 @@ function Statistics() {
       { name: 'CSS3', version: '-', role: 'Styling' }
     ],
     deployment: {
-      backend: 'Railway',
-      frontend: 'Cloudflare Pages',
-      domain: 'valiantpicks.com'
+      backend: 'v1.0.0 - Production',
+      frontend: 'v1.0.0 - Production',
+      database: 'PostgreSQL 14+ (Supabase)'
+    },
+    timeline: {
+      startDate: 'December 17, 2025',
+      endDate: 'January 4, 2026',
+      daysElapsed: 18,
+      hoursEstimate: '180-220',
+      hoursPerDay: '10-12',
+      totalFiles: 52337,
+      totalFolders: 7731
     }
   };
 
@@ -62,8 +71,8 @@ function Statistics() {
               <div className="stat-label">Total Commits</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">{stats.developers.length}</div>
-              <div className="stat-label">Active Developers</div>
+              <div className="stat-number">1</div>
+              <div className="stat-label">Developer</div>
             </div>
             <div className="stat-card">
               <div className="stat-number">{Object.values(stats.files).reduce((a, b) => a + b, 0)}</div>
@@ -71,10 +80,46 @@ function Statistics() {
             </div>
           </div>
           <div className="developers-list">
-            <h3>👥 Contributors</h3>
-            {stats.developers.map((dev, idx) => (
-              <div key={idx} className="dev-badge">{dev}</div>
-            ))}
+            <h3>👨‍💻 Created By</h3>
+            <div className="creator-badge">{stats.developer}</div>
+          </div>
+        </section>
+
+        {/* Timeline */}
+        <section className="stats-section timeline-section">
+          <h2>⏱️ Development Timeline</h2>
+          <div className="timeline-content">
+            <div className="timeline-item">
+              <span className="timeline-label">Project Created</span>
+              <span className="timeline-date">{stats.timeline.startDate}</span>
+            </div>
+            <div className="timeline-divider">↓</div>
+            <div className="timeline-item">
+              <span className="timeline-label">Completed</span>
+              <span className="timeline-date">{stats.timeline.endDate}</span>
+            </div>
+          </div>
+          <div className="timeline-stats">
+            <div className="timeline-stat-card">
+              <div className="timeline-stat-number">{stats.timeline.daysElapsed}</div>
+              <div className="timeline-stat-label">Days</div>
+            </div>
+            <div className="timeline-stat-card">
+              <div className="timeline-stat-number">{stats.timeline.hoursEstimate}</div>
+              <div className="timeline-stat-label">Hours Estimated</div>
+            </div>
+            <div className="timeline-stat-card">
+              <div className="timeline-stat-number">{stats.timeline.hoursPerDay}</div>
+              <div className="timeline-stat-label">Hours/Day</div>
+            </div>
+            <div className="timeline-stat-card">
+              <div className="timeline-stat-number">{stats.timeline.totalFiles.toLocaleString()}</div>
+              <div className="timeline-stat-label">Total Files</div>
+            </div>
+            <div className="timeline-stat-card">
+              <div className="timeline-stat-number">{stats.timeline.totalFolders.toLocaleString()}</div>
+              <div className="timeline-stat-label">Total Folders</div>
+            </div>
           </div>
         </section>
 
@@ -177,48 +222,88 @@ function Statistics() {
 
         {/* Deployment */}
         <section className="stats-section">
-          <h2>🚀 Deployment</h2>
+          <h2>� Versions</h2>
           <div className="deployment-cards">
             <div className="deploy-card">
-              <div className="deploy-label">Backend</div>
+              <div className="deploy-label">Backend API</div>
               <div className="deploy-value">{stats.deployment.backend}</div>
             </div>
             <div className="deploy-card">
-              <div className="deploy-label">Frontend</div>
+              <div className="deploy-label">Frontend Client</div>
               <div className="deploy-value">{stats.deployment.frontend}</div>
             </div>
             <div className="deploy-card">
-              <div className="deploy-label">Domain</div>
-              <div className="deploy-value">{stats.deployment.domain}</div>
+              <div className="deploy-label">Database</div>
+              <div className="deploy-value">{stats.deployment.database}</div>
             </div>
           </div>
         </section>
 
         {/* Summary */}
         <section className="stats-section summary-section">
-          <h2>✨ Project Summary</h2>
+          <h2>✨ Project Overview</h2>
           <div className="summary-content">
             <p>
-              <strong>Valiant Picks</strong> is a full-stack sports betting web application built for Valiant Academy basketball. 
-              With <strong>{stats.commits} commits</strong> of development, the application features a comprehensive betting system, 
-              team management, real-time leaderboards, and an admin dashboard.
+              <strong>Valiant Picks</strong> is a full-stack sports betting web application developed from the ground up by <strong>Gavin Galan</strong>. 
+              Built for Valiant Academy basketball, this application enables users to place confidence-based bets on games with virtual Valiant Bucks, 
+              manage teams and player rosters, track betting history, and compete on a public leaderboard.
             </p>
+            
+            <h3>Technical Architecture</h3>
+            <p>
+              The application follows a modern full-stack monorepo architecture with a React 18.2.0 frontend hosted on Cloudflare Pages and an Express.js 
+              backend deployed on Railway. Data is persisted in a PostgreSQL database through Supabase, ensuring reliability and scalability. Authentication 
+              is handled via JWT tokens with bcryptjs password hashing, providing secure user sessions. The entire codebase spans <strong>79 tracked files</strong> 
+              across <strong>325 commits</strong>, demonstrating consistent development and iteration.
+            </p>
+
+            <h3>Key Capabilities</h3>
+            <p>
+              Users can authenticate, browse available games, place bets with three confidence levels (Low 1.2x, Medium 1.5x, High 2.0x), track their betting 
+              history, view real-time leaderboards, and explore team rosters with detailed player information. Admin users gain access to a comprehensive dashboard 
+              for managing games, teams, players, bets, and user balances. The application supports prop bets with custom odds, automatic bet resolution upon game 
+              completion, and transaction history tracking for complete financial transparency.
+            </p>
+
+            <h3>User Experience</h3>
+            <p>
+              The frontend is fully responsive across five breakpoints (1024px+, 768px, 520px, 480px, and below) ensuring seamless experiences on desktop, tablet, 
+              and mobile devices. Features include a mobile slide-out navigation menu, real-time balance updates, animated notifications, onboarding modals for new 
+              users, and intuitive forms for placing bets. The interface uses a professional color scheme anchored by #004f9e Valiant blue with careful attention 
+              to accessibility and visual hierarchy.
+            </p>
+
+            <h3>Data & Security</h3>
+            <p>
+              The database includes 8 core models (User, Game, Team, Bet, PropBet, Notification, Player, Transaction) with Row-Level Security (RLS) policies 
+              for data protection. All API endpoints are protected with JWT middleware, and user inputs are validated server-side. The system maintains referential 
+              integrity through foreign keys, prevents overbetting by validating user balances, and automatically calculates and credits winnings upon bet resolution.
+            </p>
+
             <div className="summary-highlights">
               <div className="highlight-item">
                 <span className="highlight-icon">🎯</span>
-                <span>Full-stack monorepo architecture</span>
+                <span>Full-stack monorepo with clear separation of concerns</span>
               </div>
               <div className="highlight-item">
                 <span className="highlight-icon">📱</span>
-                <span>Responsive design with 5 breakpoints</span>
+                <span>5-breakpoint responsive design for all devices</span>
               </div>
               <div className="highlight-item">
                 <span className="highlight-icon">🔐</span>
-                <span>JWT authentication + RLS policies</span>
+                <span>JWT + RLS security with server-side validation</span>
               </div>
               <div className="highlight-item">
-                <span className="highlight-icon">🌐</span>
-                <span>Production-ready deployment</span>
+                <span className="highlight-icon">⚡</span>
+                <span>Production-ready with Railway + Cloudflare deployment</span>
+              </div>
+              <div className="highlight-item">
+                <span className="highlight-icon">🎲</span>
+                <span>Confidence-based betting system with live odds</span>
+              </div>
+              <div className="highlight-item">
+                <span className="highlight-icon">📊</span>
+                <span>Real-time leaderboards and transaction tracking</span>
               </div>
             </div>
           </div>
