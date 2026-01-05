@@ -183,13 +183,6 @@ function App() {
             <div className="mobile-user-name">👤 {currentUser?.username || 'User'}</div>
             <div className="mobile-balance">💰 {formatCurrency(currentUser?.balance || 0)}</div>
           </div>
-          <button
-            className="mobile-close-btn"
-            onClick={() => setMobileMenuOpen(false)}
-            aria-label="Close menu"
-          >
-            ✕
-          </button>
         </div>
         
         <div className="mobile-menu-nav">
