@@ -227,7 +227,6 @@ function Teams() {
                 <div className="player-header">
                   <span className="player-number">#{player.number}</span>
                   <span className="player-name">{player.name}</span>
-                  <span className="player-position">{player.position}</span>
                   <span className="player-grade">Grade {player.grade}</span>
                   <span className="player-height">{player.height}</span>
                 </div>
@@ -249,7 +248,6 @@ function Teams() {
                 <div className="player-header">
                   <span className="player-number">#{player.number}</span>
                   <span className="player-name">{player.name}</span>
-                  <span className="player-position">{player.position}</span>
                   <span className="player-grade">Grade {player.grade}</span>
                   <span className="player-height">{player.height}</span>
                 </div>
@@ -279,8 +277,8 @@ function Teams() {
               <div key={idx} className={`schedule-row ${game.result === 'W' ? 'win' : game.result === 'L' ? 'loss' : 'scheduled'}`}>
                 <div className="result">{game.result}</div>
                 <div className="mobile-content">
-                  <strong>{game.date}</strong>
-                  <span>{game.opponent}</span>
+                  <div className="opponent-main">vs. {game.opponent}</div>
+                  <div className="game-date">{game.date}</div>
                 </div>
                 <div className="location-badge">{game.location}</div>
                 <div className="desktop-only">{game.score}</div>
