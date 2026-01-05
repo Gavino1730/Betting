@@ -253,6 +253,9 @@ function HowToUse({ onNavigate }) {
           <button className="btn btn-secondary" onClick={() => onNavigate('dashboard')}>
             📊 Go to Dashboard
           </button>
+          <button className="btn btn-secondary" onClick={() => onNavigate('about')}>
+            ℹ️ About Valiant Picks
+          </button>
         </div>
       </div>
     </div>

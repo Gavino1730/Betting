@@ -6,7 +6,7 @@ import { formatCurrency } from '../utils/currency';
 import { formatTime } from '../utils/time';
 import Confetti from './Confetti';
 
-function Dashboard({ user }) {
+function Dashboard({ user, onNavigate }) {
   const [balance, setBalance] = useState(user?.balance || 0);
   const [games, setGames] = useState([]);
   const [bets, setBets] = useState([]);
@@ -601,6 +601,19 @@ function Dashboard({ user }) {
             ) : (
               <p className="empty-text">No recent activity</p>
             )}
+          </div>
+
+          {/* About Section */}
+          <div className="card about-section">
+            <h3>Learn More About Valiant Picks</h3>
+            <p>Curious about the platform? Check out our comprehensive information page.</p>
+            <button 
+              className="btn btn-secondary"
+              onClick={() => onNavigate && onNavigate('about')}
+              style={{ marginTop: '1rem' }}
+            >
+              ℹ️ About Valiant Picks
+            </button>
           </div>
         </div>
       </div>

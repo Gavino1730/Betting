@@ -259,7 +259,7 @@ function App() {
       </div>
 
       <div className="container">
-        {page === 'dashboard' && <Dashboard user={user} />}
+        {page === 'dashboard' && <Dashboard user={user} onNavigate={handlePageChange} />}
         <Suspense fallback={<LoadingSpinner />}>
           {page === 'games' && <Games />}
           {page === 'teams' && <Teams />}

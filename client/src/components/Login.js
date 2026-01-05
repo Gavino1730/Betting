@@ -3,10 +3,12 @@ import apiClient from '../utils/axios';
 import { validateUsername, validatePassword, validateEmail, getPasswordStrength } from '../utils/validation';
 import '../styles/Login.css';
 import HowToUse from './HowToUse';
+import About from './About';
 
 function Login({ onLogin, apiUrl }) {
   const [isRegister, setIsRegister] = useState(false);
   const [showHowToUse, setShowHowToUse] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -154,6 +156,23 @@ function Login({ onLogin, apiUrl }) {
     );
   }
 
+  // If showing About page, render that instead
+  if (showAbout) {
+    return (
+      <div className="login-container">
+        <div className="howto-wrapper">
+          <button 
+            className="back-to-login-btn"
+            onClick={() => setShowAbout(false)}
+          >
+            ← Back to Login
+          </button>
+          <About />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -201,7 +220,16 @@ function Login({ onLogin, apiUrl }) {
           onClick={() => setShowHowToUse(true)}
           type="button"
         >
-          � How to Use Valiant Picks
+          📚 How to Use Valiant Picks
+        </button>
+
+        <button 
+          className="how-to-use-link"
+          onClick={() => setShowAbout(true)}
+          type="button"
+          style={{marginTop: '0.5rem'}}
+        >
+          ℹ️ About Valiant Picks
         </button>
 
         {!isRegister && (
