@@ -379,6 +379,15 @@ function AdminPanel() {
   const handleCreatePropBet = async (e) => {
     e.preventDefault();
     try {
+      // Validate that all options have names
+      for (let i = 0; i < propBetForm.options.length; i++) {
+        const option = propBetForm.options[i];
+        if (!option || option.trim() === '') {
+          alert(`Please enter a name for Option ${i + 1}`);
+          return;
+        }
+      }
+
       // Validate that all options have odds
       for (const option of propBetForm.options) {
         if (!propBetForm.optionOdds[option]) {
