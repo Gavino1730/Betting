@@ -424,22 +424,46 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                     <label>👥 Step 2: Who Will Win?</label>
                     <p className="field-help">Click on the team you think will win this game</p>
                     <div className="team-selection">
-                      <button
-                        type="button"
-                        className={`team-btn ${selectedTeam === selectedGame.home_team ? 'active' : ''}`}
-                        onClick={() => setSelectedTeam(selectedGame.home_team)}
-                      >
-                        <span className="team-name">{selectedGame.home_team}</span>
-                        <span className="team-label">Home</span>
-                      </button>
-                      <button
-                        type="button"
-                        className={`team-btn ${selectedTeam === selectedGame.away_team ? 'active' : ''}`}
-                        onClick={() => setSelectedTeam(selectedGame.away_team)}
-                      >
-                        <span className="team-name">{selectedGame.away_team}</span>
-                        <span className="team-label">Away</span>
-                      </button>
+                      {/* Always show Valiants first (left) */}
+                      {selectedGame.home_team.toLowerCase().includes('valiant') ? (
+                        <>
+                          <button
+                            type="button"
+                            className={`team-btn valiant ${selectedTeam === selectedGame.home_team ? 'active' : ''}`}
+                            onClick={() => setSelectedTeam(selectedGame.home_team)}
+                          >
+                            <span className="team-name">{selectedGame.home_team}</span>
+                            <span className="team-label">Home</span>
+                          </button>
+                          <button
+                            type="button"
+                            className={`team-btn opponent ${selectedTeam === selectedGame.away_team ? 'active' : ''}`}
+                            onClick={() => setSelectedTeam(selectedGame.away_team)}
+                          >
+                            <span className="team-name">{selectedGame.away_team}</span>
+                            <span className="team-label">Away</span>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            className={`team-btn valiant ${selectedTeam === selectedGame.away_team ? 'active' : ''}`}
+                            onClick={() => setSelectedTeam(selectedGame.away_team)}
+                          >
+                            <span className="team-name">{selectedGame.away_team}</span>
+                            <span className="team-label">Away</span>
+                          </button>
+                          <button
+                            type="button"
+                            className={`team-btn opponent ${selectedTeam === selectedGame.home_team ? 'active' : ''}`}
+                            onClick={() => setSelectedTeam(selectedGame.home_team)}
+                          >
+                            <span className="team-name">{selectedGame.home_team}</span>
+                            <span className="team-label">Home</span>
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
 

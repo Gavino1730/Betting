@@ -597,42 +597,67 @@
   border: 2px solid;
 }
 
-/* Home Team Button */
+/* Valiant Team Button (always on left) */
+.team-selection .team-btn.valiant {
+  background: linear-gradient(135deg, #1a3a5c 0%, #0d1f33 100%);
+  border-color: rgba(31, 78, 153, 0.5);
+}
+
+.team-selection .team-btn.valiant:hover {
+  border-color: rgba(31, 78, 153, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(31, 78, 153, 0.3);
+}
+
+.team-selection .team-btn.valiant.active {
+  background: linear-gradient(135deg, #1f4e99 0%, #3b82f6 100%);
+  border-color: #4a90e2;
+  box-shadow: 0 8px 24px rgba(31, 78, 153, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Opponent Team Button (always on right) */
+.team-selection .team-btn.opponent {
+  background: linear-gradient(135deg, #4a1a5c 0%, #2d1033 100%);
+  border-color: rgba(156, 39, 176, 0.5);
+}
+
+.team-selection .team-btn.opponent:hover {
+  border-color: rgba(156, 39, 176, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(156, 39, 176, 0.3);
+}
+
+.team-selection .team-btn.opponent.active {
+  background: linear-gradient(135deg, #9c27b0 0%, #ba68c8 100%);
+  border-color: #ce93d8;
+  box-shadow: 0 8px 24px rgba(156, 39, 176, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Legacy selectors for backwards compatibility - remove old home/away specific styles */
 .team-selection .team-btn:first-child {
-  background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
-  border-color: rgba(245, 158, 11, 0.4);
+  /* Styles now handled by .valiant or .opponent classes */
 }
 
 .team-selection .team-btn:first-child:hover {
-  border-color: rgba(245, 158, 11, 0.7);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  /* Styles now handled by .valiant or .opponent classes */
 }
 
 .team-selection .team-btn:first-child.active {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  border-color: #fbbf24;
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
-  transform: translateY(-2px);
+  /* Styles now handled by .valiant or .opponent classes */
 }
 
-/* Away Team Button */
 .team-selection .team-btn:last-child {
-  background: linear-gradient(135deg, #164e63 0%, #0c2d3a 100%);
-  border-color: rgba(6, 182, 212, 0.4);
+  /* Styles now handled by .valiant or .opponent classes */
 }
 
 .team-selection .team-btn:last-child:hover {
-  border-color: rgba(6, 182, 212, 0.7);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  /* Styles now handled by .valiant or .opponent classes */
 }
 
 .team-selection .team-btn:last-child.active {
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-  border-color: #22d3ee;
-  box-shadow: 0 8px 24px rgba(6, 182, 212, 0.4);
-  transform: translateY(-2px);
+  /* Styles now handled by .valiant or .opponent classes */
 }
 
 .team-name {
