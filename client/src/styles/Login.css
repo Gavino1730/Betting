@@ -219,10 +219,6 @@
   background-clip: text;
   font-weight: 700;
 }
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 700;
-}
 
 .admin-link {
   background: linear-gradient(135deg, rgba(0, 79, 158, 0.08), rgba(0, 79, 158, 0.02));
