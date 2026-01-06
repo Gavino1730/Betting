@@ -1,0 +1,394 @@
+/* Rivalry Week Popup Overlay */
+.rivalry-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Screen Shake Effect */
+.rivalry-popup-overlay.shake {
+  animation: screenShake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-3px, -3px) rotate(-0.5deg); }
+  20%, 40%, 60%, 80% { transform: translate(3px, 3px) rotate(0.5deg); }
+}
+
+/* Popup Content */
+.rivalry-popup-content {
+  background: linear-gradient(135deg, #1a1f35 0%, #0f1419 100%);
+  border: 3px solid #1f4e99;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(31, 78, 153, 0.4), 
+              0 0 100px rgba(31, 78, 153, 0.2);
+  animation: slideInScale 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+}
+
+@keyframes slideInScale {
+  from {
+    transform: scale(0.7) translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Close Button */
+.rivalry-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.rivalry-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+/* Image Container */
+.rivalry-image-container {
+  width: 100%;
+  max-height: 250px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(31, 78, 153, 0.2) 0%, transparent 100%);
+  padding: 2rem 1rem 1rem;
+}
+
+.rivalry-image {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.rivalry-image.rumble {
+  animation: rumble 0.3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(31, 78, 153, 0.5));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px rgba(31, 78, 153, 0.8));
+  }
+}
+
+@keyframes rumble {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  25% { transform: translate(-5px, -5px) rotate(-2deg) scale(1.02); }
+  50% { transform: translate(5px, 5px) rotate(2deg) scale(1.02); }
+  75% { transform: translate(-3px, 3px) rotate(-1deg) scale(1.02); }
+}
+
+/* Text Container */
+.rivalry-text-container {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Title */
+.rivalry-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px rgba(31, 78, 153, 0.8),
+               0 0 40px rgba(31, 78, 153, 0.6);
+}
+
+.rivalry-title.animated {
+  animation: textAppear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both, glow 2s ease-in-out infinite 1.4s;
+}
+
+@keyframes textAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(31, 78, 153, 0.8),
+                 0 0 40px rgba(31, 78, 153, 0.6);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(31, 78, 153, 1),
+                 0 0 60px rgba(31, 78, 153, 0.8),
+                 0 0 80px rgba(31, 78, 153, 0.6);
+  }
+}
+
+/* Matchup */
+.rivalry-matchup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.rivalry-matchup.animated-delayed {
+  animation: textAppear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s both;
+}
+
+.rivalry-team {
+  font-size: 3rem;
+  font-weight: 900;
+  padding: 0.5rem 1.5rem;
+  border-radius: 12px;
+  animation: slideIn 0.6s ease-out;
+}
+
+.rivalry-team.valiant {
+  background: linear-gradient(135deg, #1f4e99, #3b82f6);
+  color: white;
+  box-shadow: 0 4px 20px rgba(31, 78, 153, 0.5);
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
+}
+
+.rivalry-team.opponent {
+  background: linear-gradient(135deg, #ef5350, #c62828);
+  color: white;
+  box-shadow: 0 4px 20px rgba(239, 83, 80, 0.5);
+  animation-delay: 0.4s;
+  animation-fill-mode: both;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.rivalry-vs {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #888a9b;
+  animation: fadeIn 0.6s ease-out 0.6s both;
+}
+
+/* Tagline */
+.rivalry-tagline {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ff9800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 10px rgba(255, 152, 0, 0.5);
+}
+
+.rivalry-tagline.animated-delayed-more {
+  animation: textAppear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.8s both, bounce 1s ease-in-out infinite 2.6s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Game Info */
+.rivalry-game-info {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rivalry-info-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  color: #e0e0e0;
+}
+
+.info-icon {
+  font-size: 1.5rem;
+}
+
+.info-text {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* CTA Button */
+.rivalry-cta-btn {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: white;
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  border-radius: 50px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 6px 25px rgba(255, 152, 0, 0.4);
+  transition: all 0.3s ease;
+  animation: buttonPulse 2s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 6px 25px rgba(255, 152, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 35px rgba(255, 152, 0, 0.6);
+    transform: scale(1.02);
+  }
+}
+
+.rivalry-cta-btn:hover {
+  background: linear-gradient(135deg, #f57c00, #ff9800);
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 10px 40px rgba(255, 152, 0, 0.6);
+}
+
+.rivalry-cta-btn:active {
+  transform: scale(0.98);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .rivalry-popup-content {
+    border-radius: 16px;
+    max-width: 95%;
+  }
+
+  .rivalry-title {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+  }
+
+  .rivalry-team {
+    font-size: 2rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .rivalry-vs {
+    font-size: 1.5rem;
+  }
+
+  .rivalry-tagline {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .rivalry-text-container {
+    padding: 1.5rem;
+  }
+
+  .rivalry-game-info {
+    padding: 1rem;
+  }
+
+  .rivalry-info-item {
+    font-size: 1rem;
+  }
+
+  .info-icon {
+    font-size: 1.2rem;
+  }
+
+  .rivalry-cta-btn {
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+  }
+
+  .rivalry-image-container {
+    max-height: 150px;
+    padding: 1.5rem 1rem 0.5rem;
+  }
+
+  .rivalry-image {
+    max-height: 120px;
+  }
+}
+
+@media (max-width: 400px) {
+  .rivalry-title {
+    font-size: 1.4rem;
+  }
+
+  .rivalry-team {
+    font-size: 1.6rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .rivalry-matchup {
+    gap: 1rem;
+  }
+}

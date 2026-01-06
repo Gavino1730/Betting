@@ -3,6 +3,7 @@ import './App.css';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import OnboardingModal from './components/OnboardingModal';
+import RivalryWeekPopup from './components/RivalryWeekPopup';
 import Footer from './components/Footer';
 import { ToastProvider } from './components/ToastProvider';
 import './styles/Toast.css';
@@ -119,9 +120,26 @@ function App() {
   // Get user data from state or localStorage
   const currentUser = user || (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null);
 
+  // Rivalry Week Configuration - Toggle enabled to true/false
+  const rivalryWeekConfig = {
+    enabled: true, // Set to false to disable
+    gameInfo: {
+      opponent: 'WESTSIDE',
+      date: 'Friday, January 10',
+      time: '7:00 PM',
+      location: 'Home Court'
+    }
+  };
+
   return (
     <ToastProvider>
     <div className="app">
+      {/* Rivalry Week Popup */}
+      <RivalryWeekPopup 
+        enabled={rivalryWeekConfig.enabled}
+        gameInfo={rivalryWeekConfig.gameInfo}
+      />
+
       <nav className="navbar">
         <div className="nav-brand" onClick={() => handlePageChange('dashboard')} style={{ cursor: 'pointer' }}>
           <img 
