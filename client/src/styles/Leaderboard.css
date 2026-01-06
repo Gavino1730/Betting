@@ -278,6 +278,77 @@
   width: fit-content;
 }
 
+/* ===== USER NAME ROW WITH TIER ===== */
+.user-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ranking-score-preview {
+  margin-top: 0.2rem;
+}
+
+.score-total {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+}
+
+/* ===== SCORE BREAKDOWN CELL ===== */
+.score-cell {
+  min-width: 150px;
+}
+
+.score-breakdown {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.score-part {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #b8c5d6;
+  background: rgba(31, 78, 153, 0.15);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  cursor: help;
+}
+
+.score-part:hover {
+  background: rgba(31, 78, 153, 0.25);
+}
+
+/* ===== SORT LABEL ===== */
+.sort-label {
+  color: #888a9b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
 /* ===== STATS CELLS ===== */
 .stats-cell {
   display: flex;
@@ -643,12 +714,36 @@
     font-size: 0.8rem;
   }
 
+  .sort-label {
+    display: none;
+  }
+
   .picks-cell {
     display: none !important;
   }
 
   .profit-cell {
     display: none !important;
+  }
+
+  /* Hide score cell on mobile */
+  .score-cell {
+    display: none !important;
+  }
+
+  /* Tier badge mobile styling */
+  .tier-badge {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .user-name-row {
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+  }
+
+  .ranking-score-preview {
+    display: none;
   }
 
   /* Restructure the layout */
