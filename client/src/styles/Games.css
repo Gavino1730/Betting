@@ -99,7 +99,6 @@
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 0;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .tab-btn {
@@ -317,6 +316,7 @@
   .game-sport {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
+    min-width: -webkit-fit-content;
     min-width: fit-content;
   }
 

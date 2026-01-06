@@ -124,9 +124,9 @@ function App() {
   const rivalryWeekConfig = {
     enabled: true, // Set to false to disable
     gameInfo: {
-      opponent: 'WESTSIDE',
-      date: 'Friday, January 10',
-      time: '7:00 PM',
+      opponent: 'WESTSIDE CHRISTIAN',
+      date: 'Thursday, January 9',
+      time: '7:30 PM',
       location: 'Home Court'
     }
   };

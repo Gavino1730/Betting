@@ -61,6 +61,29 @@
   }
 }
 
+/* Top Badge - Game of the Year */
+.rivalry-top-badge {
+  background: linear-gradient(135deg, #ffd700, #ffb300);
+  color: #1a1a1a;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 0.6rem 1.5rem;
+  text-align: center;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    background: linear-gradient(135deg, #ffd700, #ffb300);
+  }
+  50% {
+    background: linear-gradient(135deg, #ffb300, #ffd700);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  }
+}
+
 /* Close Button */
 .rivalry-close-btn {
   position: absolute;
@@ -132,6 +155,22 @@
 .rivalry-text-container {
   padding: 2rem;
   text-align: center;
+}
+
+/* Fire Row */
+.rivalry-fire-row {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  animation: fireGlow 1s ease-in-out infinite;
+}
+
+@keyframes fireGlow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
 }
 
 /* Title */
@@ -236,12 +275,33 @@
   color: #ff9800;
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-shadow: 0 2px 10px rgba(255, 152, 0, 0.5);
 }
 
 .rivalry-tagline.animated-delayed-more {
   animation: textAppear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.8s both, bounce 1s ease-in-out infinite 2.6s;
+}
+
+/* Hype Badges */
+.rivalry-hype-badges {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.hype-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #e0e0e0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 @keyframes bounce {
@@ -255,14 +315,27 @@
 
 /* Game Info */
 .rivalry-game-info {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(31, 78, 153, 0.3), rgba(31, 78, 153, 0.1));
+  border: 2px solid rgba(31, 78, 153, 0.5);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 0 4px 20px rgba(31, 78, 153, 0.3), inset 0 0 30px rgba(31, 78, 153, 0.1);
+  animation: infoPulse 2s ease-in-out infinite;
+}
+
+@keyframes infoPulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(31, 78, 153, 0.3), inset 0 0 30px rgba(31, 78, 153, 0.1);
+    border-color: rgba(31, 78, 153, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(31, 78, 153, 0.5), inset 0 0 40px rgba(31, 78, 153, 0.2);
+    border-color: rgba(31, 78, 153, 0.8);
+  }
 }
 
 .rivalry-info-item {
@@ -270,17 +343,41 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  font-size: 1.1rem;
-  color: #e0e0e0;
+  font-size: 1.3rem;
+  color: #ffffff;
 }
 
 .info-icon {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  animation: iconBounce 1s ease-in-out infinite;
+}
+
+.rivalry-info-item:nth-child(1) .info-icon {
+  animation-delay: 0s;
+}
+
+.rivalry-info-item:nth-child(2) .info-icon {
+  animation-delay: 0.2s;
+}
+
+.rivalry-info-item:nth-child(3) .info-icon {
+  animation-delay: 0.4s;
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 .info-text {
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* CTA Button */
@@ -320,11 +417,35 @@
   transform: scale(0.98);
 }
 
+/* Bottom Text */
+.rivalry-bottom-text {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rivalry-bottom-text span {
+  font-size: 0.85rem;
+  color: #888a9b;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
 /* Mobile Responsive */
 @media (max-width: 600px) {
   .rivalry-popup-content {
     border-radius: 16px;
     max-width: 95%;
+  }
+
+  .rivalry-top-badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    letter-spacing: 1px;
+  }
+
+  .rivalry-fire-row {
+    font-size: 1.2rem;
   }
 
   .rivalry-title {
@@ -356,11 +477,11 @@
   }
 
   .rivalry-info-item {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .info-icon {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
   .rivalry-cta-btn {
@@ -376,6 +497,15 @@
   .rivalry-image {
     max-height: 120px;
   }
+
+  .hype-badge {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .rivalry-bottom-text span {
+    font-size: 0.75rem;
+  }
 }
 
 @media (max-width: 400px) {
@@ -390,5 +520,9 @@
 
   .rivalry-matchup {
     gap: 1rem;
+  }
+
+  .hype-badge {
+    font-size: 0.6rem;
   }
 }

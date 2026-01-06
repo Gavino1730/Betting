@@ -49,6 +49,9 @@ const RivalryWeekPopup = ({ enabled = true, gameInfo = {} }) => {
       <div className="rivalry-popup-content" onClick={(e) => e.stopPropagation()}>
         <button className="rivalry-close-btn" onClick={handleClose}>×</button>
         
+        {/* Top Badge */}
+        <div className="rivalry-top-badge">🏆 GAME OF THE YEAR 🏆</div>
+        
         <div className="rivalry-image-container">
           <img 
             src="/assets/fight.png" 
@@ -58,6 +61,7 @@ const RivalryWeekPopup = ({ enabled = true, gameInfo = {} }) => {
         </div>
 
         <div className="rivalry-text-container">
+          <div className="rivalry-fire-row">🔥🔥🔥</div>
           <h1 className="rivalry-title animated">IT'S RIVALRY WEEK</h1>
           <div className="rivalry-matchup animated-delayed">
             <span className="rivalry-team valiant">VC</span>
@@ -65,6 +69,11 @@ const RivalryWeekPopup = ({ enabled = true, gameInfo = {} }) => {
             <span className="rivalry-team opponent">{opponent}</span>
           </div>
           <p className="rivalry-tagline animated-delayed-more">SHOW UP!</p>
+          
+          <div className="rivalry-hype-badges">
+            <span className="hype-badge">⚡ BIGGEST GAME</span>
+            <span className="hype-badge">🎯 BRAGGING RIGHTS</span>
+          </div>
           
           <div className="rivalry-game-info">
             <div className="rivalry-info-item">
@@ -84,6 +93,10 @@ const RivalryWeekPopup = ({ enabled = true, gameInfo = {} }) => {
           <button className="rivalry-cta-btn" onClick={handleClose}>
             LET'S GO! 🔥
           </button>
+          
+          <div className="rivalry-bottom-text">
+            <span>💙 Wear Blue • Bring the Energy • Support Your Valiants 💙</span>
+          </div>
         </div>
       </div>
     </div>

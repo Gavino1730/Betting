@@ -71,6 +71,7 @@
   justify-content: center;
   align-items: center;
   z-index: 2000;
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
 
@@ -117,7 +118,6 @@
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 0;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .tab-btn {
@@ -974,7 +974,6 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-height: auto;
   height: 32px;
 }
 

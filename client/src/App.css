@@ -32,7 +32,6 @@ body {
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
-  scrollbar-gutter: stable;
   width: 100%;
   position: relative;
 }
@@ -66,6 +65,7 @@ body {
   gap: 0.75rem;
   letter-spacing: -0.5px;
   flex-shrink: 0;
+  min-width: -webkit-fit-content;
   min-width: fit-content;
 }
 
@@ -91,8 +91,8 @@ body {
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: none;
   -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .nav-center::-webkit-scrollbar {
@@ -106,6 +106,7 @@ body {
   justify-content: flex-end;
   flex-wrap: nowrap;
   flex-shrink: 0;
+  min-width: -webkit-fit-content;
   min-width: fit-content;
 }
 
@@ -766,6 +767,7 @@ table tbody tr:hover {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 1050;
   animation: fadeIn 0.3s ease;
