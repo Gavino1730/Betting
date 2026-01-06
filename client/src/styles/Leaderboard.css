@@ -532,10 +532,11 @@
   .leaderboard-row {
     display: grid !important;
     flex-direction: initial !important;
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 40px 1fr auto;
     gap: 0.5rem;
-    padding: 0.75rem 0.5rem;
+    padding: 0.5rem;
     border-radius: 8px;
+    align-items: center;
   }
 
   .rank-number {
@@ -545,7 +546,9 @@
   }
 
   .user-cell {
-    grid-column: span 1;
+    grid-column: 2;
+    display: flex;
+    align-items: center;
   }
 
   .user-name {
@@ -569,11 +572,12 @@
     display: none !important;
   }
 
-  /* Only show balance below username */
+  /* Show balance on same row */
   .balance-cell {
     display: flex !important;
-    grid-column: 2;
-    margin-top: 0.25rem;
+    grid-column: 3;
+    margin-top: 0;
+    justify-content: flex-end;
   }
 
   .balance-cell .cell-label {
