@@ -83,24 +83,6 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-// Update prop bet status/outcome (admin only)
-router.put('/:id', authenticateToken, async (req, res) => {
-  const user = req.user;
-  if (!user.is_admin) {
-    return res.status(403).json({ error: 'Only admins can update prop bets' });
-  }
-
-  const { status, outcome } = req.body;
-
-  try {
-    const { supabase } = require('../supabase');
-    const Bet = require('../models/Bet');
-    
-    // Update prop bet status
-    await PropBet.updateStatus(req.params.id, status, outcome);
-
-    let betsResolved = 0;
-
 // Toggle prop bet visibility (admin only)
 router.put('/:id/visibility', authenticateToken, async (req, res) => {
   const user = req.user;
@@ -118,6 +100,24 @@ router.put('/:id/visibility', authenticateToken, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Update prop bet status/outcome (admin only)
+router.put('/:id', authenticateToken, async (req, res) => {
+  const user = req.user;
+  if (!user.is_admin) {
+    return res.status(403).json({ error: 'Only admins can update prop bets' });
+  }
+
+  const { status, outcome } = req.body;
+
+  try {
+    const { supabase } = require('../supabase');
+    const Bet = require('../models/Bet');
+    
+    // Update prop bet status
+    await PropBet.updateStatus(req.params.id, status, outcome);
+
+    let betsResolved = 0;
     let winningsDistributed = 0;
 
     // If outcome is set (yes or no), resolve all associated bets
