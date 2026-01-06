@@ -24,6 +24,9 @@ const PropBet = {
         ? parseFloat(noOdds)
         : (optionOdds['No'] ? parseFloat(optionOdds['No']) : 1.5);
 
+      // If no expiration date provided, set to 1 year from now
+      const finalExpiresAt = expiresAt || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+
       const { data, error } = await supabase
         .from('prop_bets')
         .insert([{
@@ -36,7 +39,7 @@ const PropBet = {
           // custom options instead of default YES/NO.
           options: options && options.length ? options : null,
           option_odds: optionOdds && Object.keys(optionOdds).length ? optionOdds : null,
-          expires_at: expiresAt,
+          expires_at: finalExpiresAt,
           status: 'active',
           is_visible: true
         }])

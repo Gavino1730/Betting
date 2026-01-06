@@ -530,6 +530,8 @@
   }
 
   .leaderboard-row {
+    display: grid !important;
+    flex-direction: initial !important;
     grid-template-columns: 40px 1fr;
     gap: 0.5rem;
     padding: 0.75rem 0.5rem;

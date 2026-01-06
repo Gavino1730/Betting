@@ -532,7 +532,7 @@ function Games() {
                     )}
 
                     <div className="betting-section">
-                      <div className="team-selection" style={{display: 'flex', gap: '10px', marginBottom: '15px', width: '100%'}}>
+                      <div className="team-selection">
                         {/* Always show Valiants on the left */}
                         {game.home_team.toLowerCase().includes('valiant') ? (
                           <>
