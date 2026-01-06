@@ -205,6 +205,35 @@ body {
   }
 }
 
+/* Tablet optimizations (iPad, tablets) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .container {
+    max-width: 95%;
+    padding: 1.5rem 1rem;
+  }
+
+  .navbar {
+    padding: 0.85rem 1.2rem;
+  }
+
+  .nav-center button {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .balance-display {
+    padding: 0.5rem 1rem;
+  }
+
+  .balance-label {
+    font-size: 0.8rem;
+  }
+
+  .balance-amount {
+    font-size: 0.95rem;
+  }
+}
+
 @media (max-width: 900px) {
   .navbar {
     padding: 0.65rem 0.8rem;

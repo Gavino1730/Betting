@@ -461,6 +461,37 @@ function AdminPanel() {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    const user = users.find(u => u.id === userId);
+    if (!user) return;
+
+    const confirmDelete = window.confirm(
+      `⚠️ WARNING: This will permanently delete the user "${user.username}" and ALL their data including:\n\n` +
+      `• All bets\n` +
+      `• All transactions\n` +
+      `• All notifications\n\n` +
+      `This action CANNOT be undone!\n\n` +
+      `Type the username "${user.username}" to confirm deletion.`
+    );
+
+    if (!confirmDelete) return;
+
+    const typedUsername = window.prompt(`Type "${user.username}" to confirm:`);
+    if (typedUsername !== user.username) {
+      alert('Username does not match. Deletion cancelled.');
+      return;
+    }
+
+    try {
+      await apiClient.delete(`/users/${userId}`);
+      fetchUsers();
+      setSelectedUser(null);
+      alert('✅ User account deleted successfully');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete user');
+    }
+  };
+
   const handleUpdateBet = async (betId) => {
     if (!editingBetOutcome) {
       alert('Please select an outcome');
@@ -1721,6 +1752,25 @@ function AdminPanel() {
                   >
                     ❌ Close
                   </button>
+                </div>
+
+                {/* Delete User Button */}
+                <div style={{marginBottom: '20px', paddingTop: '20px', borderTop: '1px solid rgba(255, 255, 255, 0.1)'}}>
+                  <button 
+                    className="btn"
+                    style={{
+                      width: '100%',
+                      background: 'linear-gradient(135deg, #d32f2f, #b71c1c)',
+                      border: '2px solid #d32f2f',
+                      fontWeight: '700'
+                    }}
+                    onClick={() => handleDeleteUser(selectedUser)}
+                  >
+                    🗑️ Delete Account Permanently
+                  </button>
+                  <p style={{fontSize: '0.8rem', color: '#ef5350', marginTop: '8px', textAlign: 'center'}}>
+                    ⚠️ This action cannot be undone!
+                  </p>
                 </div>
 
                 {/* User Bets and Actions */}

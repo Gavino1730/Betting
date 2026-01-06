@@ -1099,6 +1099,53 @@
 
   .dashboard-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  /* Better form spacing on tablets */
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  /* Game card selection for tablets */
+  .game-cards-selection {
+    gap: 1rem;
+  }
+
+  .game-card-btn {
+    padding: 1.25rem;
+  }
+
+  /* Team selection buttons */
+  .team-selection {
+    gap: 1rem;
+  }
+
+  .team-btn {
+    padding: 1rem;
+  }
+
+  /* Confidence buttons */
+  .confidence-selection {
+    gap: 0.75rem;
+  }
+
+  .confidence-btn {
+    padding: 1rem 0.75rem;
+  }
+
+  /* Stats compact row */
+  .dashboard-stats-compact {
+    gap: 0.75rem;
+  }
+
+  .stat-compact {
+    padding: 0.85rem 1.1rem;
+    min-width: 95px;
   }
 }
 

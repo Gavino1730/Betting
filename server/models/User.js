@@ -111,6 +111,39 @@ class User {
       throw new Error(`Error updating admin status: ${err.message}`);
     }
   }
+
+  static async delete(userId) {
+    try {
+      // Delete user's bets first (cascade)
+      await supabase
+        .from('bets')
+        .delete()
+        .eq('user_id', userId);
+
+      // Delete user's transactions
+      await supabase
+        .from('transactions')
+        .delete()
+        .eq('user_id', userId);
+
+      // Delete user's notifications
+      await supabase
+        .from('notifications')
+        .delete()
+        .eq('user_id', userId);
+
+      // Finally delete the user
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', userId);
+
+      if (error) throw error;
+      return { changes: 1 };
+    } catch (err) {
+      throw new Error(`Error deleting user: ${err.message}`);
+    }
+  }
 }
 
 module.exports = User;

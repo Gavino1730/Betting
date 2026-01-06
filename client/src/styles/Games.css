@@ -215,6 +215,31 @@
   }
 }
 
+/* Tablet optimizations */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .games-page {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .game-card {
+    padding: 1.5rem;
+  }
+
+  .game-card-title {
+    font-size: 1.1rem;
+  }
+
+  .filter-btn {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
 @media (max-width: 768px) {
   .games-page {
     padding: 0 0.75rem;

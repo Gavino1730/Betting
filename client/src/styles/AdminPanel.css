@@ -320,7 +320,59 @@
     line-height: 1.25;
   }
 }
+/* Tablet optimizations */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .admin-panel {
+    padding: 1.5rem 1.25rem;
+  }
 
+  .card {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .tabs {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .games-table,
+  .users-table {
+    font-size: 0.9rem;
+  }
+
+  .games-table th,
+  .users-table th {
+    padding: 0.9rem 0.7rem;
+  }
+
+  .games-table td,
+  .users-table td {
+    padding: 0.9rem 0.7rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .modal-content {
+    padding: 2rem 1.75rem;
+    min-width: 85vw;
+    max-width: 650px;
+  }
+}
 @media (max-width: 520px) {
   .admin-panel {
     padding: 0.75rem 0.5rem;
