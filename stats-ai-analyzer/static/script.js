@@ -101,7 +101,12 @@ function showStatus(message, type) {
     uploadStatus.classList.remove('hidden');
 }
 
-function hideStatus() {, game_id, memory_stats } = data;
+function hideStatus() {
+    uploadStatus.classList.add('hidden');
+}
+
+function displayResults(data) {
+    const { analysis, export_data, export_filename, game_id, memory_stats } = data;
 
     // Store export filename and game ID
     currentExportFilename = export_filename;
@@ -135,12 +140,7 @@ function hideStatus() {, game_id, memory_stats } = data;
         JSON.stringify(export_data, null, 2);
 
     // Reload game history
-    loadGameHistory(tent').textContent = 
-        analysis.preparation || 'No preparation notes available';
-
-    // Display export preview
-    document.getElementById('exportPreview').textContent = 
-        JSON.stringify(export_data, null, 2);
+    loadGameHistory();
 
     // Show results section
     showResults();
