@@ -3,6 +3,7 @@ const router = express.Router();
 const { authenticateToken, adminOnly, optionalAuth } = require('../middleware/auth');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
+const Notification = require('../models/Notification');
 
 router.get('/profile', authenticateToken, async (req, res) => {
   try {
@@ -40,23 +41,69 @@ router.post('/gift-balance', authenticateToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+    
+    // If balance is above 0, clear any pending refill and return
     if ((user.balance ?? 0) > 0) {
+      if (user.pending_refill_timestamp) {
+        await User.clearPendingRefill(user.id);
+      }
       return res.json({ gifted: false, user });
     }
-    const latestGift = await Transaction.findLatestGiftForUser(user.id);
-    if (latestGift) {
-      const giftTimestamp = new Date(latestGift.created_at).getTime();
-      if (!Number.isNaN(giftTimestamp)) {
-        const now = Date.now();
-        const daysSinceGift = (now - giftTimestamp) / (1000 * 60 * 60 * 24);
-        if (daysSinceGift < 7) {
-          return res.json({ gifted: false, user });
-        }
-      }
+    
+    const now = Date.now();
+    
+    // If no pending refill timestamp, this is the first time hitting $0
+    if (!user.pending_refill_timestamp) {
+      // Set the timestamp - user must wait 48 hours from now
+      await User.setPendingRefill(user.id, new Date());
+      
+      await Notification.create(
+        user.id,
+        '⏳ Balance Refill Pending',
+        'Your balance has hit $0.00. You will receive 500 Valiant Bucks in 48 hours. These funds will be spendable immediately once received.',
+        'balance_pending'
+      );
+      
+      const updatedUser = await User.findById(user.id);
+      return res.json({ 
+        gifted: false, 
+        pending: true,
+        hoursRemaining: 48,
+        message: 'Your refill will be available in 48 hours',
+        user: updatedUser 
+      });
     }
+    
+    // Check if 48 hours have passed since pending timestamp
+    const pendingTimestamp = new Date(user.pending_refill_timestamp).getTime();
+    const hoursSincePending = (now - pendingTimestamp) / (1000 * 60 * 60);
+    
+    // If less than 48 hours, user must wait
+    if (hoursSincePending < 48) {
+      const hoursRemaining = Math.ceil(48 - hoursSincePending);
+      return res.json({ 
+        gifted: false,
+        pending: true,
+        hoursRemaining,
+        message: `Your refill will be available in ${hoursRemaining} hours`,
+        user 
+      });
+    }
+    
+    // 48 hours have passed - grant the refill!
     const giftAmount = 500;
     await User.updateBalance(user.id, giftAmount);
-    await Transaction.create(user.id, 'gift', giftAmount, 'Zero-balance courtesy gift');
+    await User.clearPendingRefill(user.id);
+    await Transaction.create(user.id, 'gift', giftAmount, 'Balance refill after 48-hour wait - spendable immediately');
+    
+    // Create notification for the gift
+    await Notification.create(
+      user.id,
+      '🎁 Balance Refilled!',
+      `Your 48-hour wait is complete! We've added ${giftAmount} Valiant Bucks to your account. These funds are spendable immediately.`,
+      'balance_gift'
+    );
+    
     const updatedUser = await User.findById(user.id);
     return res.json({ gifted: true, giftAmount, user: updatedUser });
   } catch (error) {

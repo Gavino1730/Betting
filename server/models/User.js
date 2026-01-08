@@ -22,7 +22,7 @@ class User {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, username, balance, is_admin')
+        .select('id, username, balance, is_admin, pending_refill_timestamp')
         .eq('id', id)
         .single();
 
@@ -139,6 +139,34 @@ class User {
       return { changes: 1 };
     } catch (err) {
       throw new Error(`Error updating admin status: ${err.message}`);
+    }
+  }
+
+  static async setPendingRefill(userId, timestamp) {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ pending_refill_timestamp: timestamp })
+        .eq('id', userId);
+
+      if (error) throw error;
+      return { changes: 1 };
+    } catch (err) {
+      throw new Error(`Error setting pending refill: ${err.message}`);
+    }
+  }
+
+  static async clearPendingRefill(userId) {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ pending_refill_timestamp: null })
+        .eq('id', userId);
+
+      if (error) throw error;
+      return { changes: 1 };
+    } catch (err) {
+      throw new Error(`Error clearing pending refill: ${err.message}`);
     }
   }
 

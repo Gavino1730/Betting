@@ -57,6 +57,8 @@ function Notifications({ onUnreadChange }) {
       case 'bet_won': return '🎉';
       case 'bet_lost': return '😔';
       case 'bet_placed': return '✅';
+      case 'balance_gift': return '🎁';
+      case 'balance_pending': return '⏳';
       default: return '📢';
     }
   };

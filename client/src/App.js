@@ -55,10 +55,24 @@ function GiftBalanceWatcher({ user, updateUser }) {
         }
         if (response.data?.gifted) {
           showToast(
-            'Your balance hit 0 — just for fun, here’s a 500 Valiant Bucks gift to keep playing!',
-            'info',
-            6000
+            '🎁 Your 48-hour wait is complete! We\'ve added 500 Valiant Bucks to your account - spendable immediately!',
+            'success',
+            8000
           );
+        } else if (response.data?.pending) {
+          if (response.data.hoursRemaining === 48) {
+            showToast(
+              '⏳ Your balance hit $0.00. You will receive 500 Valiant Bucks in 48 hours. Check your notifications for details.',
+              'info',
+              7000
+            );
+          } else {
+            showToast(
+              `⏳ Your refill will be available in ${response.data.hoursRemaining} hours.`,
+              'info',
+              6000
+            );
+          }
         }
       } catch (err) {
         console.error('Error gifting balance:', err);
