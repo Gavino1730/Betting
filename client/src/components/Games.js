@@ -157,7 +157,14 @@ function Games() {
       return;
     }
 
-    const amount = parseFloat(propBetAmounts[`${propId}-${choice}`]);
+    const loadingKey = `${propId}-${choice}`;
+    
+    // Prevent double-clicking
+    if (propBetLoading[loadingKey]) {
+      return;
+    }
+
+    const amount = parseFloat(propBetAmounts[loadingKey]);
     
     if (!amount || amount <= 0) {
       setMessage('Please enter a valid bet amount');
@@ -169,6 +176,16 @@ function Games() {
       return;
     }
 
+    // Set loading state
+    setPropBetLoading(prev => ({ ...prev, [loadingKey]: true }));
+
+    // CRITICAL: Optimistically subtract balance immediately to prevent double-betting
+    const newBalance = balance - amount;
+    setBalance(newBalance);
+    if (updateUser) {
+      updateUser({ ...user, balance: newBalance });
+    }
+
     try {
       await apiClient.post('/prop-bets/place', {
         propBetId: propId,
@@ -176,13 +193,30 @@ function Games() {
         amount
       });
       
+      // Refresh balance from server to get exact value
+      const userResponse = await apiClient.get('/users/profile');
+      setBalance(userResponse.data.balance);
+      if (updateUser) {
+        updateUser(userResponse.data);
+      }
+      
       setMessage(`Pick placed successfully on ${choice.toUpperCase()}!`);
-      setPropBetAmounts({});
-      fetchBalance();
+      setPropBetAmounts(prev => {
+        const updated = { ...prev };
+        delete updated[loadingKey];
+        return updated;
+      });
       
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
+      // Restore balance if bet fails
+      setBalance(balance);
+      if (updateUser) {
+        updateUser(user);
+      }
       setMessage(err.response?.data?.error || 'Failed to place pick');
+    } finally {
+      setPropBetLoading(prev => ({ ...prev, [loadingKey]: false }));
     }
   };
 
@@ -401,9 +435,13 @@ function Games() {
                               <button
                                 className={`prop-bet-btn ${idx === 0 ? 'yes' : 'no'}-btn`}
                                 onClick={() => handlePlacePropBet(prop.id, optionKey, propLocked)}
-                                disabled={propLocked}
+                                disabled={propLocked || propBetLoading[`${prop.id}-${optionKey}`]}
+                                style={{
+                                  opacity: (propLocked || propBetLoading[`${prop.id}-${optionKey}`]) ? 0.6 : 1,
+                                  cursor: (propLocked || propBetLoading[`${prop.id}-${optionKey}`]) ? 'not-allowed' : 'pointer'
+                                }}
                               >
-                                {propLocked ? 'Closed' : `Bet ${option}`}
+                                {propBetLoading[`${prop.id}-${optionKey}`] ? 'Placing...' : (propLocked ? 'Closed' : `Bet ${option}`)}
                               </button>
                             </div>
                           );
@@ -429,9 +467,13 @@ function Games() {
                             <button
                               className="prop-bet-btn yes-btn"
                               onClick={() => handlePlacePropBet(prop.id, 'yes', propLocked)}
-                              disabled={propLocked}
+                              disabled={propLocked || propBetLoading[`${prop.id}-yes`]}
+                              style={{
+                                opacity: (propLocked || propBetLoading[`${prop.id}-yes`]) ? 0.6 : 1,
+                                cursor: (propLocked || propBetLoading[`${prop.id}-yes`]) ? 'not-allowed' : 'pointer'
+                              }}
                             >
-                              {propLocked ? 'Closed' : 'Pick YES'}
+                              {propBetLoading[`${prop.id}-yes`] ? 'Placing...' : (propLocked ? 'Closed' : 'Pick YES')}
                             </button>
                           </div>
 
@@ -453,9 +495,13 @@ function Games() {
                             <button
                               className="prop-bet-btn no-btn"
                               onClick={() => handlePlacePropBet(prop.id, 'no', propLocked)}
-                              disabled={propLocked}
+                              disabled={propLocked || propBetLoading[`${prop.id}-no`]}
+                              style={{
+                                opacity: (propLocked || propBetLoading[`${prop.id}-no`]) ? 0.6 : 1,
+                                cursor: (propLocked || propBetLoading[`${prop.id}-no`]) ? 'not-allowed' : 'pointer'
+                              }}
                             >
-                              {propLocked ? 'Closed' : 'Pick NO'}
+                              {propBetLoading[`${prop.id}-no`] ? 'Placing...' : (propLocked ? 'Closed' : 'Pick NO')}
                             </button>
                           </div>
                         </>

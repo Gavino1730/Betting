@@ -115,10 +115,10 @@ function App() {
     if (token) {
       fetchUnreadCount();
       fetchUserProfile(); // Initial fetch
-      // Lighten load: poll notifications every 2 minutes instead of 30s
+      // Poll notifications every 2 minutes
       const notificationInterval = setInterval(fetchUnreadCount, 120000);
-      // Refresh user balance every 30 seconds to catch bet resolutions
-      const balanceInterval = setInterval(fetchUserProfile, 30000);
+      // Refresh user balance every 5 seconds to catch immediate updates
+      const balanceInterval = setInterval(fetchUserProfile, 5000);
       return () => {
         clearInterval(notificationInterval);
         clearInterval(balanceInterval);
@@ -381,7 +381,7 @@ function App() {
       <div className="container">
         {page === 'dashboard' && <Dashboard user={user} onNavigate={handlePageChange} updateUser={updateUser} fetchUserProfile={fetchUserProfile} />}
         <Suspense fallback={<LoadingSpinner />}>
-          {page === 'games' && <Games />}
+          {page === 'games' && <Games user={currentUser} updateUser={updateUser} />}
           {page === 'teams' && <Teams />}
           {page === 'bets' && <BetList />}
           {page === 'leaderboard' && <Leaderboard />}

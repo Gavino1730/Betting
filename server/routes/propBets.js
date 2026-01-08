@@ -232,6 +232,18 @@ router.post('/place', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'This prop bet is no longer active' });
     }
 
+    // Check if user already has a bet on this prop
+    const { data: existingBets } = await supabase
+      .from('bets')
+      .select('id')
+      .eq('user_id', req.user.id)
+      .eq('game_id', propBetId)
+      .like('bet_type', 'prop-%');
+    
+    if (existingBets && existingBets.length > 0) {
+      return res.status(400).json({ error: 'You have already placed a bet on this prop' });
+    }
+
     const expiresAt = propBet.expires_at ? new Date(propBet.expires_at) : null;
     const hasExpired = expiresAt && !Number.isNaN(expiresAt.getTime()) && Date.now() >= expiresAt.getTime();
 
@@ -266,7 +278,6 @@ router.post('/place', authenticateToken, async (req, res) => {
     const potentialWin = parsedAmount * odds;
 
     // Create bet record (using bets table with special marker for prop bets)
-    const { supabase } = require('../supabase');
     const { data: bet, error: betError } = await supabase
       .from('bets')
       .insert({
@@ -284,16 +295,16 @@ router.post('/place', authenticateToken, async (req, res) => {
 
     if (betError) throw betError;
 
-    // Deduct balance
-    await User.updateBalance(req.user.id, -parsedAmount);
-
-    // Create transaction
+    // Create transaction record first
     await Transaction.create(
       req.user.id,
       'bet',
       -parsedAmount,
       `Prop bet: ${propBet.title} - ${choice}`
     );
+
+    // Then deduct balance
+    await User.updateBalance(req.user.id, -parsedAmount);
 
     // Create notification
     const Notification = require('../models/Notification');

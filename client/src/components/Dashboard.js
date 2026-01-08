@@ -8,6 +8,13 @@ import Confetti from './Confetti';
 
 function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
   const [balance, setBalance] = useState(user?.balance || 0);
+
+  // Sync balance immediately when user prop changes
+  useEffect(() => {
+    if (user?.balance !== undefined) {
+      setBalance(user.balance);
+    }
+  }, [user?.balance]);
   const [games, setGames] = useState([]);
   const [bets, setBets] = useState([]);
   const [selectedGameId, setSelectedGameId] = useState('');
@@ -247,15 +254,31 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         odds: confidenceMultipliers[confidence],
       };
 
-      await apiClient.post('/bets', betData);
-
-      // Refresh user balance from server
-      const userResponse = await apiClient.get('/users/profile');
-      setBalance(userResponse.data.balance);
-      
-      // Update parent component's user state and localStorage
+      // CRITICAL: Optimistically subtract balance immediately to prevent double-betting
+      const newBalance = balance - betAmount;
+      setBalance(newBalance);
       if (updateUser) {
-        updateUser(userResponse.data);
+        updateUser({ ...user, balance: newBalance });
+      }
+
+      try {
+        await apiClient.post('/bets', betData);
+
+        // Refresh user balance from server to get exact value
+        const userResponse = await apiClient.get('/users/profile');
+        setBalance(userResponse.data.balance);
+        
+        // Update parent component's user state and localStorage
+        if (updateUser) {
+          updateUser(userResponse.data);
+        }
+      } catch (betError) {
+        // Restore balance if bet fails
+        setBalance(balance);
+        if (updateUser) {
+          updateUser(user);
+        }
+        throw betError;
       }
 
       setMessage(`Pick placed successfully on ${selectedTeam}! Potential win: ${formatCurrency(amount * confidenceMultipliers[confidence])}`);

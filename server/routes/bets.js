@@ -122,8 +122,12 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // Create bet and update balance atomically
     const bet = await Bet.create(req.user.id, gameId, confidence, selectedTeam, parsedAmount, resolvedOdds);
-    await User.updateBalance(req.user.id, -parsedAmount);
+    
+    // Create transaction record first (before balance update)
     await Transaction.create(req.user.id, 'bet', -parsedAmount, `${confidence} confidence bet on ${selectedTeam}: ${resolvedOdds}x odds`);
+    
+    // Then deduct balance
+    await User.updateBalance(req.user.id, -parsedAmount);
 
     // Create notification
     const Notification = require('../models/Notification');
