@@ -999,15 +999,17 @@
 .prop-description {
   color: #b0b2c3;
   font-size: 0.85rem;
-  line-height: 1.4;
+  line-height: 1.6;
   margin: 0.5rem 0 1rem 0;
+  white-space: pre-line;
 }
 
 .prop-card.featured .prop-description {
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.7;
   color: #c8d4e6;
   margin: 0.8rem 0 1.2rem 0;
+  white-space: pre-line;
 }
 
 .prop-betting-section {

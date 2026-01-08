@@ -362,8 +362,8 @@ function AdminPanel() {
   };
 
   const removePropBetOption = (index) => {
-    if (propBetForm.options.length <= 2) {
-      alert('You must have at least 2 options');
+    if (propBetForm.options.length <= 1) {
+      alert('You must have at least 1 option');
       return;
     }
     const optionToRemove = propBetForm.options[index];
