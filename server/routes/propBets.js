@@ -47,19 +47,19 @@ router.post('/', authenticateToken, async (req, res) => {
   // Support both old format (yesOdds/noOdds) and new format (options/optionOdds)
   let finalYesOdds, finalNoOdds, finalOptionOdds;
   
-  if (options && options.length >= 2 && optionOdds) {
-    // New format: custom options
+  if (options && options.length >= 1 && optionOdds) {
+    // New format: custom options (single or multiple)
     finalOptionOdds = optionOdds;
     // Extract yes/no odds for backward compatibility
     finalYesOdds = optionOdds[options[0]] || 1.5;
-    finalNoOdds = optionOdds[options[1]] || 1.5;
-  } else if (yesOdds && noOdds) {
-    // Old format: yesOdds/noOdds
+    finalNoOdds = options.length > 1 ? (optionOdds[options[1]] || 1.0) : 1.0; // Default NO to 1.0 if single option
+  } else if (yesOdds) {
+    // Old format: yesOdds with optional noOdds
     finalYesOdds = yesOdds;
-    finalNoOdds = noOdds;
-    finalOptionOdds = { 'Yes': yesOdds, 'No': noOdds };
+    finalNoOdds = noOdds || 1.0; // Default to 1.0 if not provided
+    finalOptionOdds = { 'Yes': yesOdds, 'No': finalNoOdds };
   } else {
-    return res.status(400).json({ error: 'Please provide odds for all options' });
+    return res.status(400).json({ error: 'Please provide odds for at least one option' });
   }
 
   try {

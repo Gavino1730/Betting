@@ -52,7 +52,7 @@ function AdminPanel() {
     title: '',
     description: '',
     teamType: 'General',
-    options: ['', ''],
+    options: ['YES'],
     optionOdds: {},
     expiresAt: '',
     useCustomOptions: true
@@ -412,7 +412,7 @@ function AdminPanel() {
         title: '',
         description: '',
         teamType: 'General',
-        options: ['', ''],
+        options: ['YES'],
         optionOdds: {},
         expiresAt: '',
         useCustomOptions: true
@@ -482,7 +482,7 @@ function AdminPanel() {
       title: '',
       description: '',
       teamType: 'General',
-      options: ['', ''],
+      options: ['YES'],
       optionOdds: {},
       expiresAt: '',
       useCustomOptions: true
@@ -496,8 +496,8 @@ function AdminPanel() {
 
     // Validate options and odds
     const filledOptions = propBetForm.options.filter(opt => opt.trim() !== '');
-    if (filledOptions.length < 2) {
-      alert('Please provide at least 2 options');
+    if (filledOptions.length < 1) {
+      alert('Please provide at least 1 option');
       return;
     }
 
@@ -516,7 +516,7 @@ function AdminPanel() {
         optionOdds: propBetForm.optionOdds,
         expiresAt: propBetForm.expiresAt || null,
         yesOdds: propBetForm.optionOdds[filledOptions[0]],
-        noOdds: propBetForm.optionOdds[filledOptions[1]]
+        noOdds: filledOptions.length > 1 ? propBetForm.optionOdds[filledOptions[1]] : 1.0
       });
 
       alert('Prop pick updated successfully!');
@@ -1265,7 +1265,9 @@ function AdminPanel() {
             <div className="form-row">
               <div className="form-group full-width">
                 <label>Pick Options *</label>
-                <p style={{fontSize: '0.9rem', color: '#888a9b', marginBottom: '1rem'}}>Define custom options users can pick (e.g., "Valiants win", "Opponent wins")</p>
+                <p style={{fontSize: '0.9rem', color: '#888a9b', marginBottom: '1rem'}}>
+                  For parlays, use a single "YES" option. For regular props, add multiple options (e.g., "Team A wins", "Team B wins")
+                </p>
                 
                 {propBetForm.options.map((option, index) => (
                   <div key={index} style={{display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'flex-end'}}>
@@ -1291,7 +1293,7 @@ function AdminPanel() {
                         style={{width: '100%'}}
                       />
                     </div>
-                    {propBetForm.options.length > 2 && (
+                    {propBetForm.options.length > 1 && (
                       <button 
                         type="button" 
                         onClick={() => removePropBetOption(index)}
