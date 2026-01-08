@@ -99,6 +99,7 @@ function App() {
   const [page, setPage] = useState(localStorage.getItem('currentPage') || 'dashboard');
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const profilePollRef = useRef({ timeoutId: null, delay: 5000, inFlight: false });
 
   useEffect(() => {
     // Token is now handled by axios interceptor
@@ -113,15 +114,47 @@ function App() {
 
   useEffect(() => {
     if (token) {
+      const profilePollState = profilePollRef.current;
       fetchUnreadCount();
-      fetchUserProfile(); // Initial fetch
       // Poll notifications every 2 minutes
       const notificationInterval = setInterval(fetchUnreadCount, 120000);
-      // Refresh user balance every 5 seconds to catch immediate updates
-      const balanceInterval = setInterval(fetchUserProfile, 5000);
+      let isMounted = true;
+
+      const scheduleNextProfileFetch = (delay) => {
+        if (!isMounted) return;
+        profilePollState.timeoutId = setTimeout(runProfileFetch, delay);
+      };
+
+      const runProfileFetch = async () => {
+        if (!isMounted) return;
+        if (profilePollState.inFlight) {
+          scheduleNextProfileFetch(profilePollState.delay);
+          return;
+        }
+
+        profilePollState.inFlight = true;
+        const updatedUser = await fetchUserProfile();
+
+        if (updatedUser) {
+          profilePollState.delay = 5000;
+        } else {
+          profilePollState.delay = Math.min(profilePollState.delay * 2, 60000);
+        }
+
+        profilePollState.inFlight = false;
+        scheduleNextProfileFetch(profilePollState.delay);
+      };
+
+      runProfileFetch();
+
       return () => {
+        isMounted = false;
         clearInterval(notificationInterval);
-        clearInterval(balanceInterval);
+        if (profilePollState.timeoutId) {
+          clearTimeout(profilePollState.timeoutId);
+        }
+        profilePollState.inFlight = false;
+        profilePollState.delay = 5000;
       };
     }
   }, [token]);
@@ -141,8 +174,10 @@ function App() {
       const updatedUser = response.data;
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
+      return updatedUser;
     } catch (err) {
       console.error('Error fetching user profile:', err);
+      return null;
     }
   };
 
