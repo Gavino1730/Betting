@@ -9,7 +9,7 @@ Users create accounts, get virtual money (Valiant Bucks), and place bets on game
 ### 1. Setup Database
 - Create a Supabase project: https://supabase.com
 - Open the SQL Editor
-- Copy and run everything in `database-setup.sql`
+- Copy and run everything in `database/database-setup.sql`
 
 ### 2. Setup Environment Variables
 
@@ -70,7 +70,10 @@ Frontend runs at: http://localhost:3000
 ```
 server/          → Backend code (API endpoints)
 client/          → Frontend code (React app)
-database-setup.sql → Database schema
+database/        → SQL scripts and migrations
+docs/            → Documentation files
+uploads/         → User uploaded files
+exports/         → Export data
 ```
 
 ## Need Help?
