@@ -1,6 +1,10 @@
 # Environment variables
 .env
 
+# Database
+stats_memory.db
+stats_memory.db-journal
+
 # Python
 __pycache__/
 *.py[cod]

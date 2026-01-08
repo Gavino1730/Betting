@@ -4,7 +4,9 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 import os
 
-DATABASE_PATH = 'stats_memory.db'
+# Set database path to be in the same directory as this script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE_PATH = os.path.join(SCRIPT_DIR, 'stats_memory.db')
 
 class StatsDatabase:
     def __init__(self, db_path: str = DATABASE_PATH):

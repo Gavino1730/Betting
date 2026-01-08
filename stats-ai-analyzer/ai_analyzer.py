@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from typing import Dict, Any, List
 import json
 from database import StatsDatabase
+from schedule_helper import get_schedule_context
 
 load_dotenv()
 
@@ -42,8 +43,11 @@ class AIAnalyzer:
                 if game_context.get('away_team'):
                     team_histories['away'] = self.db.get_team_history(game_context['away_team'])
             
+            # Get schedule context
+            schedule_context = get_schedule_context(game_context.get('game_date') if game_context else None)
+            
             # Create comprehensive prompt for analysis with historical context
-            prompt = self._create_analysis_prompt(stats_text, historical_context, team_histories)
+            prompt = self._create_analysis_prompt(stats_text, historical_context, team_histories, schedule_context)
             
             # Build message content with text and images
             message_content = []
@@ -87,7 +91,7 @@ class AIAnalyzer:
             # Structure the analysis
             return self._structure_analysis(analysis_text, stats_text)
         
-        except Exception as e:
+        except Exception as e:, schedule_context: str
             raise Exception(f"Error during AI analysis: {str(e)}")
     
     def _create_analysis_prompt(self, stats_text: str, historical_context: Dict[str, Any], team_histories: Dict[str, List]) -> str:
@@ -133,11 +137,12 @@ IMPORTANT: I'm providing both text data AND images from the stats sheet. Please 
 
 {history_section}
 {team_history_section}
+{schedule_context}
 
 CURRENT GAME STATS (TEXT):
 {stats_text}
 
-Using ALL available data (current stats, historical trends, past games, and user insights), please provide:
+Using ALL available data (current stats, historical trends, past games, schedule context, and user insights), please provide:
 
 1. GAME PREDICTION
    - Predicted winner and confidence level (%)

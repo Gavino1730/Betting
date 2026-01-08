@@ -193,10 +193,12 @@ def download_file(filename):
 @app.route('/health')
 def health_check():
     """Health check endpoint."""
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'stats_memory.db')
     return jsonify({
         'status': 'healthy',
         'openai_configured': bool(os.getenv('OPENAI_API_KEY')),
-        'database_initialized': os.path.exists('stats_memory.db'),
+        'database_path': db_path,
+        'database_initialized': os.path.exists(db_path),
         'total_games_analyzed': db.get_historical_context()['total_games']
     })
 
