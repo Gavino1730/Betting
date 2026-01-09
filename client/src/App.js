@@ -118,30 +118,32 @@ function App() {
       // Poll notifications every 2 minutes
       const notificationInterval = setInterval(fetchUnreadCount, 120000);
       let isMounted = true;
+      // Copy ref to local variable at effect start for cleanup
+      const pollRef = profilePollRef.current;
 
       const scheduleNextProfileFetch = (delay) => {
         if (!isMounted) return;
-        profilePollRef.current.timeoutId = setTimeout(runProfileFetch, delay);
+        pollRef.timeoutId = setTimeout(runProfileFetch, delay);
       };
 
       const runProfileFetch = async () => {
         if (!isMounted) return;
-        if (profilePollRef.current.inFlight) {
-          scheduleNextProfileFetch(profilePollRef.current.delay);
+        if (pollRef.inFlight) {
+          scheduleNextProfileFetch(pollRef.delay);
           return;
         }
 
-        profilePollRef.current.inFlight = true;
+        pollRef.inFlight = true;
         const updatedUser = await fetchUserProfile();
 
         if (updatedUser) {
-          profilePollRef.current.delay = 5000;
+          pollRef.delay = 5000;
         } else {
-          profilePollRef.current.delay = Math.min(profilePollRef.current.delay * 2, 60000);
+          pollRef.delay = Math.min(pollRef.delay * 2, 60000);
         }
 
-        profilePollRef.current.inFlight = false;
-        scheduleNextProfileFetch(profilePollRef.current.delay);
+        pollRef.inFlight = false;
+        scheduleNextProfileFetch(pollRef.delay);
       };
 
       runProfileFetch();
@@ -149,8 +151,6 @@ function App() {
       return () => {
         isMounted = false;
         clearInterval(notificationInterval);
-        // Copy ref to local variable for cleanup
-        const pollRef = profilePollRef.current;
         if (pollRef.timeoutId) {
           clearTimeout(pollRef.timeoutId);
         }
