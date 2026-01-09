@@ -631,7 +631,10 @@ function AdminPanel() {
   };
 
   const handleUpdateGameStatus = async () => {
+    if (loading) return; // Prevent double-click
+    
     try {
+      setLoading(true);
       const { id, status, homeScore, awayScore, winner } = gameStatusModal;
       
       const updateData = {
@@ -658,6 +661,8 @@ function AdminPanel() {
       fetchAllBets();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to update game');
+    } finally {
+      setLoading(false);
     }
   };
 

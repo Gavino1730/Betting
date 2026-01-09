@@ -83,10 +83,17 @@ function Games({ user, updateUser }) {
   }, []);
 
   useEffect(() => {
-    fetchGames();
-    fetchPropBets();
-    fetchBalance();
-    fetchUserBets();
+    // Initial fetch on mount
+    const loadData = async () => {
+      await Promise.all([
+        fetchGames(),
+        fetchPropBets(),
+        fetchBalance(),
+        fetchUserBets()
+      ]);
+    };
+    
+    loadData();
     
     // Poll for updates every 5 seconds for near real-time experience
     const pollInterval = setInterval(() => {
@@ -97,7 +104,8 @@ function Games({ user, updateUser }) {
     }, 5000);
     
     return () => clearInterval(pollInterval);
-  }, [fetchGames, fetchPropBets, fetchBalance, fetchUserBets]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array - only run on mount
 
   useEffect(() => {
     const intervalId = setInterval(() => setNow(Date.now()), 3000);

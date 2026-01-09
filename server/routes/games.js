@@ -438,7 +438,8 @@ router.put('/:id/outcome', authenticateToken, async (req, res) => {
         // Create notification
         const Notification = require('../models/Notification');
         if (won) {
-          const winnings = bet.amount * bet.odds;
+          // Use potential_win if available, otherwise calculate
+          const winnings = bet.potential_win || (bet.amount * bet.odds);
           await User.updateBalance(bet.user_id, winnings);
           await Transaction.create(
             bet.user_id, 

@@ -430,7 +430,7 @@ function AppContent() {
             <Route path="/howto" element={<HowToUse onNavigate={handlePageChange} />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
-            {user && user.is_admin && (
+            {currentUser && currentUser.is_admin && (
               <Route path="/admin" element={<AdminPanel />} />
             )}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
