@@ -596,6 +596,36 @@ function AdminPanel() {
     }
   };
 
+  const handleResetPassword = async (userId) => {
+    const user = users.find(u => u.id === userId);
+    if (!user) return;
+
+    const newPassword = window.prompt(
+      `🔒 Reset password for "${user.username}"\n\n` +
+      `Enter a new password (minimum 6 characters):`
+    );
+
+    if (!newPassword) return;
+
+    if (newPassword.length < 6) {
+      alert('❌ Password must be at least 6 characters long');
+      return;
+    }
+
+    try {
+      const response = await apiClient.put(`/users/${userId}/reset-password`, { newPassword });
+      alert(
+        `✅ Password reset successfully!\n\n` +
+        `New password: ${response.data.newPassword}\n\n` +
+        `Please share this password with ${user.username}.\n` +
+        `They will also receive a notification in the app.`
+      );
+      fetchUsers();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to reset password');
+    }
+  };
+
   const handleUpdateBet = async (betId) => {
     if (!editingBetOutcome) {
       alert('Please select an outcome');
@@ -1944,6 +1974,13 @@ function AdminPanel() {
                     onClick={() => handleUpdateUserBalance(selectedUser)}
                   >
                     ✅ Save Balance
+                  </button>
+                  <button 
+                    className="btn btn-mobile"
+                    style={{background: '#ff9800'}}
+                    onClick={() => handleResetPassword(selectedUser)}
+                  >
+                    🔒 Reset Password
                   </button>
                   <button 
                     className="btn btn-mobile btn-secondary"

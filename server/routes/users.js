@@ -139,6 +139,37 @@ router.put('/:id/admin', authenticateToken, adminOnly, async (req, res) => {
   }
 });
 
+router.put('/:id/reset-password', authenticateToken, adminOnly, async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    if (!newPassword) {
+      return res.status(400).json({ error: 'New password required' });
+    }
+    
+    // Validate password length
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+
+    const bcrypt = require('bcryptjs');
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+    await User.updatePassword(req.params.id, hashedPassword);
+    
+    // Notify user about password change
+    await Notification.create(
+      req.params.id,
+      '🔒 Password Reset',
+      'Your password has been reset by an administrator. Please use your new password to log in.',
+      'password_reset'
+    );
+    
+    res.json({ message: 'Password reset successfully', newPassword }); // Return the plaintext password so admin can share it
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.delete('/:id', authenticateToken, adminOnly, async (req, res) => {
   try {
     // Prevent deleting yourself

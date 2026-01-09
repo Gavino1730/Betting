@@ -170,6 +170,20 @@ class User {
     }
   }
 
+  static async updatePassword(userId, hashedPassword) {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ password: hashedPassword })
+        .eq('id', userId);
+
+      if (error) throw error;
+      return { changes: 1 };
+    } catch (err) {
+      throw new Error(`Error updating password: ${err.message}`);
+    }
+  }
+
   static async delete(userId) {
     try {
       // Use RPC function to delete user with CASCADE
