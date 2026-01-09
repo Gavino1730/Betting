@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
@@ -93,13 +94,17 @@ function GiftBalanceWatcher({ user, updateUser }) {
   return null;
 }
 
-function App() {
+function AppContent() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [page, setPage] = useState(localStorage.getItem('currentPage') || 'dashboard');
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const profilePollRef = useRef({ timeoutId: null, delay: 5000, inFlight: false });
+  
+  // Get page from URL path
+  const page = location.pathname.slice(1) || 'dashboard';
 
   useEffect(() => {
     // Token is now handled by axios interceptor
@@ -199,14 +204,12 @@ function App() {
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    localStorage.removeItem('currentPage');
     localStorage.removeItem('hasSeenOnboarding');
-    setPage('dashboard');
+    navigate('/dashboard');
   };
 
   const handlePageChange = (newPage) => {
-    setPage(newPage);
-    localStorage.setItem('currentPage', newPage);
+    navigate(`/${newPage}`);
     setMobileMenuOpen(false); // Close mobile menu on navigation
   };
 
@@ -415,17 +418,23 @@ function App() {
       </div>
 
       <div className="container">
-        {page === 'dashboard' && <Dashboard user={user} onNavigate={handlePageChange} updateUser={updateUser} fetchUserProfile={fetchUserProfile} />}
         <Suspense fallback={<LoadingSpinner />}>
-          {page === 'games' && <Games user={currentUser} updateUser={updateUser} />}
-          {page === 'teams' && <Teams />}
-          {page === 'bets' && <BetList />}
-          {page === 'leaderboard' && <Leaderboard />}
-          {page === 'notifications' && <Notifications />}
-          {page === 'howto' && <HowToUse onNavigate={handlePageChange} />}
-          {page === 'about' && <About />}
-          {page === 'terms' && <Terms />}
-          {page === 'admin' && user && user.is_admin && <AdminPanel />}
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard user={user} onNavigate={handlePageChange} updateUser={updateUser} fetchUserProfile={fetchUserProfile} />} />
+            <Route path="/games" element={<Games user={currentUser} updateUser={updateUser} />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/bets" element={<BetList />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/howto" element={<HowToUse onNavigate={handlePageChange} />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<Terms />} />
+            {user && user.is_admin && (
+              <Route path="/admin" element={<AdminPanel />} />
+            )}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
         </Suspense>
       </div>
 
@@ -434,6 +443,14 @@ function App() {
       {token && <OnboardingModal />}
     </div>
     </ToastProvider>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
