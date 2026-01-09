@@ -14,25 +14,9 @@ router.post('/register', async (req, res) => {
     const trimmedUsername = username.trim();
     const trimmedEmail = email.trim().toLowerCase();
     
-    // Validate email
+    // Validate email format only
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: 'Invalid email format' });
-    }
-    
-    // Validate username
-    if (trimmedUsername.length < 3 || trimmedUsername.length > 20) {
-      return res.status(400).json({ error: 'Username must be 3-20 characters' });
-    }
-    if (!/^[a-zA-Z0-9_]+$/.test(trimmedUsername)) {
-      return res.status(400).json({ error: 'Username can only contain letters, numbers, and underscores' });
-    }
-
-    // Validate password strength
-    if (password.length < 8) {
-      return res.status(400).json({ error: 'Password must be at least 8 characters' });
-    }
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      return res.status(400).json({ error: 'Password must contain uppercase, lowercase, and number' });
     }
     
     try {

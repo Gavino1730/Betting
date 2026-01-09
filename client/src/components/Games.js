@@ -184,6 +184,9 @@ function Games({ user, updateUser }) {
       return;
     }
 
+    // Store the original balance before optimistic update
+    const originalBalance = balance;
+
     // Set loading state
     setPropBetLoading(prev => ({ ...prev, [loadingKey]: true }));
 
@@ -195,17 +198,17 @@ function Games({ user, updateUser }) {
     }
 
     try {
-      await apiClient.post('/prop-bets/place', {
+      const response = await apiClient.post('/prop-bets/place', {
         propBetId: propId,
         choice,
         amount
       });
       
-      // Refresh balance from server to get exact value
-      const userResponse = await apiClient.get('/users/profile');
-      setBalance(userResponse.data.balance);
+      // Use the balance returned from the server
+      const serverBalance = response.data.newBalance;
+      setBalance(serverBalance);
       if (updateUser) {
-        updateUser(userResponse.data);
+        updateUser({ ...user, balance: serverBalance });
       }
       
       setMessage(`Pick placed successfully on ${choice.toUpperCase()}!`);
@@ -217,12 +220,13 @@ function Games({ user, updateUser }) {
       
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
-      // Restore balance if bet fails
-      setBalance(balance);
+      // Restore the original balance if bet fails
+      setBalance(originalBalance);
       if (updateUser) {
-        updateUser(user);
+        updateUser({ ...user, balance: originalBalance });
       }
       setMessage(err.response?.data?.error || 'Failed to place pick');
+      setTimeout(() => setMessage(''), 3000);
     } finally {
       setPropBetLoading(prev => ({ ...prev, [loadingKey]: false }));
     }

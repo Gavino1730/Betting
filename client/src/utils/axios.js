@@ -111,7 +111,7 @@ apiClient.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
     // Log API errors (except auth failures which are normal)
     if (error.response?.status >= 500) {
       logError(error, {
@@ -128,11 +128,18 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       const requestUrl = error.config?.url || '';
       const isAuthRequest = requestUrl.includes('/auth/login') || requestUrl.includes('/auth/register');
-      if (isAuthRequest) {
+      
+      // Don't retry auth requests or requests that have already been retried
+      if (isAuthRequest || error.config._retry) {
         return Promise.reject(error);
       }
+      
+      // Mark this request as retried to prevent infinite loops
+      error.config._retry = true;
+      
       // Try to refresh the token
-      return refreshToken().then(newToken => {
+      try {
+        const newToken = await refreshToken();
         if (newToken) {
           // Retry the original request with new token
           error.config.headers.Authorization = `Bearer ${newToken}`;
@@ -142,7 +149,10 @@ apiClient.interceptors.response.use(
           window.location.href = '/';
           return Promise.reject(error);
         }
-      });
+      } catch (refreshError) {
+        window.location.href = '/';
+        return Promise.reject(refreshError);
+      }
     }
     return Promise.reject(error);
   }

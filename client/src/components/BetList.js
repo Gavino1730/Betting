@@ -265,15 +265,22 @@ function BetList() {
               <div className="bet-item-header">
                 <div className="bet-team-info">
                   <span className="team-type-badge">{bet.games?.team_type || 'Game'}</span>
-                  <h3 className="team-name">{bet.selected_team}</h3>
-                  <span className="vs-text">vs</span>
-                  <span className="opponent-name">{getOpponent(bet)}</span>
+                  <h3 className="team-name">{bet.games?.home_team} vs {bet.games?.away_team}</h3>
+                  {bet.games?.game_date && (
+                    <span className="game-date-badge">📅 {(parseLocalDateOnly(bet.games.game_date) || new Date(bet.games.game_date)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  )}
                 </div>
                 <div className="bet-status-badge">
                   {bet.status === 'pending' && <span className="badge badge-pending">Pending</span>}
                   {bet.outcome === 'won' && <span className="badge badge-won">Won</span>}
                   {bet.outcome === 'lost' && <span className="badge badge-lost">Lost</span>}
                 </div>
+              </div>
+
+              {/* Selected Team Highlight */}
+              <div style={{padding: '8px 12px', background: 'rgba(33, 150, 243, 0.1)', borderRadius: '6px', marginBottom: '12px', borderLeft: '3px solid #2196f3'}}>
+                <span style={{fontSize: '0.85rem', color: '#90caf9'}}>Your Pick: </span>
+                <span style={{fontSize: '0.95rem', fontWeight: '600', color: '#2196f3'}}>{bet.selected_team}</span>
               </div>
 
               {/* Bet Details Grid */}
@@ -306,15 +313,7 @@ function BetList() {
 
               {/* Bet Footer */}
               <div className="bet-item-footer">
-                <span className="bet-date">📅 Pick placed on: {formatPlacedAt(bet.created_at)}</span>
-                {bet.games?.game_date && (
-                  <span className="game-date">
-                    🏀 Game: {(parseLocalDateOnly(bet.games.game_date) || new Date(bet.games.game_date)).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      day: 'numeric'
-                    })}
-                  </span>
-                )}
+                <span className="bet-date">📅 Pick placed: {formatPlacedAt(bet.created_at)}</span>
               </div>
             </div>
           ))}
