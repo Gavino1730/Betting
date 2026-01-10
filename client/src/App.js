@@ -109,7 +109,7 @@ function GiftBalanceWatcher({ user, updateUser }) {
     return () => {
       isMounted = false;
     };
-  }, [user?.balance, showToast, updateUser]);
+  }, [user, showToast, updateUser]);
 
   return null;
 }
