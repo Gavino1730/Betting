@@ -59,18 +59,15 @@ function Games({ user, updateUser }) {
 
   const fetchGames = useCallback(async () => {
     try {
-      console.log('[Games] Fetching games...');
       const response = await apiClient.get('/games', { timeout: 5000 });
       const sortedGames = (response.data || []).sort((a, b) => {
         return new Date(a.game_date) - new Date(b.game_date);
       });
-      console.log(`[Games] Games fetched successfully: ${sortedGames.length} games`);
       setGames(sortedGames);
     } catch (err) {
       console.error('[Games] Error fetching games:', err.message || err);
       // Don't clear games on error - keep showing what we had before
       setGames(prevGames => {
-        console.log(`[Games] Error fetching games, keeping ${prevGames.length} previous games`);
         return prevGames.length === 0 ? [] : prevGames;
       });
     } finally {
@@ -107,11 +104,18 @@ function Games({ user, updateUser }) {
     
     // Create flag to prevent polling after unmount
     let isActive = true;
+    let isPageVisible = true;
+    
+    // Track page visibility to pause polling when tab is not in focus
+    const handleVisibilityChange = () => {
+      isPageVisible = document.visibilityState === 'visible';
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     // Poll with staggered intervals for better performance
     // Games and prop bets every 15 seconds (less frequent, stable data)
     const gamesInterval = setInterval(async () => {
-      if (isActive) {
+      if (isActive && isPageVisible) {
         try {
           await Promise.all([fetchGames(), fetchPropBets()]);
         } catch (err) {
@@ -122,7 +126,7 @@ function Games({ user, updateUser }) {
     
     // Balance and bets every 5 seconds (more frequent, changes more often)
     const userDataInterval = setInterval(async () => {
-      if (isActive) {
+      if (isActive && isPageVisible) {
         try {
           await Promise.all([fetchBalance(), fetchUserBets()]);
         } catch (err) {
@@ -133,6 +137,7 @@ function Games({ user, updateUser }) {
     
     return () => {
       isActive = false;
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearInterval(gamesInterval);
       clearInterval(userDataInterval);
     };

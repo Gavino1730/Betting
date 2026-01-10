@@ -117,20 +117,17 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   const fetchGames = useCallback(async () => {
     try {
-      console.log('[Dashboard] Fetching games...');
       const response = await apiClient.get('/games');
       // Sort games by date (earliest first)
       const sortedGames = (response.data || []).sort((a, b) => {
         return new Date(a.game_date) - new Date(b.game_date);
       });
-      console.log(`[Dashboard] Games fetched successfully: ${sortedGames.length} games`);
       setGames(sortedGames);
     } catch (err) {
       console.error('Error fetching games:', err.message || err);
       // Don't clear games on error - keep showing what we had before
       // Only set empty if it's the initial load and we had no games
       setGames(prevGames => {
-        console.log(`[Dashboard] Error fetching games, keeping ${prevGames.length} previous games`);
         return prevGames.length === 0 ? [] : prevGames;
       });
     } finally {
@@ -228,10 +225,18 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     
     // Create abort controller to handle unmounting gracefully
     let isActive = true;
+    let isPageVisible = true;
     
-    // Poll with proper cleanup: bets every 5 seconds, games every 10 seconds
+    // Track page visibility to pause polling when tab is not in focus
+    const handleVisibilityChange = () => {
+      isPageVisible = document.visibilityState === 'visible';
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Poll with proper cleanup: bets every 5 seconds, games every 30 seconds
+    // Only poll when page is visible
     const betsInterval = setInterval(async () => {
-      if (isActive) {
+      if (isActive && isPageVisible) {
         try {
           await fetchBets();
         } catch (err) {
@@ -241,7 +246,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     }, 5000);
     
     const gamesInterval = setInterval(async () => {
-      if (isActive) {
+      if (isActive && isPageVisible) {
         try {
           await fetchGames();
         } catch (err) {
@@ -252,6 +257,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     
     return () => {
       isActive = false;
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearInterval(betsInterval);
       clearInterval(gamesInterval);
     };
