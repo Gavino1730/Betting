@@ -248,7 +248,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           console.error('Error in games polling:', err);
         }
       }
-    }, 10000);
+    }, 30000);
     
     return () => {
       isActive = false;

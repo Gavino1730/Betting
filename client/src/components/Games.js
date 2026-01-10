@@ -108,25 +108,33 @@ function Games({ user, updateUser }) {
     // Create flag to prevent polling after unmount
     let isActive = true;
     
-    // Poll for updates every 5 seconds for near real-time experience
-    const pollInterval = setInterval(async () => {
+    // Poll with staggered intervals for better performance
+    // Games and prop bets every 15 seconds (less frequent, stable data)
+    const gamesInterval = setInterval(async () => {
       if (isActive) {
         try {
-          await Promise.all([
-            fetchGames(),
-            fetchPropBets(),
-            fetchBalance(),
-            fetchUserBets()
-          ]);
+          await Promise.all([fetchGames(), fetchPropBets()]);
         } catch (err) {
-          console.error('Error during polling:', err);
+          console.error('Error polling games/prop bets:', err);
+        }
+      }
+    }, 15000);
+    
+    // Balance and bets every 5 seconds (more frequent, changes more often)
+    const userDataInterval = setInterval(async () => {
+      if (isActive) {
+        try {
+          await Promise.all([fetchBalance(), fetchUserBets()]);
+        } catch (err) {
+          console.error('Error polling user data:', err);
         }
       }
     }, 5000);
     
     return () => {
       isActive = false;
-      clearInterval(pollInterval);
+      clearInterval(gamesInterval);
+      clearInterval(userDataInterval);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty array - only run on mount
