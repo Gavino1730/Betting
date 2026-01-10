@@ -60,7 +60,7 @@ function Games({ user, updateUser }) {
   const fetchGames = useCallback(async () => {
     try {
       console.log('[Games] Fetching games...');
-      const response = await apiClient.get('/games');
+      const response = await apiClient.get('/games', { timeout: 5000 });
       const sortedGames = (response.data || []).sort((a, b) => {
         return new Date(a.game_date) - new Date(b.game_date);
       });

@@ -11,6 +11,17 @@ const errorLogger = async (err, req, res, next) => {
                     req.headers['x-real-ip'] || 
                     req.socket.remoteAddress;
 
+  // Sanitize request body to exclude sensitive fields
+  const sanitizedBody = { ...req.body };
+  const sensitiveFields = ['password', 'token', 'jwt', 'secret', 'key', 'credit', 'card', 'ssn', 'pin'];
+  sensitiveFields.forEach(field => {
+    Object.keys(sanitizedBody).forEach(key => {
+      if (key.toLowerCase().includes(field)) {
+        sanitizedBody[key] = '[REDACTED]';
+      }
+    });
+  });
+
   // Log the error
   await ErrorLog.create({
     userId,
@@ -20,7 +31,7 @@ const errorLogger = async (err, req, res, next) => {
     errorStack: err.stack,
     endpoint: req.originalUrl || req.url,
     method: req.method,
-    requestBody: req.body,
+    requestBody: Object.keys(sanitizedBody).length > 0 ? sanitizedBody : null,
     userAgent: req.headers['user-agent'],
     ipAddress,
     severity: err.statusCode >= 500 ? 'critical' : 'error'

@@ -282,16 +282,28 @@ router.post('/place', authenticateToken, async (req, res) => {
 
     // Calculate potential win - support both custom options and legacy yes/no
     let odds = 1.5; // Default fallback
+    let validChoice = false;
     
     if (propBet.options && propBet.options.length > 0 && propBet.option_odds) {
       // Custom options - find matching option case-insensitively
       const matchedOption = propBet.options.find(opt => opt.toLowerCase() === normalizedChoice);
       if (matchedOption && propBet.option_odds[matchedOption]) {
         odds = parseFloat(propBet.option_odds[matchedOption]);
+        validChoice = true;
+      } else {
+        // Invalid choice - not in available options
+        return res.status(400).json({ 
+          error: `Invalid choice. Valid options are: ${propBet.options.join(', ')}` 
+        });
       }
     } else {
       // Legacy yes/no format
-      odds = normalizedChoice === 'yes' ? propBet.yes_odds : propBet.no_odds;
+      if (normalizedChoice === 'yes' || normalizedChoice === 'no') {
+        odds = normalizedChoice === 'yes' ? propBet.yes_odds : propBet.no_odds;
+        validChoice = true;
+      } else {
+        return res.status(400).json({ error: 'Invalid choice. Must be YES or NO' });
+      }
     }
 
     const potentialWin = parsedAmount * odds;

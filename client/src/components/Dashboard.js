@@ -140,7 +140,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   const fetchProfile = useCallback(async () => {
     try {
-      if (fetchUserProfile) {
+      if (fetchUserProfile && typeof fetchUserProfile === 'function') {
         const updatedUser = await fetchUserProfile();
         if (updatedUser?.balance !== undefined) {
           setBalance(updatedUser.balance);
@@ -152,14 +152,14 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       if (response?.data?.balance !== undefined) {
         setBalance(response.data.balance);
         // Update parent component's user state and localStorage
-        if (updateUser) {
+        if (updateUser && typeof updateUser === 'function') {
           updateUser(response.data);
         }
       }
     } catch (err) {
       console.error('Error fetching profile:', err);
     }
-  }, [fetchUserProfile, updateUser]);
+  }, [fetchUserProfile, updateUser])
 
   const fetchBets = useCallback(async () => {
     try {
@@ -173,18 +173,22 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           if (oldBet && oldBet.status === 'pending' && newBet.status === 'resolved') {
             // Bet was just resolved
             if (newBet.outcome === 'won') {
-              const profit = parseFloat(newBet.potential_win) - parseFloat(newBet.amount);
+              const profit = newBet.potential_win ? (parseFloat(newBet.potential_win) - parseFloat(newBet.amount)) : 0;
               setWinNotification({ team: newBet.selected_team, amount: profit });
               setShowConfetti(true);
-              setTimeout(() => {
+              const winTimeout = setTimeout(() => {
                 setWinNotification(null);
                 setShowConfetti(false);
               }, 3000);
+              // Store timeout for cleanup
+              return () => clearTimeout(winTimeout);
             } else if (newBet.outcome === 'lost') {
               setLossNotification({ team: newBet.selected_team, amount: newBet.amount });
-              setTimeout(() => {
+              const lossTimeout = setTimeout(() => {
                 setLossNotification(null);
               }, 2500);
+              // Store timeout for cleanup
+              return () => clearTimeout(lossTimeout);
             }
           }
         });
@@ -295,7 +299,10 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         odds: confidenceMultipliers[confidence],
       };
 
-      // CRITICAL: Optimistically subtract balance immediately to prevent double-betting
+      // CRITICAL: Store original balance BEFORE optimistic update
+      const originalBalance = balance;
+      
+      // Optimistically subtract balance immediately to prevent double-betting
       const newBalance = balance - betAmount;
       setBalance(newBalance);
       if (updateUser) {
@@ -303,21 +310,28 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       }
 
       try {
-        await apiClient.post('/bets', betData);
+        const response = await apiClient.post('/bets', betData);
 
-        // Refresh user balance from server to get exact value
-        const userResponse = await apiClient.get('/users/profile');
-        setBalance(userResponse.data.balance);
-        
-        // Update parent component's user state and localStorage
-        if (updateUser) {
-          updateUser(userResponse.data);
+        // Use balance from server response to ensure accuracy (no additional fetch needed)
+        const serverBalance = response.data?.user?.balance || response.data?.newBalance;
+        if (serverBalance !== undefined) {
+          setBalance(serverBalance);
+          if (updateUser) {
+            updateUser({ ...user, balance: serverBalance });
+          }
+        } else {
+          // Fallback: fetch fresh balance if not in response
+          const userResponse = await apiClient.get('/users/profile');
+          setBalance(userResponse.data.balance);
+          if (updateUser) {
+            updateUser(userResponse.data);
+          }
         }
       } catch (betError) {
-        // Restore balance if bet fails
-        setBalance(balance);
+        // Restore to original balance if bet fails
+        setBalance(originalBalance);
         if (updateUser) {
-          updateUser(user);
+          updateUser({ ...user, balance: originalBalance });
         }
         throw betError;
       }

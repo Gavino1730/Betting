@@ -427,7 +427,7 @@ function AdminPanel() {
         expiresAt: propBetForm.expiresAt || null
       };
       await apiClient.post('/prop-bets', payload);
-      alert('Prop pick created successfully!');
+      setError('Prop pick created successfully!', 'success', 3000);
       setPropBetForm({
         title: '',
         description: '',
@@ -439,7 +439,7 @@ function AdminPanel() {
       });
       fetchPropBets();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to create prop pick');
+      setError(err.response?.data?.error || 'Failed to create prop pick', 'error', 4000);
     }
   };
 
@@ -447,9 +447,9 @@ function AdminPanel() {
     try {
       await apiClient.put(`/prop-bets/${propBetId}`, { status, outcome });
       fetchPropBets();
-      alert('Prop pick updated successfully!');
+      setError('Prop pick updated successfully!', 'success', 3000);
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update prop pick');
+      setError(err.response?.data?.error || 'Failed to update prop pick', 'error', 4000);
     }
   };
 

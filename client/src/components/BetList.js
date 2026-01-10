@@ -19,7 +19,11 @@ function BetList() {
     fetchBets();
     // Poll for bet updates every 5 seconds
     const interval = setInterval(fetchBets, 5000);
-    return () => clearInterval(interval);
+    let timeoutCleanups = [];
+    return () => {
+      clearInterval(interval);
+      timeoutCleanups.forEach(cleanup => cleanup && cleanup());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -30,26 +34,31 @@ function BetList() {
       
       // Check for newly resolved bets
       if (previousBets.length > 0) {
+        const timeoutIds = [];
         newBets.forEach(newBet => {
           const oldBet = previousBets.find(b => b.id === newBet.id);
           if (oldBet && oldBet.status === 'pending' && newBet.status === 'resolved') {
             // Bet was just resolved
             if (newBet.outcome === 'won') {
-              const profit = parseFloat(newBet.potential_win) - parseFloat(newBet.amount);
+              const profit = newBet.potential_win ? (parseFloat(newBet.potential_win) - parseFloat(newBet.amount)) : 0;
               setWinNotification({ team: newBet.selected_team, amount: profit });
               setShowConfetti(true);
-              setTimeout(() => {
+              const winTimeout = setTimeout(() => {
                 setWinNotification(null);
                 setShowConfetti(false);
               }, 3000);
+              timeoutIds.push(winTimeout);
             } else if (newBet.outcome === 'lost') {
               setLossNotification({ team: newBet.selected_team, amount: newBet.amount });
-              setTimeout(() => {
+              const lossTimeout = setTimeout(() => {
                 setLossNotification(null);
               }, 2500);
+              timeoutIds.push(lossTimeout);
             }
           }
         });
+        // Return cleanup function for timeouts
+        return () => timeoutIds.forEach(id => clearTimeout(id));
       }
       
       setPreviousBets(newBets);

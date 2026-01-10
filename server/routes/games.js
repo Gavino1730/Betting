@@ -249,6 +249,26 @@ router.post('/', authenticateToken, async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields: teamType, homeTeam, gameDate, winningOdds, losingOdds' });
   }
 
+  // Validate date format (YYYY-MM-DD)
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(gameDate)) {
+    return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' });
+  }
+
+  // Validate time format if provided (HH:MM:SS or HH:MM)
+  if (gameTime) {
+    const timeRegex = /^\d{2}:\d{2}(:\d{2})?$/;
+    if (!timeRegex.test(gameTime)) {
+      return res.status(400).json({ error: 'Invalid time format. Use HH:MM or HH:MM:SS' });
+    }
+  }
+
+  // Validate date is valid
+  const testDate = new Date(gameDate);
+  if (isNaN(testDate.getTime())) {
+    return res.status(400).json({ error: 'Invalid date value' });
+  }
+
   try {
     const result = await Game.create({
       teamType,

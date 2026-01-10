@@ -135,16 +135,17 @@ function AppContent() {
         setUser(JSON.parse(storedUser));
       }
     }
-  }, [token, user]);
+  }, [token]);
 
   useEffect(() => {
-    if (token) {
-      fetchUnreadCount();
-      // Poll notifications every 10 seconds for faster updates
-      const notificationInterval = setInterval(fetchUnreadCount, 10000);
-      let isMounted = true;
-      // Copy ref to local variable at effect start for cleanup
-      const pollRef = profilePollRef.current;
+    if (!token) return;
+    
+    fetchUnreadCount();
+    // Poll notifications every 10 seconds for faster updates
+    const notificationInterval = setInterval(fetchUnreadCount, 10000);
+    let isMounted = true;
+    // Copy ref to local variable at effect start for cleanup
+    const pollRef = profilePollRef.current;
 
       const scheduleNextProfileFetch = (delay) => {
         if (!isMounted) return;

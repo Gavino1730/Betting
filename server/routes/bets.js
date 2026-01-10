@@ -61,6 +61,15 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Game not found' });
     }
 
+    // Validate team name exists in the game
+    const homeTeam = game.home_team?.toLowerCase() || '';
+    const awayTeam = game.away_team?.toLowerCase() || '';
+    const selectedTeamLower = selectedTeam.toLowerCase();
+    
+    if (selectedTeamLower !== homeTeam && selectedTeamLower !== awayTeam) {
+      return res.status(400).json({ error: 'Selected team is not in this game' });
+    }
+
     // Check if user already has a bet on this game
     const existingBet = await Bet.findByUserAndGame(req.user.id, gameId);
     if (existingBet) {
