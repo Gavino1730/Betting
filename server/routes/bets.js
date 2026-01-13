@@ -24,8 +24,8 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Invalid numeric values' });
     }
     
-    if (parsedAmount <= 0 || parsedAmount > 10000) {
-      return res.status(400).json({ error: 'Bet amount must be between $0.01 and $10,000' });
+    if (parsedAmount <= 0) {
+      return res.status(400).json({ error: 'Bet amount must be greater than $0' });
     }
     
     // Validate confidence level
