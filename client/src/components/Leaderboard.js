@@ -21,12 +21,18 @@ function Leaderboard() {
     try {
       // Get all users
       const usersRes = await apiClient.get('/users');
-      // Filter out admin account
-      setUsers(usersRes.data.filter(u => u.username !== 'admin'));
+      // Filter out admin account from displayed users
+      const nonAdminUsers = usersRes.data.filter(u => u.username !== 'admin');
+      setUsers(nonAdminUsers);
 
       // Get all bets
       const betsRes = await apiClient.get('/bets/all');
-      setBets(betsRes.data);
+      // Filter out admin bets to match filtered users
+      const adminUser = usersRes.data.find(u => u.username === 'admin');
+      const nonAdminBets = adminUser 
+        ? betsRes.data.filter(b => b.user_id !== adminUser.id)
+        : betsRes.data;
+      setBets(nonAdminBets);
       setError('');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch leaderboard');
@@ -41,14 +47,26 @@ function Leaderboard() {
     const resolvedBets = userBets.filter(b => b.status === 'resolved');
     const totalBets = userBets.length;
     const resolvedCount = resolvedBets.length;
-    const wonBets = userBets.filter(b => b.outcome === 'won').length;
-    const lostBets = userBets.filter(b => b.outcome === 'lost').length;
+    const wonBets = resolvedBets.filter(b => b.outcome === 'won').length;
+    const lostBets = resolvedBets.filter(b => b.outcome === 'lost').length;
     const pendingBets = userBets.filter(b => b.status === 'pending').length;
+    
+    // Calculate profit from resolved bets only
+    // For won bets: profit = potential_win - amount (net gain)
+    // For lost bets: profit = -amount (loss)
+    const netProfit = resolvedBets.reduce((sum, b) => {
+      if (b.outcome === 'won') {
+        return sum + ((b.potential_win || 0) - (b.amount || 0));
+      } else if (b.outcome === 'lost') {
+        return sum - (b.amount || 0);
+      }
+      return sum;
+    }, 0);
+    
     const totalWagered = resolvedBets.reduce((sum, b) => sum + (b.amount || 0), 0);
-    const totalWinnings = userBets
+    const totalWinnings = resolvedBets
       .filter(b => b.outcome === 'won')
       .reduce((sum, b) => sum + (b.potential_win || 0), 0);
-    const netProfit = totalWinnings - totalWagered;
     const winRate = resolvedCount > 0 ? ((wonBets / resolvedCount) * 100) : 0;
     return {
       totalBets,
@@ -96,8 +114,6 @@ function Leaderboard() {
 
   const rankedUsers = getSortedUsers();
   const totalPicks = bets.length;
-  const totalWagered = bets.reduce((sum, b) => sum + (b.amount || 0), 0);
-  const totalWinnings = bets.filter(b => b.outcome === 'won').reduce((sum, b) => sum + (b.potential_win || 0), 0);
 
   return (
     <div className="leaderboard-page">
@@ -119,16 +135,6 @@ function Leaderboard() {
           <div className="stat-card-value">{totalPicks}</div>
           <div className="stat-card-label">Total Picks</div>
           <div className="stat-card-icon">🎲</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-card-value">{formatCurrency(totalWagered)}</div>
-          <div className="stat-card-label">Total Wagered</div>
-          <div className="stat-card-icon">💰</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-card-value" style={{color: '#66bb6a'}}>{formatCurrency(totalWinnings)}</div>
-          <div className="stat-card-label">Total Winnings</div>
-          <div className="stat-card-icon">🎉</div>
         </div>
       </div>
 
