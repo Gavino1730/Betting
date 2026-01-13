@@ -1238,8 +1238,4 @@
   .page-header h2 {
     font-size: 2rem;
   }
-
-  .confidence-options {
-    grid-template-columns: 1fr;
-  }
 }
