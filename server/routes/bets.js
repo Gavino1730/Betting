@@ -157,10 +157,10 @@ router.post('/', authenticateToken, async (req, res) => {
 // Get user's bets
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const bets = await Bet.findByUserId(req.user.id);
+    const limit = req.query.limit ? parseInt(req.query.limit) : null;
+    const bets = await Bet.findByUserId(req.user.id, limit);
     res.json(bets || []);
   } catch (error) {
-    console.error('Get bets error:', error);
     res.status(500).json({ error: error.message || 'Failed to retrieve bets' });
   }
 });

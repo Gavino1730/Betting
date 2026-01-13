@@ -96,7 +96,7 @@ function GiftBalanceWatcher({ user, updateUser }) {
         checkIntervalRef.current = null;
       }
     };
-  }, [user?.balance, showToast, updateUser]);
+  }, [user?.balance, user, showToast, updateUser]);
 
   return null;
 }

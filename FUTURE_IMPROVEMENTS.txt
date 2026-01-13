@@ -1,0 +1,276 @@
+# Future Improvements for Valiant Picks
+
+## High Priority (User Experience)
+
+### 1. Add Loading Skeletons
+**Current**: Shows "Loading..." text
+**Better**: Skeleton screens for better perceived performance
+**Benefit**: Makes the app feel faster, better UX during data fetching
+**Implementation**: Add skeleton components for dashboard cards, game lists, leaderboard rows
+
+### 2. Debounce Bet Amount Input
+**Issue**: Validation runs on every keystroke while typing
+**Solution**: Debounce validation by 300-500ms
+**Benefit**: Reduces unnecessary re-renders, smoother typing experience
+**Files**: Dashboard.js, Games.js
+
+### 3. Add Bet Confirmation Dialog
+**Purpose**: Prevent accidental high-value bets
+**Features**: 
+  - Show bet summary (team, amount, potential win)
+  - Require explicit confirmation
+  - Highlight for bets over $100
+**Benefit**: Prevents costly user mistakes, adds confidence
+**Priority**: HIGH - prevents user errors
+
+### 4. Better Error Messages
+**Current**: Generic error messages
+**Better**: User-friendly, actionable error messages
+**Examples**:
+  - "Insufficient balance" → "You need $X more to place this bet"
+  - "Game locked" → "Betting closed - game starts in 5 minutes"
+  - "Server error" → "Connection issue - your bet was not placed"
+
+### 5. Add "Recent Winners" Section
+**Location**: Dashboard top section
+**Display**: Recent winning bets from all users
+**Features**: 
+  - Username, team, amount won
+  - Sliding carousel or auto-scroll
+  - Creates FOMO and social proof
+**Benefit**: Increases engagement, shows active community
+
+### 6. Keyboard Navigation
+**Add shortcuts**:
+  - Enter: Submit active form
+  - Esc: Close modals/dialogs
+  - Tab: Better focus management
+  - Arrow keys: Navigate between games
+**Benefit**: Power users can bet faster, better accessibility
+
+### 7. Add Bet Slip Preview (Real-time Calculation)
+**Feature**: Live calculation as user types bet amount
+**Display**: 
+  - Amount wagered
+  - Confidence multiplier
+  - Potential payout
+  - Profit if won
+**Location**: Next to bet form, updates in real-time
+**Benefit**: User knows exact payout before confirming
+**Priority**: HIGH - improves clarity
+
+### 8. Implement Rate Limiting on Client
+**Issue**: User can accidentally double-click "Place Bet"
+**Solution**: 
+  - Disable button after click
+  - Show loading state
+  - Re-enable only after response or timeout
+**Benefit**: Prevents double-betting bugs
+**Priority**: HIGH - prevents critical bugs
+
+---
+
+## Medium Priority (Features)
+
+### 9. Add Bet History Export
+**Feature**: Export bet history to CSV/PDF
+**Use case**: Users can track their performance offline
+**Data**: All bets with dates, amounts, outcomes, profit/loss
+
+### 10. Add Bet Statistics Dashboard
+**Show user**: 
+  - Profit/loss over time (chart)
+  - Best performing confidence level
+  - Most profitable teams
+  - Win rate by team type (Boys/Girls Basketball, etc.)
+
+### 11. Add Push Notifications
+**For**: 
+  - Bet resolved (won/lost)
+  - Balance refill ready
+  - New games available
+  - Game starting soon (if user has bet)
+
+### 12. Add Dark/Light Mode Toggle
+**Current**: Dark theme only
+**Add**: User preference toggle
+**Benefit**: Accessibility, user preference
+
+### 13. Add Bet Editing Window
+**Feature**: Allow users to change selected team within first 5 minutes
+**Rules**: 
+  - Only before game starts
+  - Only if no other bets placed since
+  - Keep same confidence/amount
+
+### 14. Add Live Game Updates
+**Feature**: Show live scores during games
+**Source**: Could be manual admin updates or API integration
+**Display**: On dashboard and games page
+
+### 15. Add Betting Trends
+**Show**: 
+  - Most bet on teams
+  - Most popular confidence levels
+  - Community win rate
+**Benefit**: Helps users make informed decisions
+
+---
+
+## Low Priority (Polish)
+
+### 16. Add Animations
+**Where**: 
+  - Bet placement success (slide-in)
+  - Balance update (count-up animation)
+  - Leaderboard position changes (smooth transitions)
+
+### 17. Add Sound Effects (Optional)
+**For**: 
+  - Bet placed
+  - Bet won (celebration)
+  - Bet lost (subtle)
+**Note**: Must be optional/mutable
+
+### 18. Add Profile Customization
+**Features**: 
+  - Profile picture/avatar
+  - Favorite team badge
+  - Display name vs username
+  - Bio/tagline
+
+### 19. Add Bet Sharing
+**Feature**: Share bet on social media
+**Format**: "I just bet $100 on [Team] with Valiant Picks!"
+**Benefit**: Free marketing, viral growth
+
+### 20. Add Leaderboard Filters
+**Filters**: 
+  - By time period (weekly, monthly, all-time)
+  - By team type
+  - By confidence level stats
+
+---
+
+## Technical Improvements
+
+### 21. Add Service Worker (PWA)
+**Benefit**: 
+  - Offline support
+  - Faster loading
+  - Install as app on mobile
+  - Better caching
+
+### 22. Optimize Images
+**Action**: 
+  - Compress logo files
+  - Use WebP format
+  - Lazy load team images
+
+### 23. Add End-to-End Tests
+**Tool**: Playwright or Cypress
+**Coverage**: 
+  - User registration/login
+  - Bet placement flow
+  - Admin game management
+
+### 24. Add Error Boundary Improvements
+**Feature**: 
+  - Catch more granular errors
+  - Show user-friendly fallbacks
+  - Add "Report Bug" button
+
+### 25. Database Indexing Review
+**Check**: 
+  - Indexes on frequently queried columns
+  - Query performance optimization
+  - N+1 query issues
+
+---
+
+## Security Enhancements
+
+### 26. Add Two-Factor Authentication
+**Optional security layer for users**
+**Benefit**: Protect high-balance accounts
+
+### 27. Add Session Management
+**Features**: 
+  - Show active sessions
+  - Logout from all devices
+  - Session timeout configuration
+
+### 28. Add Admin Audit Log
+**Track**: 
+  - All admin actions
+  - Game edits
+  - User balance changes
+  - Bet resolutions
+
+---
+
+## Quick Wins (Easy to Implement)
+
+### 29. Add "Back to Top" Button
+**Show**: On long scrolling pages (leaderboard, teams)
+**Trigger**: After scrolling down 500px
+
+### 30. Add Bet Amount Quick Buttons
+**Feature**: Quick bet buttons ($10, $25, $50, $100, Max)
+**Location**: Next to amount input field
+**Benefit**: Faster betting for common amounts
+
+### 31. Add Game Search/Filter
+**On**: Browse Picks page
+**Filter by**: 
+  - Team type
+  - Date
+  - Status (upcoming/live/completed)
+
+### 32. Add Tooltip Explanations
+**For**: 
+  - Confidence levels (explain multipliers)
+  - Win rate calculation
+  - Balance refill logic
+
+### 33. Add "Clear Form" Button
+**On**: Bet forms
+**Action**: Reset all fields quickly
+
+---
+
+## Analytics & Monitoring
+
+### 34. Add User Analytics Dashboard (Admin)
+**Show**: 
+  - Daily active users
+  - Total bets placed
+  - Most active times
+  - Average bet amount
+
+### 35. Add Error Tracking
+**Tool**: Sentry or similar
+**Benefit**: Catch production bugs faster
+
+### 36. Add Performance Monitoring
+**Track**: 
+  - Page load times
+  - API response times
+  - Slow queries
+
+---
+
+## Priority Order for Next Sprint
+
+1. ✅ #8 - Rate Limiting (Prevents bugs)
+2. ✅ #3 - Bet Confirmation (Prevents user errors)
+3. ✅ #7 - Bet Slip Preview (Better UX)
+4. ✅ #30 - Quick Bet Buttons (Easy win)
+5. ✅ #4 - Better Error Messages (Better UX)
+6. 🔄 #1 - Loading Skeletons (Better perceived performance)
+7. 🔄 #5 - Recent Winners (Engagement)
+8. 🔄 #10 - Statistics Dashboard (User retention)
+
+---
+
+Last Updated: January 12, 2026

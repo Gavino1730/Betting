@@ -25,9 +25,9 @@ class Bet {
     }
   }
 
-  static async findByUserId(userId) {
+  static async findByUserId(userId, limit = null) {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('bets')
         .select(`
           *,
@@ -42,6 +42,16 @@ class Bet {
         `)
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
+      
+      if (limit) {
+        query = query.limit(limit);
+      }
+
+      const { data, error } = await query;
+      
+      if (limit) {
+        query = query.limit(limit);
+      }
 
       if (error) {
         console.error('Supabase error in findByUserId:', error);

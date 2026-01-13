@@ -160,7 +160,8 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   const fetchBets = useCallback(async () => {
     try {
-      const response = await apiClient.get('/bets');
+      // Only fetch recent bets for dashboard (last 50) for better performance
+      const response = await apiClient.get('/bets?limit=50');
       const userBets = response.data || [];
 
       // Check for newly resolved bets
