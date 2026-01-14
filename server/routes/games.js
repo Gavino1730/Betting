@@ -752,7 +752,8 @@ router.post('/retroactive-payout-oes', authenticateToken, async (req, res) => {
     const { supabase } = require('../supabase');
 
     // Find all winning bets for OES games that don't have corresponding win transactions
-    const { data: unpaidBets, error: betsError } = await supabase
+    // Step 1: Get all resolved winning bets
+    const { data: allWinningBets, error: betsError } = await supabase
       .from('bets')
       .select(`
         id,
@@ -777,9 +778,20 @@ router.post('/retroactive-payout-oes', authenticateToken, async (req, res) => {
       `)
       .eq('status', 'resolved')
       .eq('outcome', 'won')
-      .or('games.home_team.ilike.%Oregon Episcopal%,games.away_team.ilike.%Oregon Episcopal%,games.home_team.ilike.%OES%,games.away_team.ilike.%OES%');
+      .not('game_id', 'is', null);
 
     if (betsError) throw betsError;
+
+    // Step 2: Filter to only OES games
+    const unpaidBets = (allWinningBets || []).filter(bet => {
+      if (!bet.games) return false;
+      const homeTeam = (bet.games.home_team || '').toLowerCase();
+      const awayTeam = (bet.games.away_team || '').toLowerCase();
+      return homeTeam.includes('oregon episcopal') || 
+             awayTeam.includes('oregon episcopal') ||
+             homeTeam.includes('oes') || 
+             awayTeam.includes('oes');
+    });
 
     // Filter out bets that already have win transactions
     const betsToPayOut = [];
