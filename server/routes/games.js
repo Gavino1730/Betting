@@ -3,6 +3,9 @@ const router = express.Router();
 const Game = require('../models/Game');
 const { authenticateToken, optionalAuth } = require('../middleware/auth');
 
+// Helper function for consistent currency rounding
+const roundCurrency = (amount) => Math.round(amount * 100) / 100;
+
 // Admin: Seed games from team schedules
 router.post('/seed-from-schedule', authenticateToken, async (req, res) => {
   const user = req.user;
@@ -794,28 +797,57 @@ router.post('/retroactive-payout-oes', authenticateToken, async (req, res) => {
     });
 
     // Filter out bets that already have win transactions
+    // Optimize: Get all potential transactions in one query instead of N queries
+    const betUpdatedTimes = unpaidBets.map(bet => ({
+      userId: bet.user_id,
+      minTime: new Date(new Date(bet.updated_at).getTime() - 10000).toISOString(),
+      maxTime: new Date(new Date(bet.updated_at).getTime() + 10000).toISOString(),
+      payout: bet.potential_win || (bet.amount * bet.odds)
+    }));
+
+    // Get all win transactions for these users in the time range
+    const userIds = [...new Set(unpaidBets.map(b => b.user_id))];
+    const minTime = Math.min(...betUpdatedTimes.map(b => new Date(b.minTime).getTime()));
+    const maxTime = Math.max(...betUpdatedTimes.map(b => new Date(b.maxTime).getTime()));
+
+    const { data: allWinTransactions, error: txError } = await supabase
+      .from('transactions')
+      .select('id, user_id, amount, created_at')
+      .eq('type', 'win')
+      .in('user_id', userIds)
+      .gte('created_at', new Date(minTime).toISOString())
+      .lte('created_at', new Date(maxTime).toISOString());
+
+    if (txError) throw txError;
+
+    // Build index of transactions by user for fast lookup
+    const transactionsByUser = {};
+    (allWinTransactions || []).forEach(tx => {
+      if (!transactionsByUser[tx.user_id]) {
+        transactionsByUser[tx.user_id] = [];
+      }
+      transactionsByUser[tx.user_id].push(tx);
+    });
+
     const betsToPayOut = [];
-    for (const bet of unpaidBets || []) {
-      // Check if a win transaction exists for this bet
-      const { data: existingTx, error: txError } = await supabase
-        .from('transactions')
-        .select('id, amount')
-        .eq('user_id', bet.user_id)
-        .eq('type', 'win')
-        .gte('created_at', new Date(new Date(bet.updated_at).getTime() - 10000).toISOString())
-        .lte('created_at', new Date(new Date(bet.updated_at).getTime() + 10000).toISOString());
+    for (let i = 0; i < unpaidBets.length; i++) {
+      const bet = unpaidBets[i];
+      const betTiming = betUpdatedTimes[i];
+      const userTransactions = transactionsByUser[bet.user_id] || [];
 
-      if (txError) throw txError;
-
-      const payout = bet.potential_win || (bet.amount * bet.odds);
-      const hasMatchingTransaction = (existingTx || []).some(tx => 
-        Math.abs(tx.amount - payout) < 0.01
-      );
+      // Check if a matching transaction exists
+      const hasMatchingTransaction = userTransactions.some(tx => {
+        const txTime = new Date(tx.created_at).getTime();
+        const inTimeWindow = txTime >= new Date(betTiming.minTime).getTime() && 
+                            txTime <= new Date(betTiming.maxTime).getTime();
+        const matchesAmount = Math.abs(tx.amount - betTiming.payout) < 0.01;
+        return inTimeWindow && matchesAmount;
+      });
 
       if (!hasMatchingTransaction) {
         betsToPayOut.push({
           ...bet,
-          payout
+          payout: betTiming.payout
         });
       }
     }
@@ -862,13 +894,13 @@ router.post('/retroactive-payout-oes', authenticateToken, async (req, res) => {
         summary: {
           betsToProcess: betsToPayOut.length,
           affectedUsers: affectedUsers.length,
-          totalPayout: Math.round(totalPayout * 100) / 100
+          totalPayout: roundCurrency(totalPayout)
         },
         userPayouts: Object.entries(userPayouts).map(([userId, data]) => ({
           userId,
           username: data.username,
           betCount: data.bets.length,
-          totalOwed: Math.round(data.totalOwed * 100) / 100,
+          totalOwed: roundCurrency(data.totalOwed),
           bets: data.bets
         }))
       });
@@ -924,7 +956,7 @@ router.post('/retroactive-payout-oes', authenticateToken, async (req, res) => {
       await Notification.create(
         userId,
         '💰 Retroactive Payout - OES Games',
-        `You received ${Math.round(data.total * 100) / 100} Valiant Bucks from ${data.count} winning bet(s) on OES games that were not paid out previously. Sorry for the delay!`,
+        `You received ${roundCurrency(data.total)} Valiant Bucks from ${data.count} winning bet(s) on OES games that were not paid out previously. Sorry for the delay!`,
         'system'
       );
     }
@@ -932,7 +964,7 @@ router.post('/retroactive-payout-oes', authenticateToken, async (req, res) => {
     res.json({
       message: 'Retroactive payouts processed',
       betsProcessed: successfulPayouts,
-      totalPaid: Math.round(payoutResults.filter(r => r.status === 'success').reduce((sum, r) => sum + r.payout, 0) * 100) / 100,
+      totalPaid: roundCurrency(payoutResults.filter(r => r.status === 'success').reduce((sum, r) => sum + r.payout, 0)),
       affectedUsers: Object.keys(userPayoutTotals).length,
       results: payoutResults
     });

@@ -103,7 +103,7 @@ const req = httpModule.request(options, (res) => {
 
         console.log('\n' + '-'.repeat(70));
         console.log('\nTo execute these payouts, run:');
-        console.log(`  node test-retroactive-payout.js ${adminToken.substring(0, 20)}... execute`);
+        console.log(`  node test-retroactive-payout.js <your-token> execute`);
       } else {
         console.log('✅ PAYOUTS EXECUTED\n');
         console.log(`Message: ${response.message}`);
