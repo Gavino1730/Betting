@@ -735,4 +735,199 @@ router.delete('/bulk/delete-all', authenticateToken, async (req, res) => {
   }
 });
 
+// Admin: Retroactive payout for OES games (winning bets that weren't paid)
+router.post('/retroactive-payout-oes', authenticateToken, async (req, res) => {
+  const user = req.user;
+  if (!user.is_admin) {
+    return res.status(403).json({ error: 'Only admins can process retroactive payouts' });
+  }
+
+  const { dryRun = true } = req.body; // Default to dry run for safety
+
+  try {
+    const Bet = require('../models/Bet');
+    const User = require('../models/User');
+    const Transaction = require('../models/Transaction');
+    const Notification = require('../models/Notification');
+    const { supabase } = require('../supabase');
+
+    // Find all winning bets for OES games that don't have corresponding win transactions
+    const { data: unpaidBets, error: betsError } = await supabase
+      .from('bets')
+      .select(`
+        id,
+        user_id,
+        game_id,
+        selected_team,
+        bet_type,
+        amount,
+        odds,
+        potential_win,
+        status,
+        outcome,
+        created_at,
+        updated_at,
+        games (
+          home_team,
+          away_team,
+          team_type,
+          game_date,
+          result
+        )
+      `)
+      .eq('status', 'resolved')
+      .eq('outcome', 'won')
+      .or('games.home_team.ilike.%Oregon Episcopal%,games.away_team.ilike.%Oregon Episcopal%,games.home_team.ilike.%OES%,games.away_team.ilike.%OES%');
+
+    if (betsError) throw betsError;
+
+    // Filter out bets that already have win transactions
+    const betsToPayOut = [];
+    for (const bet of unpaidBets || []) {
+      // Check if a win transaction exists for this bet
+      const { data: existingTx, error: txError } = await supabase
+        .from('transactions')
+        .select('id, amount')
+        .eq('user_id', bet.user_id)
+        .eq('type', 'win')
+        .gte('created_at', new Date(new Date(bet.updated_at).getTime() - 10000).toISOString())
+        .lte('created_at', new Date(new Date(bet.updated_at).getTime() + 10000).toISOString());
+
+      if (txError) throw txError;
+
+      const payout = bet.potential_win || (bet.amount * bet.odds);
+      const hasMatchingTransaction = (existingTx || []).some(tx => 
+        Math.abs(tx.amount - payout) < 0.01
+      );
+
+      if (!hasMatchingTransaction) {
+        betsToPayOut.push({
+          ...bet,
+          payout
+        });
+      }
+    }
+
+    if (betsToPayOut.length === 0) {
+      return res.json({ 
+        message: 'No unpaid winning bets found for OES games',
+        betsProcessed: 0,
+        totalPaid: 0
+      });
+    }
+
+    // Calculate totals
+    const totalPayout = betsToPayOut.reduce((sum, bet) => sum + bet.payout, 0);
+    const affectedUsers = [...new Set(betsToPayOut.map(bet => bet.user_id))];
+
+    // If dry run, just return what would be paid
+    if (dryRun) {
+      // Get usernames for the report
+      const userPayouts = {};
+      for (const bet of betsToPayOut) {
+        if (!userPayouts[bet.user_id]) {
+          const userData = await User.findById(bet.user_id);
+          userPayouts[bet.user_id] = {
+            username: userData?.username || 'Unknown',
+            bets: [],
+            totalOwed: 0
+          };
+        }
+        userPayouts[bet.user_id].bets.push({
+          betId: bet.id,
+          amount: bet.amount,
+          odds: bet.odds,
+          payout: bet.payout,
+          gameDate: bet.games?.game_date,
+          teamType: bet.games?.team_type
+        });
+        userPayouts[bet.user_id].totalOwed += bet.payout;
+      }
+
+      return res.json({
+        dryRun: true,
+        message: 'DRY RUN - No changes made. Set dryRun=false to execute payouts.',
+        summary: {
+          betsToProcess: betsToPayOut.length,
+          affectedUsers: affectedUsers.length,
+          totalPayout: Math.round(totalPayout * 100) / 100
+        },
+        userPayouts: Object.entries(userPayouts).map(([userId, data]) => ({
+          userId,
+          username: data.username,
+          betCount: data.bets.length,
+          totalOwed: Math.round(data.totalOwed * 100) / 100,
+          bets: data.bets
+        }))
+      });
+    }
+
+    // Execute payouts
+    let successfulPayouts = 0;
+    const payoutResults = [];
+
+    for (const bet of betsToPayOut) {
+      try {
+        // Update user balance
+        await User.updateBalance(bet.user_id, bet.payout);
+
+        // Create transaction record
+        await Transaction.create(
+          bet.user_id,
+          'win',
+          bet.payout,
+          `Retroactive payout: ${bet.bet_type} confidence bet on ${bet.selected_team} (OES game)`
+        );
+
+        successfulPayouts++;
+        payoutResults.push({
+          betId: bet.id,
+          userId: bet.user_id,
+          payout: bet.payout,
+          status: 'success'
+        });
+      } catch (error) {
+        console.error(`Failed to process payout for bet ${bet.id}:`, error);
+        payoutResults.push({
+          betId: bet.id,
+          userId: bet.user_id,
+          payout: bet.payout,
+          status: 'failed',
+          error: error.message
+        });
+      }
+    }
+
+    // Send notifications to affected users
+    const userPayoutTotals = {};
+    for (const result of payoutResults.filter(r => r.status === 'success')) {
+      if (!userPayoutTotals[result.userId]) {
+        userPayoutTotals[result.userId] = { count: 0, total: 0 };
+      }
+      userPayoutTotals[result.userId].count++;
+      userPayoutTotals[result.userId].total += result.payout;
+    }
+
+    for (const [userId, data] of Object.entries(userPayoutTotals)) {
+      await Notification.create(
+        userId,
+        '💰 Retroactive Payout - OES Games',
+        `You received ${Math.round(data.total * 100) / 100} Valiant Bucks from ${data.count} winning bet(s) on OES games that were not paid out previously. Sorry for the delay!`,
+        'system'
+      );
+    }
+
+    res.json({
+      message: 'Retroactive payouts processed',
+      betsProcessed: successfulPayouts,
+      totalPaid: Math.round(payoutResults.filter(r => r.status === 'success').reduce((sum, r) => sum + r.payout, 0) * 100) / 100,
+      affectedUsers: Object.keys(userPayoutTotals).length,
+      results: payoutResults
+    });
+  } catch (err) {
+    console.error('Error processing retroactive payouts:', err);
+    res.status(500).json({ error: 'Error processing retroactive payouts: ' + err.message });
+  }
+});
+
 module.exports = router;
