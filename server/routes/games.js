@@ -458,22 +458,21 @@ router.put('/:id/outcome', authenticateToken, async (req, res) => {
         // Create notification
         const Notification = require('../models/Notification');
         if (won) {
-          // Calculate profit (potential_win is total payout, so subtract original bet amount)
-          const winnings = (bet.potential_win || (bet.amount * bet.odds)) - bet.amount;
-          await User.updateBalance(bet.user_id, winnings);
+          const payout = bet.potential_win || (bet.amount * bet.odds);
+          await User.updateBalance(bet.user_id, payout);
           await Transaction.create(
-            bet.user_id, 
-            'win', 
-            winnings, 
+            bet.user_id,
+            'win',
+            payout,
             `Won bet on ${bet.selected_team} (${bet.bet_type} confidence)`
           );
           await Notification.create(
             bet.user_id,
             '🎉 Bet Won!',
-            `Your ${bet.bet_type} confidence bet on ${bet.selected_team} won ${winnings} Valiant Bucks!`,
+            `Your ${bet.bet_type} confidence bet on ${bet.selected_team} won ${payout} Valiant Bucks!`,
             'bet_won'
           );
-          winningsDistributed += winnings;
+          winningsDistributed += payout;
         } else {
           await Notification.create(
             bet.user_id,
