@@ -8,14 +8,6 @@
 **Benefit**: Makes the app feel faster, better UX during data fetching
 **Implementation**: Add skeleton components for dashboard cards, game lists, leaderboard rows
 
-### 3. Add Bet Confirmation Dialog
-**Purpose**: Prevent accidental high-value bets
-**Features**: 
-  - Show bet summary (team, amount, potential win)
-  - Require explicit confirmation
-  - Highlight for bets over $100
-**Benefit**: Prevents costly user mistakes, adds confidence
-**Priority**: HIGH - prevents user errors
 
 
 
