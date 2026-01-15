@@ -3,7 +3,6 @@ import apiClient from '../utils/axios';
 import '../styles/Dashboard.css';
 import '../styles/Confetti.css';
 import { formatCurrency } from '../utils/currency';
-import { formatTime } from '../utils/time';
 import Confetti from './Confetti';
 
 function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
@@ -30,7 +29,6 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     winRate: 0,
     totalWinnings: 0
   });
-  const [now, setNow] = useState(Date.now());
 
   // Spirit Week Data - Broadway Theme
   const [spiritWeekData] = useState({
@@ -163,13 +161,6 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     }
   ]);
 
-
-  useEffect(() => {
-    // Update less frequently to reduce re-renders
-    const intervalId = setInterval(() => setNow(Date.now()), 10000);
-    return () => clearInterval(intervalId);
-  }, []);
-
   const parseLocalDateOnly = (dateStr) => {
     const [year, month, day] = (dateStr || '').split('-').map(Number);
     if (Number.isInteger(year) && Number.isInteger(month) && Number.isInteger(day)) {
@@ -196,28 +187,6 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       setGamesLoading(false);
     }
   }, []);
-
-  const fetchProfile = useCallback(async () => {
-    try {
-      if (fetchUserProfile && typeof fetchUserProfile === 'function') {
-        const updatedUser = await fetchUserProfile();
-        if (updatedUser?.balance !== undefined) {
-          setBalance(updatedUser.balance);
-        }
-        return;
-      }
-
-      const response = await apiClient.get('/users/profile');
-      if (response?.data?.balance !== undefined) {
-        setBalance(response.data.balance);
-        if (updateUser && typeof updateUser === 'function') {
-          updateUser(response.data);
-        }
-      }
-    } catch (err) {
-      console.error('Error fetching profile:', err);
-    }
-  }, [fetchUserProfile, updateUser]);
 
   const fetchBets = useCallback(async () => {
     try {
