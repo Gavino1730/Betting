@@ -1,0 +1,138 @@
+name: 🐛 Bug Report
+description: Report a bug or issue with Valiant Picks
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this bug! Please provide as much detail as possible to help us fix it quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what went wrong...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+      placeholder: I expected to see...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Instead, I saw...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component/Area
+      description: Which part of the app is affected?
+      options:
+        - Authentication (Login/Register)
+        - Betting/Wagering
+        - Dashboard
+        - Leaderboard
+        - Admin Panel
+        - Games Management
+        - Teams/Players
+        - Prop Bets
+        - Transaction History
+        - UI/Design
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - Critical (App is unusable)
+        - High (Major feature broken)
+        - Medium (Feature partially works)
+        - Low (Minor issue, has workaround)
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Please provide details about your environment
+      placeholder: |
+        - OS: [e.g., Windows 11, macOS 13, iOS 16]
+        - Browser: [e.g., Chrome 120, Safari 17, Firefox 121]
+        - Device: [e.g., Desktop, iPhone 14, Samsung Galaxy]
+        - App Version: [e.g., 1.0.0]
+      value: |
+        - OS: 
+        - Browser: 
+        - Device: 
+        - App Version: 
+    validations:
+      required: true
+
+  - type: textarea
+    id: console-logs
+    attributes:
+      label: Console Errors (if any)
+      description: Open browser DevTools (F12), check Console tab, and paste any error messages
+      placeholder: Paste console errors here...
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain the problem
+      placeholder: Drag and drop images here or paste image URLs
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information about the problem
+      placeholder: |
+        - Does this happen consistently or intermittently?
+        - Did this work before?
+        - Any recent changes or updates?
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched for similar issues before creating this one
+          required: true
+        - label: I have provided all the required information above
+          required: true
+        - label: This is not a security vulnerability (those should be emailed privately)
+          required: true

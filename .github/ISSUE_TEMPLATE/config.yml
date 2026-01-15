@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/yourusername/valiant-picks/discussions
+    about: Ask questions, share ideas, and discuss with the community
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/yourusername/valiant-picks/security/policy
+    about: Report security vulnerabilities privately (DO NOT create a public issue)
+  - name: 📧 Direct Contact
+    url: mailto:your-email@example.com
+    about: Contact the maintainers directly for sensitive or private matters

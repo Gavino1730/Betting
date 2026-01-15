@@ -1,7 +1,7 @@
 {
   "name": "valiant-picks",
   "version": "1.0.0",
-  "description": "Full-stack sports betting website for Valiant Academy basketball",
+  "description": "Full-stack virtual sports betting platform with confidence-based wagering for schools and communities",
   "main": "server/server.js",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -9,6 +9,7 @@
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
     "install-all": "npm install && cd server && npm install && cd ../client && npm install && cd ..",
+    "setup": "npm run install-all",
     "auto-commit": "node auto-commit.js",
     "auto-commit-daemon": "node auto-commit.js &"
   },
@@ -17,11 +18,30 @@
     "sports",
     "basketball",
     "valiant",
-    "virtual-currency"
+    "virtual-currency",
+    "wagering",
+    "leaderboard",
+    "school-sports",
+    "react",
+    "express",
+    "postgresql",
+    "supabase"
   ],
   "author": "Gavin",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/valiant-picks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/valiant-picks/issues"
+  },
+  "homepage": "https://github.com/yourusername/valiant-picks#readme",
   "devDependencies": {
     "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }
