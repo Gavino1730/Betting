@@ -227,7 +227,7 @@ function Games({ user, updateUser }) {
 
   const handlePlacePropBet = async (propId, choice, isLocked) => {
     if (isLocked) {
-      setMessage('This prop bet is closed');
+      setMessage('This prop bet is closed and no longer accepting picks');
       return;
     }
 
@@ -241,12 +241,13 @@ function Games({ user, updateUser }) {
     const amount = parseFloat(propBetAmounts[loadingKey]);
     
     if (!amount || amount <= 0) {
-      setMessage('Please enter a valid bet amount');
+      setMessage('Please enter a bet amount greater than $0');
       return;
     }
 
     if (amount > balance) {
-      setMessage('Insufficient balance!');
+      const needed = amount - balance;
+      setMessage(`Insufficient balance! You need ${formatCurrency(needed)} more to place this bet. Your current balance: ${formatCurrency(balance)}`);
       return;
     }
 
@@ -264,7 +265,7 @@ function Games({ user, updateUser }) {
         if (updateUser) {
           updateUser({ ...user, balance: originalBalance });
         }
-        setMessage('Request timed out. Please try again.');
+        setMessage('Request timed out - taking too long to respond. Check your connection and try again.');
         setTimeout(() => setMessage(''), 3000);
       }
     }, 10000);
@@ -312,7 +313,14 @@ function Games({ user, updateUser }) {
       if (updateUser) {
         updateUser({ ...user, balance: originalBalance });
       }
-      setMessage(err.response?.data?.error || 'Failed to place pick');
+      const errorMsg = err.response?.data?.error;
+      if (errorMsg) {
+        setMessage(`Error: ${errorMsg}`);
+      } else if (err.message === 'Network Error') {
+        setMessage('Connection issue - check your internet and try again');
+      } else {
+        setMessage('Failed to place pick - please try again or refresh the page');
+      }
       setTimeout(() => setMessage(''), 3000);
     } finally {
       setPropBetLoading(prev => ({ ...prev, [loadingKey]: false }));
@@ -349,7 +357,7 @@ function Games({ user, updateUser }) {
 
     const selectedGame = games.find(g => g.id === parseInt(selectedGameId));
     if (!selectedGame) {
-      setMessage('Please select a game');
+      setMessage('Please select a game to place your pick');
       return;
     }
 
@@ -358,24 +366,35 @@ function Games({ user, updateUser }) {
     const gameLocked = countdown.isPast || isClosedStatus(selectedGame.status);
 
     if (gameLocked) {
-      setMessage('Picking closed for this game');
+      if (countdown.isPast) {
+        setMessage('Picking closed - this game has already started or finished');
+      } else {
+        setMessage(`Picking closed - ${selectedGame.status || 'game is no longer accepting bets'}`);
+      }
       return;
     }
 
     if (hasExistingBet(selectedGame.id)) {
-      setMessage('You have already placed a pick on this game');
+      setMessage('You have already placed a pick on this game - check your active picks below');
       return;
     }
 
     const betAmount = parseFloat(amount);
 
     if (!selectedTeam || !confidence || !betAmount) {
-      setMessage('Please select team, confidence, and enter amount');
+      if (!selectedTeam) {
+        setMessage('Please select which team you think will win');
+      } else if (!confidence) {
+        setMessage('Please choose your confidence level (Low, Medium, or High)');
+      } else {
+        setMessage('Please enter a bet amount');
+      }
       return;
     }
 
     if (betAmount > balance) {
-      setMessage('Insufficient balance!');
+      const needed = betAmount - balance;
+      setMessage(`Insufficient balance! You need ${formatCurrency(needed)} more to place this bet. Your current balance: ${formatCurrency(balance)}`);
       return;
     }
 
@@ -397,7 +416,7 @@ function Games({ user, updateUser }) {
     const timeoutId = setTimeout(() => {
       if (isSubmittingBet) {
         setIsSubmittingBet(false);
-        setMessage('Request timed out. Please try again.');
+        setMessage('Request timed out - taking too long to respond. Check your connection and try again.');
         setTimeout(() => setMessage(''), 3000);
       }
     }, 10000);
@@ -426,7 +445,14 @@ function Games({ user, updateUser }) {
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
       clearTimeout(timeoutId);
-      setMessage(err.response?.data?.error || 'Failed to place pick');
+      const errorMsg = err.response?.data?.error;
+      if (errorMsg) {
+        setMessage(`Error: ${errorMsg}`);
+      } else if (err.message === 'Network Error') {
+        setMessage('Connection issue - your bet was not placed. Check your internet and try again.');
+      } else {
+        setMessage('Failed to place pick - your bet was not placed. Please try again.');
+      }
       setConfirmationOpen(false);
       setPendingBet(null);
     } finally {
@@ -449,7 +475,7 @@ function Games({ user, updateUser }) {
 
       {/* Beginner Help Section */}
       <div className="help-banner">
-        <div className="help-icon">📖</div>
+        <div className="help-icon">?</div>
         <div className="help-content">
           <h3>Quick Guide</h3>
           <p><strong>Game Picks:</strong> Predict which team wins. Choose your confidence level (Low 1.2x, Medium 1.5x, High 2.0x) to multiply your winnings!</p>
