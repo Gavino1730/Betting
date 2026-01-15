@@ -156,7 +156,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     {
       id: 3,
       type: "success",
-      message: "Valiant Picks now live! Place your picks on Browse Picks page!",
+      message: "Valiant Picks now live! Place your picks on Place Picks page!",
       date: "January 20, 2026"
     }
   ]); */
@@ -389,13 +389,13 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           {/* Place a Pick CTA */}
           <div className="card pick-cta-card">
             <h3>🎲 Ready to Make Your Picks?</h3>
-            <p>Head over to the Browse Picks page to place your predictions on upcoming Valiant games!</p>
+            <p>Head over to the Place Picks page to place your predictions on upcoming Valiant games!</p>
             <button 
               className="btn btn-primary btn-large"
               onClick={() => onNavigate && onNavigate('games')}
               style={{ marginTop: '1rem', width: '100%' }}
             >
-              🏀 Go to Browse Picks
+              🏀 Go to Place Picks
             </button>
             <div className="balance-display">
               <span className="balance-label">Your Balance:</span>
@@ -520,7 +520,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
               onClick={() => onNavigate && onNavigate('games')}
               style={{ marginTop: '1rem', width: '100%' }}
             >
-              View All & Place Picks
+              View All & Make Picks
             </button>
           </div>
 
@@ -568,7 +568,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                 className="quick-link-btn"
                 onClick={() => onNavigate && onNavigate('games')}
               >
-                🏀 Browse Picks
+                🏀 Place Picks
               </button>
               <button 
                 className="quick-link-btn"

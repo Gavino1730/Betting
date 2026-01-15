@@ -262,7 +262,7 @@ function AppContent() {
             Dashboard
           </button>
           <button onClick={() => handlePageChange('games')} className={page === 'games' ? 'active' : ''}>
-            Browse Picks
+            Place Picks
           </button>
           <button onClick={() => handlePageChange('teams')} className={page === 'teams' ? 'active' : ''}>
             Teams
@@ -339,7 +339,7 @@ function AppContent() {
             className={page === 'games' ? 'active' : ''}
           >
             <span className="menu-icon">🎲</span>
-            Browse Picks
+            Place Picks
           </button>
           <button 
             onClick={() => handlePageChange('teams')} 

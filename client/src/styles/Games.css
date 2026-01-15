@@ -1375,9 +1375,12 @@
   background: rgba(30, 33, 57, 0.8);
   border: 2px solid rgba(33, 150, 243, 0.3);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   margin-top: 1rem;
   animation: slideDown 0.3s ease;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @keyframes slideDown {
@@ -1394,7 +1397,7 @@
 .expanded-bet-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .form-group label {

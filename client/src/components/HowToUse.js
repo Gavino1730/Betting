@@ -53,7 +53,7 @@ function HowToUse({ onNavigate }) {
             <div className="step-number">2</div>
             <div className="step-content">
               <h3>Browse Available Games</h3>
-              <p>Check the Dashboard or Browse Picks page to see upcoming games and prop bets.</p>
+              <p>Check the Dashboard or Place Picks page to see upcoming games and prop bets.</p>
             </div>
           </div>
           <div className="step">
@@ -186,7 +186,7 @@ function HowToUse({ onNavigate }) {
           <div className="nav-item">
             <div className="nav-icon">🎯</div>
             <div className="nav-content">
-              <h4>Browse Picks</h4>
+              <h4>Place Picks</h4>
               <p>View all available games and prop bets in one place. Filter by Boys or Girls Basketball.</p>
             </div>
           </div>

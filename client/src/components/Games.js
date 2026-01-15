@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import apiClient from '../utils/axios';
 import '../styles/Games.css';
 import { formatCurrency } from '../utils/currency';
@@ -23,6 +23,7 @@ function Games({ user, updateUser }) {
   const [isSubmittingBet, setIsSubmittingBet] = useState(false);
   const [propBetLoading, setPropBetLoading] = useState({});
   const [propBetAmounts, setPropBetAmounts] = useState({});
+  const expandedBetRef = useRef(null);
 
   // Sync balance immediately when user prop changes
   useEffect(() => {
@@ -383,8 +384,8 @@ function Games({ user, updateUser }) {
   return (
     <div className="games-page">
       <div className="page-header">
-        <h2>Available Picks</h2>
-        <p className="page-subtitle">Browse all upcoming games and prop picks</p>
+        <h2>Place Your Picks</h2>
+        <p className="page-subtitle">Select a game and make your predictions</p>
       </div>
 
       {/* Beginner Help Section */}
@@ -617,11 +618,21 @@ function Games({ user, updateUser }) {
                           className={`game-card-btn ${isSelected ? 'active' : ''} ${gameLocked ? 'locked' : ''} ${game.team_type?.toLowerCase().includes('boys') ? 'boys-game' : game.team_type?.toLowerCase().includes('girls') ? 'girls-game' : ''}`}
                           onClick={() => {
                             if (!gameLocked) {
+                              const willBeSelected = !isSelected;
                               setSelectedGameId(isSelected ? '' : game.id.toString());
                               if (!isSelected) {
                                 setSelectedTeam('');
                                 setConfidence('');
                                 setAmount('');
+                                // Scroll to expanded section after state updates
+                                setTimeout(() => {
+                                  if (expandedBetRef.current && willBeSelected) {
+                                    expandedBetRef.current.scrollIntoView({ 
+                                      behavior: 'smooth', 
+                                      block: 'center'
+                                    });
+                                  }
+                                }, 100);
                               }
                             }
                           }}
@@ -652,7 +663,7 @@ function Games({ user, updateUser }) {
                         </button>
                         
                         {isSelected && selectedGame && (
-                          <div className="bet-details-expanded">
+                          <div ref={expandedBetRef} className="bet-details-expanded">
                             <form onSubmit={handlePlaceGameBet} className="expanded-bet-form">
                               <div className="form-group">
                                 <label>👥 Step 1: Who Will Win?</label>
