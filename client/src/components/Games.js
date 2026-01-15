@@ -85,11 +85,13 @@ function Games({ user, updateUser }) {
   }, []);
 
   useEffect(() => {
-    // Initial fetch on mount
-  useEffect(() => {
     // Create flag to prevent polling after unmount
     let isActive = true;
     let isPageVisible = true;
+    
+    // Capture refs at effect setup time to avoid stale reference warning
+    const debounceTimer = debounceTimerRef;
+    const propDebounceTimers = propDebounceTimersRef;
     
     // Track page visibility to pause polling when tab is not in focus
     const handleVisibilityChange = () => {
@@ -143,12 +145,12 @@ function Games({ user, updateUser }) {
       clearInterval(gamesInterval);
       clearInterval(userDataInterval);
       
-      // Cleanup debounce timers
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
+      // Cleanup debounce timers using captured refs
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
       }
-      const timers = propDebounceTimersRef.current;
-      Object.values(timers).forEach(timer => {
+      const timers = propDebounceTimers.current;
+      Object.values(timers || {}).forEach(timer => {
         if (timer) clearTimeout(timer);
       });
     };
