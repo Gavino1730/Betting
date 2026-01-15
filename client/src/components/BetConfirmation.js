@@ -5,15 +5,24 @@ import { formatCurrency } from '../utils/currency';
 function BetConfirmation({ isOpen, bet, onConfirm, onCancel, potentialWin, isSubmitting }) {
   if (!isOpen || !bet) return null;
 
+  const isHighValue = bet.amount >= 100;
+
   return (
     <div className="confirmation-overlay" onClick={isSubmitting ? undefined : onCancel}>
-      <div className="confirmation-modal" onClick={(e) => e.stopPropagation()}>
+      <div className={`confirmation-modal ${isHighValue ? 'high-value-bet' : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className="confirmation-header">
-          <h2>📋 Confirm Your Pick</h2>
+          <h2>{isHighValue ? '⚠️ High Value Pick' : '📋 Confirm Your Pick'}</h2>
           <button className="confirmation-close" onClick={onCancel} disabled={isSubmitting}>✕</button>
         </div>
 
         <div className="confirmation-content">
+          {isHighValue && (
+            <div className="high-value-warning">
+              <strong>⚠️ Large Bet Alert</strong>
+              <p>You're about to place a bet of {formatCurrency(bet.amount)} or more. Please review carefully.</p>
+            </div>
+          )}
+
           <div className="confirmation-section">
             <label>Team Selected</label>
             <div className="confirmation-value team-name">{bet.team}</div>
@@ -21,7 +30,7 @@ function BetConfirmation({ isOpen, bet, onConfirm, onCancel, potentialWin, isSub
 
           <div className="confirmation-section">
             <label>Pick Amount</label>
-            <div className="confirmation-value amount">{formatCurrency(bet.amount)}</div>
+            <div className={`confirmation-value amount ${isHighValue ? 'high-value' : ''}`}>{formatCurrency(bet.amount)}</div>
           </div>
 
           <div className="confirmation-section">

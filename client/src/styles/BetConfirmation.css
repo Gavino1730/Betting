@@ -120,6 +120,61 @@
   color: #ffb74d;
 }
 
+/* ===== HIGH VALUE BET STYLING ===== */
+.confirmation-modal.high-value-bet {
+  border: 2px solid rgba(255, 152, 0, 0.5);
+  box-shadow: 0 10px 40px rgba(255, 152, 0, 0.3);
+}
+
+.confirmation-modal.high-value-bet .confirmation-header {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.1));
+  border-bottom: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.confirmation-modal.high-value-bet .confirmation-header h2 {
+  color: #ff9800;
+}
+
+.high-value-warning {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(255, 152, 0, 0.08));
+  border: 2px solid rgba(255, 152, 0, 0.4);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.high-value-warning strong {
+  display: block;
+  color: #ff9800;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.high-value-warning p {
+  margin: 0;
+  color: #ffb74d;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.confirmation-value.amount.high-value {
+  color: #ff9800;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    border-color: rgba(255, 152, 0, 0.4);
+    box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4);
+  }
+  50% {
+    border-color: rgba(255, 152, 0, 0.6);
+    box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.1);
+  }
+}
+
 .confirmation-section.highlight {
   background: linear-gradient(135deg, rgba(102, 187, 106, 0.1), rgba(102, 187, 106, 0.05));
   border: 1px solid rgba(102, 187, 106, 0.2);
