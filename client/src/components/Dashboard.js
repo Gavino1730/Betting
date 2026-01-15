@@ -339,8 +339,8 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         )}
       </div>
 
-      {/* School Alerts - TEMPORARILY HIDDEN */}
-      {/* {schoolAlerts.length > 0 && (
+      {/* School Alerts - TEMPORARILY HIDDEN
+      {schoolAlerts.length > 0 && (
         <div className="school-alerts">
           {schoolAlerts.map(alert => (
             <div key={alert.id} className={`alert-banner alert-${alert.type}`}>
@@ -353,7 +353,8 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
             </div>
           ))}
         </div>
-      )} */
+      )}
+      */}
 
       {/* Stats Overview - Compact */}
       <div className="dashboard-stats-compact">

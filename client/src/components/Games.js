@@ -11,7 +11,6 @@ function Games({ user, updateUser }) {
   const [propBets, setPropBets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState(user?.balance || 0);
-  const [propBetAmounts, setPropBetAmounts] = useState({});
   const [message, setMessage] = useState('');
   const [teamFilter, setTeamFilter] = useState('all');
   const [selectedGameId, setSelectedGameId] = useState('');
