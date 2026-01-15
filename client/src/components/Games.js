@@ -3,7 +3,6 @@ import apiClient from '../utils/axios';
 import '../styles/Games.css';
 import { formatCurrency } from '../utils/currency';
 import { formatTime } from '../utils/time';
-import Tooltip from './Tooltip';
 import BetConfirmation from './BetConfirmation';
 
 function Games({ user, updateUser }) {
