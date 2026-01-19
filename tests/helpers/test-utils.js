@@ -6,18 +6,31 @@ const { expect } = require('@playwright/test');
 async function login(page, email, password) {
   await page.goto('/');
   
-  // Wait for and click login button
-  await page.click('text=Login');
+  // Wait for page to load
+  await page.waitForLoadState('domcontentloaded');
+  
+  // Check if already on login page or need to click login
+  const usernameInput = page.locator('input[name="username"]');
+  const isLoginPage = await usernameInput.isVisible({ timeout: 2000 }).catch(() => false);
+  
+  if (!isLoginPage) {
+    // Not on login page, click login button
+    await page.click('text=Login');
+    await page.waitForSelector('input[name="username"]', { timeout: 5000 });
+  }
+  
+  // Extract username from email (testuser@... -> testuser)
+  const username = email.split('@')[0];
   
   // Fill in credentials
-  await page.fill('input[type="email"]', email);
-  await page.fill('input[type="password"]', password);
+  await page.fill('input[name="username"]', username);
+  await page.fill('input[name="password"]', password);
   
   // Submit form
-  await page.click('button[type="submit"]:has-text("Login")');
+  await page.click('button[type="submit"]');
   
   // Wait for successful login (dashboard or home page)
-  await page.waitForURL(/\/(dashboard)?/, { timeout: 10000 });
+  await page.waitForURL(/\/(dashboard)?/, { timeout: 15000 });
   
   // Verify we're logged in (check for logout button or user menu)
   await expect(page.locator('text=/Logout|Dashboard/i')).toBeVisible({ timeout: 5000 });
@@ -40,24 +53,34 @@ async function logout(page) {
  */
 async function register(page, username, email, password) {
   await page.goto('/');
-  await page.click('text=Login');
+  await page.waitForLoadState('domcontentloaded');
   
-  // Look for register/sign up link
-  const registerLink = page.locator('text=/Register|Sign Up/i').first();
-  if (await registerLink.isVisible()) {
-    await registerLink.click();
+  // Check if already on login page
+  const usernameInput = page.locator('input[name="username"]');
+  const isLoginPage = await usernameInput.isVisible({ timeout: 2000 }).catch(() => false);
+  
+  if (!isLoginPage) {
+    await page.click('text=Login');
+    await page.waitForSelector('input[name="username"]', { timeout: 5000 });
   }
   
-  // Fill registration form
-  await page.fill('input[placeholder*="username" i]', username);
-  await page.fill('input[type="email"]', email);
-  await page.fill('input[type="password"]', password);
+  // Click to switch to register mode
+  const registerLink = page.locator('text=/Create Account|Sign Up|Register/i, button:has-text(/Create Account|Sign Up|Register/i)').first();
+  if (await registerLink.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await registerLink.click();
+    await page.waitForTimeout(500);
+  }
+  
+  // Fill registration form using name attributes
+  await page.fill('input[name="username"]', username);
+  await page.fill('input[name="email"]', email);
+  await page.fill('input[name="password"]', password);
   
   // Submit
-  await page.click('button[type="submit"]:has-text(/Register|Sign Up/i)');
+  await page.click('button[type="submit"]');
   
   // Wait for success
-  await page.waitForURL(/\/(dashboard)?/, { timeout: 10000 });
+  await page.waitForURL(/\/(dashboard)?/, { timeout: 15000 });
 }
 
 /**

@@ -62,9 +62,16 @@ ALTER TABLE achievements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE wheel_config ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies - Allow all for simplicity (backend validates with JWT)
+DROP POLICY IF EXISTS "Allow all on daily_logins" ON daily_logins;
 CREATE POLICY "Allow all on daily_logins" ON daily_logins FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow all on wheel_spins" ON wheel_spins;
 CREATE POLICY "Allow all on wheel_spins" ON wheel_spins FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow all on achievements" ON achievements;
 CREATE POLICY "Allow all on achievements" ON achievements FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow all on wheel_config" ON wheel_config;
 CREATE POLICY "Allow all on wheel_config" ON wheel_config FOR ALL USING (true) WITH CHECK (true);
 
 -- Function to calculate consecutive login streak
