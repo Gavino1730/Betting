@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy, useRef } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Login from './components/Login';
@@ -172,18 +172,38 @@ function AppContent() {
       pollRef.inFlight = false;
       pollRef.delay = 15000;
     };
-  }, [token]);
+  }, [token, fetchUnreadCount, fetchAndCheckNotifications, fetchUserProfile]);
 
-  const fetchUnreadCount = async () => {
+  const fetchUnreadCount = useCallback(async () => {
     try {
       const response = await apiClient.get('/notifications/unread-count');
       setUnreadCount(response.data.count);
     } catch (err) {
       // Fail silently - unread count is not critical
     }
-  };
+  }, []);
 
-  const fetchAndCheckNotifications = async () => {
+  const sendBrowserNotification = useCallback((notification) => {
+    // Map notification types to browser notification messages
+    const typeMessages = {
+      'bet_won': { title: '🎉 Bet Won!', body: notification.message },
+      'bet_lost': { title: '😔 Bet Lost', body: notification.message },
+      'bet_placed': { title: '✅ Bet Placed', body: notification.message },
+      'balance_gift': { title: '🎁 Balance Gift', body: notification.message },
+      'balance_pending': { title: '⏳ Balance Pending', body: notification.message },
+      'default': { title: notification.title || '📢 Notification', body: notification.message }
+    };
+
+    const messageData = typeMessages[notification.type] || typeMessages.default;
+    
+    notificationService.send(messageData.title, {
+      body: messageData.body,
+      tag: `notification-${notification.id}`,
+      data: { notificationId: notification.id, type: notification.type }
+    });
+  }, []);
+
+  const fetchAndCheckNotifications = useCallback(async () => {
     try {
       const response = await apiClient.get('/notifications');
       const notifications = response.data || [];
@@ -203,29 +223,9 @@ function AppContent() {
     } catch (err) {
       // Fail silently - notifications are not critical
     }
-  };
+  }, [sendBrowserNotification]);
 
-  const sendBrowserNotification = (notification) => {
-    // Map notification types to browser notification messages
-    const typeMessages = {
-      'bet_won': { title: '🎉 Bet Won!', body: notification.message },
-      'bet_lost': { title: '😔 Bet Lost', body: notification.message },
-      'bet_placed': { title: '✅ Bet Placed', body: notification.message },
-      'balance_gift': { title: '🎁 Balance Gift', body: notification.message },
-      'balance_pending': { title: '⏳ Balance Pending', body: notification.message },
-      'default': { title: notification.title || '📢 Notification', body: notification.message }
-    };
-
-    const messageData = typeMessages[notification.type] || typeMessages.default;
-    
-    notificationService.send(messageData.title, {
-      body: messageData.body,
-      tag: `notification-${notification.id}`,
-      data: { notificationId: notification.id, type: notification.type }
-    });
-  };
-
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     try {
       const response = await apiClient.get('/users/profile');
       const updatedUser = response.data;
@@ -236,7 +236,7 @@ function AppContent() {
       // Fail silently - will retry
       return null;
     }
-  };
+  }, []);
 
   const updateUser = (userData) => {
     setUser(userData);

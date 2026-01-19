@@ -41,21 +41,7 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     weekOf: "February 3-7, 2026",
     grades: [
       {
-        grade: "Freshman",
-        subtheme: "Hamilton",
-        color: "#8B4513",
-        icon: "🎩",
-        activities: [
-          "Monday: Colonial Day",
-          "Tuesday: War Room Dance-Off",
-          "Wednesday: Ten Duel Commandments Trivia",
-          "Thursday: Hamilton Karaoke",
-          "Friday: Full Costume Day"
-        ],
-        points: 245
-      },
-      {
-        grade: "Sophomores",
+        grade: "Freshmen",
         subtheme: "Wicked",
         color: "#00C853",
         icon: "🧙‍♀️",
@@ -66,33 +52,47 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           "Thursday: Musical Number Performance",
           "Friday: Good vs Evil Costume Battle"
         ],
+        points: 245
+      },
+      {
+        grade: "Sophomores",
+        subtheme: "Lion King",
+        color: "#FF9800",
+        icon: "🦁",
+        activities: [
+          "Monday: Pride Lands Safari Day",
+          "Tuesday: Circle of Life Performance",
+          "Wednesday: Hakuna Matata Dance-Off",
+          "Thursday: Can You Feel the Love Tonight?",
+          "Friday: Full Animal Kingdom Costume Day"
+        ],
         points: 312
       },
       {
         grade: "Juniors",
-        subtheme: "The Phantom of the Opera",
-        color: "#D32F2F",
-        icon: "🎭",
+        subtheme: "Grease",
+        color: "#E91E63",
+        icon: "🎸",
         activities: [
-          "Monday: Masquerade Ball Prep",
-          "Tuesday: Opera Singing Contest",
-          "Wednesday: Chandelier Decorating",
-          "Thursday: Phantom vs Christine Debate",
-          "Friday: Full Opera Attire Day"
+          "Monday: Sock Hop & Poodle Skirts",
+          "Tuesday: Greased Lightning Car Show",
+          "Wednesday: Summer Nights Karaoke",
+          "Thursday: T-Birds vs Pink Ladies Face-Off",
+          "Friday: 1950s Costume Day"
         ],
         points: 298
       },
       {
         grade: "Seniors",
-        subtheme: "Les Misérables",
+        subtheme: "Hamilton",
         color: "#1976D2",
-        icon: "🇫🇷",
+        icon: "🎩",
         activities: [
-          "Monday: French Revolution Day",
-          "Tuesday: Barricade Building Competition",
-          "Wednesday: One Day More Choir Performance",
-          "Thursday: Revolutionary Trivia",
-          "Friday: 19th Century Costume Day"
+          "Monday: Colonial Day",
+          "Tuesday: War Room Dance-Off",
+          "Wednesday: Ten Duel Commandments Trivia",
+          "Thursday: Hamilton Karaoke",
+          "Friday: Revolutionary Era Costume Day"
         ],
         points: 367
       }
