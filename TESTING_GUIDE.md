@@ -159,12 +159,17 @@ You'll need to create test accounts on your live site:
 ### Regular User
 - Email: testuser@valiantpicks.com
 - Password: TestPassword123!
+- Username: testuser
 
 ### Admin User
 - Email: admin@valiantpicks.com
 - Password: AdminPassword123!
+- Username: testadmin
 
-**Important**: Create these accounts on https://valiantpicks.com before running tests.
+**Important**: Create these accounts on https://valiantpicks.com before running tests. After creating the admin account, promote it to admin in Supabase:
+```sql
+UPDATE users SET is_admin = true WHERE email = 'admin@valiantpicks.com';
+```
 
 ## Understanding Test Results
 
