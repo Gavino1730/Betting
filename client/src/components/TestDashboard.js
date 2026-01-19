@@ -7,6 +7,9 @@ import { formatCurrency } from '../utils/currency';
 import Confetti from './Confetti';
 import { UpcomingGameSkeleton } from './Skeleton';
 import notificationService from '../utils/notifications';
+import SpinWheel from './SpinWheel';
+import DailyReward from './DailyReward';
+import Achievements from './Achievements';
 
 function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
   const [balance, setBalance] = useState(user?.balance || 0);
@@ -34,6 +37,37 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     winRate: 0,
     totalWinnings: 0
   });
+
+  // Rewards System State
+  const [showSpinWheel, setShowSpinWheel] = useState(false);
+
+  // Handle Daily Reward Claimed
+  const handleDailyRewardClaimed = async (rewardAmount) => {
+    const newBalance = balance + rewardAmount;
+    setBalance(newBalance);
+    if (fetchUserProfile) {
+      await fetchUserProfile();
+    }
+  };
+
+  // Handle Spin Wheel Prize
+  const handleSpinWheelPrize = async (prizeAmount) => {
+    const newBalance = balance + prizeAmount;
+    setBalance(newBalance);
+    if (fetchUserProfile) {
+      await fetchUserProfile();
+    }
+    setShowSpinWheel(false);
+  };
+
+  // Handle Achievement Claimed
+  const handleAchievementClaimed = async (rewardAmount) => {
+    const newBalance = balance + rewardAmount;
+    setBalance(newBalance);
+    if (fetchUserProfile) {
+      await fetchUserProfile();
+    }
+  };
 
   // Spirit Week Data - Broadway Theme - NOW VISIBLE
   const [spiritWeekData] = useState({
@@ -279,6 +313,16 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
   return (
     <div className="test-dashboard school-dashboard">
       <Confetti show={showConfetti} onComplete={() => setShowConfetti(false)} />
+      
+      {/* Rewards System Components */}
+      <DailyReward onRewardClaimed={handleDailyRewardClaimed} />
+      <Achievements onAchievementClaimed={handleAchievementClaimed} />
+      {showSpinWheel && (
+        <SpinWheel
+          onClose={() => setShowSpinWheel(false)}
+          onPrizeWon={handleSpinWheelPrize}
+        />
+      )}
       
       {/* TEST MODE BANNER */}
       <div className="test-mode-banner">
@@ -582,6 +626,13 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           <div className="card quick-links-card">
             <h3>🔗 Quick Links</h3>
             <div className="quick-links">
+              <button 
+                className="quick-link-btn"
+                onClick={() => setShowSpinWheel(true)}
+                style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}
+              >
+                🎡 Spin Wheel
+              </button>
               <button 
                 className="quick-link-btn"
                 onClick={() => onNavigate && onNavigate('games')}

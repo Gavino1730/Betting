@@ -220,8 +220,6 @@
   }
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
 /* Tablet responsive */
 @media (max-width: 768px) {
   .achievement-badge {
