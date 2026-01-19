@@ -86,6 +86,8 @@ app.use('/api/error-logs', require('./routes/errorLogs'));
 app.use('/api/wheel', require('./routes/wheelSpin'));
 app.use('/api/daily-rewards', require('./routes/dailyRewards'));
 app.use('/api/achievements', require('./routes/achievements'));
+app.use('/api/periodic-bonuses', require('./routes/periodicBonuses'));
+app.use('/api/referrals', require('./routes/referrals'));
 
 // Health check
 app.get('/api/health', (req, res) => {

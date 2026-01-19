@@ -191,6 +191,10 @@ router.post('/', authenticateToken, async (req, res) => {
       
       // Check betting milestones
       await Achievement.checkBettingMilestones(req.user.id);
+      
+      // Complete referral if this is user's first bet
+      const { completeReferral } = require('./referrals');
+      await completeReferral(req.user.id);
     } catch (achError) {
       console.error('Error checking achievements:', achError);
       // Don't fail the bet if achievement check fails
