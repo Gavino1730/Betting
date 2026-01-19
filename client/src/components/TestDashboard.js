@@ -37,14 +37,14 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   // Spirit Week Data - Broadway Theme - NOW VISIBLE
   const [spiritWeekData] = useState({
-    theme: "Broadway Bonanza",
-    weekOf: "February 3-7, 2026",
+    theme: "Broadway",
+    weekOf: "February 2-6, 2026",
     description: "Each grade decorates their hallway to their musical theme. Judges rank hallways for points. Daily dress-up themes earn participation points. Check in teachers for your grade to get DOUBLE points!",
     events: [
       { day: "Monday-Thursday", event: "Daily Dress-Up Themes (TBD)" },
       { day: "Tuesday", event: "🎯 Tug of War Competition" },
       { day: "Friday", event: "🎤 Lip Sync Battle Finals" },
-      { day: "Saturday", event: "💃 Sadie Hawkins Dance (Theme TBD)" }
+      { day: "Saturday, Feb 7", event: "💃 Sadie Hawkins Dance @ Valley Catholic - 8:00 PM" }
     ],
     grades: [
       {
@@ -52,98 +52,37 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         subtheme: "Wicked",
         color: "#00C853",
         icon: "🧙‍♀️",
-        points: 245
+        points: 0
       },
       {
         grade: "Sophomores",
         subtheme: "Lion King",
         color: "#FF9800",
         icon: "🦁",
-        points: 312
+        points: 0
       },
       {
         grade: "Juniors",
         subtheme: "Grease",
         color: "#E91E63",
         icon: "🎸",
-        points: 298
+        points: 0
       },
       {
         grade: "Seniors",
         subtheme: "Hamilton",
         color: "#1976D2",
         icon: "🎩",
-        points: 367
+        points: 0
       }
     ]
   });
 
-  // School Events Data - NOW VISIBLE
-  const [schoolEvents] = useState([
-    {
-      id: 1,
-      title: "Spirit Week - Broadway Bonanza",
-      date: "February 3-7, 2026",
-      time: "All Week",
-      location: "Campus Wide",
-      type: "spirit",
-      description: "Show your class pride with Broadway-themed activities!"
-    },
-    {
-      id: 2,
-      title: "Boys Basketball vs Highland",
-      date: "February 10, 2026",
-      time: "7:00 PM",
-      location: "Valiant Arena",
-      type: "sports"
-    },
-    {
-      id: 3,
-      title: "Girls Basketball vs Skyview",
-      date: "February 12, 2026",
-      time: "6:30 PM",
-      location: "Valiant Arena",
-      type: "sports"
-    },
-    {
-      id: 4,
-      title: "College Fair",
-      date: "February 15, 2026",
-      time: "10:00 AM - 2:00 PM",
-      location: "Main Gymnasium",
-      type: "academic"
-    },
-    {
-      id: 5,
-      title: "Winter Dance: Enchanted Evening",
-      date: "February 21, 2026",
-      time: "7:00 PM - 10:00 PM",
-      location: "Cafeteria",
-      type: "social"
-    }
-  ]);
-
-  // School Alerts Data - NOW VISIBLE
-  const [schoolAlerts] = useState([
-    {
-      id: 1,
-      type: "info",
-      message: "Spirit Week voting opens Monday! Support your class!",
-      date: "February 1, 2026"
-    },
-    {
-      id: 2,
-      type: "warning",
-      message: "Early dismissal on Friday, February 7th at 1:00 PM for pep rally",
-      date: "February 1, 2026"
-    },
-    {
-      id: 3,
-      type: "success",
-      message: "Valiant Picks now live! Place your picks on Place Picks page!",
-      date: "January 20, 2026"
-    }
-  ]);
+  // Flex Schedule - Rotates weekly
+  const [flexSchedule] = useState({
+    currentWeek: "5, 6, 7", // Changes between "5, 6, 7" -> "6, 7, 5" -> "7, 5, 6"
+    note: "Flex schedule rotates weekly"
+  });
 
   const parseLocalDateOnly = (dateStr) => {
     const [year, month, day] = (dateStr || '').split('-').map(Number);
@@ -374,6 +313,16 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           <h2>Welcome to Valiant Picks, {user?.username || 'Student'}!</h2>
         </div>
       </div>
+
+      {/* Flex Schedule Banner */}
+      <div className="flex-schedule-banner">
+        <div className="flex-icon">📅</div>
+        <div className="flex-content">
+          <div className="flex-label">This Week's Flex</div>
+          <div className="flex-periods">Periods {flexSchedule.currentWeek}</div>
+        </div>
+        <div className="flex-note">{flexSchedule.note}</div>
+      </div>
       
       {/* Win/Loss Notifications */}
       <div style={{minHeight: winNotification || lossNotification ? 'auto' : '0px', marginBottom: winNotification || lossNotification ? '1rem' : '0'}}>
@@ -429,22 +378,6 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         </div>
       )}
 
-      {/* School Alerts - NOW VISIBLE */}
-      {schoolAlerts.length > 0 && (
-        <div className="school-alerts">
-          {schoolAlerts.map(alert => (
-            <div key={alert.id} className={`alert-banner alert-${alert.type}`}>
-              <span className="alert-icon">
-                {alert.type === 'warning' && '⚠️'}
-                {alert.type === 'info' && 'ℹ️'}
-                {alert.type === 'success' && '✅'}
-              </span>
-              <span className="alert-message">{alert.message}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* Stats Overview - Compact */}
       <div className="dashboard-stats-compact">
         <div className="stat-compact">
@@ -495,7 +428,7 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           {/* Spirit Week Tracker - NOW VISIBLE */}
           <div className="card spirit-week-card">
             <div className="spirit-week-header">
-              <h3>🎭 Spirit Week: {spiritWeekData.theme}</h3>
+              <h3>🎭 Spirit Week 2026: {spiritWeekData.theme}</h3>
               <span className="spirit-week-date">{spiritWeekData.weekOf}</span>
             </div>
             <p className="spirit-week-description">
@@ -562,38 +495,6 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                   );
                 })}
             </div>
-          </div>
-
-          {/* Upcoming School Events - NOW VISIBLE */}
-          <div className="card school-events-card">
-            <h3>📅 Upcoming School Events</h3>
-            {schoolEvents.length > 0 ? (
-              <div className="events-list">
-                {schoolEvents.map(event => (
-                  <div key={event.id} className={`event-item event-${event.type}`}>
-                    <div className="event-icon">
-                      {event.type === 'sports' && '🏀'}
-                      {event.type === 'spirit' && '🎭'}
-                      {event.type === 'academic' && '📚'}
-                      {event.type === 'social' && '🎉'}
-                    </div>
-                    <div className="event-details">
-                      <h4>{event.title}</h4>
-                      <div className="event-meta">
-                        <span>📅 {event.date}</span>
-                        <span>🕐 {event.time}</span>
-                        <span>📍 {event.location}</span>
-                      </div>
-                      {event.description && (
-                        <p className="event-description">{event.description}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="empty-text">No upcoming events</p>
-            )}
           </div>
         </div>
 
