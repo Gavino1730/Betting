@@ -27,6 +27,7 @@ const DailyReward = ({ onRewardClaimed }) => {
       }
     } catch (error) {
       console.error('Error checking daily login:', error);
+      // Don't retry on error to prevent infinite loops
     }
   };
 

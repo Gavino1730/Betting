@@ -46,6 +46,9 @@ const SpinWheel = ({ isOpen, onClose, onPrizeWon }) => {
       setSpinsRemaining(response.data.spinsRemaining);
     } catch (error) {
       console.error('Error checking spin availability:', error);
+      // Set defaults on error to prevent infinite retries
+      setCanSpin(false);
+      setSpinsRemaining(0);
     }
   };
 

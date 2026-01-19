@@ -24,6 +24,9 @@ const Achievements = ({ onAchievementClaimed }) => {
       }
     } catch (error) {
       console.error('Error loading achievements:', error);
+      // Set empty state on error to prevent infinite retries
+      setAchievements([]);
+      setUnclaimedCount(0);
     }
   };
 
