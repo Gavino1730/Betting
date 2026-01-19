@@ -19,8 +19,8 @@ async function login(page, email, password) {
     await page.waitForSelector('input[name="username"]', { timeout: 5000 });
   }
   
-  // Extract username from email (testuser@... -> testuser)
-  const username = email.split('@')[0];
+  // Map email to username
+  const username = email.includes('admin') ? 'testadmin' : 'testuser';
   
   // Fill in credentials
   await page.fill('input[name="username"]', username);
