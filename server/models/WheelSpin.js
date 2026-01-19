@@ -34,13 +34,12 @@ class WheelSpin {
       const today = new Date().toISOString().split('T')[0];
       const config = await this.getConfig();
 
-      // Count spins today
+      // Count spins today using spin_date instead of spin_time
       const { data, error } = await supabase
         .from('wheel_spins')
         .select('id')
         .eq('user_id', userId)
-        .gte('spin_time', `${today}T00:00:00`)
-        .lte('spin_time', `${today}T23:59:59`);
+        .eq('spin_date', today);
 
       if (error) throw error;
 

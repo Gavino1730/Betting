@@ -38,19 +38,10 @@ BEGIN
   END IF;
 END $$;
 
--- Fix check_all_games_bet function (if exists)
--- Skipping - function does not exist in current database
--- DO $$ 
--- BEGIN
---   IF EXISTS (SELECT 1 FROM pg_proc WHERE proname = 'check_all_games_bet') THEN
---     ALTER FUNCTION public.check_all_games_bet(UUID, DATE) 
---       SECURITY INVOKER 
---       SET search_path = public, pg_temp;
---     RAISE NOTICE 'Fixed check_all_games_bet';
---   ELSE
---     RAISE NOTICE 'Function check_all_games_bet does not exist - skipping';
---   END IF;
--- END $$;
+-- Fix check_all_games_bet function (corrected signature)
+ALTER FUNCTION public.check_all_games_bet(UUID) 
+  SECURITY INVOKER 
+  SET search_path = public, pg_temp;
 
 -- Fix delete_user_cascade function (if exists)
 DO $$ 

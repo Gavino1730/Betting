@@ -542,10 +542,10 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
             </button>
             <button 
               className="btn btn-secondary btn-large"
-              onClick={() => setShowSpinWheel(!showSpinWheel)}
+              onClick={() => setShowSpinWheel(true)}
               style={{ marginTop: '0.5rem', width: '100%', background: 'linear-gradient(135deg, #ffc107, #ff9800)' }}
             >
-              🎡 {showSpinWheel ? 'Hide' : 'Show'} Daily Spin Wheel
+              🎡 Open Daily Spin Wheel
             </button>
             <div className="balance-display">
               <span className="balance-label">Your Balance:</span>
@@ -553,12 +553,12 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
             </div>
           </div>
 
-          {/* Spin Wheel Section */}
-          {showSpinWheel && (
-            <div className="card">
-              <SpinWheel onPrizeWon={handleSpinWheelPrize} />
-            </div>
-          )}
+          {/* Spin Wheel Modal */}
+          <SpinWheel 
+            isOpen={showSpinWheel} 
+            onClose={() => setShowSpinWheel(false)}
+            onPrizeWon={handleSpinWheelPrize} 
+          />
 
           {/* Spirit Week Tracker - TEMPORARILY HIDDEN
           <div className="card spirit-week-card">

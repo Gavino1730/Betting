@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '../utils/axios';
 import '../styles/SpinWheel.css';
 
-const SpinWheel = ({ onPrizeWon }) => {
+const SpinWheel = ({ isOpen, onClose, onPrizeWon }) => {
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [canSpin, setCanSpin] = useState(false);
@@ -78,10 +78,24 @@ const SpinWheel = ({ onPrizeWon }) => {
   };
 
   const segmentAngle = 360 / prizes.length;
-  const colors = ['#004f9e', '#0066cc', '#003d7a', '#0052a3', '#005bb5', '#0047a0', '#0059b3', '#004080'];
+  const colors = [
+    { base: '#8B0000', dark: '#5A0000' }, // Dark Red
+    { base: '#FF4500', dark: '#CC3700' }, // Orange Red
+    { base: '#FFD700', dark: '#CCB000' }, // Gold
+    { base: '#32CD32', dark: '#28A428' }, // Lime Green
+    { base: '#1E90FF', dark: '#1873CC' }, // Dodger Blue
+    { base: '#9370DB', dark: '#7659B3' }, // Medium Purple
+    { base: '#FF1493', dark: '#CC1075' }, // Deep Pink
+    { base: '#FF8C00', dark: '#CC7000' }  // Dark Orange
+  ];
+
+  if (!isOpen) return null;
 
   return (
-    <div className="spin-wheel-container">
+    <div className="spin-wheel-overlay" onClick={onClose}>
+      <div className="spin-wheel-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="spin-wheel-close" onClick={onClose}>&times;</button>
+        <div className="spin-wheel-container">
       <div className="wheel-header">
         <h2>Daily Spin Wheel</h2>
         <p className="spins-remaining">
@@ -97,13 +111,15 @@ const SpinWheel = ({ onPrizeWon }) => {
         >
           {prizes.map((prize, index) => {
             const startAngle = index * segmentAngle;
+            const colorPair = colors[index % colors.length];
             return (
               <div
                 key={index}
                 className="wheel-segment"
                 style={{
                   transform: `rotate(${startAngle}deg)`,
-                  backgroundColor: colors[index % colors.length]
+                  '--segment-color': colorPair.base,
+                  '--segment-color-dark': colorPair.dark
                 }}
               >
                 <div className="prize-text" style={{ transform: `rotate(${segmentAngle / 2}deg)` }}>
@@ -135,6 +151,8 @@ const SpinWheel = ({ onPrizeWon }) => {
           </div>
         </div>
       )}
+        </div>
+      </div>
     </div>
   );
 };
