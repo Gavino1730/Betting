@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 const DailyLogin = require('../models/DailyLogin');
 
 // Record login and check for reward
-router.post('/record', auth, async (req, res) => {
+router.post('/record', authenticateToken, async (req, res) => {
   try {
     const result = await DailyLogin.recordLogin(req.user.id);
     res.json(result);
@@ -15,7 +15,7 @@ router.post('/record', auth, async (req, res) => {
 });
 
 // Claim daily reward
-router.post('/claim', auth, async (req, res) => {
+router.post('/claim', authenticateToken, async (req, res) => {
   try {
     const result = await DailyLogin.claimReward(req.user.id);
     res.json(result);
@@ -26,7 +26,7 @@ router.post('/claim', auth, async (req, res) => {
 });
 
 // Get login history
-router.get('/history', auth, async (req, res) => {
+router.get('/history', authenticateToken, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 30;
     const history = await DailyLogin.getLoginHistory(req.user.id, limit);
@@ -38,7 +38,7 @@ router.get('/history', auth, async (req, res) => {
 });
 
 // Get current streak
-router.get('/streak', auth, async (req, res) => {
+router.get('/streak', authenticateToken, async (req, res) => {
   try {
     const streak = await DailyLogin.getCurrentStreak(req.user.id);
     res.json({ streak });

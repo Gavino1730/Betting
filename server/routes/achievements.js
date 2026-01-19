@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 const Achievement = require('../models/Achievement');
 
 // Get user achievements
-router.get('/', auth, async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     const achievements = await Achievement.getUserAchievements(req.user.id);
     res.json(achievements);
@@ -15,7 +15,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Get unclaimed achievements
-router.get('/unclaimed', auth, async (req, res) => {
+router.get('/unclaimed', authenticateToken, async (req, res) => {
   try {
     const achievements = await Achievement.getUnclaimedAchievements(req.user.id);
     res.json(achievements);
@@ -26,7 +26,7 @@ router.get('/unclaimed', auth, async (req, res) => {
 });
 
 // Claim achievement reward
-router.post('/claim/:id', auth, async (req, res) => {
+router.post('/claim/:id', authenticateToken, async (req, res) => {
   try {
     const achievementId = parseInt(req.params.id);
     const result = await Achievement.claimAchievement(achievementId, req.user.id);
@@ -38,7 +38,7 @@ router.post('/claim/:id', auth, async (req, res) => {
 });
 
 // Check for "all games bet" achievement
-router.post('/check-all-games', auth, async (req, res) => {
+router.post('/check-all-games', authenticateToken, async (req, res) => {
   try {
     const achievement = await Achievement.checkAllGamesBet(req.user.id);
     res.json({ achievement });
