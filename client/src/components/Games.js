@@ -466,7 +466,7 @@ function Games({ user, updateUser }) {
 
       {/* Girls Game Bonus Promotion */}
       <div className="bonus-promo-banner">
-        <div className="bonus-promo-icon">🎀</div>
+        <div className="bonus-promo-icon">�</div>
         <div className="bonus-promo-content">
           <h3>Girls Game Bonus Active!</h3>
           <p><strong>Earn up to 25% extra</strong> on all girls basketball bets! The more consecutive girls games you bet on, the bigger your bonus grows!</p>
@@ -904,7 +904,7 @@ function Games({ user, updateUser }) {
                                           </div>
                                           {selectedGame?.team_type?.toLowerCase().includes('girls') && (
                                             <div className="bet-slip-row bonus-row">
-                                              <span className="bet-slip-label">🎀 Girls Game Bonus</span>
+                                              <span className="bet-slip-label">� Girls Game Bonus</span>
                                               <span className="bet-slip-value bonus-value">+10% to +25%</span>
                                             </div>
                                           )}
@@ -915,7 +915,7 @@ function Games({ user, updateUser }) {
                                           </div>
                                           {selectedGame?.team_type?.toLowerCase().includes('girls') && (
                                             <div className="bet-slip-row bonus-payout">
-                                              <span className="bet-slip-label">🎀 With Girls Bonus</span>
+                                              <span className="bet-slip-label">� With Girls Bonus</span>
                                               <span className="bet-slip-value bonus-payout-value">Up to {formatCurrency(parseFloat(amount) * confidenceMultipliers[confidence] * 1.25)}</span>
                                             </div>
                                           )}

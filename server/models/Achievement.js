@@ -1,5 +1,24 @@
 const supabase = require('../supabase');
 
+// Get current date in Pacific timezone (YYYY-MM-DD format)
+const getTodayPacific = () => {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'America/Los_Angeles'
+  });
+  
+  const parts = formatter.formatToParts(new Date());
+  const date = {};
+  parts.forEach(part => {
+    date[part.type] = part.value;
+  });
+  
+  // Return YYYY-MM-DD format
+  return `${date.year}-${date.month}-${date.day}`;
+};
+
 class Achievement {
   // Achievement types and rewards
   static TYPES = {
@@ -38,7 +57,7 @@ class Achievement {
   // Check and award "all games bet" achievement
   static async checkAllGamesBet(userId) {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific();
 
       // Check if already earned today
       const { data: existing } = await supabase
@@ -81,7 +100,7 @@ class Achievement {
   // Check girls game achievements
   static async checkGirlsGameAchievements(userId) {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific();
       const awarded = [];
 
       // Count total girls game bets
@@ -286,7 +305,7 @@ class Achievement {
   // Check consecutive login achievements
   static async checkLoginStreak(userId, streakCount) {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific();
       let awarded = [];
 
       // Check for 7-day streak
@@ -341,7 +360,7 @@ class Achievement {
   // Award achievement
   static async awardAchievement(userId, type, description, rewardAmount) {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific();
 
       // Create achievement record
       const { data: achievement, error: achError } = await supabase

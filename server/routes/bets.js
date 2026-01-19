@@ -129,38 +129,48 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Insufficient balance' });
     }
 
-    // Calculate girls game bonus if applicable
+    // Calculate game bonus for all game types
     const { supabase } = require('../supabase');
-    let girlsGameBonus = 0;
+    let gameBonus = 0;
     let bonusMessage = '';
+    let bonusEmoji = '';
     
-    if (game.team_type === 'girls') {
-      try {
-        const { data: bonusData } = await supabase
-          .rpc('calculate_girls_game_bonus', { 
-            p_user_id: req.user.id, 
-            p_team_type: game.team_type 
-          });
+    try {
+      const { data: bonusData } = await supabase
+        .rpc('calculate_game_bonus', { 
+          p_user_id: req.user.id, 
+          p_team_type: game.team_type || 'general'
+        });
+      
+      gameBonus = bonusData || 0;
+      
+      if (gameBonus > 0) {
+        const bonusPercent = (gameBonus * 100).toFixed(0);
         
-        girlsGameBonus = bonusData || 0;
-        
-        if (girlsGameBonus > 0) {
-          const bonusPercent = (girlsGameBonus * 100).toFixed(0);
-          bonusMessage = ` 🎀 +${bonusPercent}% Girls Game Bonus!`;
+        // Different emojis for different game types
+        if (game.team_type === 'girls') {
+          bonusEmoji = '�';
+          bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Girls Game Bonus!`;
+        } else if (game.team_type === 'boys') {
+          bonusEmoji = '🏀';
+          bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Boys Game Bonus!`;
+        } else {
+          bonusEmoji = '⭐';
+          bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Betting Bonus!`;
         }
-      } catch (error) {
-        console.error('Error calculating girls game bonus:', error);
       }
+    } catch (error) {
+      console.error('Error calculating game bonus:', error);
     }
 
     // Create bet with bonus
     const bet = await Bet.create(req.user.id, gameId, confidence, selectedTeam, parsedAmount, resolvedOdds);
     
     // Update bet with bonus if applicable
-    if (girlsGameBonus > 0) {
+    if (gameBonus > 0) {
       await supabase
         .from('bets')
-        .update({ girls_game_bonus: girlsGameBonus })
+        .update({ girls_game_bonus: gameBonus })
         .eq('id', bet.id);
     }
     
@@ -174,7 +184,7 @@ router.post('/', authenticateToken, async (req, res) => {
     const Notification = require('../models/Notification');
     await Notification.create(
       req.user.id,
-      '✅ Bet Placed' + (girlsGameBonus > 0 ? ' 🎀' : ''),
+      '✅ Bet Placed' + (gameBonus > 0 ? ` ${bonusEmoji}` : ''),
       `${confidence.charAt(0).toUpperCase() + confidence.slice(1)} confidence bet on ${selectedTeam} for ${parsedAmount} Valiant Bucks at ${resolvedOdds}x odds${bonusMessage}`,
       'bet_placed'
     );

@@ -1,5 +1,24 @@
 const supabase = require('../supabase');
 
+// Get current date in Pacific timezone (YYYY-MM-DD format)
+const getTodayPacific = () => {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'America/Los_Angeles'
+  });
+  
+  const parts = formatter.formatToParts(new Date());
+  const date = {};
+  parts.forEach(part => {
+    date[part.type] = part.value;
+  });
+  
+  // Return YYYY-MM-DD format
+  return `${date.year}-${date.month}-${date.day}`;
+};
+
 class WheelSpin {
   // Get wheel configuration
   static async getConfig() {
@@ -31,7 +50,7 @@ class WheelSpin {
   // Check if user can spin today
   static async canSpin(userId) {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific(); // Use Pacific timezone
       const config = await this.getConfig();
 
       // Count spins today using spin_date instead of spin_time
@@ -110,7 +129,7 @@ class WheelSpin {
       if (updateError) throw updateError;
 
       // Record spin
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific(); // Use Pacific timezone
       const { data: spinRecord, error: spinError } = await supabase
         .from('wheel_spins')
         .insert({

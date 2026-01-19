@@ -164,10 +164,16 @@ async function placeBet(page, gameSelector, betType, amount, confidence = 'mediu
  */
 async function clearSession(page) {
   await page.context().clearCookies();
-  await page.evaluate(() => {
-    localStorage.clear();
-    sessionStorage.clear();
-  });
+  
+  // Only clear storage if we're on a valid page
+  try {
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+  } catch (error) {
+    // Ignore - no page loaded yet, nothing to clear
+  }
 }
 
 module.exports = {

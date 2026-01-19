@@ -133,6 +133,58 @@ function HowToUse({ onNavigate }) {
         <p>Prop bets have custom odds (like 1.8x or 2.5x) and usually expire before the game starts!</p>
       </div>
 
+      {/* Betting Bonuses */}
+      <div className="card tutorial-section">
+        <div className="section-icon">🎁</div>
+        <h2>Betting Bonuses & Incentives</h2>
+        <p className="section-description">
+          Earn extra Valiant Bucks on your winnings! Different game types offer different bonuses:
+        </p>
+        <div className="bonus-tiers">
+          <div className="bonus-tier girls">
+            <div className="bonus-header">
+              <span className="bonus-icon">�</span>
+              <h4>Girls Games (BEST!)</h4>
+            </div>
+            <ul>
+              <li><strong>10% base bonus</strong> on all girls game bets</li>
+              <li><strong>+5%</strong> for 3+ consecutive girls bets</li>
+              <li><strong>+10%</strong> for 7+ consecutive girls bets</li>
+              <li className="bonus-max">Maximum: 20% bonus (+5% on weekends!)</li>
+            </ul>
+          </div>
+          <div className="bonus-tier boys">
+            <div className="bonus-header">
+              <span className="bonus-icon">🏀</span>
+              <h4>Boys Games</h4>
+            </div>
+            <ul>
+              <li><strong>5% base bonus</strong> on all boys game bets</li>
+              <li><strong>+3%</strong> for 3+ consecutive boys bets</li>
+              <li><strong>+5%</strong> for 7+ consecutive boys bets</li>
+              <li className="bonus-max">Maximum: 10% bonus (+5% on weekends!)</li>
+            </ul>
+          </div>
+          <div className="bonus-tier general">
+            <div className="bonus-header">
+              <span className="bonus-icon">⭐</span>
+              <h4>All Bets</h4>
+            </div>
+            <ul>
+              <li><strong>2% base bonus</strong> on any bet</li>
+              <li><strong>+3%</strong> for betting 3 days in a row</li>
+              <li><strong>+5%</strong> for betting 7 days in a row</li>
+              <li className="bonus-max">Maximum: 7% bonus (+5% on weekends!)</li>
+            </ul>
+          </div>
+        </div>
+        <div className="bonus-example">
+          <h4>💰 Example:</h4>
+          <p>Win 200 Valiant Bucks on a girls game with 15% bonus = <strong>230 Bucks total!</strong></p>
+          <p className="bonus-tip">💡 Tip: Build streaks and bet on weekends for maximum bonuses!</p>
+        </div>
+      </div>
+
       {/* Tips & Strategies */}
       <div className="card tutorial-section">
         <div className="section-icon">💡</div>
@@ -144,14 +196,29 @@ function HowToUse({ onNavigate }) {
             <p>Don't risk all your Valiant Bucks on one game. Spread your picks to minimize risk.</p>
           </div>
           <div className="tip-card">
+            <div className="tip-icon">�</div>
+            <h4>Support Girls Basketball</h4>
+            <p>Girls games offer the best bonuses (up to 20%+)! More winnings and support women's sports.</p>
+          </div>
+          <div className="tip-card">
             <div className="tip-icon">📊</div>
             <h4>Check Team Stats</h4>
             <p>Visit the Teams page to see records, rankings, and schedules before making picks.</p>
           </div>
           <div className="tip-card">
+            <div className="tip-icon">🔥</div>
+            <h4>Build Streaks</h4>
+            <p>Consecutive bets on the same game type earn streak bonuses. Keep it going!</p>
+          </div>
+          <div className="tip-card">
             <div className="tip-icon">⏰</div>
             <h4>Pick Early</h4>
             <p>Make your predictions early - betting closes when the game starts!</p>
+          </div>
+          <div className="tip-card">
+            <div className="tip-icon">🎉</div>
+            <h4>Weekend Betting</h4>
+            <p>Extra 5% bonus on ALL bets during weekends! Stack it with other bonuses.</p>
           </div>
           <div className="tip-card">
             <div className="tip-icon">🏆</div>
@@ -167,6 +234,11 @@ function HowToUse({ onNavigate }) {
             <div className="tip-icon">🎲</div>
             <h4>Mix Confidence Levels</h4>
             <p>Use high confidence for games you're sure about, low confidence for riskier picks.</p>
+          </div>
+          <div className="tip-card">
+            <div className="tip-icon">📅</div>
+            <h4>Daily Bets</h4>
+            <p>Bet every day to build your daily streak bonus. Even small bets count!</p>
           </div>
         </div>
       </div>

@@ -308,6 +308,40 @@ router.post('/place', authenticateToken, async (req, res) => {
 
     const potentialWin = parsedAmount * odds;
 
+    // Calculate game bonus for prop bets based on team type
+    let gameBonus = 0;
+    let bonusMessage = '';
+    let bonusEmoji = '';
+    
+    try {
+      const { data: bonusData } = await supabase
+        .rpc('calculate_game_bonus', { 
+          p_user_id: req.user.id, 
+          p_team_type: propBet.team_type || 'general'
+        });
+      
+      gameBonus = bonusData || 0;
+      
+      if (gameBonus > 0) {
+        const bonusPercent = (gameBonus * 100).toFixed(0);
+        const teamType = (propBet.team_type || '').toLowerCase();
+        
+        // Different emojis for different prop types
+        if (teamType.includes('girl')) {
+          bonusEmoji = '�';
+          bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Girls Prop Bonus!`;
+        } else if (teamType.includes('boy')) {
+          bonusEmoji = '🏀';
+          bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Boys Prop Bonus!`;
+        } else {
+          bonusEmoji = '⭐';
+          bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Prop Bonus!`;
+        }
+      }
+    } catch (error) {
+      console.error('Error calculating prop bonus:', error);
+    }
+
     // Create bet record (using bets table with special marker for prop bets)
     const { data: bet, error: betError } = await supabase
       .from('bets')
@@ -319,7 +353,8 @@ router.post('/place', authenticateToken, async (req, res) => {
         amount: parsedAmount,
         odds: odds,
         status: 'pending',
-        potential_win: potentialWin
+        potential_win: potentialWin,
+        girls_game_bonus: gameBonus // Reuse existing column for all bonus types
       })
       .select()
       .single();
@@ -331,7 +366,7 @@ router.post('/place', authenticateToken, async (req, res) => {
       req.user.id,
       'bet',
       -parsedAmount,
-      `Prop bet: ${propBet.title} - ${choice}`
+      `Prop bet: ${propBet.title} - ${choice}${bonusMessage}`
     );
 
     // Then deduct balance
@@ -341,8 +376,8 @@ router.post('/place', authenticateToken, async (req, res) => {
     const Notification = require('../models/Notification');
     await Notification.create(
       req.user.id,
-      '✅ Prop Bet Placed',
-      `Bet ${parsedAmount} Valiant Bucks on "${propBet.title}" - ${choice.toUpperCase()} at ${odds}x odds`,
+      '✅ Prop Bet Placed' + (gameBonus > 0 ? ` ${bonusEmoji}` : ''),
+      `Bet ${parsedAmount} Valiant Bucks on "${propBet.title}" - ${choice.toUpperCase()} at ${odds}x odds${bonusMessage}`,
       'bet_placed'
     );
 

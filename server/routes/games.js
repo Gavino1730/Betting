@@ -460,23 +460,32 @@ router.put('/:id/outcome', authenticateToken, async (req, res) => {
         if (won) {
           let payout = bet.potential_win || (bet.amount * bet.odds);
           
-          // Add girls game bonus to payout
+          // Add game bonus to payout (works for girls, boys, and general bonuses)
           if (bet.girls_game_bonus && bet.girls_game_bonus > 0) {
             const bonusAmount = payout * bet.girls_game_bonus;
             payout += bonusAmount;
             const bonusPercent = (bet.girls_game_bonus * 100).toFixed(0);
+            
+            // Determine bonus emoji based on game type
+            const gameType = game.team_type || '';
+            let bonusEmoji = '⭐';
+            if (gameType.toLowerCase().includes('girl')) {
+              bonusEmoji = '�';
+            } else if (gameType.toLowerCase().includes('boy')) {
+              bonusEmoji = '🏀';
+            }
             
             await User.updateBalance(bet.user_id, payout);
             await Transaction.create(
               bet.user_id,
               'win',
               payout,
-              `Won bet on ${bet.selected_team} (${bet.bet_type} confidence) with +${bonusPercent}% girls game bonus`
+              `Won bet on ${bet.selected_team} (${bet.bet_type} confidence) with +${bonusPercent}% bonus`
             );
             await Notification.create(
               bet.user_id,
-              '🎉🎀 Bet Won with Bonus!',
-              `Your ${bet.bet_type} confidence bet on ${bet.selected_team} won ${payout.toFixed(0)} Valiant Bucks (including +${bonusPercent}% girls game bonus)!`,
+              `🎉${bonusEmoji} Bet Won with Bonus!`,
+              `Your ${bet.bet_type} confidence bet on ${bet.selected_team} won ${payout.toFixed(0)} Valiant Bucks (including +${bonusPercent}% bonus)!`,
               'bet_won'
             );
           } else {

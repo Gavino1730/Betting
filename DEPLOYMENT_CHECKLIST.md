@@ -163,27 +163,27 @@ open https://valiantpicks.com
 1. [ ] Open games page
 2. [ ] Verify bonus banner appears (pink, animated)
 3. [ ] Click on a girls basketball game
-4. [ ] Verify bet slip shows "🎀 Girls Game Bonus: +10% to +25%"
+4. [ ] Verify bet slip shows "� Girls Game Bonus: +10% to +25%"
 5. [ ] Enter amount and confidence
 6. [ ] Verify bonus payout calculation shows
 
 **Expected Result:**
 ```
 Base Payout: 150 VB
-🎀 With Girls Bonus: Up to 187 VB
+� With Girls Bonus: Up to 187 VB
 ```
 
 ### Test 2: Place Girls Game Bet ✓
 1. [ ] Place bet on girls game
-2. [ ] Check notification includes 🎀 emoji
+2. [ ] Check notification includes � emoji
 3. [ ] Verify balance deducted correctly
 4. [ ] Check database: `SELECT girls_game_bonus FROM bets WHERE id = ?`
 5. [ ] Verify bonus value stored (0.10 = 10%)
 
 **Expected Result:**
 ```
-Notification: ✅🎀 Bet Placed!
-Medium confidence bet... 🎀 +10% Girls Game Bonus!
+Notification: ✅� Bet Placed!
+Medium confidence bet... � +10% Girls Game Bonus!
 ```
 
 ### Test 3: Girls Game Win with Bonus ✓
@@ -196,7 +196,7 @@ Medium confidence bet... 🎀 +10% Girls Game Bonus!
 **Expected Result:**
 ```
 Payout: 165 VB (150 base + 15 bonus)
-Notification: 🎉🎀 Bet Won with Bonus!
+Notification: 🎉� Bet Won with Bonus!
 Your medium confidence bet on Team won 165 Valiant 
 Bucks (including +10% girls game bonus)!
 ```

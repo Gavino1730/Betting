@@ -59,7 +59,7 @@ const Achievements = ({ onAchievementClaimed }) => {
       'big_win': '💰',
       'first_bet': '🎉',
       // Girls game achievements
-      'girls_supporter': '🎀',
+      'girls_supporter': '�',
       'girls_champion': '👑',
       'girls_legend': '🏆',
       'girls_streak_3': '💖',

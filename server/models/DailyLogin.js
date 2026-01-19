@@ -1,10 +1,29 @@
 const supabase = require('../supabase');
 
+// Get current date in Pacific timezone (YYYY-MM-DD format)
+const getTodayPacific = () => {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'America/Los_Angeles'
+  });
+  
+  const parts = formatter.formatToParts(new Date());
+  const date = {};
+  parts.forEach(part => {
+    date[part.type] = part.value;
+  });
+  
+  // Return YYYY-MM-DD format
+  return `${date.year}-${date.month}-${date.day}`;
+};
+
 class DailyLogin {
   // Record a daily login and calculate streak
   static async recordLogin(userId) {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific(); // Use Pacific timezone
       
       // Check if already logged in today
       const { data: existing, error: checkError } = await supabase
@@ -70,7 +89,7 @@ class DailyLogin {
   // Claim daily login reward
   static async claimReward(userId) {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getTodayPacific(); // Use Pacific timezone
 
       // Get today's login record
       const { data: loginRecord, error: fetchError } = await supabase
