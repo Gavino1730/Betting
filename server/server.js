@@ -47,10 +47,14 @@ const authLimiter = RATE_LIMIT_ENABLED ? rateLimit({
 app.use(cors({
   origin: [
     'https://valiantpicks.com',
+    'https://www.valiantpicks.com',
     'https://betting-6i9.pages.dev',
     'http://localhost:3000'
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(bodyParser.json({ limit: '10mb' }));
 if (limiter) {
