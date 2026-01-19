@@ -410,14 +410,17 @@ function TestDashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         <div className="dashboard-main-column">
           {/* Place a Pick CTA */}
           <div className="card pick-cta-card">
-            <h3>🎲 Ready to Make Your Picks?</h3>
-            <p>Head over to the Place Picks page to place your predictions on upcoming Valiant games!</p>
+            <h3>🎲 Want to Place Your Picks?</h3>
+            <p style={{fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.75rem'}}>
+              All betting has moved to the <strong style={{color: '#4caf50'}}>Place Picks</strong> page!
+            </p>
+            <p>Click below to view upcoming games and make your predictions on Valiant sports.</p>
             <button 
               className="btn btn-primary btn-large"
               onClick={() => onNavigate && onNavigate('games')}
               style={{ marginTop: '1rem', width: '100%' }}
             >
-              🏀 Go to Place Picks
+              🏀 Go to Place Picks Page
             </button>
             <div className="balance-display">
               <span className="balance-label">Your Balance:</span>
