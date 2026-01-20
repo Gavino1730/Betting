@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login, logout, getUserBalance, navigateTo, clearSession } = require('../helpers/test-utils');
+const { login, logout, getUserBalance, navigateTo, clearSession, dismissOnboarding } = require('../helpers/test-utils');
 
 test.describe('User Features', () => {
   test.beforeEach(async ({ page }) => {
@@ -115,7 +115,8 @@ test.describe('User Features', () => {
     
     const howToLink = page.locator('text=/How to Use|Guide|Help/i').first();
     if (await howToLink.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await howToLink.click({ timeout: 5000 });
+      await dismissOnboarding(page);
+      await howToLink.click({ timeout: 5000, force: true });
       await page.waitForTimeout(500);
       
       // Check if modal/page opened
@@ -132,7 +133,8 @@ test.describe('User Features', () => {
     
     const aboutLink = page.locator('text=/About/i').first();
     if (await aboutLink.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await aboutLink.click({ timeout: 5000 });
+      await dismissOnboarding(page);
+      await aboutLink.click({ timeout: 5000, force: true });
       await page.waitForTimeout(500);
       
       // Check if modal/page opened
@@ -149,7 +151,8 @@ test.describe('User Features', () => {
     
     const termsLink = page.locator('text=/Terms|Privacy/i').first();
     if (await termsLink.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await termsLink.click({ timeout: 5000 });
+      await dismissOnboarding(page);
+      await termsLink.click({ timeout: 5000, force: true });
       await page.waitForTimeout(500);
       
       // Check if modal/page opened
@@ -169,6 +172,7 @@ test.describe('User Features', () => {
 
   test('should have responsive navigation menu', async ({ page }) => {
     await page.goto('/dashboard');
+    await dismissOnboarding(page);
     
     // Check if navigation menu exists
     const navMenu = page.locator('nav, [class*="nav"]');
