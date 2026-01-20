@@ -112,9 +112,9 @@ test.describe('Teams', () => {
       await firstTeam.click();
       
       // Look for player cards or list
-      const players = page.locator('[class*="player"], text=/Roster/i ~ *');
-      const playerCount = await players.count();
-      expect(playerCount).toBeGreaterThanOrEqual(0);
+      const playerCards = await page.locator('[class*="player"]').count();
+      const rosterText = await page.getByText(/Roster/i).count();
+      expect(playerCards + rosterText).toBeGreaterThanOrEqual(0);
     }
   });
 
@@ -193,7 +193,7 @@ test.describe('Teams', () => {
     await dismissOnboarding(page);
     
     // Check for filter buttons
-    const filterButtons = page.locator('button:has-text(/Varsity|JV|Girls|Boys/i)');
+    const filterButtons = page.getByRole('button', { name: /Varsity|JV|Girls|Boys/i });
     const filterCount = await filterButtons.count();
     
     if (filterCount > 0) {

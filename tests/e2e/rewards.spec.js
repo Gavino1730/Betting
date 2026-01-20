@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login, clearSession, getUserBalance } = require('../helpers/test-utils');
+const { login, clearSession, getUserBalance, dismissOnboarding } = require('../helpers/test-utils');
 
 test.describe('Rewards and Achievements', () => {
   test.beforeEach(async ({ page }) => {
