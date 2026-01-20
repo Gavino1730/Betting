@@ -19,7 +19,8 @@
     "test:report": "playwright show-report playwright-report",
     "test:chromium": "playwright test --project=chromium",
     "test:firefox": "playwright test --project=firefox",
-    "test:webkit": "playwright test --project=webkit"
+    "test:webkit": "playwright test --project=webkit",
+    "test:export": "powershell -ExecutionPolicy Bypass -File export-test-results.ps1"
   },
   "keywords": [
     "betting",
