@@ -74,6 +74,7 @@ test.describe('Transaction History', () => {
     // Place a bet
     await page.goto('/games');
     await page.waitForLoadState('domcontentloaded');
+    await dismissOnboarding(page);
     
     const betButton = page.locator('[class*="game"], button:has-text("Bet")').first();
     const gameExists = await betButton.isVisible({ timeout: 5000 }).catch(() => false);
