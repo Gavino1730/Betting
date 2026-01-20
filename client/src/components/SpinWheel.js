@@ -65,11 +65,19 @@ const SpinWheel = ({ isOpen, onClose, onPrizeWon }) => {
       // Calculate rotation to land on prize
       const prizeIndex = prizes.indexOf(prizeAmount);
       const segmentAngle = 360 / prizes.length;
-      const targetAngle = prizeIndex * segmentAngle;
+      
+      // Calculate the center angle of the target segment
+      // Segments start at 0 degrees and go clockwise
+      // The pointer is at top (0 degrees) pointing down
+      // We need the segment center to align with the pointer
+      const segmentCenterAngle = (prizeIndex * segmentAngle) + (segmentAngle / 2);
+      
+      // Calculate target rotation (subtract to bring segment to top)
+      const targetAngle = 360 - segmentCenterAngle;
       
       // Spin multiple times + target angle
       const spins = 5 + Math.random() * 3; // 5-8 full rotations
-      const totalRotation = rotation + (spins * 360) + (360 - targetAngle);
+      const totalRotation = rotation + (spins * 360) + targetAngle;
 
       setRotation(totalRotation);
 
