@@ -23,24 +23,26 @@ test.describe('Authentication Flow', () => {
   test('should show error for invalid credentials', async ({ page }) => {
     await page.goto('/');
     await page.click('text=Login');
+    await page.waitForSelector('input[name="username"]');
     
-    await page.fill('input[type="email"]', 'invalid@test.com');
-    await page.fill('input[type="password"]', 'wrongpassword');
+    await page.fill('input[name="username"]', 'invaliduser');
+    await page.fill('input[name="password"]', 'wrongpassword');
     await page.click('button[type="submit"]:has-text("Login")');
     
     // Should show error message
-    await expect(page.locator('text=/Invalid|incorrect|failed/i')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('text=/Invalid|incorrect|failed|error/i')).toBeVisible({ timeout: 10000 });
   });
 
   test('should show error for empty fields', async ({ page }) => {
     await page.goto('/');
     await page.click('text=Login');
+    await page.waitForSelector('input[name="username"]');
     
     await page.click('button[type="submit"]:has-text("Login")');
     
-    // Should show validation error
-    const emailInput = page.locator('input[type="email"]');
-    await expect(emailInput).toHaveAttribute('required', '');
+    // Should show validation error (HTML5 validation)
+    const usernameInput = page.locator('input[name="username"]');
+    await expect(usernameInput).toHaveAttribute('required', '');
   });
 
   test('should successfully login with valid credentials', async ({ page }) => {

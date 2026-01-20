@@ -140,7 +140,8 @@ async function navigateTo(page, linkText) {
   
   // Wait for the link to be clickable
   await page.locator(`text=${linkText}`).first().click({ timeout: 10000 });
-  await page.waitForLoadState('networkidle', { timeout: 30000 });
+  await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
+  await page.waitForTimeout(500);
   
   // Dismiss onboarding on new page if present
   await dismissOnboarding(page);
