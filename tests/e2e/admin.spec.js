@@ -235,7 +235,7 @@ test.describe('Admin Panel', () => {
     if (await teamsLink.isVisible({ timeout: 3000 }).catch(() => false)) {
       await teamsLink.click();
       
-      await expect(page.locator('text=/Create Team|Team Management/i')).toBeVisible();
+      await expect(page.locator('text=/Create Team|Team Management/i').first()).toBeVisible();
     }
   });
 
@@ -341,6 +341,8 @@ test.describe('Admin Panel', () => {
 
   test('should display admin statistics', async ({ page }) => {
     await page.goto('/admin');
+    await dismissOnboarding(page);
+    await page.waitForLoadState('domcontentloaded');
     
     // Should show stats like total users, total bets, etc
     const statsSection = page.locator('text=/Total Users|Total Bets|Pending|Resolved/i');

@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login, navigateTo, clearSession } = require('../helpers/test-utils');
+const { login, navigateTo, clearSession, dismissOnboarding } = require('../helpers/test-utils');
 
 test.describe('Teams', () => {
   test.beforeEach(async ({ page }) => {
@@ -9,8 +9,9 @@ test.describe('Teams', () => {
 
   test('should display teams page', async ({ page }) => {
     await navigateTo(page, 'Teams');
+    await dismissOnboarding(page);
     
-    await expect(page.locator('text=/Teams|Valiant/i')).toBeVisible();
+    await expect(page.locator('text=/Teams|Valiant/i').first()).toBeVisible();
   });
 
   test('should list all teams', async ({ page }) => {
@@ -26,6 +27,7 @@ test.describe('Teams', () => {
   test('should display team types (Varsity, JV, Girls, etc)', async ({ page }) => {
     await page.goto('/teams');
     await page.waitForLoadState('domcontentloaded');
+    await dismissOnboarding(page);
     
     // Check for team type filters or labels
     const teamTypes = page.locator('text=/Varsity|JV|Girls|Boys|Freshman/i');
@@ -45,7 +47,7 @@ test.describe('Teams', () => {
       await firstTeam.click();
       
       // Should show team details
-      await expect(page.locator('text=/Record|Wins|Losses|Schedule/i')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('text=/Record|Wins|Losses|Schedule/i').first()).toBeVisible({ timeout: 5000 });
     }
   });
 
@@ -188,6 +190,7 @@ test.describe('Teams', () => {
   test('should filter teams by type', async ({ page }) => {
     await page.goto('/teams');
     await page.waitForLoadState('domcontentloaded');
+    await dismissOnboarding(page);
     
     // Check for filter buttons
     const filterButtons = page.locator('button:has-text(/Varsity|JV|Girls|Boys/i)');

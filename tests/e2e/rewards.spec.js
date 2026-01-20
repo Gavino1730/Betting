@@ -69,6 +69,7 @@ test.describe('Rewards and Achievements', () => {
   test('should display spin wheel feature', async ({ page }) => {
     await page.goto('/dashboard');
     await page.waitForLoadState('domcontentloaded');
+    await dismissOnboarding(page);
     await page.waitForTimeout(1000);
     
     // Look for spin wheel link/button
@@ -78,9 +79,9 @@ test.describe('Rewards and Achievements', () => {
     if (exists) {
       await spinWheelLink.click({ timeout: 5000 });
       await page.waitForTimeout(500);
-      const wheelVisible = await page.locator('text=/Spin|Wheel/i').isVisible({ timeout: 5000 }).catch(() => false);
+      const wheelVisible = await page.locator('text=/Spin|Wheel/i').first().isVisible({ timeout: 5000 }).catch(() => false);
       if (wheelVisible) {
-        await expect(page.locator('text=/Spin|Wheel/i')).toBeVisible();
+        await expect(page.locator('text=/Spin|Wheel/i').first()).toBeVisible();
       }
     }
   });

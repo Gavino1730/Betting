@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login, clearSession, getUserBalance } = require('../helpers/test-utils');
+const { login, clearSession, getUserBalance, dismissOnboarding } = require('../helpers/test-utils');
 
 test.describe('Transaction History', () => {
   test.beforeEach(async ({ page }) => {
@@ -98,27 +98,37 @@ test.describe('Transaction History', () => {
 
   test('should show positive transactions (winnings, rewards)', async ({ page }) => {
     await page.goto('/dashboard');
+    await dismissOnboarding(page);
+    await page.waitForLoadState('domcontentloaded');
     
     // Look for positive transactions (usually shown in green or with +)
-    const positiveTransactions = page.locator('text=/\\+|Won|Reward|Bonus/i, [class*="positive"]');
-    const count = await positiveTransactions.count();
-    expect(count).toBeGreaterThanOrEqual(0);
+    const textMatches = page.getByText(/Won|Reward|Bonus/i);
+    const classMatches = page.locator('[class*="positive"]');
+    const textCount = await textMatches.count();
+    const classCount = await classMatches.count();
+    expect(textCount + classCount).toBeGreaterThanOrEqual(0);
   });
 
   test('should show negative transactions (bets placed)', async ({ page }) => {
     await page.goto('/dashboard');
+    await dismissOnboarding(page);
+    await page.waitForLoadState('domcontentloaded');
     
     // Look for negative transactions (usually shown in red or with -)
-    const negativeTransactions = page.locator('text=/-|Bet Placed|Lost/i, [class*="negative"]');
-    const count = await negativeTransactions.count();
-    expect(count).toBeGreaterThanOrEqual(0);
+    const textMatches = page.getByText(/Bet Placed|Lost/i);
+    const classMatches = page.locator('[class*="negative"]');
+    const textCount = await textMatches.count();
+    const classCount = await classMatches.count();
+    expect(textCount + classCount).toBeGreaterThanOrEqual(0);
   });
 
   test('should filter transactions by type', async ({ page }) => {
     await page.goto('/dashboard');
+    await dismissOnboarding(page);
+    await page.waitForLoadState('domcontentloaded');
     
     // Look for filter buttons
-    const filterButtons = page.locator('button:has-text(/All|Bets|Wins|Rewards/i)');
+    const filterButtons = page.getByRole('button', { name: /All|Bets|Wins|Rewards/i });
     const filterCount = await filterButtons.count();
     
     if (filterCount > 0) {
@@ -180,9 +190,11 @@ test.describe('Transaction History', () => {
 
   test('should paginate transaction history', async ({ page }) => {
     await page.goto('/dashboard');
+    await dismissOnboarding(page);
+    await page.waitForLoadState('domcontentloaded');
     
     // Look for pagination controls
-    const paginationControls = page.locator('button:has-text(/Next|Previous|Load More/i)');
+    const paginationControls = page.getByRole('button', { name: /Next|Previous|Load More/i });
     const hasPagination = await paginationControls.count();
     
     if (hasPagination > 0) {

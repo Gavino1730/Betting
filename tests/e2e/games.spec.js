@@ -9,12 +9,14 @@ test.describe('Games and Betting', () => {
 
   test('should display games list', async ({ page }) => {
     await navigateTo(page, 'Games');
+    await dismissOnboarding(page);
     
-    await expect(page.locator('text=/Games|Upcoming/i')).toBeVisible();
+    await expect(page.locator('text=/Games|Upcoming/i').first()).toBeVisible();
   });
 
   test('should load visible games only', async ({ page }) => {
     await page.goto('/games');
+    await dismissOnboarding(page);
     
     // Wait for games to load
     await page.waitForLoadState('domcontentloaded');
@@ -67,7 +69,7 @@ test.describe('Games and Betting', () => {
       await firstGame.click();
       
       // Should open betting modal/form
-      await expect(page.locator('text=/Place Bet|Bet Amount|Confirm/i')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('text=/Place Bet|Bet Amount|Confirm/i').first()).toBeVisible({ timeout: 5000 });
     }
   });
 
@@ -149,14 +151,14 @@ test.describe('Games and Betting', () => {
       await page.fill('input[placeholder*="amount" i], input[type="number"]', '15');
       
       // Select High confidence (2.0x)
-      const highConfidence = page.locator('text=/High|2.0/i');
+      const highConfidence = page.locator('text=/High|2.0/i').first();
       if (await highConfidence.isVisible({ timeout: 2000 }).catch(() => false)) {
         await highConfidence.click();
       }
       
       await page.click('button:has-text(/Place Bet|Confirm|Submit/i)');
       
-      await expect(page.locator('text=/Success|Bet Placed/i')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('text=/Success|Bet Placed/i').first()).toBeVisible({ timeout: 5000 });
     }
   });
 
@@ -333,6 +335,7 @@ test.describe('Games and Betting', () => {
   test('should filter games by type', async ({ page }) => {
     await page.goto('/games');
     await page.waitForLoadState('domcontentloaded');
+    await dismissOnboarding(page);
     
     // Check if filter options exist
     const filterButtons = page.locator('button:has-text(/All|Varsity|JV|Girls|Boys/i)');

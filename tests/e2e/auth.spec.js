@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login, logout, register, clearSession, generateTestData } = require('../helpers/test-utils');
+const { login, logout, register, clearSession, generateTestData, dismissOnboarding } = require('../helpers/test-utils');
 
 test.describe('Authentication Flow', () => {
   test.beforeEach(async ({ page }) => {
@@ -15,9 +15,9 @@ test.describe('Authentication Flow', () => {
   test('should display login page', async ({ page }) => {
     await page.goto('/');
     await page.click('text=Login');
-    await expect(page.locator('input[type="email"]')).toBeVisible();
-    await expect(page.locator('input[type="password"]')).toBeVisible();
-    await expect(page.locator('button[type="submit"]')).toBeVisible();
+    await expect(page.locator('input[type="email"]').first()).toBeVisible();
+    await expect(page.locator('input[type="password"]').first()).toBeVisible();
+    await expect(page.locator('button[type="submit"]').first()).toBeVisible();
   });
 
   test('should show error for invalid credentials', async ({ page }) => {
@@ -52,12 +52,13 @@ test.describe('Authentication Flow', () => {
     };
 
     await login(page, testUser.email, testUser.password);
+    await dismissOnboarding(page);
     
     // Verify logged in
-    await expect(page.locator('text=/Dashboard|Logout/i')).toBeVisible();
+    await expect(page.locator('text=/Dashboard|Logout/i').first()).toBeVisible();
     
     // Should see user balance
-    await expect(page.locator('text=/Balance|Valiant Bucks/i')).toBeVisible();
+    await expect(page.locator('text=/Balance|Valiant Bucks/i').first()).toBeVisible();
   });
 
   test('should successfully logout', async ({ page }) => {
@@ -162,18 +163,20 @@ test.describe('Authentication Flow', () => {
     };
 
     await login(page, testUser.email, testUser.password);
+    await dismissOnboarding(page);
     
     // Reload page
     await page.reload();
+    await dismissOnboarding(page);
     
     // Should still be logged in
-    await expect(page.locator('text=/Dashboard|Logout/i')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('text=/Dashboard|Logout/i').first()).toBeVisible({ timeout: 5000 });
   });
 
   test('should redirect to login for protected routes when not authenticated', async ({ page }) => {
     await page.goto('/dashboard');
     
     // Should redirect to login or show login form
-    await expect(page.locator('text=/Login|Sign In/i')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('text=/Login|Sign In/i').first()).toBeVisible({ timeout: 5000 });
   });
 });
