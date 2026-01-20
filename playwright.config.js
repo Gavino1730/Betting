@@ -5,7 +5,7 @@ module.exports = defineConfig({
   fullyParallel: true, // Run tests in parallel for speed
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 4, // 4 parallel workers locally
+  workers: process.env.CI ? 1 : 10, // 10 parallel workers for Ryzen 7 5800X (16 threads)
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
     ['json', { outputFile: 'test-results/results.json' }],
