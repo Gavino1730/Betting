@@ -2,10 +2,10 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: false, // Run tests sequentially to avoid conflicts
+  fullyParallel: true, // Run tests in parallel for speed
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1, // Single worker to prevent race conditions
+  workers: process.env.CI ? 1 : 4, // 4 parallel workers locally
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
     ['json', { outputFile: 'test-results/results.json' }],
@@ -16,8 +16,8 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 30000,
-    navigationTimeout: 60000,
+    actionTimeout: 20000,
+    navigationTimeout: 40000,
   },
 
   projects: [
