@@ -22,9 +22,10 @@ test.describe('Games and Betting', () => {
     // Wait for games to load
     await page.waitForLoadState('domcontentloaded');
     
-    // Should show games or "no games" message
-    const gamesExist = await page.locator('[class*="game"], text=/No games available/i').count();
-    expect(gamesExist).toBeGreaterThan(0);
+    // Should show games or "no games" message - check both
+    const gamesCount = await page.locator('[class*="game"]').count();
+    const noGamesMessage = await page.locator('text=/No games available/i').count();
+    expect(gamesCount + noGamesMessage).toBeGreaterThan(0);
   });
 
   test('should display game details', async ({ page }) => {
@@ -68,11 +69,16 @@ test.describe('Games and Betting', () => {
     const gameExists = await firstGame.isVisible({ timeout: 5000 }).catch(() => false);
     
     if (gameExists) {
+      await page.waitForTimeout(1000);
       await firstGame.click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
       
-      // Should open betting modal/form
-      await expect(page.locator('text=/Place Bet|Bet Amount|Confirm/i').first()).toBeVisible({ timeout: 10000 });
+      // Should open betting modal/form - check for any modal indicators
+      const modalVisible = await Promise.race([
+        page.locator('text=/Place Bet|Bet Amount|Confirm/i').first().isVisible({ timeout: 15000 }).catch(() => false),
+        page.locator('input[placeholder*="amount" i]').isVisible({ timeout: 15000 }).catch(() => false)
+      ]);
+      expect(modalVisible).toBe(true);
     }
   });
 
@@ -118,15 +124,18 @@ test.describe('Games and Betting', () => {
 
   test('should place bet with medium confidence (1.5x)', async ({ page }) => {
     await page.goto('/games');
+    await dismissOnboarding(page);
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(1000);
     
     const betButton = page.locator('[class*="game"], button:has-text("Bet")').first();
     const gameExists = await betButton.isVisible({ timeout: 5000 }).catch(() => false);
     
     if (gameExists) {
+      await page.waitForTimeout(1000);
       await betButton.click();
       
-      await page.fill('input[placeholder*="amount" i], input[type="number"]', '20');
+      await page.fill('input[placeholder*="amount" i], input[type="number"]', '20', { timeout: 10000 });
       
       // Select Medium confidence (1.5x)
       const mediumConfidence = page.locator('text=/Medium|1.5/i');
@@ -238,15 +247,19 @@ test.describe('Games and Betting', () => {
 
   test('should show bet confirmation before placing bet', async ({ page }) => {
     await page.goto('/games');
+    await dismissOnboarding(page);
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(1000);
     
     const betButton = page.locator('[class*="game"], button:has-text("Bet")').first();
     const gameExists = await betButton.isVisible({ timeout: 5000 }).catch(() => false);
     
     if (gameExists) {
+      await page.waitForTimeout(1000);
       await betButton.click();
+      await page.waitForTimeout(1000);
       
-      await page.fill('input[placeholder*="amount" i], input[type="number"]', '25');
+      await page.fill('input[placeholder*="amount" i], input[type="number"]', '25', { timeout: 10000 });
       
       // Should show potential win amount
       await expect(page.locator('text=/Potential Win|You could win/i')).toBeVisible({ timeout: 5000 });

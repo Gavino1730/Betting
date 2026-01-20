@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login, clearSession, isAdmin } = require('../helpers/test-utils');
+const { login, clearSession, isAdmin, dismissOnboarding } = require('../helpers/test-utils');
 
 test.describe('Admin Panel', () => {
   test.beforeEach(async ({ page }) => {
@@ -17,11 +17,13 @@ test.describe('Admin Panel', () => {
 
   test('should display admin navigation menu', async ({ page }) => {
     await page.goto('/admin');
+    await page.waitForLoadState('domcontentloaded');
     
-    // Should show admin menu items
-    const menuItems = page.locator('text=/Games|Teams|Users|Bets|Props/i');
-    const menuCount = await menuItems.count();
-    expect(menuCount).toBeGreaterThanOrEqual(3);
+    // Should show admin menu items (check for tabs)
+    const tabs = page.locator('.tabs .tab-btn, .admin-mobile-nav .mobile-admin-pill');
+    await tabs.first().waitFor({ state: 'visible', timeout: 10000 });
+    const tabCount = await tabs.count();
+    expect(tabCount).toBeGreaterThanOrEqual(4); // At least 4 tabs (Games, PropBets, Bets, Users, Teams)
   });
 
   test('should display games management section', async ({ page }) => {

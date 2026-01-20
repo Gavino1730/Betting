@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login, getUserBalance, clearSession } = require('../helpers/test-utils');
+const { login, getUserBalance, clearSession, dismissOnboarding } = require('../helpers/test-utils');
 
 test.describe('Prop Bets', () => {
   test.beforeEach(async ({ page }) => {
@@ -10,6 +10,8 @@ test.describe('Prop Bets', () => {
   test('should display prop bets page', async ({ page }) => {
     // Navigate to prop bets (might be in games or separate page)
     await page.goto('/games');
+    await dismissOnboarding(page);
+    await page.waitForTimeout(500);
     
     // Look for prop bets section
     const propBetsLink = page.locator('text=/Prop Bets|Props|Special Bets/i').first();

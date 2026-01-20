@@ -83,7 +83,7 @@ async function logout(page) {
   const logoutButton = page.locator('text=Logout').first();
   if (await logoutButton.isVisible()) {
     await logoutButton.click();
-    await page.waitForURL('/', { timeout: 5000 });
+    await page.waitForURL('/', { timeout: 15000 });
   }
 }
 

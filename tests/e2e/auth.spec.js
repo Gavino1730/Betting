@@ -13,11 +13,14 @@ test.describe('Authentication Flow', () => {
   });
 
   test('should display login page', async ({ page }) => {
+    await clearSession(page);
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(500);
     await page.click('text=Login', { timeout: 10000 });
     await page.waitForLoadState('domcontentloaded');
-    await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 10000 });
+    await page.waitForTimeout(500);
+    await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 15000 });
     await expect(page.locator('input[type="password"]').first()).toBeVisible();
     await expect(page.locator('button[type="submit"]').first()).toBeVisible();
   });

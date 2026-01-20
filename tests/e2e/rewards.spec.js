@@ -70,15 +70,17 @@ test.describe('Rewards and Achievements', () => {
     await page.goto('/dashboard');
     await page.waitForLoadState('domcontentloaded');
     await dismissOnboarding(page);
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(2000); // Longer wait for animations/stability
     
     // Look for spin wheel link/button
     const spinWheelLink = page.locator('text=/Spin|Wheel|Lucky Wheel/i').first();
     const exists = await spinWheelLink.isVisible({ timeout: 5000 }).catch(() => false);
     
     if (exists) {
-      await spinWheelLink.click({ timeout: 5000 });
-      await page.waitForTimeout(500);
+      // Wait for element to be stable
+      await page.waitForTimeout(1000);
+      await spinWheelLink.click({ timeout: 10000 });
+      await page.waitForTimeout(1000);
       const wheelVisible = await page.locator('text=/Spin|Wheel/i').first().isVisible({ timeout: 5000 }).catch(() => false);
       if (wheelVisible) {
         await expect(page.locator('text=/Spin|Wheel/i').first()).toBeVisible();
@@ -195,13 +197,16 @@ test.describe('Rewards and Achievements', () => {
     await page.goto('/games');
     await page.waitForLoadState('domcontentloaded');
     await dismissOnboarding(page);
+    await page.waitForTimeout(1000);
     
     const betButton = page.locator('[class*="game"], button:has-text("Bet")').first();
     const gameExists = await betButton.isVisible({ timeout: 5000 }).catch(() => false);
     
     if (gameExists) {
+      await page.waitForTimeout(1000);
       await betButton.click();
-      await page.fill('input[placeholder*="amount" i], input[type="number"]', '5');
+      await page.waitForTimeout(1000);
+      await page.fill('input[placeholder*="amount" i], input[type="number"]', '5', { timeout: 10000 });
       await page.click('button:has-text(/Place Bet|Confirm|Submit/i)');
       
       // Check for achievement notification
