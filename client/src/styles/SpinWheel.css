@@ -5,8 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(0, 79, 158, 0.95), rgba(0, 36, 70, 0.95));
-  backdrop-filter: blur(10px);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
