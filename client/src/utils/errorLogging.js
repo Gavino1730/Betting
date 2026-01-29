@@ -1,8 +1,55 @@
-import apiClient from './axios';
+import axios from 'axios';
+
+// Create a separate axios instance for error logging that doesn't use the main apiClient
+// This prevents circular logging when error-log requests themselves fail
+const errorLogClient = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || (
+    typeof window !== 'undefined' && window.location.origin.includes('localhost')
+      ? 'http://localhost:5000/api'
+      : '/api'
+  ),
+  timeout: 5000, // Short timeout for error logging
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Rate limiting for error logging - prevent spam
+const errorLogRateLimit = {
+  lastLogTime: 0,
+  errorCount: 0,
+  maxErrorsPerMinute: 5,
+  recentErrors: new Set() // Track unique errors to avoid duplicates
+};
 
 // Log error to backend
 export const logError = async (error, context = {}) => {
   try {
+    const now = Date.now();
+    const oneMinuteAgo = now - 60000;
+    
+    // Reset counter if a minute has passed
+    if (errorLogRateLimit.lastLogTime < oneMinuteAgo) {
+      errorLogRateLimit.errorCount = 0;
+      errorLogRateLimit.recentErrors.clear();
+    }
+    
+    // Check rate limit
+    if (errorLogRateLimit.errorCount >= errorLogRateLimit.maxErrorsPerMinute) {
+      return; // Skip logging, rate limit exceeded
+    }
+    
+    // Create a fingerprint for this error to avoid duplicate logging
+    const errorFingerprint = `${error.message || ''}:${context.endpoint || ''}:${context.statusCode || ''}`;
+    if (errorLogRateLimit.recentErrors.has(errorFingerprint)) {
+      return; // Skip duplicate error
+    }
+    
+    // Update rate limit tracking
+    errorLogRateLimit.lastLogTime = now;
+    errorLogRateLimit.errorCount++;
+    errorLogRateLimit.recentErrors.add(errorFingerprint);
+    
     const errorData = {
       errorMessage: error.message || String(error),
       errorStack: error.stack || null,
@@ -12,12 +59,12 @@ export const logError = async (error, context = {}) => {
     };
 
     // Don't wait for response - fire and forget
-    apiClient.post('/error-logs', errorData).catch(err => {
-      console.error('Failed to log error to server:', err);
+    // Use the separate error log client to avoid circular logging
+    errorLogClient.post('/error-logs', errorData).catch(() => {
+      // Silently fail - don't log errors about logging errors
     });
   } catch (err) {
     // Silently fail - don't want logging to break the app
-    console.error('Error in logError:', err);
   }
 };
 

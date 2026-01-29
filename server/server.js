@@ -97,11 +97,26 @@ app.get('/api/health', (req, res) => {
 // Error logging middleware (logs all errors)
 const { errorLogger } = require('./middleware/errorLogger');
 
+// Handle async errors that aren't caught by route handlers
+const asyncErrorHandler = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
+
 // Error handling middleware
 app.use(errorLogger);
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Internal server error' });
+  console.error('Server Error:', err.message);
+  console.error('Stack:', err.stack);
+  
+  // Determine status code
+  const statusCode = err.statusCode || err.status || 500;
+  
+  // Don't expose internal error details in production
+  const message = statusCode >= 500 
+    ? 'Internal server error' 
+    : (err.message || 'An error occurred');
+  
+  res.status(statusCode).json({ error: message });
 });
 
 app.listen(PORT, () => {
