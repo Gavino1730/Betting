@@ -149,7 +149,7 @@ router.post('/', authenticateToken, async (req, res) => {
         
         // Different emojis for different game types
         if (game.team_type === 'girls') {
-          bonusEmoji = '�';
+          bonusEmoji = '💗';
           bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Girls Game Bonus!`;
         } else if (game.team_type === 'boys') {
           bonusEmoji = '🏀';

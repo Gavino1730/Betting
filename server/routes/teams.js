@@ -89,8 +89,6 @@ router.put('/:id', authenticateToken, async (req, res) => {
         : JSON.stringify(req.body.players);
     }
 
-    console.log(`Updating team ${req.params.id} with:`, updates);
-
     const team = await Team.update(req.params.id, updates);
     
     if (!team) {

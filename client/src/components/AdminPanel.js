@@ -462,7 +462,6 @@ function AdminPanel() {
   };
 
   const handleEditPropBet = (propBet) => {
-    console.log('Editing prop bet:', propBet);
     setEditingPropBet(propBet);
     
     // Handle legacy props that use yes_odds/no_odds without custom options

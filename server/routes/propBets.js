@@ -328,7 +328,7 @@ router.post('/place', authenticateToken, async (req, res) => {
         
         // Different emojis for different prop types
         if (teamType.includes('girl')) {
-          bonusEmoji = '�';
+          bonusEmoji = '💗';
           bonusMessage = ` ${bonusEmoji} +${bonusPercent}% Girls Prop Bonus!`;
         } else if (teamType.includes('boy')) {
           bonusEmoji = '🏀';

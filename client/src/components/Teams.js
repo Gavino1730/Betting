@@ -111,7 +111,7 @@ function Teams() {
           { number: 14, name: 'Calista Everson', position: 'G', grade: '12', height: '5\'7"', bio: 'Red headed wrecking ball. Full speed, full contact, zero fear. Plays like every possession owes her money.' },
           { number: 15, name: 'Allison Jacobs', position: 'F', grade: '11', height: '5\'7"', bio: 'Runs the streets of Banks. Fearless, physical, and confident. Not backing down from anyone, ever.' },
           { number: 22, name: 'Maya Taha', position: 'P', grade: '10', height: '5\'8"', bio: 'Cool, calm, collected. When chaos hits, she\'s unfazed. Keeps the team steady.' },
-          { number: 23, name: 'Mia Verzani', position: 'G', grade: '11', height: '5\'5"', bio: 'Controled chaos in every direction. Energy everywhere. Chaos incarnate. Defense has no idea what\'s coming next.' },
+          { number: 23, name: 'Mia Verzani', position: 'G', grade: '11', height: '5\'5"', bio: 'Controlled chaos in every direction. Energy everywhere. Chaos incarnate. Defense has no idea what\'s coming next.' },
           { number: 24, name: 'Emmee Kinder', position: 'P', grade: '12', height: '5\'10"', bio: 'Dog in the post. Physical, relentless, and tough. Lives in the paint and loves it.' },
           { number: 31, name: 'Scarlett Thomson', position: 'G', grade: '10', height: '5\'7"', bio: 'Motor never shuts off. Hustle machine. Always moving, always annoying.' },
           { number: 33, name: 'Nicole Arbaugh', position: 'G', grade: '11', height: '5\'5"', bio: 'Kneebrace Nicole. Still grinding. Still competing. Still not afraid of contact.' },

@@ -48,10 +48,6 @@ class Bet {
       }
 
       const { data, error } = await query;
-      
-      if (limit) {
-        query = query.limit(limit);
-      }
 
       if (error) {
         console.error('Supabase error in findByUserId:', error);

@@ -71,7 +71,6 @@ const applyReferralCode = async (newUserId, referralCode) => {
       .single();
 
     if (findError || !referrer) {
-      console.log('Referral code not found:', referralCode);
       return;
     }
 

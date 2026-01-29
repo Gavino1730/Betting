@@ -143,7 +143,7 @@ function HowToUse({ onNavigate }) {
         <div className="bonus-tiers">
           <div className="bonus-tier girls">
             <div className="bonus-header">
-              <span className="bonus-icon">�</span>
+              <span className="bonus-icon">💗</span>
               <h4>Girls Games (BEST!)</h4>
             </div>
             <ul>
@@ -196,7 +196,7 @@ function HowToUse({ onNavigate }) {
             <p>Don't risk all your Valiant Bucks on one game. Spread your picks to minimize risk.</p>
           </div>
           <div className="tip-card">
-            <div className="tip-icon">�</div>
+            <div className="tip-icon">💗</div>
             <h4>Support Girls Basketball</h4>
             <p>Girls games offer the best bonuses (up to 20%+)! More winnings and support women's sports.</p>
           </div>

@@ -470,7 +470,7 @@ router.put('/:id/outcome', authenticateToken, async (req, res) => {
             const gameType = game.team_type || '';
             let bonusEmoji = '⭐';
             if (gameType.toLowerCase().includes('girl')) {
-              bonusEmoji = '�';
+              bonusEmoji = '💗';
             } else if (gameType.toLowerCase().includes('boy')) {
               bonusEmoji = '🏀';
             }

@@ -81,8 +81,6 @@ class Team {
   }
 
   static async update(id, updates) {
-    console.log('Team.update called with id:', id, 'updates:', updates);
-    
     const { data, error } = await supabase
       .from('teams')
       .update(updates)
@@ -93,8 +91,6 @@ class Team {
       console.error('Supabase update error:', error);
       throw error;
     }
-    
-    console.log('Supabase update result:', data);
     
     if (!data || data.length === 0) {
       throw new Error('No team found with that ID');

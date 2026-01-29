@@ -154,7 +154,6 @@ function AdminTeams() {
       schedule: parsedSchedule
     };
     
-    console.log('Setting selected team to:', cleanedTeam);
     setSelectedTeam(cleanedTeam);
     setFormData(cleanedTeam);
     setEditMode(false);
