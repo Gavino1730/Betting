@@ -535,6 +535,45 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       <div className="dashboard-grid school-grid">
         {/* Left Column */}
         <div className="dashboard-main-column">
+          {/* Grade Rankings - Top Priority */}
+          <div className="card spirit-week-card" style={{marginBottom: '1.5rem'}}>
+            <div className="spirit-leaderboard">
+              <h4>🏆 Grade Rankings</h4>
+              {[...spiritWeekData.grades]
+                .sort((a, b) => b.points - a.points)
+                .map((grade, index) => {
+                  const maxPoints = Math.max(...spiritWeekData.grades.map(g => g.points), 1);
+                  const percentage = (grade.points / maxPoints) * 100;
+                  return (
+                    <div key={index} className="grade-bar-item">
+                      <div className="grade-bar-header">
+                        <div className="grade-bar-info">
+                          <span className="grade-bar-icon">{grade.icon}</span>
+                          <div className="grade-bar-text">
+                            <span className="grade-bar-name" style={{color: grade.color}}>{grade.grade}</span>
+                            <span className="grade-bar-theme">{grade.subtheme}</span>
+                          </div>
+                        </div>
+                        <span className="grade-bar-points" style={{color: grade.color}}>{grade.points} pts</span>
+                      </div>
+                      <div className="grade-bar-container">
+                        <div 
+                          className="grade-bar-fill" 
+                          style={{
+                            width: `${percentage}%`,
+                            backgroundColor: grade.color,
+                            boxShadow: `0 2px 8px ${grade.color}40`
+                          }}
+                        >
+                          {percentage > 10 && <span className="grade-bar-percentage">{percentage.toFixed(0)}%</span>}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+
           {/* Place a Pick CTA */}
           <div className="card pick-cta-card">
             <h3>🎲 Want to Place Your Picks?</h3>
@@ -589,41 +628,66 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
               {spiritWeekData.description}
             </p>
             
-            {/* Dress-Up Days */}
+            {/* Combined Spirit Week Schedule */}
             <div className="spirit-week-events">
-              <h4>👔 Dress-Up Days</h4>
+              <h4>📅 Spirit Week Schedule</h4>
               <div className="events-timeline">
-                {spiritWeekData.dressUpDays.map((dressUp, idx) => (
-                  <div key={idx} className="timeline-item dress-up-day">
-                    <span className="timeline-day">{dressUp.day}</span>
-                    <div className="dress-up-details">
-                      <div className="dress-up-theme">{dressUp.theme}</div>
-                      <div className="dress-up-points">
-                        <div className="points-option">
-                          <span className="points-badge single">Single Points</span>
-                          <span className="points-desc">{dressUp.singlePoints}</span>
+                {spiritWeekData.dressUpDays.map((dressUp, idx) => {
+                  // Find matching events for this day
+                  const dayEvents = spiritWeekData.events.filter(event => 
+                    event.day.includes(dressUp.day.split(',')[1]?.trim()) || 
+                    (dressUp.day.includes('Monday') && event.day.includes('Monday')) ||
+                    (dressUp.day.includes('Tuesday') && event.day.includes('Tuesday')) ||
+                    (dressUp.day.includes('Wednesday') && event.day.includes('Wednesday')) ||
+                    (dressUp.day.includes('Thursday') && event.day.includes('Thursday')) ||
+                    (dressUp.day.includes('Friday') && event.day.includes('Friday'))
+                  );
+                  
+                  return (
+                    <div key={idx} className="timeline-item dress-up-day">
+                      <span className="timeline-day">{dressUp.day}</span>
+                      <div className="dress-up-details">
+                        <div className="dress-up-theme">👔 {dressUp.theme}</div>
+                        <div className="dress-up-points">
+                          <div className="points-option">
+                            <span className="points-badge single">Single Points</span>
+                            <span className="points-desc">{dressUp.singlePoints}</span>
+                          </div>
+                          <div className="points-option">
+                            <span className="points-badge double">Double Points</span>
+                            <span className="points-desc">{dressUp.doublePoints}</span>
+                          </div>
                         </div>
-                        <div className="points-option">
-                          <span className="points-badge double">Double Points</span>
-                          <span className="points-desc">{dressUp.doublePoints}</span>
-                        </div>
+                        {/* Show daily events */}
+                        {dayEvents.length > 0 && (
+                          <div style={{marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.1)'}}>
+                            {dayEvents.map((event, eventIdx) => (
+                              <div key={eventIdx} style={{fontSize: '0.9rem', color: '#b8c5d6', marginBottom: '0.35rem'}}>
+                                📌 {event.event}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Spirit Week Events */}
-            <div className="spirit-week-events">
-              <h4>📅 Week Schedule</h4>
-              <div className="events-timeline">
-                {spiritWeekData.events.map((event, idx) => (
-                  <div key={idx} className="timeline-item">
-                    <span className="timeline-day">{event.day}</span>
-                    <span className="timeline-event">{event.event}</span>
-                  </div>
-                ))}
+                  );
+                })}
+                
+                {/* Show remaining events that don't match dress-up days */}
+                {spiritWeekData.events
+                  .filter(event => 
+                    !event.day.includes('Monday, Feb') && 
+                    !event.day.includes('Tuesday, Feb') && 
+                    !event.day.includes('Wednesday, Feb') && 
+                    !event.day.includes('Thursday, Feb') && 
+                    !event.day.includes('Friday, Feb')
+                  )
+                  .map((event, idx) => (
+                    <div key={`extra-${idx}`} className="timeline-item">
+                      <span className="timeline-day">{event.day}</span>
+                      <span className="timeline-event">{event.event}</span>
+                    </div>
+                  ))}
               </div>
             </div>
 
@@ -657,43 +721,6 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                 <div className="leader-subtheme">{spiritLeader.subtheme}</div>
               </div>
               <div className="leader-points">{spiritLeader.points} pts</div>
-            </div>
-
-            {/* All Grades - Points Leaderboard */}
-            <div className="spirit-leaderboard">
-              <h4>🏆 Grade Rankings</h4>
-              {[...spiritWeekData.grades]
-                .sort((a, b) => b.points - a.points)
-                .map((grade, index) => {
-                  const maxPoints = Math.max(...spiritWeekData.grades.map(g => g.points), 1);
-                  const percentage = (grade.points / maxPoints) * 100;
-                  return (
-                    <div key={index} className="grade-bar-item">
-                      <div className="grade-bar-header">
-                        <div className="grade-bar-info">
-                          <span className="grade-bar-icon">{grade.icon}</span>
-                          <div className="grade-bar-text">
-                            <span className="grade-bar-name" style={{color: grade.color}}>{grade.grade}</span>
-                            <span className="grade-bar-theme">{grade.subtheme}</span>
-                          </div>
-                        </div>
-                        <span className="grade-bar-points" style={{color: grade.color}}>{grade.points} pts</span>
-                      </div>
-                      <div className="grade-bar-container">
-                        <div 
-                          className="grade-bar-fill" 
-                          style={{
-                            width: `${percentage}%`,
-                            backgroundColor: grade.color,
-                            boxShadow: `0 2px 8px ${grade.color}40`
-                          }}
-                        >
-                          {percentage > 10 && <span className="grade-bar-percentage">{percentage.toFixed(0)}%</span>}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
             </div>
           </div>
         </div>
