@@ -1,13 +1,16 @@
 .spirit-week-banner {
-  background: linear-gradient(135deg, #c2185b 0%, #d81b60 50%, #e91e63 100%);
+  background: linear-gradient(180deg, #1a0f08 0%, #2d1810 50%, #1a0f08 100%);
   color: white;
   padding: 0.875rem 1.5rem;
-  box-shadow: 0 4px 16px rgba(216, 27, 96, 0.4);
-  border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(255, 140, 0, 0.3), inset 0 0 30px rgba(255, 140, 0, 0.1);
+  border-top: 3px solid #ff8c00;
+  border-bottom: 3px solid #ff8c00;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
   z-index: 1050;
+  border-left: 10px solid #2d1810;
+  border-right: 10px solid #2d1810;
 }
 
 .spirit-week-banner.minimized {
@@ -45,9 +48,18 @@
 
 .spirit-banner-text strong {
   font-size: 1.125rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-shadow: 
+    0 0 10px #ff8c00,
+    0 0 20px #ff6f00,
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(255, 140, 0, 0.5);
+  background: linear-gradient(180deg, #ffd700 0%, #ff8c00 50%, #ff6f00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 3px rgba(255, 140, 0, 0.8));
 }
 
 .spirit-banner-dates {
@@ -104,24 +116,34 @@
   bottom: 0;
   pointer-events: none;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 2rem;
 }
 
 .sparkle {
   position: absolute;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #ffeb3b 0%, #ff9800 50%, #ff6f00 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800, 0 0 30px #ff6f00;
+  animation: marqueeBulb 1.5s ease-in-out infinite;
   top: 50%;
-  font-size: 1.25rem;
-  animation: sparkleFloat 3s ease-in-out infinite;
-  opacity: 0.7;
+  transform: translateY(-50%);
 }
 
-@keyframes sparkleFloat {
+@keyframes marqueeBulb {
   0%, 100% {
-    transform: translateY(-50%) scale(0.8) rotate(0deg);
-    opacity: 0.7;
+    opacity: 1;
+    box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800, 0 0 30px #ff6f00;
+    transform: translateY(-50%) scale(1);
   }
   50% {
-    transform: translateY(-70%) scale(1.2) rotate(180deg);
-    opacity: 1;
+    opacity: 0.4;
+    box-shadow: 0 0 5px #ffeb3b, 0 0 10px #ff9800;
+    transform: translateY(-50%) scale(0.9);
   }
 }
 

@@ -63,11 +63,11 @@ function SpiritWeekBanner() {
         </div>
       </div>
       <div className="spirit-banner-sparkles">
-        {[...Array(8)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <div key={i} className="sparkle" style={{
-            left: `${(i + 1) * 12}%`,
-            animationDelay: `${i * 0.3}s`
-          }}>✨</div>
+            left: `${(i + 1) * 8}%`,
+            animationDelay: `${i * 0.15}s`
+          }}></div>
         ))}
       </div>
     </div>

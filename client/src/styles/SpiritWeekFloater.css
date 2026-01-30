@@ -2,16 +2,20 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: linear-gradient(135deg, #8e24aa 0%, #ab47bc 100%);
+  background: linear-gradient(135deg, #1a0f08 0%, #2d1810 100%);
   color: white;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(142, 36, 170, 0.5);
+  border-radius: 12px;
+  box-shadow: 
+    0 0 20px rgba(255, 140, 0, 0.6),
+    0 8px 32px rgba(0, 0, 0, 0.8),
+    inset 0 0 30px rgba(255, 140, 0, 0.1);
   z-index: 1000;
   cursor: pointer;
   transition: all 0.3s ease;
   max-width: 280px;
   animation: floaterSlideIn 0.5s ease-out, floaterBounce 2s ease-in-out 0.5s infinite;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid #ff8c00;
+  border-radius: 8px;
 }
 
 @keyframes floaterSlideIn {
@@ -59,10 +63,18 @@
 }
 
 .floater-title {
-  font-weight: 700;
+  font-weight: 900;
   font-size: 1rem;
   flex: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 
+    0 0 10px #ff8c00,
+    0 0 20px #ff6f00,
+    2px 2px 4px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(180deg, #ffd700 0%, #ff8c00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 3px rgba(255, 140, 0, 0.8));
 }
 
 .floater-close {
@@ -126,12 +138,14 @@
 }
 
 .highlight-item {
-  background: rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.2) 0%, rgba(255, 111, 0, 0.1) 100%);
   padding: 0.4rem 0.6rem;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 140, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
 }
 
 .floater-cta {

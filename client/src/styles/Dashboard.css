@@ -1594,9 +1594,20 @@
     padding: 1rem;
   }
 
-  /* Center upcoming games, recent picks, and quick links on mobile */
+  /* Center the entire sidebar on mobile */
+  .dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  /* Center upcoming games, recent picks, and quick links cards on mobile */
   .dashboard-sidebar .card {
     text-align: center;
+    margin: 0 auto;
+    max-width: 600px;
+    width: 100%;
   }
 
   .dashboard-sidebar h3 {
@@ -1908,9 +1919,20 @@
     padding: 0.75rem;
   }
 
+  /* Center the entire sidebar on smaller mobile screens */
+  .dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+  }
+
   /* Ensure centering on smaller mobile */
   .dashboard-sidebar .card {
     text-align: center;
+    margin: 0 auto;
+    max-width: 100%;
+    width: 100%;
   }
 
   .dashboard-sidebar h3 {
@@ -3097,6 +3119,16 @@
 
   .dashboard-sidebar {
     grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .dashboard-sidebar .card {
+    margin: 0 auto;
+    max-width: 600px;
+    width: 100%;
   }
 
   .pick-cta-card {

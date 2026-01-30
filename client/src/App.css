@@ -93,28 +93,34 @@ body {
   overflow: hidden;
 }
 
-/* Spirit Week Flair */
+/* Spirit Week Flair - Broadway Marquee Lights */
 .navbar::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, 
-    #ff1744 0%, #ff1744 20%,
-    #ffea00 20%, #ffea00 40%,
-    #00e676 40%, #00e676 60%,
-    #2979ff 60%, #2979ff 80%,
-    #d500f9 80%, #d500f9 100%
-  );
-  animation: rainbowShift 3s linear infinite;
+  height: 4px;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      #ff8c00 0px,
+      #ff8c00 20px,
+      #ffeb3b 20px,
+      #ffeb3b 40px,
+      #ff6f00 40px,
+      #ff6f00 60px,
+      #ffd700 60px,
+      #ffd700 80px
+    );
+  animation: marqueeLightsScroll 2s linear infinite;
   z-index: 1;
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.6);
 }
 
-@keyframes rainbowShift {
+@keyframes marqueeLightsScroll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(20%); }
+  100% { transform: translateX(80px); }
 }
 
 .nav-brand {
@@ -214,11 +220,25 @@ body {
   );
   transform: rotate(45deg);
   animation: shimmer 3s infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes shimmer {
   0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
   100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* Ensure text stays on top */
+.nav-center button,
+.nav-right button {
+  z-index: 1;
+}
+
+.nav-center button > *,
+.nav-right button > * {
+  position: relative;
+  z-index: 2;
 }
 
 .notification-icon-btn {
@@ -229,6 +249,11 @@ body {
   border: none !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
+  z-index: 2 !important;
+}
+
+.notification-icon-btn::after {
+  display: none !important;
 }
 
 .notification-icon-btn:hover {
@@ -283,6 +308,11 @@ body {
 .logout-btn {
   background: rgba(239, 83, 80, 0.2) !important;
   border-color: rgba(239, 83, 80, 0.5) !important;
+  z-index: 2 !important;
+}
+
+.logout-btn::after {
+  z-index: -1 !important;
 }
 
 .logout-btn:hover {
@@ -485,6 +515,8 @@ body {
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .username {
@@ -494,6 +526,9 @@ body {
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.3px;
+  position: relative;
+  z-index: 2;
+}
 }
 
 .notification-badge {
@@ -509,6 +544,7 @@ body {
   min-width: 18px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(239, 83, 80, 0.5);
+  z-index: 3;
 }
 
 .nav-right .balance-display {
@@ -528,6 +564,8 @@ body {
   border-top: none;
   margin-top: 0;
   padding-top: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .nav-right .balance-label {
@@ -535,10 +573,14 @@ body {
   font-weight: 500;
   font-size: 0.85rem;
   white-space: nowrap;
+  position: relative;
+  z-index: 2;
 }
 
 .nav-right .balance-amount {
   color: #66bb6a;
+  position: relative;
+  z-index: 2;
   font-weight: 700;
   font-size: 0.9rem;
   white-space: nowrap;
