@@ -181,13 +181,6 @@ function BetList() {
           </div>
         </div>
         <div className="bet-stat-card">
-          <div className="stat-icon stat-icon-pending">⏳</div>
-          <div className="stat-info">
-            <span className="stat-label">Pending</span>
-            <span className="stat-value">{stats.pending}</span>
-          </div>
-        </div>
-        <div className="bet-stat-card">
           <div className="stat-icon stat-icon-won">🏆</div>
           <div className="stat-info">
             <span className="stat-label">Won</span>
@@ -228,12 +221,6 @@ function BetList() {
           onClick={() => setFilter('all')}
         >
           All Picks ({stats.total})
-        </button>
-        <button 
-          className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
-          onClick={() => setFilter('pending')}
-        >
-          Pending ({stats.pending})
         </button>
         <button 
           className={`filter-btn ${filter === 'won' ? 'active' : ''}`}
