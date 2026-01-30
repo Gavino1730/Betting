@@ -65,16 +65,27 @@ const SpinWheel = ({ isOpen, onClose, onPrizeWon }) => {
 
       // Calculate rotation to land on prize
       const prizeIndex = prizes.indexOf(prizeAmount);
+      
+      // If prize not found in array, log error but continue
+      if (prizeIndex === -1) {
+        console.error('Prize amount not found in prizes array:', prizeAmount, prizes);
+      }
+      
       const segmentAngle = 360 / prizes.length;
       
-      // Calculate the center angle of the target segment
-      // Segments start at 0 degrees and go clockwise
-      // The pointer is at top (0 degrees) pointing down
-      // We need the segment center to align with the pointer
-      const segmentCenterAngle = (prizeIndex * segmentAngle) + (segmentAngle / 2);
+      // Segments are drawn starting from top (-90 degrees) and going clockwise
+      // Segment 0 starts at -90 degrees (top)
+      // The pointer is at the top (0 degrees in transform space)
+      // We need to rotate the wheel so the target segment center aligns with the pointer
       
-      // Calculate target rotation (subtract to bring segment to top)
-      const targetAngle = 360 - segmentCenterAngle;
+      // Calculate the angle of the segment center from the top
+      // Since segments start at top and go clockwise, segment 0 center is at -90 + segmentAngle/2
+      const segmentStartAngle = prizeIndex * segmentAngle;
+      const segmentCenterAngle = segmentStartAngle + (segmentAngle / 2);
+      
+      // To align the segment with the top pointer, we need to rotate by negative of the segment center angle
+      // This brings the segment center to 0 degrees (top)
+      const targetAngle = -segmentCenterAngle;
       
       // Spin multiple times + target angle
       const spins = 5 + Math.random() * 3; // 5-8 full rotations
