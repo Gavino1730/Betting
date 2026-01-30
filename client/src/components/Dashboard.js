@@ -12,14 +12,15 @@ import SpinWheel from './SpinWheel';
 import Achievements from './Achievements';
 
 function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
-  const [balance, setBalance] = useState(user?.balance || 0);
+  // TEMPORARILY DISABLED - balance state (used in commented-out CTA section)
+  // const [balance, setBalance] = useState(user?.balance || 0);
 
   // Sync balance immediately when user prop changes
-  useEffect(() => {
-    if (user?.balance !== undefined) {
-      setBalance(user.balance);
-    }
-  }, [user?.balance]);
+  // useEffect(() => {
+  //   if (user?.balance !== undefined) {
+  //     setBalance(user.balance);
+  //   }
+  // }, [user?.balance]);
 
   // Detect mobile device
   useEffect(() => {
@@ -43,14 +44,15 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
   const [showSpinWheel, setShowSpinWheel] = useState(false);
   const [hasCheckedSpinWheel, setHasCheckedSpinWheel] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [stats, setStats] = useState({
-    totalBets: 0,
-    activeBets: 0,
-    wonBets: 0,
-    lostBets: 0,
-    winRate: 0,
-    totalWinnings: 0
-  });
+  // TEMPORARILY DISABLED - stats state (used in commented-out stats overview section)
+  // const [stats, setStats] = useState({
+  //   totalBets: 0,
+  //   activeBets: 0,
+  //   wonBets: 0,
+  //   lostBets: 0,
+  //   winRate: 0,
+  //   totalWinnings: 0
+  // });
 
   // Spirit Week Data - Broadway Theme
   const [spiritWeekData] = useState({
@@ -230,24 +232,25 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       setPreviousBets(userBets);
       setBets(userBets);
       
-      // Calculate stats
-      const totalBets = userBets.length;
-      const activeBets = userBets.filter(b => b.status === 'pending').length;
-      const wonBets = userBets.filter(b => b.outcome === 'won').length;
-      const lostBets = userBets.filter(b => b.outcome === 'lost').length;
-      const winRate = totalBets > 0 ? Math.round((wonBets / (wonBets + lostBets)) * 100) || 0 : 0;
-      const totalWinnings = userBets
-        .filter(b => b.outcome === 'won')
-        .reduce((sum, b) => sum + (b.potential_win - b.amount), 0);
+      // TEMPORARILY DISABLED - Calculate stats (stats state is disabled)
+      // const totalBets = userBets.length;
+      // const activeBets = userBets.filter(b => b.status === 'pending').length;
+      // const wonBets = userBets.filter(b => b.outcome === 'won').length;
+      // const lostBets = userBets.filter(b => b.outcome === 'lost').length;
+      // const winRate = totalBets > 0 ? Math.round((wonBets / (wonBets + lostBets)) * 100) || 0 : 0;
+      // const totalWinnings = userBets
+      //   .filter(b => b.outcome === 'won')
+      //   .reduce((sum, b) => sum + (b.potential_win - b.amount), 0);
       
-      setStats({
-        totalBets,
-        activeBets,
-        wonBets,
-        lostBets,
-        winRate,
-        totalWinnings
-      });
+      // TEMPORARILY DISABLED - setStats (stats state is disabled)
+      // setStats({
+      //   totalBets,
+      //   activeBets,
+      //   wonBets,
+      //   lostBets,
+      //   winRate,
+      //   totalWinnings
+      // });
     } catch (err) {
       console.error('Error fetching bets:', err);
     }
@@ -363,7 +366,8 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   // Handle daily reward claimed
   const handleDailyRewardClaimed = async (amount, newBalance, streak) => {
-    setBalance(newBalance);
+    // TEMPORARILY DISABLED - setBalance (balance state is disabled)
+    // setBalance(newBalance);
     if (fetchUserProfile) {
       await fetchUserProfile();
     }
@@ -378,7 +382,8 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   // Handle spin wheel prize
   const handleSpinWheelPrize = async (amount, newBalance) => {
-    setBalance(newBalance);
+    // TEMPORARILY DISABLED - setBalance (balance state is disabled)
+    // setBalance(newBalance);
     if (fetchUserProfile) {
       await fetchUserProfile();
     }
@@ -386,7 +391,8 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   // Handle achievement claimed
   const handleAchievementClaimed = async (amount, newBalance) => {
-    setBalance(newBalance);
+    // TEMPORARILY DISABLED - setBalance (balance state is disabled)
+    // setBalance(newBalance);
     if (fetchUserProfile) {
       await fetchUserProfile();
     }
