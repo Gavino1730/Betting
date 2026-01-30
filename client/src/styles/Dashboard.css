@@ -2355,7 +2355,7 @@
   font-weight: 600;
 }
 
-.balance-display {
+.dashboard .balance-display {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
@@ -2364,11 +2364,11 @@
   font-size: 1.1rem;
 }
 
-.balance-label {
+.dashboard .balance-label {
   color: #b8c5d6;
 }
 
-.balance-amount {
+.dashboard .balance-amount {
   color: #4caf50;
   font-weight: 700;
   font-size: 1.3rem;
@@ -3113,7 +3113,7 @@
     align-items: flex-start;
   }
 
-  .balance-display {
+  .dashboard .balance-display {
     flex-direction: column;
     gap: 0.5rem;
   }

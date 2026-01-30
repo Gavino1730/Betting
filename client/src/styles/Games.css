@@ -242,7 +242,7 @@
   text-align: center;
 }
 
-.balance-display {
+.games-page .balance-display {
   color: #1f4e99;
   font-size: 1.3rem;
   font-weight: 700;
@@ -502,7 +502,7 @@
     font-size: 0.85rem;
   }
 
-  .balance-display {
+  .games-page .balance-display {
     font-size: 1.1rem;
   }
 
@@ -684,7 +684,7 @@
     font-size: 0.95rem;
   }
 
-  .balance-display {
+  .games-page .balance-display {
     font-size: 1rem;
     margin-top: 0.5rem;
   }
