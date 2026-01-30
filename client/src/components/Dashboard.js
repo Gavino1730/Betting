@@ -674,9 +674,6 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                           <div className="grade-bar-text">
                             <span className="grade-bar-name" style={{color: grade.color}}>{grade.grade}</span>
                             <span className="grade-bar-theme">{grade.subtheme}</span>
-                            <span className="grade-bar-colors" style={{fontSize: '0.8rem', color: '#888a9b'}}>
-                              {grade.colors} • {grade.lipSyncPractice}
-                            </span>
                           </div>
                         </div>
                         <span className="grade-bar-points" style={{color: grade.color}}>{grade.points} pts</span>
