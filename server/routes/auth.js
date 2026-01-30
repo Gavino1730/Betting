@@ -115,33 +115,43 @@ router.post('/refresh', async (req, res) => {
 
     // Verify the token (even if expired, we can still decode it)
     jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key', async (err, decoded) => {
-      // If token is valid or just expired (not tampered), issue new token
-      if (err && err.name !== 'TokenExpiredError') {
-        return res.status(403).json({ error: 'Invalid token' });
+      try {
+        // If token is invalid or tampered (not just expired), reject
+        if (err && err.name !== 'TokenExpiredError') {
+          return res.status(403).json({ error: 'Invalid token' });
+        }
+
+        // Ensure decoded is valid
+        if (!decoded || !decoded.id) {
+          return res.status(403).json({ error: 'Invalid token payload' });
+        }
+
+        // Get fresh user data
+        const user = await User.findById(decoded.id);
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Issue new token
+        const newToken = jwt.sign(
+          { id: user.id, username: user.username, is_admin: user.is_admin },
+          process.env.JWT_SECRET || 'your-secret-key',
+          { expiresIn: '30d' }
+        );
+
+        res.json({ 
+          token: newToken, 
+          user: { 
+            id: user.id, 
+            username: user.username, 
+            balance: user.balance || 1000,
+            is_admin: user.is_admin || false 
+          } 
+        });
+      } catch (error) {
+        console.error('Error in token refresh callback:', error);
+        return res.status(500).json({ error: 'Token refresh failed' });
       }
-
-      // Get fresh user data
-      const user = await User.findById(decoded.id);
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-
-      // Issue new token
-      const newToken = jwt.sign(
-        { id: user.id, username: user.username, is_admin: user.is_admin },
-        process.env.JWT_SECRET || 'your-secret-key',
-        { expiresIn: '30d' }
-      );
-
-      res.json({ 
-        token: newToken, 
-        user: { 
-          id: user.id, 
-          username: user.username, 
-          balance: user.balance || 1000,
-          is_admin: user.is_admin || false 
-        } 
-      });
     });
   } catch (error) {
     console.error('Token refresh error:', error);

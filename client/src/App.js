@@ -13,16 +13,37 @@ import apiClient from './utils/axios';
 import { formatCurrency } from './utils/currency';
 import notificationService from './utils/notifications';
 
-// Lazy load admin and less-frequently-used components
-const AdminPanel = lazy(() => import('./components/AdminPanel'));
-const BetList = lazy(() => import('./components/BetList'));
-const Leaderboard = lazy(() => import('./components/Leaderboard'));
-const Teams = lazy(() => import('./components/Teams'));
-const Games = lazy(() => import('./components/Games'));
-const Notifications = lazy(() => import('./components/Notifications'));
-const HowToUse = lazy(() => import('./components/HowToUse'));
-const About = lazy(() => import('./components/About'));
-const Terms = lazy(() => import('./components/Terms'));
+// Helper to handle chunk load errors - retry once then refresh
+const lazyWithRetry = (componentImport) => {
+  return lazy(() => 
+    componentImport().catch((error) => {
+      // Check if this is a chunk load error
+      if (error.name === 'ChunkLoadError' || error.message.includes('Loading chunk')) {
+        // Check if we already tried refreshing
+        const lastRefresh = sessionStorage.getItem('lastChunkRefresh');
+        const now = Date.now();
+        
+        // Only refresh if we haven't refreshed in the last 10 seconds
+        if (!lastRefresh || (now - parseInt(lastRefresh)) > 10000) {
+          sessionStorage.setItem('lastChunkRefresh', now.toString());
+          window.location.reload();
+        }
+      }
+      throw error;
+    })
+  );
+};
+
+// Lazy load admin and less-frequently-used components with retry
+const AdminPanel = lazyWithRetry(() => import('./components/AdminPanel'));
+const BetList = lazyWithRetry(() => import('./components/BetList'));
+const Leaderboard = lazyWithRetry(() => import('./components/Leaderboard'));
+const Teams = lazyWithRetry(() => import('./components/Teams'));
+const Games = lazyWithRetry(() => import('./components/Games'));
+const Notifications = lazyWithRetry(() => import('./components/Notifications'));
+const HowToUse = lazyWithRetry(() => import('./components/HowToUse'));
+const About = lazyWithRetry(() => import('./components/About'));
+const Terms = lazyWithRetry(() => import('./components/Terms'));
 
 // Simple loading fallback
 const LoadingSpinner = () => (
