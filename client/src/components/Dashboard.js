@@ -38,7 +38,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
   const [winNotification, setWinNotification] = useState(null);
   const [lossNotification, setLossNotification] = useState(null);
   const [previousBets, setPreviousBets] = useState([]);
-  const [recentWinners, setRecentWinners] = useState([]);
+  // const [recentWinners, setRecentWinners] = useState([]); // TEMPORARILY DISABLED
   const [notificationsEnabled, setNotificationsEnabled] = useState(notificationService.isEnabled());
   const [showSpinWheel, setShowSpinWheel] = useState(false);
   const [hasCheckedSpinWheel, setHasCheckedSpinWheel] = useState(false);
@@ -253,22 +253,23 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     }
   }, [previousBets]);
 
-  const fetchRecentWinners = useCallback(async () => {
-    try {
-      const response = await apiClient.get('/bets/recent-winners?limit=15');
-      setRecentWinners(response.data || []);
-    } catch (err) {
-      console.error('Error fetching recent winners:', err);
-      setRecentWinners([]);
-    }
-  }, []);
+  // TEMPORARILY DISABLED - Recent Winners Feature
+  // const fetchRecentWinners = useCallback(async () => {
+  //   try {
+  //     const response = await apiClient.get('/bets/recent-winners?limit=15');
+  //     setRecentWinners(response.data || []);
+  //   } catch (err) {
+  //     console.error('Error fetching recent winners:', err);
+  //     setRecentWinners([]);
+  //   }
+  // }, []);
 
   useEffect(() => {
     // Fetch all data in parallel for faster initial load
     Promise.all([
       fetchGames(),
-      fetchBets(),
-      fetchRecentWinners()
+      fetchBets()
+      // fetchRecentWinners() // TEMPORARILY DISABLED
     ]);
     
     // Check if user should see spin wheel automatically
@@ -328,25 +329,25 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       }
     }, 60000);
     
-    // Poll recent winners every 30 seconds
-    const winnersInterval = setInterval(async () => {
-      if (isActive && isPageVisible) {
-        try {
-          await fetchRecentWinners();
-        } catch (err) {
-          // Polling error - will retry
-        }
-      }
-    }, 30000);
+    // Poll recent winners every 30 seconds - TEMPORARILY DISABLED
+    // const winnersInterval = setInterval(async () => {
+    //   if (isActive && isPageVisible) {
+    //     try {
+    //       await fetchRecentWinners();
+    //     } catch (err) {
+    //       // Polling error - will retry
+    //     }
+    //   }
+    // }, 30000);
     
     return () => {
       isActive = false;
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearInterval(betsInterval);
       clearInterval(gamesInterval);
-      clearInterval(winnersInterval);
+      // clearInterval(winnersInterval); // TEMPORARILY DISABLED
     };
-  }, [fetchGames, fetchBets, fetchRecentWinners, hasCheckedSpinWheel]);
+  }, [fetchGames, fetchBets, hasCheckedSpinWheel]); // fetchRecentWinners TEMPORARILY DISABLED
 
   const upcomingGames = React.useMemo(() => games.slice(0, 5), [games]);
   const recentActivity = React.useMemo(
