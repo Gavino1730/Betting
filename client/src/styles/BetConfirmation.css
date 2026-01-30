@@ -5,41 +5,78 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: radial-gradient(circle at 50% 50%, rgba(45, 24, 16, 0.92) 0%, rgba(0, 0, 0, 0.92) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1500;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
   animation: fadeIn 0.3s ease;
 }
 
 .confirmation-modal {
   background: linear-gradient(135deg, #1e2139 0%, #161b2e 100%);
-  border: 1px solid rgba(31, 78, 153, 0.2);
+  border: 3px solid #ff8c00;
   border-radius: 16px;
   max-width: 500px;
   width: 90%;
-  box-shadow: 0 10px 40px rgba(31, 78, 153, 0.3);
+  box-shadow: 
+    0 10px 40px rgba(31, 78, 153, 0.3),
+    0 0 40px rgba(255, 140, 0, 0.3),
+    inset 0 0 50px rgba(255, 140, 0, 0.05);
   animation: slideUp 0.3s ease;
   position: relative;
+  overflow: hidden;
+}
+
+.confirmation-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #ff8c00 0px,
+    #ff8c00 15px,
+    #ffeb3b 15px,
+    #ffeb3b 30px,
+    #ff6f00 30px,
+    #ff6f00 45px
+  );
+  animation: marqueeRun 2s linear infinite;
+  box-shadow: 0 0 12px rgba(255, 140, 0, 0.6);
+  z-index: 10;
+}
+
+@keyframes marqueeRun {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(45px); }
 }
 
 .confirmation-header {
-  background: linear-gradient(135deg, rgba(31, 78, 153, 0.2), rgba(31, 78, 153, 0.1));
-  border-bottom: 1px solid rgba(31, 78, 153, 0.2);
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.15), rgba(255, 111, 0, 0.1));
+  border-bottom: 2px solid rgba(255, 140, 0, 0.3);
   padding: 1.5rem;
   border-radius: 16px 16px 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
 .confirmation-header h2 {
-  color: #1f4e99;
+  color: #ffd700;
   margin: 0;
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 900;
+  text-shadow: 
+    0 0 10px #ff8c00,
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(255, 140, 0, 0.4);
+  letter-spacing: 0.5px;
 }
 
 .confirmation-close {
@@ -281,6 +318,38 @@
 
 .btn-confirm {
   background: linear-gradient(135deg, #1f4e99, #3b82f6);
+  color: white;
+  border: 2px solid #ffd700;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  box-shadow: 
+    0 4px 16px rgba(31, 78, 153, 0.3),
+    0 0 20px rgba(255, 215, 0, 0.3),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-confirm::before {
+  content: '';\n  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  animation: showtimeShine 3s ease-in-out infinite;
+}
+
+@keyframes showtimeShine {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
   border: none;
   color: white;
   padding: 0.8rem 2rem;

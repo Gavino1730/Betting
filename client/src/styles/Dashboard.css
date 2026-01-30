@@ -6,7 +6,7 @@
   position: relative;
 }
 
-/* Spirit Week Sparkles Background */
+/* Broadway Theater Spotlight Effect */
 .dashboard::before {
   content: '';
   position: fixed;
@@ -15,17 +15,24 @@
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 105, 180, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 90%, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 20% 50%, rgba(255, 140, 0, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(255, 111, 0, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 40% 90%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
-  animation: sparkleShift 20s ease-in-out infinite;
+  animation: spotlightShift 25s ease-in-out infinite;
 }
 
-@keyframes sparkleShift {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
+@keyframes spotlightShift {
+  0%, 100% { 
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
 }
 
 @keyframes fadeIn {
@@ -114,16 +121,57 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 20px rgba(33, 150, 243, 0.1);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.25), 
+    0 0 20px rgba(33, 150, 243, 0.1),
+    inset 0 0 20px rgba(255, 140, 0, 0.05);
   transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   animation: subtleGlow 3s ease-in-out infinite;
 }
 
+/* Broadway marquee lights on stat cards */
+.stat-compact::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    #ff8c00 0px,
+    #ff8c00 10px,
+    transparent 10px,
+    transparent 15px,
+    #ffd700 15px,
+    #ffd700 25px,
+    transparent 25px,
+    transparent 30px
+  );
+  animation: marqueeScroll 2s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(30px); }
+}
+
 @keyframes subtleGlow {
-  0%, 100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 20px rgba(33, 150, 243, 0.1); }
-  50% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 25px rgba(33, 150, 243, 0.2); }
+  0%, 100% { 
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.25), 
+      0 0 20px rgba(33, 150, 243, 0.1),
+      inset 0 0 20px rgba(255, 140, 0, 0.05);
+  }
+  50% { 
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.25), 
+      0 0 25px rgba(33, 150, 243, 0.2),
+      inset 0 0 25px rgba(255, 140, 0, 0.08);
+  }
 }
 
 .stat-compact::before {
@@ -1616,11 +1664,12 @@
 
   .upcoming-games-list,
   .recent-bets-list {
-    align-items: center;
+    align-items: stretch;
   }
 
   .upcoming-game-item,
   .recent-bet-item {
+    width: 100%;
     border-left: none;
     border-top: 3px solid #1f4e99;
   }
@@ -1941,7 +1990,12 @@
 
   .upcoming-games-list,
   .recent-bets-list {
-    align-items: center;
+    align-items: stretch;
+  }
+
+  .upcoming-game-item,
+  .recent-bet-item {
+    width: 100%;
   }
 
   .quick-links-card {
