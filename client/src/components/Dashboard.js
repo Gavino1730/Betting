@@ -497,7 +497,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       )}
       */}
 
-      {/* Stats Overview - Compact */}
+      {/* Stats Overview - Compact - TEMPORARILY HIDDEN
       <div className="dashboard-stats-compact">
         <div className="stat-compact">
           <span className="stat-compact-value">{stats.totalBets}</span>
@@ -522,6 +522,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           <span className="stat-compact-label">Profit</span>
         </div>
       </div>
+      */}
 
       {/* Main Grid Layout */}
       <div className="dashboard-grid school-grid">
@@ -580,7 +581,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
             </div>
           </div>
 
-          {/* Place a Pick CTA */}
+          {/* Place a Pick CTA - TEMPORARILY HIDDEN
           <div className="card pick-cta-card">
             <h3>🎲 Want to Place Your Picks?</h3>
             <p style={{fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.75rem'}}>
@@ -616,6 +617,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
               <span className="balance-amount">{formatCurrency(balance)}</span>
             </div>
           </div>
+          */}
 
           {/* Spin Wheel Modal */}
           <SpinWheel 

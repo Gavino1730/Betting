@@ -2292,11 +2292,13 @@
 
 .timeline-day {
   color: #ffa726;
-  font-weight: 700;
-  font-size: 0.85rem;
-  min-width: 120px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  min-width: 130px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
 }
 
 .timeline-event {
@@ -2309,9 +2311,18 @@
 .dress-up-day {
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: 0.75rem;
+  padding: 1.25rem;
   border-left: 4px solid #ffa726;
+  background: linear-gradient(135deg, rgba(255, 167, 38, 0.08), rgba(255, 152, 0, 0.04));
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dress-up-day:hover {
+  background: linear-gradient(135deg, rgba(255, 167, 38, 0.12), rgba(255, 152, 0, 0.06));
+  transform: translateX(6px);
+  box-shadow: 0 4px 12px rgba(255, 167, 38, 0.2);
 }
 
 .dress-up-details {
@@ -2322,54 +2333,77 @@
 }
 
 .dress-up-theme {
-  color: #64b5f6;
-  font-weight: 700;
-  font-size: 1rem;
+  color: #ffa726;
+  font-weight: 800;
+  font-size: 1.1rem;
   margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .dress-up-points {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 
 .points-option {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  gap: 0.35rem;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.points-option:hover {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(3px);
 }
 
 .points-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  letter-spacing: 0.8px;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
   display: inline-block;
   width: fit-content;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .points-badge.single {
-  background: rgba(33, 150, 243, 0.3);
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.4), rgba(33, 150, 243, 0.3));
   color: #64b5f6;
-  border: 1px solid rgba(33, 150, 243, 0.5);
+  border: 1.5px solid rgba(33, 150, 243, 0.6);
 }
 
 .points-badge.double {
-  background: rgba(255, 167, 38, 0.3);
-  color: #ffa726;
-  border: 1px solid rgba(255, 167, 38, 0.5);
+  background: linear-gradient(135deg, rgba(255, 167, 38, 0.4), rgba(255, 152, 0, 0.3));
+  color: #ffb74d;
+  border: 1.5px solid rgba(255, 167, 38, 0.6);
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .points-desc {
   color: #e9f1ff;
   font-size: 0.9rem;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
 }
 
 /* Prep Week Section */
