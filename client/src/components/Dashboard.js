@@ -54,43 +54,90 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
 
   // Spirit Week Data - Broadway Theme
   const [spiritWeekData] = useState({
-    theme: "Broadway",
+    theme: "Battle of the Broadways",
     weekOf: "February 2-6, 2026",
-    description: "Each grade decorates their hallway to their musical theme. Judges rank hallways for points. Daily dress-up themes earn participation points. Check in teachers for your grade to get DOUBLE points!",
+    description: "Spirit Week kicks off Monday, February 2nd! Earn points daily by checking in at the front lobby during lunch, with bonus points for themed outfits and activities. The lip sync challenge and hall transformations are worth the most points!",
+    dressUpDays: [
+      { 
+        day: "Monday, Feb 2", 
+        theme: "Opening Night Monday", 
+        singlePoints: "Black top + black bottom",
+        doublePoints: "Dress fancy like attending opening night of a Broadway play!"
+      },
+      { 
+        day: "Tuesday, Feb 3", 
+        theme: "Twinning Tuesday (Jersey Out)", 
+        singlePoints: "Twin with a friend - 3 matching items",
+        doublePoints: "3 matching items with a JERSEY (Blue Crew Jersey Out for OES games)"
+      },
+      { 
+        day: "Wednesday, Feb 4", 
+        theme: "Wicked Wednesday", 
+        singlePoints: "3 articles of pink or green",
+        doublePoints: "Pink & green with Wicked accessory (broom, wand, witch hat)"
+      },
+      { 
+        day: "Thursday, Feb 5", 
+        theme: "Hakuna Matata Thursday", 
+        singlePoints: "2 pajama items (sweatpants don't count!)",
+        doublePoints: "3 sleep articles: matching top/bottom/slippers OR bathrobe OR onesie!"
+      },
+      { 
+        day: "Friday, Feb 6", 
+        theme: '"Be Your Broadway" Friday', 
+        singlePoints: "3 articles of your class colors",
+        doublePoints: "Dress like a character from your Broadway show!"
+      }
+    ],
     events: [
-      { day: "Monday-Thursday", event: "Daily Dress-Up Themes (TBD)" },
-      { day: "Tuesday", event: "🎯 Tug of War Competition" },
-      { day: "Friday", event: "🎤 Lip Sync Battle Finals" },
+      { day: "Daily at Lunch", event: "Spirit check-in at front lobby & Sadie Hawkins ticket sales" },
+      { day: "Mon-Thu Lunch", event: "Lip Sync Practices (Valiants Gym) - Each class different day" },
+      { day: "Monday, Feb 2", event: "Hall decorations judged" },
+      { day: "Tuesday, Feb 3", event: "🎯 Tug-O-War Assembly + Blue Crew Jersey Out (OES games) + Class banners due" },
+      { day: "Wednesday, Feb 4", event: "Wig Snatching in the Courtyard" },
+      { day: "Friday, Feb 6", event: "🎤 Spirit Week Lip Sync Assembly - Ultimate bragging rights!" },
       { day: "Saturday, Feb 7", event: "💃 Sadie Hawkins Dance @ Valley Catholic - 8:00 PM" }
+    ],
+    prepWeek: [
+      { day: "Friday, Jan 30", time: "12:30-4:30 PM", activity: "Prep Week Collaboration" },
+      { day: "Sunday, Feb 1", time: "12:00-6:00 PM", activity: "Major Setup Weekend (Service hours available!)" }
     ],
     grades: [
       {
         grade: "Freshmen",
         subtheme: "Wicked",
+        colors: "Pink & Green",
         color: "#00C853",
         icon: "🧙‍♀️",
-        points: 0
+        points: 0,
+        lipSyncPractice: "Monday Lunch"
       },
       {
         grade: "Sophomores",
         subtheme: "Lion King",
+        colors: "Orange & Yellow",
         color: "#FF9800",
         icon: "🦁",
-        points: 0
+        points: 0,
+        lipSyncPractice: "Tuesday Lunch"
       },
       {
         grade: "Juniors",
         subtheme: "Grease",
+        colors: "Pink & Black",
         color: "#E91E63",
         icon: "🎸",
-        points: 0
+        points: 0,
+        lipSyncPractice: "Wednesday Lunch"
       },
       {
         grade: "Seniors",
         subtheme: "Hamilton",
+        colors: "Red, White & Blue",
         color: "#1976D2",
         icon: "🎩",
-        points: 0
+        points: 0,
+        lipSyncPractice: "Thursday Lunch"
       }
     ]
   });
@@ -405,7 +452,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         )}
       </div>
 
-      {/* Recent Winners Section */}
+      {/* Recent Winners Section - TEMPORARILY HIDDEN
       {recentWinners.length > 0 && (
         <div className="recent-winners-banner">
           <div className="recent-winners-header">
@@ -438,6 +485,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
           </div>
         </div>
       )}
+      */}
 
       {/* School Alerts - TEMPORARILY HIDDEN
       {schoolAlerts.length > 0 && (
@@ -540,6 +588,31 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
               {spiritWeekData.description}
             </p>
             
+            {/* Dress-Up Days */}
+            <div className="spirit-week-events">
+              <h4>👔 Dress-Up Days</h4>
+              <div className="events-timeline">
+                {spiritWeekData.dressUpDays.map((dressUp, idx) => (
+                  <div key={idx} className="timeline-item dress-up-day">
+                    <span className="timeline-day">{dressUp.day}</span>
+                    <div className="dress-up-details">
+                      <div className="dress-up-theme">{dressUp.theme}</div>
+                      <div className="dress-up-points">
+                        <div className="points-option">
+                          <span className="points-badge single">Single Points</span>
+                          <span className="points-desc">{dressUp.singlePoints}</span>
+                        </div>
+                        <div className="points-option">
+                          <span className="points-badge double">Double Points</span>
+                          <span className="points-desc">{dressUp.doublePoints}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Spirit Week Events */}
             <div className="spirit-week-events">
               <h4>📅 Week Schedule</h4>
@@ -552,6 +625,27 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                 ))}
               </div>
             </div>
+
+            {/* Prep Week Info */}
+            {spiritWeekData.prepWeek && (
+              <div className="spirit-week-events prep-week-section">
+                <h4>🎨 Prep Week - Final Days!</h4>
+                <p style={{fontSize: '0.9rem', color: '#b8c5d6', marginBottom: '0.75rem'}}>
+                  Service hours available! Build class unity and prepare for Spirit Week success.
+                </p>
+                <div className="events-timeline">
+                  {spiritWeekData.prepWeek.map((prep, idx) => (
+                    <div key={idx} className="timeline-item prep-day">
+                      <span className="timeline-day">{prep.day}</span>
+                      <div style={{display: 'flex', flexDirection: 'column', gap: '0.25rem'}}>
+                        <span className="timeline-event">{prep.activity}</span>
+                        <span style={{fontSize: '0.85rem', color: '#888a9b'}}>{prep.time}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             
             {/* Current Leader Banner */}
             <div className="spirit-leader-banner" style={{borderColor: spiritLeader.color}}>
@@ -580,6 +674,9 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                           <div className="grade-bar-text">
                             <span className="grade-bar-name" style={{color: grade.color}}>{grade.grade}</span>
                             <span className="grade-bar-theme">{grade.subtheme}</span>
+                            <span className="grade-bar-colors" style={{fontSize: '0.8rem', color: '#888a9b'}}>
+                              {grade.colors} • {grade.lipSyncPractice}
+                            </span>
                           </div>
                         </div>
                         <span className="grade-bar-points" style={{color: grade.color}}>{grade.points} pts</span>
