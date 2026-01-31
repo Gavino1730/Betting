@@ -7,8 +7,12 @@ const DailyReward = ({ onRewardClaimed }) => {
   const [rewardData, setRewardData] = useState(null);
   const [claimed, setClaimed] = useState(false);
   const [claiming, setClaiming] = useState(false);
+  const hasChecked = React.useRef(false);
 
   useEffect(() => {
+    // Prevent duplicate checks in React Strict Mode
+    if (hasChecked.current) return;
+    hasChecked.current = true;
     checkDailyLogin();
   }, []);
 

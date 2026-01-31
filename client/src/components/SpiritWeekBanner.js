@@ -28,14 +28,25 @@ function SpiritWeekBanner() {
     });
 
     if (currentDayIndex !== -1) {
+      // During Spirit Week - show current and next day
       const currentDay = dressUpDays[currentDayIndex];
       const nextDay = currentDayIndex < dressUpDays.length - 1 ? dressUpDays[currentDayIndex + 1] : null;
-      return { currentDay, nextDay };
+      return { currentDay, nextDay, beforeSpirit: false };
     }
-    return { currentDay: null, nextDay: null };
+
+    // Before Spirit Week - show countdown and first day
+    const firstDay = dressUpDays[0];
+    const firstDayDate = new Date(firstDay.date);
+    firstDayDate.setHours(0, 0, 0, 0);
+    
+    if (today < firstDayDate) {
+      return { currentDay: null, nextDay: firstDay, beforeSpirit: true };
+    }
+
+    return { currentDay: null, nextDay: null, beforeSpirit: false };
   };
 
-  const { currentDay, nextDay } = getCurrentAndNextDay();
+  const { currentDay, nextDay, beforeSpirit } = getCurrentAndNextDay();
 
   const handleMinimize = () => {
     const newState = !isMinimized;
@@ -71,6 +82,10 @@ function SpiritWeekBanner() {
                   Today: {currentDay.emoji} {currentDay.theme}
                   {nextDay && ` • Tomorrow: ${nextDay.emoji} ${nextDay.theme}`}
                 </span>
+              ) : beforeSpirit && nextDay ? (
+                <span className="spirit-banner-dates">
+                  Starts Monday: {nextDay.emoji} {nextDay.theme}
+                </span>
               ) : (
                 <span className="spirit-banner-dates">Feb 2-6 • Themed dress-up days, competitions & prizes!</span>
               )}
@@ -79,7 +94,9 @@ function SpiritWeekBanner() {
         )}
         {isMinimized && (
           <div className="spirit-banner-minimized-text">
-            {currentDay ? `${currentDay.emoji} ${currentDay.theme}` : '🎭 Spirit Week! 🌟'}
+            {currentDay ? `${currentDay.emoji} ${currentDay.theme}` : 
+             beforeSpirit && nextDay ? `Starts Monday: ${nextDay.emoji} ${nextDay.theme}` :
+             '🎭 Spirit Week! 🌟'}
           </div>
         )}
         <div className="spirit-banner-controls">
