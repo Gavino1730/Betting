@@ -336,7 +336,7 @@ function AppContent() {
           <button onClick={() => handlePageChange('dashboard')} className={page === 'dashboard' ? 'active' : ''}>
             Dashboard
           </button>
-          <button onClick={() => handlePageChange('games')} className={page === 'games' ? 'active place-picks-btn' : 'place-picks-btn'}>
+          <button onClick={() => handlePageChange('games')} className={`place-picks-btn${page === 'games' ? ' active' : ''}`}>
             Place Picks
           </button>
           <button onClick={() => handlePageChange('teams')} className={page === 'teams' ? 'active' : ''}>
