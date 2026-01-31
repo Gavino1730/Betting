@@ -302,7 +302,7 @@ function AppContent() {
     enabled: true, // Set to false to disable
     gameInfo: {
       opponent: 'OES',
-      date: 'Tuesday, February 3',
+      date: 'This Tuesday!',
       time: '7:30 PM',
       location: 'Valiants Gym'
     }

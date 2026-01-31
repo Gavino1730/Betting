@@ -544,6 +544,23 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       <div className="dashboard-grid school-grid">
         {/* Left Column */}
         <div className="dashboard-main-column">
+          {/* Spirit Week Quick Preview - Top Banner */}
+          <div className="spirit-week-preview-banner">
+            <div className="preview-banner-content">
+              <div className="preview-banner-icon">🎭</div>
+              <div className="preview-banner-info">
+                <h4>Spirit Week 2026: Battle of the Broadways</h4>
+                <p>Feb 2-6 • Daily dress-up themes, events & grade competition!</p>
+              </div>
+              <button 
+                className="btn btn-primary preview-banner-btn"
+                onClick={scrollToCalendar}
+              >
+                📅 View Full Schedule
+              </button>
+            </div>
+          </div>
+
           {/* Grade Rankings - Top Priority */}
           <div className="card spirit-week-card" style={{marginBottom: '1.5rem'}}>
             <div className="spirit-week-header" style={{marginBottom: '1rem'}}>

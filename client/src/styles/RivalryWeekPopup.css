@@ -38,9 +38,8 @@
 
 /* Popup Content */
 .rivalry-popup-content {
-  background: linear-gradient(135deg, #1a2f35 0%, #0f1a19 50%, #1a1f35 100%);
-  border: 3px solid transparent;
-  border-image: linear-gradient(135deg, #1f4e99, #005a43) 1;
+  background: #1a1f2e;
+  border: none;
   border-radius: 20px;
   max-width: 500px;
   width: 100%;
@@ -121,7 +120,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(90deg, rgba(31, 78, 153, 0.2) 0%, rgba(0, 90, 67, 0.2) 100%);
+  background: transparent;
   padding: 1rem;
 }
 

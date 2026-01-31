@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import '../styles/SpiritWeekBanner.css';
 
 function SpiritWeekBanner() {
-  const [isVisible, setIsVisible] = useState(true);
   const [isMinimized, setIsMinimized] = useState(() => {
     return localStorage.getItem('spiritWeekBannerMinimized') === 'true';
   });
@@ -54,21 +53,6 @@ function SpiritWeekBanner() {
     localStorage.setItem('spiritWeekBannerMinimized', newState.toString());
   };
 
-  const handleClose = () => {
-    setIsVisible(false);
-    localStorage.setItem('spiritWeekBannerClosed', 'true');
-  };
-
-  // Check if banner was previously closed
-  useEffect(() => {
-    const wasClosed = localStorage.getItem('spiritWeekBannerClosed') === 'true';
-    if (wasClosed) {
-      setIsVisible(false);
-    }
-  }, []);
-
-  if (!isVisible) return null;
-
   return (
     <div className={`spirit-week-banner ${isMinimized ? 'minimized' : ''}`}>
       <div className="spirit-banner-content">
@@ -106,13 +90,6 @@ function SpiritWeekBanner() {
             aria-label={isMinimized ? 'Expand banner' : 'Minimize banner'}
           >
             {isMinimized ? '▼' : '▲'}
-          </button>
-          <button 
-            className="spirit-banner-btn close" 
-            onClick={handleClose}
-            aria-label="Close banner"
-          >
-            ✕
           </button>
         </div>
       </div>

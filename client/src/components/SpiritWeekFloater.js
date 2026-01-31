@@ -2,43 +2,17 @@ import React, { useState, useEffect } from 'react';
 import '../styles/SpiritWeekFloater.css';
 
 function SpiritWeekFloater() {
-  const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  useEffect(() => {
-    // Show floater after 3 seconds
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleClose = () => {
-    setIsVisible(false);
-  };
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
-
-  if (!isVisible) return null;
 
   return (
     <div className={`spirit-floater ${isExpanded ? 'expanded' : ''}`}>
       <div className="floater-header" onClick={toggleExpand}>
         <span className="floater-emoji">🎭</span>
         <span className="floater-title">Spirit Week!</span>
-        <button 
-          className="floater-close" 
-          onClick={(e) => {
-            e.stopPropagation();
-            handleClose();
-          }}
-          aria-label="Close"
-        >
-          ✕
-        </button>
       </div>
       {isExpanded && (
         <div className="floater-body">
