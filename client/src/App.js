@@ -299,10 +299,10 @@ function AppContent() {
 
   // Rivalry Week Configuration - Toggle enabled to true/false
   const rivalryWeekConfig = {
-    enabled: false, // Set to false to disable
+    enabled: true, // Set to false to disable
     gameInfo: {
-      opponent: 'WESTSIDE CHRISTIAN',
-      date: 'Thursday, January 9',
+      opponent: 'OREGON EPISCOPAL',
+      date: 'Tuesday, February 3',
       time: '7:30 PM',
       location: 'Home Court'
     }

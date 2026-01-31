@@ -50,7 +50,7 @@ const RivalryWeekPopup = ({ enabled = true, gameInfo = {} }) => {
         <button className="rivalry-close-btn" onClick={handleClose}>×</button>
         
         {/* Top Badge */}
-        <div className="rivalry-top-badge">🏆 GAME OF THE YEAR 🏆</div>
+        <div className="rivalry-top-badge">💢 RIVALRY GAME 💢</div>
         
         <div className="rivalry-image-container">
           <img 
@@ -62,17 +62,17 @@ const RivalryWeekPopup = ({ enabled = true, gameInfo = {} }) => {
 
         <div className="rivalry-text-container">
           <div className="rivalry-fire-row">🔥🔥🔥</div>
-          <h1 className="rivalry-title animated">IT'S RIVALRY WEEK</h1>
+          <h1 className="rivalry-title animated">BEEF IS ON</h1>
           <div className="rivalry-matchup animated-delayed">
             <span className="rivalry-team valiant">VC</span>
             <span className="rivalry-vs">VS</span>
             <span className="rivalry-team opponent">{opponent}</span>
           </div>
-          <p className="rivalry-tagline animated-delayed-more">SHOW UP!</p>
+          <p className="rivalry-tagline animated-delayed-more">SETTLE THE SCORE!</p>
           
           <div className="rivalry-hype-badges">
-            <span className="hype-badge">⚡ BIGGEST GAME</span>
-            <span className="hype-badge">🎯 BRAGGING RIGHTS</span>
+            <span className="hype-badge">😤 BAD BLOOD</span>
+            <span className="hype-badge">👊 TIME TO BATTLE</span>
           </div>
           
           <div className="rivalry-game-info">
