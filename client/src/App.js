@@ -401,6 +401,15 @@ function AppContent() {
 
       {/* Mobile Slide-out Menu */}
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+        {/* User Info Header at Top */}
+        <div className="mobile-menu-header">
+          <div className="mobile-user-info">
+            <div className="mobile-user-name">👤 {currentUser?.username || 'User'}</div>
+            <div className="mobile-balance">💰 {formatCurrency(currentUser?.balance || 0)}</div>
+          </div>
+        </div>
+
+        {/* Navigation Menu */}
         <div className="mobile-menu-nav">
           <button 
             onClick={() => handlePageChange('dashboard')} 
@@ -479,13 +488,8 @@ function AppContent() {
           )}
         </div>
 
+        {/* Logout Button at Bottom */}
         <div className="mobile-menu-footer">
-          <div className="mobile-menu-header">
-            <div className="mobile-user-info">
-              <div className="mobile-user-name">👤 {currentUser?.username || 'User'}</div>
-              <div className="mobile-balance">💰 {formatCurrency(currentUser?.balance || 0)}</div>
-            </div>
-          </div>
           <button onClick={handleLogout} className="mobile-logout-btn">
             🚪 Logout
           </button>

@@ -7,6 +7,36 @@ function SpiritWeekBanner() {
     return localStorage.getItem('spiritWeekBannerMinimized') === 'true';
   });
 
+  // Spirit Week dress-up days
+  const dressUpDays = [
+    { date: new Date('2026-02-02'), theme: "Opening Night Monday", emoji: "🎭" },
+    { date: new Date('2026-02-03'), theme: "Twinning Tuesday (Jersey Out)", emoji: "👯" },
+    { date: new Date('2026-02-04'), theme: "Wicked Wednesday", emoji: "💚" },
+    { date: new Date('2026-02-05'), theme: "Hakuna Matata Thursday", emoji: "😴" },
+    { date: new Date('2026-02-06'), theme: "Be Your Broadway Friday", emoji: "🎪" }
+  ];
+
+  // Get current and next day's themes
+  const getCurrentAndNextDay = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const currentDayIndex = dressUpDays.findIndex(day => {
+      const dayDate = new Date(day.date);
+      dayDate.setHours(0, 0, 0, 0);
+      return dayDate.getTime() === today.getTime();
+    });
+
+    if (currentDayIndex !== -1) {
+      const currentDay = dressUpDays[currentDayIndex];
+      const nextDay = currentDayIndex < dressUpDays.length - 1 ? dressUpDays[currentDayIndex + 1] : null;
+      return { currentDay, nextDay };
+    }
+    return { currentDay: null, nextDay: null };
+  };
+
+  const { currentDay, nextDay } = getCurrentAndNextDay();
+
   const handleMinimize = () => {
     const newState = !isMinimized;
     setIsMinimized(newState);
@@ -36,13 +66,20 @@ function SpiritWeekBanner() {
             <div className="spirit-banner-icon">🎭</div>
             <div className="spirit-banner-text">
               <strong>🌟 Spirit Week: Battle of the Broadways 🌟</strong>
-              <span className="spirit-banner-dates">Feb 2-6 • Themed dress-up days, competitions & prizes!</span>
+              {currentDay ? (
+                <span className="spirit-banner-dates">
+                  Today: {currentDay.emoji} {currentDay.theme}
+                  {nextDay && ` • Tomorrow: ${nextDay.emoji} ${nextDay.theme}`}
+                </span>
+              ) : (
+                <span className="spirit-banner-dates">Feb 2-6 • Themed dress-up days, competitions & prizes!</span>
+              )}
             </div>
           </>
         )}
         {isMinimized && (
           <div className="spirit-banner-minimized-text">
-            🎭 Spirit Week! 🌟
+            {currentDay ? `${currentDay.emoji} ${currentDay.theme}` : '🎭 Spirit Week! 🌟'}
           </div>
         )}
         <div className="spirit-banner-controls">

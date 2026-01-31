@@ -89,7 +89,6 @@ body {
   width: 100%;
   gap: 0.5rem;
   min-height: 60px;
-  position: relative;
   overflow: hidden;
 }
 
@@ -912,6 +911,7 @@ table tbody tr:hover {
   width: 280px;
   max-width: 85vw;
   height: 100vh;
+  height: 100dvh;
   background: linear-gradient(180deg, #0d47a1 0%, #1565c0 50%, #0d47a1 100%);
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
   z-index: 1060;
@@ -919,6 +919,8 @@ table tbody tr:hover {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .mobile-menu.open {
@@ -926,13 +928,14 @@ table tbody tr:hover {
 }
 
 .mobile-menu-header {
-  padding: 1rem 1rem;
-  background: transparent;
-  border-bottom: none;
+  padding: 1.25rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .mobile-user-info {
@@ -961,10 +964,11 @@ table tbody tr:hover {
 
 .mobile-menu-nav {
   flex: 1;
-  padding: 5rem 0 1rem 0;
+  padding: 1rem 0 1rem 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-menu-nav button {
@@ -1018,8 +1022,11 @@ table tbody tr:hover {
 }
 
 .mobile-menu-footer {
-  padding: 1rem 1.25rem 7rem 1.25rem;
+  padding: 1rem 1.25rem 2rem 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .mobile-logout-btn {
