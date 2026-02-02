@@ -22,8 +22,8 @@ function SpiritWeekFloater() {
             <div className="highlight-item">🎪 Mon: Opening Night</div>
             <div className="highlight-item">👯 Tue: Twinning Tuesday</div>
             <div className="highlight-item">💚 Wed: Wicked Wednesday</div>
-            <div className="highlight-item">🦁 Thu: Lion King Thursday</div>
-            <div className="highlight-item">🎤 Fri: Hamilton Friday</div>
+            <div className="highlight-item">😴 Thu: Hakuna Matata Thursday</div>
+            <div className="highlight-item">🎪 Fri: Be Your Broadway Friday</div>
           </div>
           <p className="floater-cta">Check Dashboard for details! ⭐</p>
         </div>
