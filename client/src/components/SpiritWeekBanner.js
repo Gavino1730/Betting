@@ -7,12 +7,13 @@ function SpiritWeekBanner() {
   });
 
   // Spirit Week dress-up days
+  // Using new Date(year, month, day) format to ensure local timezone (month is 0-indexed)
   const dressUpDays = [
-    { date: new Date('2026-02-02'), theme: "Opening Night Monday", emoji: "🎭" },
-    { date: new Date('2026-02-03'), theme: "Twinning Tuesday (Jersey Out)", emoji: "👯" },
-    { date: new Date('2026-02-04'), theme: "Wicked Wednesday", emoji: "💚" },
-    { date: new Date('2026-02-05'), theme: "Hakuna Matata Thursday", emoji: "😴" },
-    { date: new Date('2026-02-06'), theme: "Be Your Broadway Friday", emoji: "🎪" }
+    { date: new Date(2026, 1, 2), theme: "Opening Night Monday", emoji: "🎭" },
+    { date: new Date(2026, 1, 3), theme: "Twinning Tuesday (Jersey Out)", emoji: "👯" },
+    { date: new Date(2026, 1, 4), theme: "Wicked Wednesday", emoji: "💚" },
+    { date: new Date(2026, 1, 5), theme: "Hakuna Matata Thursday", emoji: "😴" },
+    { date: new Date(2026, 1, 6), theme: "Be Your Broadway Friday", emoji: "🎪" }
   ];
 
   // Get current and next day's themes
