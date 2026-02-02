@@ -22,36 +22,36 @@ const getTodayPacific = () => {
 class Achievement {
   // Achievement types and rewards
   static TYPES = {
-    ALL_GAMES_BET: { type: 'all_games_bet', reward: 200, description: 'Bet on all available games today!' },
-    CONSECUTIVE_7: { type: 'consecutive_logins_7', reward: 300, description: '7 day login streak!' },
-    CONSECUTIVE_30: { type: 'consecutive_logins_30', reward: 1500, description: '30 day login streak!' },
-    BIG_WIN: { type: 'big_win', reward: 100, description: 'Won a big bet!' },
-    FIRST_BET: { type: 'first_bet', reward: 50, description: 'Placed your first bet!' },
+    ALL_GAMES_BET: { type: 'all_games_bet', reward: 300, description: 'Bet on all available games today!' },
+    CONSECUTIVE_7: { type: 'consecutive_logins_7', reward: 450, description: '7 day login streak!' },
+    CONSECUTIVE_30: { type: 'consecutive_logins_30', reward: 2250, description: '30 day login streak!' },
+    BIG_WIN: { type: 'big_win', reward: 150, description: 'Won a big bet!' },
+    FIRST_BET: { type: 'first_bet', reward: 75, description: 'Placed your first bet!' },
     
     // Girls game achievements
-    GIRLS_SUPPORTER: { type: 'girls_supporter', reward: 150, description: 'Bet on 5 girls games!' },
-    GIRLS_CHAMPION: { type: 'girls_champion', reward: 300, description: 'Bet on 20 girls games!' },
-    GIRLS_LEGEND: { type: 'girls_legend', reward: 500, description: 'Bet on 50 girls games!' },
-    GIRLS_STREAK_3: { type: 'girls_streak_3', reward: 100, description: '3 consecutive girls game bets!' },
-    GIRLS_STREAK_7: { type: 'girls_streak_7', reward: 250, description: '7 consecutive girls game bets!' },
-    GIRLS_ALL_TODAY: { type: 'girls_all_today', reward: 200, description: 'Bet on all girls games today!' },
+    GIRLS_SUPPORTER: { type: 'girls_supporter', reward: 225, description: 'Bet on 5 girls games!' },
+    GIRLS_CHAMPION: { type: 'girls_champion', reward: 450, description: 'Bet on 20 girls games!' },
+    GIRLS_LEGEND: { type: 'girls_legend', reward: 750, description: 'Bet on 50 girls games!' },
+    GIRLS_STREAK_3: { type: 'girls_streak_3', reward: 150, description: '3 consecutive girls game bets!' },
+    GIRLS_STREAK_7: { type: 'girls_streak_7', reward: 375, description: '7 consecutive girls game bets!' },
+    GIRLS_ALL_TODAY: { type: 'girls_all_today', reward: 300, description: 'Bet on all girls games today!' },
     
     // Betting engagement
-    BET_STREAK_3: { type: 'bet_streak_3', reward: 75, description: '3 days betting streak!' },
-    BET_STREAK_7: { type: 'bet_streak_7', reward: 200, description: '7 days betting streak!' },
-    BET_STREAK_30: { type: 'bet_streak_30', reward: 1000, description: '30 days betting streak!' },
-    HIGH_ROLLER: { type: 'high_roller', reward: 300, description: 'Place 10 bets in one day!' },
-    PERFECT_WEEK: { type: 'perfect_week', reward: 500, description: 'Win all bets for a week!' },
-    COMEBACK_KID: { type: 'comeback_kid', reward: 150, description: 'Win after losing 5 in a row!' },
+    BET_STREAK_3: { type: 'bet_streak_3', reward: 112, description: '3 days betting streak!' },
+    BET_STREAK_7: { type: 'bet_streak_7', reward: 300, description: '7 days betting streak!' },
+    BET_STREAK_30: { type: 'bet_streak_30', reward: 1500, description: '30 days betting streak!' },
+    HIGH_ROLLER: { type: 'high_roller', reward: 450, description: 'Place 10 bets in one day!' },
+    PERFECT_WEEK: { type: 'perfect_week', reward: 750, description: 'Win all bets for a week!' },
+    COMEBACK_KID: { type: 'comeback_kid', reward: 225, description: 'Win after losing 5 in a row!' },
     
     // Milestones
-    BETS_10: { type: 'bets_10', reward: 100, description: '10 total bets placed!' },
-    BETS_50: { type: 'bets_50', reward: 300, description: '50 total bets placed!' },
-    BETS_100: { type: 'bets_100', reward: 750, description: '100 total bets placed!' },
-    BETS_500: { type: 'bets_500', reward: 2000, description: '500 total bets placed!' },
-    WINS_10: { type: 'wins_10', reward: 150, description: '10 bets won!' },
-    WINS_50: { type: 'wins_50', reward: 500, description: '50 bets won!' },
-    WINS_100: { type: 'wins_100', reward: 1000, description: '100 bets won!' }
+    BETS_10: { type: 'bets_10', reward: 150, description: '10 total bets placed!' },
+    BETS_50: { type: 'bets_50', reward: 450, description: '50 total bets placed!' },
+    BETS_100: { type: 'bets_100', reward: 1125, description: '100 total bets placed!' },
+    BETS_500: { type: 'bets_500', reward: 3000, description: '500 total bets placed!' },
+    WINS_10: { type: 'wins_10', reward: 225, description: '10 bets won!' },
+    WINS_50: { type: 'wins_50', reward: 750, description: '50 bets won!' },
+    WINS_100: { type: 'wins_100', reward: 1500, description: '100 bets won!' }
   };
 
   // Check and award "all games bet" achievement
