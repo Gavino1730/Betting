@@ -37,7 +37,7 @@ class Achievement {
     GIRLS_ALL_TODAY: { type: 'girls_all_today', reward: 300, description: 'Bet on all girls games today!' },
     
     // Betting engagement
-    BET_STREAK_3: { type: 'bet_streak_3', reward: 112, description: '3 days betting streak!' },
+    BET_STREAK_3: { type: 'bet_streak_3', reward: 113, description: '3 days betting streak!' },
     BET_STREAK_7: { type: 'bet_streak_7', reward: 300, description: '7 days betting streak!' },
     BET_STREAK_30: { type: 'bet_streak_30', reward: 1500, description: '30 days betting streak!' },
     HIGH_ROLLER: { type: 'high_roller', reward: 450, description: 'Place 10 bets in one day!' },
