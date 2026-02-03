@@ -32,7 +32,7 @@ class WheelSpin {
 
       if (error) throw error;
       return data || {
-        prize_amounts: [1000, 1500, 2000, 3000, 5000, 7500, 10000, 15000],
+        prize_amounts: [1500, 2250, 3000, 4500, 7500, 11250, 15000, 22500],
         prize_weights: [30, 25, 20, 12, 7, 4, 1, 1],
         spins_per_day: 1
       };
@@ -40,7 +40,7 @@ class WheelSpin {
       console.error('Error getting wheel config:', error);
       // Return defaults if error
       return {
-        prize_amounts: [1000, 1500, 2000, 3000, 5000, 7500, 10000, 15000],
+        prize_amounts: [1500, 2250, 3000, 4500, 7500, 11250, 15000, 22500],
         prize_weights: [30, 25, 20, 12, 7, 4, 1, 1],
         spins_per_day: 1
       };
