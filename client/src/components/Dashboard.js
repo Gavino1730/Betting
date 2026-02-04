@@ -417,6 +417,23 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     const sorted = [...spiritWeekData.grades].sort((a, b) => b.points - a.points);
     return sorted[0];
   }, [spiritWeekData]);
+  
+  // Get theme-specific gradient for grade - memoized for performance
+  const getGradeGradient = React.useCallback((gradeName) => {
+    switch(gradeName) {
+      case 'Freshmen': // Wicked - Pink & Green
+        return 'linear-gradient(90deg, #E91E63 0%, #66BB6A 100%)';
+      case 'Sophomores': // Lion King - Orange & Yellow
+        return 'linear-gradient(90deg, #FF9800 0%, #FFC107 100%)';
+      case 'Juniors': // Grease - Pink & Black
+        return 'linear-gradient(90deg, #E91E63 0%, #424242 100%)';
+      case 'Seniors': // Hamilton - Red, White & Blue
+        return 'linear-gradient(90deg, #E53935 0%, #FFFFFF 50%, #1976D2 100%)';
+      default:
+        return 'linear-gradient(90deg, #9E9E9E 0%, #616161 100%)'; // Default gray gradient
+    }
+  }, []);
+  
   // Scroll to Spirit Week Calendar
   const scrollToCalendar = () => {
     spiritWeekCalendarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -591,10 +608,12 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                 .map((grade, index) => {
                   const maxPoints = Math.max(...spiritWeekData.grades.map(g => g.points), 1);
                   const percentage = (grade.points / maxPoints) * 100;
+                  
                   return (
                     <div key={index} className="grade-bar-item">
                       <div className="grade-bar-header">
                         <div className="grade-bar-info">
+                          <span className="grade-bar-rank">#{index + 1}</span>
                           <span className="grade-bar-icon">{grade.icon}</span>
                           <div className="grade-bar-text">
                             <span className="grade-bar-name" style={{color: grade.color}}>{grade.grade}</span>
@@ -608,7 +627,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                           className="grade-bar-fill" 
                           style={{
                             width: `${percentage}%`,
-                            backgroundColor: grade.color,
+                            background: getGradeGradient(grade.grade),
                             boxShadow: `0 2px 8px ${grade.color}40`
                           }}
                         >
