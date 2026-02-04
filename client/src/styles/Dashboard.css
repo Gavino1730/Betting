@@ -2583,12 +2583,19 @@
 .spirit-week-header h3 {
   margin: 0;
   font-size: 1.3rem;
+  color: #FFD700;
   background: linear-gradient(135deg, #FFD700, #FFA000, #FFD700);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 800;
   text-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+@media (prefers-contrast: high) {
+  .spirit-week-header h3 {
+    -webkit-text-fill-color: #FFD700;
+  }
 }
 
 .spirit-week-date {
@@ -2629,9 +2636,12 @@
   font-size: 6rem;
   opacity: 0.05;
   transform: rotate(15deg);
+  pointer-events: none;
+  user-select: none;
 }
 
 .spirit-week-events h4 {
+  color: #BA68C8;
   background: linear-gradient(135deg, #BA68C8, #9C27B0);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2640,6 +2650,12 @@
   margin: 0 0 1rem 0;
   font-weight: 800;
   letter-spacing: 0.5px;
+}
+
+@media (prefers-contrast: high) {
+  .spirit-week-events h4 {
+    -webkit-text-fill-color: #BA68C8;
+  }
 }
 
 .events-timeline {
@@ -2707,6 +2723,8 @@
   font-size: 3rem;
   opacity: 0.1;
   animation: sparkle 2s ease-in-out infinite;
+  pointer-events: none;
+  user-select: none;
 }
 
 @keyframes sparkle {
@@ -2717,6 +2735,12 @@
   50% {
     transform: scale(1.2) rotate(180deg);
     opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dress-up-day::before {
+    animation: none;
   }
 }
 
@@ -2734,6 +2758,7 @@
 }
 
 .dress-up-theme {
+  color: #FFD700;
   background: linear-gradient(135deg, #FFD700, #FFA000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2744,6 +2769,12 @@
   text-transform: uppercase;
   letter-spacing: 0.8px;
   filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+}
+
+@media (prefers-contrast: high) {
+  .dress-up-theme {
+    -webkit-text-fill-color: #FFD700;
+  }
 }
 
 .dress-up-points {
@@ -2794,6 +2825,23 @@
   border: 2px solid rgba(255, 193, 7, 0.8);
   animation: pulseGlow 2s ease-in-out infinite;
   box-shadow: 0 2px 10px rgba(255, 193, 7, 0.4);
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 2px 10px rgba(255, 193, 7, 0.4);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .points-badge.double {
+    animation: none;
+  }
 }
 
 .points-desc {
@@ -2865,6 +2913,8 @@
   font-size: 8rem;
   opacity: 0.08;
   transform: rotate(25deg);
+  pointer-events: none;
+  user-select: none;
 }
 
 @keyframes leaderGlow {
@@ -2876,10 +2926,22 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .spirit-leader-banner {
+    animation: none;
+  }
+}
+
 .leader-icon {
   flex-shrink: 0;
   font-size: 2.5rem;
   animation: bounce 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leader-icon {
+    animation: none;
+  }
 }
 
 .leader-info {
@@ -2910,11 +2972,18 @@
 .leader-points {
   font-size: 2rem;
   font-weight: 900;
+  color: #FFD700;
   background: linear-gradient(135deg, #FFD700, #FFA000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   filter: drop-shadow(0 2px 6px rgba(255, 193, 7, 0.5));
+}
+
+@media (prefers-contrast: high) {
+  .leader-points {
+    -webkit-text-fill-color: #FFD700;
+  }
 }
 
 /* Spirit Grades Grid */
@@ -2930,6 +2999,7 @@
 }
 
 .spirit-leaderboard h4 {
+  color: #FFD700;
   background: linear-gradient(135deg, #FFD700, #FFA000, #FFD700);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2940,6 +3010,12 @@
   text-align: center;
   letter-spacing: 1px;
   filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+}
+
+@media (prefers-contrast: high) {
+  .spirit-leaderboard h4 {
+    -webkit-text-fill-color: #FFD700;
+  }
 }
 
 .grade-bar-item {
@@ -3477,6 +3553,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .preview-banner-icon {
+    animation: none;
+  }
+}
+
 .preview-banner-info {
   flex: 1;
   min-width: 0;
@@ -3550,6 +3632,7 @@
 .scroll-text {
   font-size: 1.05rem;
   font-weight: 700;
+  color: #4caf50;
   background: linear-gradient(135deg, #4caf50, #66bb6a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -3557,6 +3640,12 @@
   margin-bottom: 0.5rem;
   filter: drop-shadow(0 2px 6px rgba(76, 175, 80, 0.4));
   letter-spacing: 0.3px;
+}
+
+@media (prefers-contrast: high) {
+  .scroll-text {
+    -webkit-text-fill-color: #4caf50;
+  }
 }
 
 .scroll-arrow {
