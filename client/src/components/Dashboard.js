@@ -418,19 +418,19 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     return sorted[0];
   }, [spiritWeekData]);
   
-  // Get theme-specific gradient for grade - memoized for performance
+  // Get solid color for each grade - memoized for performance
   const getGradeGradient = React.useCallback((gradeName) => {
     switch(gradeName) {
-      case 'Freshmen': // Wicked - Pink & Green
-        return 'linear-gradient(90deg, #E91E63 0%, #66BB6A 100%)';
-      case 'Sophomores': // Lion King - Orange & Yellow
-        return 'linear-gradient(90deg, #FF9800 0%, #FFC107 100%)';
-      case 'Juniors': // Grease - Pink & Black
-        return 'linear-gradient(90deg, #E91E63 0%, #424242 100%)';
-      case 'Seniors': // Hamilton - Red, White & Blue
-        return 'linear-gradient(90deg, #E53935 0%, #FFFFFF 50%, #1976D2 100%)';
+      case 'Freshmen': // Wicked - Green
+        return '#00C853';
+      case 'Sophomores': // Lion King - Orange
+        return '#FF9800';
+      case 'Juniors': // Grease - Pink
+        return '#E91E63';
+      case 'Seniors': // Hamilton - Blue
+        return '#1976D2';
       default:
-        return 'linear-gradient(90deg, #9E9E9E 0%, #616161 100%)'; // Default gray gradient
+        return '#9E9E9E'; // Default gray
     }
   }, []);
   
