@@ -419,7 +419,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
   }, [spiritWeekData]);
   
   // Get solid color for each grade - memoized for performance
-  const getGradeGradient = React.useCallback((gradeName) => {
+  const getGradeColor = React.useCallback((gradeName) => {
     switch(gradeName) {
       case 'Freshmen': // Wicked - Green
         return '#00C853';
@@ -627,7 +627,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                           className="grade-bar-fill" 
                           style={{
                             width: `${percentage}%`,
-                            background: getGradeGradient(grade.grade),
+                            background: getGradeColor(grade.grade),
                             boxShadow: `0 2px 8px ${grade.color}40`
                           }}
                         >
