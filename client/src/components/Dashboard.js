@@ -113,7 +113,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         colors: "Pink & Green",
         color: "#00C853",
         icon: "🧙‍♀️",
-        points: 0,
+        points: 850,
         lipSyncPractice: "Monday Lunch"
       },
       {
@@ -122,7 +122,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         colors: "Orange & Yellow",
         color: "#FF9800",
         icon: "🦁",
-        points: 0,
+        points: 720,
         lipSyncPractice: "Tuesday Lunch"
       },
       {
@@ -131,7 +131,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         colors: "Pink & Black",
         color: "#E91E63",
         icon: "🎸",
-        points: 0,
+        points: 1240,
         lipSyncPractice: "Wednesday Lunch"
       },
       {
@@ -140,7 +140,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         colors: "Red, White & Blue",
         color: "#1976D2",
         icon: "🎩",
-        points: 0,
+        points: 1050,
         lipSyncPractice: "Thursday Lunch"
       }
     ]
@@ -417,6 +417,23 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
     const sorted = [...spiritWeekData.grades].sort((a, b) => b.points - a.points);
     return sorted[0];
   }, [spiritWeekData]);
+  
+  // Get solid color for each grade - memoized for performance
+  const getGradeColor = React.useCallback((gradeName) => {
+    switch(gradeName) {
+      case 'Freshmen': // Wicked - Green
+        return '#00C853';
+      case 'Sophomores': // Lion King - Orange
+        return '#FF9800';
+      case 'Juniors': // Grease - Pink
+        return '#E91E63';
+      case 'Seniors': // Hamilton - Blue
+        return '#1976D2';
+      default:
+        return '#9E9E9E'; // Default gray
+    }
+  }, []);
+  
   // Scroll to Spirit Week Calendar
   const scrollToCalendar = () => {
     spiritWeekCalendarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -591,10 +608,12 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                 .map((grade, index) => {
                   const maxPoints = Math.max(...spiritWeekData.grades.map(g => g.points), 1);
                   const percentage = (grade.points / maxPoints) * 100;
+                  
                   return (
                     <div key={index} className="grade-bar-item">
                       <div className="grade-bar-header">
                         <div className="grade-bar-info">
+                          <span className="grade-bar-rank">#{index + 1}</span>
                           <span className="grade-bar-icon">{grade.icon}</span>
                           <div className="grade-bar-text">
                             <span className="grade-bar-name" style={{color: grade.color}}>{grade.grade}</span>
@@ -608,11 +627,10 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
                           className="grade-bar-fill" 
                           style={{
                             width: `${percentage}%`,
-                            backgroundColor: grade.color,
+                            background: getGradeColor(grade.grade),
                             boxShadow: `0 2px 8px ${grade.color}40`
                           }}
                         >
-                          {percentage > 10 && <span className="grade-bar-percentage">{percentage.toFixed(0)}%</span>}
                         </div>
                       </div>
                     </div>
