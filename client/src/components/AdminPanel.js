@@ -1703,7 +1703,7 @@ function AdminPanel() {
                 </div>
               ))}
             </div>
-          </div>
+          </AdminCard>
 
           {editingBet && (
             <div className="modal-overlay" onClick={() => setEditingBet(null)}>
