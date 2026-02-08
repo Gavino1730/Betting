@@ -524,6 +524,12 @@ function AppContent() {
                 </button>
               </div>
             </div>
+            <div className="user-info" title={currentUser?.username || 'User'}>
+              <span className="username">{currentUser?.username || 'User'}</span>
+            </div>
+            <button onClick={handleLogout} className="logout-btn" aria-label="Log out">
+              Logout
+            </button>
           </div>
           
           {/* Mobile Menu Toggle */}

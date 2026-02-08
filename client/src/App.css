@@ -135,6 +135,10 @@ body {
   min-width: fit-content;
 }
 
+.nav-user {
+  display: none;
+}
+
 .nav-center button,
 .nav-right button {
   background: rgba(255, 255, 255, 0.06) !important;
@@ -248,6 +252,201 @@ body {
   border-color: transparent !important;
   color: #ffffff !important;
   text-decoration: underline;
+}
+
+@media (min-width: 1025px) {
+  .navbar {
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    height: 60px;
+    min-height: 60px;
+  }
+
+  .nav-inner {
+    padding: 0 24px;
+    gap: 1.25rem;
+  }
+
+  .nav-brand span {
+    color: var(--header-text);
+  }
+
+  .nav-center {
+    gap: 0.25rem;
+  }
+
+  .nav-center .nav-link {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: var(--header-muted) !important;
+    padding: 0 12px !important;
+    min-height: 44px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: -0.1px;
+    position: relative;
+  }
+
+  .nav-center .nav-link:hover {
+    background: var(--header-hover) !important;
+    color: var(--header-text) !important;
+  }
+
+  .nav-center .nav-link.active {
+    color: var(--header-text) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+  }
+
+  .nav-center .nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 6px;
+    height: 3px;
+    background: var(--color-brand-strong);
+    border-radius: 2px;
+  }
+
+  .nav-right {
+    gap: 0.5rem;
+  }
+
+  .nav-user {
+    display: inline-flex;
+  }
+
+  .nav-right .user-info,
+  .nav-right .logout-btn {
+    display: none;
+  }
+
+  .balance-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    padding: 6px 12px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .balance-pill .balance-label {
+    color: var(--header-muted);
+  }
+
+  .balance-pill .balance-amount {
+    color: var(--header-text);
+    font-weight: 600;
+  }
+
+  .nav-icon-button {
+    background: transparent !important;
+    border: 1px solid var(--header-border) !important;
+    color: var(--header-text) !important;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+
+  .nav-icon-button:hover {
+    background: var(--header-hover) !important;
+  }
+
+  .nav-icon-button.active {
+    background: var(--header-active) !important;
+  }
+
+  .nav-right .nav-icon-button.active::after {
+    content: none;
+  }
+
+  .nav-user {
+    position: relative;
+  }
+
+  .nav-user-trigger {
+    background: transparent !important;
+    border: 1px solid var(--header-border) !important;
+    color: var(--header-text) !important;
+    min-height: 44px;
+    padding: 0 12px !important;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  .nav-user-trigger:hover {
+    background: var(--header-hover) !important;
+  }
+
+  .nav-username {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-user-chevron {
+    font-size: 0.8rem;
+    color: var(--header-muted);
+  }
+
+  .nav-user-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 6px;
+    min-width: 160px;
+    box-shadow: var(--shadow-sm);
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 1200;
+  }
+
+  .nav-user-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .nav-user-menu .nav-user-item {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: var(--color-text-primary) !important;
+    width: 100%;
+    padding: 10px 12px !important;
+    text-align: left;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .nav-user-menu .nav-user-item:hover {
+    background: var(--header-hover) !important;
+  }
+
+  .nav-user-menu .nav-user-item--muted {
+    color: var(--color-text-secondary) !important;
+  }
+
+  .nav-center .nav-link:focus-visible,
+  .nav-icon-button:focus-visible,
+  .nav-user-trigger:focus-visible,
+  .nav-user-menu .nav-user-item:focus-visible {
+    outline: 2px solid var(--color-brand-strong);
+    outline-offset: 2px;
+  }
 }
 
 /* Responsive navbar for smaller desktops */
