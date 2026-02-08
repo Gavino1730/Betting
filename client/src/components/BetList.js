@@ -215,21 +215,27 @@ function BetList() {
       {error && <div className="alert alert-error">{error}</div>}
 
       {/* Filter Tabs */}
-      <div className="bet-filters">
+      <div className="bet-filters tabs">
         <button 
-          className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+          className={`tab-button ${filter === 'all' ? 'active' : ''}`}
           onClick={() => setFilter('all')}
         >
-          All Picks ({stats.total})
+          All ({stats.total})
         </button>
         <button 
-          className={`filter-btn ${filter === 'won' ? 'active' : ''}`}
+          className={`tab-button ${filter === 'pending' ? 'active' : ''}`}
+          onClick={() => setFilter('pending')}
+        >
+          Pending ({stats.pending})
+        </button>
+        <button 
+          className={`tab-button ${filter === 'won' ? 'active' : ''}`}
           onClick={() => setFilter('won')}
         >
           Won ({stats.won})
         </button>
         <button 
-          className={`filter-btn ${filter === 'lost' ? 'active' : ''}`}
+          className={`tab-button ${filter === 'lost' ? 'active' : ''}`}
           onClick={() => setFilter('lost')}
         >
           Lost ({stats.lost})
@@ -249,8 +255,10 @@ function BetList() {
         </div>
       ) : (
         <div className="bets-list">
-          {filteredBets.map(bet => (
-            <div key={bet.id} className={`bet-item ${bet.outcome ? `bet-${bet.outcome}` : 'bet-pending'}`}>
+          {filteredBets.map(bet => {
+            const profit = (parseFloat(bet.potential_win || 0) - parseFloat(bet.amount || 0));
+            return (
+              <div key={bet.id} className={`bet-item ${bet.outcome ? `bet-${bet.outcome}` : 'bet-pending'}`}>
               {/* Bet Header */}
               <div className="bet-item-header">
                 <div className="bet-team-info">
@@ -261,41 +269,39 @@ function BetList() {
                   )}
                 </div>
                 <div className="bet-status-badge">
-                  {bet.status === 'pending' && <span className="badge badge-pending">Pending</span>}
-                  {bet.outcome === 'won' && <span className="badge badge-won">Won</span>}
-                  {bet.outcome === 'lost' && <span className="badge badge-lost">Lost</span>}
+                  {bet.status === 'pending' && <span className="badge badge-pending status--pending">Pending</span>}
+                  {bet.outcome === 'won' && <span className="badge badge-won status--won">Won</span>}
+                  {bet.outcome === 'lost' && <span className="badge badge-lost status--lost">Lost</span>}
                 </div>
               </div>
 
               {/* Selected Team Highlight */}
-              <div className="bet-filters tabs">
+              <div className="bet-picked-team">
                 <span className="bet-picked-label">Your Pick</span>
-                  className={`tab-button ${filter === 'all' ? 'active' : ''}`}
+                <span className="bet-picked-team-name">{bet.selected_team}</span>
               </div>
 
               {/* Bet Details Grid */}
               <div className="bet-item-details">
                 <div className="detail-box">
-                  className={`tab-button ${filter === 'pending' ? 'active' : ''}`}
+                  <span className="detail-label">Wager</span>
                   <span className="detail-amount">{formatCurrency(bet.amount)}</span>
                 </div>
                 <div className="detail-box">
                   <span className="detail-label">Confidence</span>
                   <span className={`confidence-badge ${getConfidenceColor(bet.bet_type)}`}>
-                  className={`tab-button ${filter === 'won' ? 'active' : ''}`}
+                    {(bet.bet_type || 'n/a').toUpperCase()}
                   </span>
                 </div>
                 <div className="detail-box">
                   <span className="detail-label">Potential Win</span>
                   <span className="detail-potential">{formatCurrency(bet.potential_win)}</span>
-                  className={`tab-button ${filter === 'lost' ? 'active' : ''}`}
+                </div>
                 {bet.outcome && (
                   <div className="detail-box">
                     <span className="detail-label">Result</span>
-                    <span className={`detail-result ${bet.outcome === 'won' ? 'result-won' : 'result-lost'}`}>
-                      {bet.outcome === 'won' 
-                        ? `+${formatCurrency(parseFloat(bet.potential_win) - parseFloat(bet.amount))}`
-                        : `-${formatCurrency(bet.amount)}`}
+                    <span className={`detail-result u-num ${bet.outcome === 'won' ? 'result-won status--won' : 'result-lost status--lost'}`}>
+                      {bet.outcome === 'won' ? formatSignedCurrency(profit) : formatSignedCurrency(-bet.amount)}
                     </span>
                   </div>
                 )}
@@ -305,8 +311,9 @@ function BetList() {
               <div className="bet-item-footer">
                 <span className="bet-date">📅 Pick placed: {formatPlacedAt(bet.created_at)}</span>
               </div>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

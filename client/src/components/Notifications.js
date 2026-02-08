@@ -147,7 +147,7 @@ function Notifications({ onUnreadChange }) {
   }
 
   return (
-    <div className="notifications-page">
+    <div className="notifications-page ds-page">
       <div className="notifications-header">
         <h2>🔔 Notifications</h2>
         {unreadCount > 0 && (

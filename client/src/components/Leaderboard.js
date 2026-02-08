@@ -212,18 +212,18 @@ function Leaderboard() {
                           </div>
                         </td>
                         <td className="td-right u-align-right u-num">
-                        <td className={`numeric profit-cell ${user.stats.netProfit >= 0 ? 'positive' : 'negative'}`}>
-                          {formatSignedCurrency(user.stats.netProfit)}
+                          {formatCurrency(user.balance)}
+                        </td>
                         <td className={`td-right u-align-right u-num ${getValueClass(user.stats.netProfit)}`}>
                           {formatSignedCurrency(user.stats.netProfit)}
-                          <span className="wins">{user.stats.wonBets}W</span>
+                        </td>
                         <td className="td-center u-align-center u-num">
+                          <span className="wins">{user.stats.wonBets}W</span>
                           <span className="losses">{user.stats.lostBets}L</span>
                         </td>
-                        <td className={`numeric roi-cell ${roi >= 0 ? 'positive' : 'negative'}`}>
-                          {formatRoi(roi)}
-                        <td className={`td-right u-align-right u-num ${getValueClass(user.stats.roi)}`}>
-                          {formatSignedPercentage(user.stats.roi)}
+                        <td className={`td-right u-align-right u-num ${getValueClass(roi)}`}>
+                          {formatSignedPercentage(roi)}
+                        </td>
                     );
                   })}
                 </tbody>

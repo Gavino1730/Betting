@@ -307,7 +307,7 @@ function Teams() {
   const selectedTeam = teams.find(t => t.id === activeTab) || teams[0];
 
   return (
-    <div className="teams-page">
+    <div className="teams-page ds-page">
       <h1>Valiant Basketball</h1>
       
       <div className="tabs">

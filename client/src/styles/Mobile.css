@@ -431,6 +431,10 @@
     padding: 0;
   }
 
+  .container {
+    padding-top: calc(var(--navbar-height) + env(safe-area-inset-top));
+  }
+
   /* Prevent horizontal scrolling */
   * {
     max-width: 100%;
@@ -675,6 +679,10 @@
 
 /* Landscape orientation adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --navbar-height: 50px;
+  }
+
   .navbar {
     padding: 0.4rem 0.8rem;
     min-height: 50px;

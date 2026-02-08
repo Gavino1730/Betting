@@ -322,7 +322,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
   };
   
   return (
-    <div className="dashboard school-dashboard">
+    <div className="dashboard school-dashboard ds-page">
       <Confetti show={showConfetti} onComplete={() => setShowConfetti(false)} />
       
       {/* Daily Reward Modal */}
