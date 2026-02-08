@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import apiClient from '../utils/axios';
+import AdminCard from './admin/AdminCard';
 import '../styles/AdminTeams.css';
+import '../styles/AdminDesignSystem.css';
 
 function AdminTeams() {
   const [teams, setTeams] = useState([]);

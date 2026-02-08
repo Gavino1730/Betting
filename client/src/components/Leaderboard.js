@@ -203,15 +203,16 @@ function Leaderboard() {
 
       {error && <div className="alert alert-error">{error}</div>}
 
-      {/* Overview Stats */}
-      <div className="overview-stats">
-        <div className="stat-card">
-          <div className="stat-card-value">{formatNumber(activePlayers)}</div>
-          <div className="stat-card-label">Active Players</div>
+      {/* Summary Bar */}
+      <div className="summary-bar">
+        <div className="summary-item">
+          <div className="summary-value">{formatNumber(activePlayers)}</div>
+          <div className="summary-label">Active Players</div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-value">{formatNumber(totalPicks)}</div>
-          <div className="stat-card-label">Total Picks</div>
+        <div className="summary-divider" aria-hidden="true" />
+        <div className="summary-item">
+          <div className="summary-value">{formatNumber(totalPicks)}</div>
+          <div className="summary-label">Total Picks</div>
         </div>
       </div>
 
@@ -224,21 +225,27 @@ function Leaderboard() {
         ) : (
           <>
             <div className="leaderboard-toolbar">
-              <div className="filter-group">
-                <button
-                  type="button"
-                  className={`filter-btn ${!activeOnly ? 'active' : ''}`}
-                  onClick={() => setActiveOnly(false)}
-                >
-                  All Players
-                </button>
-                <button
-                  type="button"
-                  className={`filter-btn ${activeOnly ? 'active' : ''}`}
-                  onClick={() => setActiveOnly(true)}
-                >
-                  Active Only
-                </button>
+              <div className="leaderboard-filters">
+                <div className="segment-control" role="tablist" aria-label="Leaderboard filters">
+                  <button
+                    type="button"
+                    className={`segment-btn ${!activeOnly ? 'active' : ''}`}
+                    onClick={() => setActiveOnly(false)}
+                    role="tab"
+                    aria-selected={!activeOnly}
+                  >
+                    All Players
+                  </button>
+                  <button
+                    type="button"
+                    className={`segment-btn ${activeOnly ? 'active' : ''}`}
+                    onClick={() => setActiveOnly(true)}
+                    role="tab"
+                    aria-selected={activeOnly}
+                  >
+                    Active Only
+                  </button>
+                </div>
               </div>
               {showJumpToRank && (
                 <button
@@ -249,6 +256,50 @@ function Leaderboard() {
                   Jump to my rank
                 </button>
               )}
+            </div>
+            <div className="leaderboard-list" role="list">
+              {paginatedUsers.map((user, index) => {
+                const rank = pageStartIndex + index + 1;
+                const roi = user.stats.roi || 0;
+                const isCurrentUser = currentUser?.id === user.id;
+                const isActive = user.stats.totalBets > 0;
+                return (
+                  <div
+                    key={user.id}
+                    className={`leaderboard-list-row ${rank <= 3 ? `rank-${rank}` : ''} ${isCurrentUser ? 'is-current-user' : ''}`}
+                    role="listitem"
+                    tabIndex={0}
+                  >
+                    <div className="list-rank">
+                      <span className={`rank-badge ${rank <= 3 ? `rank-${rank}` : ''}`}>{rank}</span>
+                    </div>
+                    <div className="list-main">
+                      <div className="list-name-row">
+                        <span
+                          className={`activity-dot ${isActive ? 'active' : 'inactive'}`}
+                          title={isActive ? 'Active bettor' : 'No picks yet'}
+                        />
+                        <span className="user-name">{user.username}</span>
+                        {isCurrentUser && <span className="you-badge">YOU</span>}
+                        {user.is_admin && <span className="admin-badge">ADMIN</span>}
+                      </div>
+                      <div className="list-meta">
+                        <span className="record-meta">
+                          {formatNumber(user.stats.wonBets)}W–{formatNumber(user.stats.lostBets)}L
+                        </span>
+                        <span className="meta-separator">•</span>
+                        <span className={`roi-meta ${getValueClass(roi)}`}>
+                          {formatSignedPercentage(roi)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`list-stat ${getValueClass(user.stats.netProfit)}`}>
+                      <div className="list-stat-value">{formatSignedCurrency(user.stats.netProfit)}</div>
+                      <div className="list-stat-label">Profit</div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
             <div className="leaderboard-table-wrapper ds-table-wrapper">
               <table className="leaderboard-table ds-table">
@@ -368,7 +419,7 @@ function Leaderboard() {
 
             <div className="pagination-bar">
               <div className="pagination-summary">
-                Showing {formatNumber(showingStart)} to {formatNumber(showingEnd)} of {formatNumber(rankedUsers.length)}
+                Showing {formatNumber(showingStart)}–{formatNumber(showingEnd)} of {formatNumber(rankedUsers.length)}
               </div>
               <div className="pagination">
                 <button

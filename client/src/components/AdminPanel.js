@@ -79,75 +79,60 @@ function AdminPanel() {
   ];
 
   useEffect(() => {
-    fetchAllBets();
-    fetchUsers();
-    fetchGames();
-    fetchPropBets();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('adminPanelTab', tab);
-  }, [tab]);
-
-  useEffect(() => {
-    if (selectedUser) {
-      const modalContent = document.querySelector('.user-options-modal');
-      if (modalContent) {
-        setTimeout(() => {
-          modalContent.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-      }
-    }
-  }, [selectedUser]);
-
-  useEffect(() => {
-    if (!selectedUser) {
-      setUserBets([]);
-      setUserTransactions([]);
-      return;
-    }
-    setUserHistoryLoading(true);
-    Promise.all([
-      apiClient.get('/bets/all').then(res => res.data.filter(b => b.user_id === selectedUser)),
-      apiClient.get('/transactions').then(() => {
-        return [];
-      }).catch(() => [])
-    ]).then(([bets, txs]) => {
-      setUserBets(bets);
-      setUserTransactions(txs);
-      setUserHistoryLoading(false);
-    }).catch(() => {
-      setUserHistoryLoading(false);
-    });
-  }, [selectedUser]);
-
-  const seedGamesFromSchedule = async () => {
-    try {
-      setError('');
-      const response = await apiClient.post('/games/seed-from-schedule');
-      alert(response.data.message || 'Games seeded successfully!');
-      fetchGames();
-    } catch (err) {
-      alert(err.response?.data?.error || 'Failed to seed games');
-    }
-  };
-
-  const toggleAllVisibility = async (isVisible) => {
-    if (!window.confirm(`Are you sure you want to ${isVisible ? 'show' : 'hide'} ALL games?`)) {
-      return;
-    }
-    try {
-      setError('');
-      const response = await apiClient.put('/games/bulk/toggle-visibility', { isVisible });
-      alert(response.data.message || `All games ${isVisible ? 'shown' : 'hidden'}`);
-      fetchGames();
-    } catch (err) {
-      alert(err.response?.data?.error || 'Failed to toggle visibility');
-    }
-  };
-
-  const deleteAllGames = async () => {
+                {allBets.map(bet => (
+                  <tr key={bet.id}>
+                    <td>{bet.id}</td>
+                    <td>{bet.users?.username || bet.user_id}</td>
+                    <td>
+                      {bet.games ? (
+                        <div style={{fontSize: '0.9em'}}>
+                          <div style={{fontWeight: '500'}}>{bet.games.home_team} vs {bet.games.away_team}</div>
+                          <div style={{fontSize: '0.8em', color: '#66bb6a', marginTop: '3px', fontWeight: '600'}}>
+                            {bet.games.team_type?.includes('Girls') ? '🏀 Girls' : '🏀 Boys'}
+                          </div>
+                        </div>
+                      ) : bet.prop_bets ? (
+                        <div style={{fontSize: '0.9em'}}>
+                          <div style={{fontWeight: '500'}}>{bet.prop_bets.title}</div>
+                          <div style={{fontSize: '0.8em', color: '#42a5f5', marginTop: '3px', fontWeight: '600'}}>
+                            🎯 {bet.prop_bets.team_type || 'General'}
+                          </div>
+                        </div>
+                      ) : (
+                        'Unknown Bet'
+                      )}
+                    </td>
+                    <td>{bet.selected_team}</td>
+                    <td>{formatCurrency(bet.amount)}</td>
+                    <td>{bet.odds}x</td>
+                    <td>
+                      <AdminBadge variant={bet.status === 'resolved' ? 'success' : 'warning'}>
+                        {bet.status === 'resolved' ? 'Completed' : bet.status || 'pending'}
+                      </AdminBadge>
+                    </td>
+                    <td>
+                      {bet.outcome ? (
+                        <AdminBadge variant={bet.outcome === 'won' ? 'success' : 'danger'}>
+                          {bet.outcome}
+                        </AdminBadge>
+                      ) : '—'}
+                    </td>
+                    <td>
+                      {bet.status !== 'resolved' && (
+                        <button
+                          className="admin-button admin-button--secondary admin-button--compact"
+                          onClick={() => {
+                            setEditingBet(bet);
+                            setEditingBetOutcome('');
+                            setEditingBetTeam(bet.selected_team);
+                          }}
+                        >
+                          Manage
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
     if (!window.confirm('⚠️ Are you ABSOLUTELY SURE you want to DELETE ALL GAMES? This cannot be undone!')) {
       return;
     }
@@ -759,7 +744,13 @@ function AdminPanel() {
     }
   };
 
-  if (loading) return <div className="card">Loading...</div>;
+  if (loading) {
+    return (
+      <AdminLayout className="admin-panel">
+        <AdminCard>Loading...</AdminCard>
+      </AdminLayout>
+    );
+  }
 
   // eslint-disable-next-line no-unused-vars
   const boysGamesCount = games.filter(g => g.team_type === 'Boys Basketball').length;
@@ -880,68 +871,70 @@ function AdminPanel() {
 
       {tab === 'games' && (
         <div className="admin-section admin-games">
-          <div className="admin-games-toolbar">
-            <div className="admin-segmented" role="tablist" aria-label="Game filters">
-              <button
-                type="button"
-                className={`admin-segment-btn ${gameFilter === 'all' ? 'active' : ''}`}
-                onClick={() => setGameFilter('all')}
-              >
-                All Games <span className="count-badge">{games.length}</span>
-              </button>
-              <button
-                type="button"
-                className={`admin-segment-btn ${gameFilter === 'boys' ? 'active' : ''}`}
-                onClick={() => setGameFilter('boys')}
-              >
-                Boys <span className="count-badge">{boysGamesCount}</span>
-              </button>
-              <button
-                type="button"
-                className={`admin-segment-btn ${gameFilter === 'girls' ? 'active' : ''}`}
-                onClick={() => setGameFilter('girls')}
-              >
-                Girls <span className="count-badge">{girlsGamesCount}</span>
-              </button>
-            </div>
-
-            <div className="admin-toolbar">
-              <button type="button" className="admin-toolbar-btn" onClick={seedGamesFromSchedule}>
-                Seed from Schedule
-              </button>
-              <button type="button" className="admin-toolbar-btn" onClick={() => toggleAllVisibility(true)}>
-                Show All
-              </button>
-              <button type="button" className="admin-toolbar-btn" onClick={() => toggleAllVisibility(false)}>
-                Hide All
-              </button>
-              <button type="button" className="admin-toolbar-btn admin-toolbar-btn--danger" onClick={deleteAllGames}>
-                Delete All
-              </button>
-              <button
-                type="button"
-                className={`admin-toolbar-btn admin-toolbar-btn--primary ${showCreateForm ? 'is-active' : ''}`}
-                onClick={() => setShowCreateForm(!showCreateForm)}
-              >
-                {showCreateForm ? 'Close' : 'Create Game'}
-              </button>
-            </div>
-          </div>
+          <AdminToolbar
+            left={
+              <div className="admin-segmented" role="tablist" aria-label="Game filters">
+                <button
+                  type="button"
+                  className={`admin-segmented__btn ${gameFilter === 'all' ? 'active' : ''}`}
+                  onClick={() => setGameFilter('all')}
+                >
+                  All Games ({games.length})
+                </button>
+                <button
+                  type="button"
+                  className={`admin-segmented__btn ${gameFilter === 'boys' ? 'active' : ''}`}
+                  onClick={() => setGameFilter('boys')}
+                >
+                  Boys Basketball ({boysGamesCount})
+                </button>
+                <button
+                  type="button"
+                  className={`admin-segmented__btn ${gameFilter === 'girls' ? 'active' : ''}`}
+                  onClick={() => setGameFilter('girls')}
+                >
+                  Girls Basketball ({girlsGamesCount})
+                </button>
+              </div>
+            }
+            right={
+              <>
+                <button type="button" className="admin-button admin-button--secondary" onClick={seedGamesFromSchedule}>
+                  Seed from Schedule
+                </button>
+                <button type="button" className="admin-button admin-button--secondary" onClick={() => toggleAllVisibility(true)}>
+                  Show All
+                </button>
+                <button type="button" className="admin-button admin-button--secondary" onClick={() => toggleAllVisibility(false)}>
+                  Hide All
+                </button>
+                <AdminActionsMenu label="More">
+                  <button
+                    type="button"
+                    className="admin-actions-menu__item admin-actions-menu__item--destructive"
+                    onClick={deleteAllGames}
+                  >
+                    Delete All Games
+                  </button>
+                </AdminActionsMenu>
+              </>
+            }
+          />
 
           {selectedGameIds.length > 0 && (
             <div className="admin-bulk-bar">
               <div className="admin-bulk-count">{selectedGameIds.length} selected</div>
               <div className="admin-bulk-actions">
-                <button type="button" className="admin-toolbar-btn" onClick={() => handleBulkVisibility(true)}>
+                <button type="button" className="admin-button admin-button--secondary" onClick={() => handleBulkVisibility(true)}>
                   Show
                 </button>
-                <button type="button" className="admin-toolbar-btn" onClick={() => handleBulkVisibility(false)}>
+                <button type="button" className="admin-button admin-button--secondary" onClick={() => handleBulkVisibility(false)}>
                   Hide
                 </button>
-                <button type="button" className="admin-toolbar-btn admin-toolbar-btn--danger" onClick={handleBulkDelete}>
+                <button type="button" className="admin-button admin-button--destructive" onClick={handleBulkDelete}>
                   Delete
                 </button>
-                <button type="button" className="admin-toolbar-btn admin-toolbar-btn--ghost" onClick={clearSelectedGames}>
+                <button type="button" className="admin-button admin-button--secondary" onClick={clearSelectedGames}>
                   Clear
                 </button>
               </div>
@@ -1656,22 +1649,21 @@ function AdminPanel() {
                       <td>{formatCurrency(bet.amount)}</td>
                       <td>{bet.odds}x</td>
                       <td>
-                        <span className={`chip chip-${bet.status === 'resolved' ? 'completed' : bet.status}`}>
+                        <AdminBadge variant={bet.status === 'resolved' ? 'success' : 'warning'}>
                           {bet.status === 'resolved' ? 'Completed' : bet.status || 'pending'}
-                        </span>
+                        </AdminBadge>
                       </td>
                       <td>
                         {bet.outcome ? (
-                          <span className={`chip chip-${bet.outcome === 'won' ? 'won' : 'lost'}`}>
+                          <AdminBadge variant={bet.outcome === 'won' ? 'success' : 'danger'}>
                             {bet.outcome}
-                          </span>
+                          </AdminBadge>
                         ) : '—'}
                       </td>
                       <td>
                         {bet.status !== 'resolved' && (
-                          <button 
-                            className="btn" 
-                            style={{padding: '4px 8px', fontSize: '0.85rem'}}
+                          <button
+                            className="admin-button admin-button--secondary admin-button--compact"
                             onClick={() => {
                               setEditingBet(bet);
                               setEditingBetOutcome('');
@@ -1685,8 +1677,7 @@ function AdminPanel() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </div>
+            </AdminTable>
 
             <div className="bets-mobile-list">
               {allBets.map(bet => (
@@ -1734,22 +1725,26 @@ function AdminPanel() {
                   <div className="bet-card-row two-col">
                     <div>
                       <span className="bet-label">Status</span>
-                      <div className={`chip chip-compact ${bet.status === 'resolved' ? 'chip-completed' : 'chip-pending'}`}>
+                      <AdminBadge variant={bet.status === 'resolved' ? 'success' : 'warning'}>
                         {bet.status === 'resolved' ? 'Completed' : bet.status || 'pending'}
-                      </div>
+                      </AdminBadge>
                     </div>
                     <div>
                       <span className="bet-label">Outcome</span>
-                      <div className={`chip chip-compact ${bet.outcome === 'won' ? 'chip-won' : bet.outcome === 'lost' ? 'chip-lost' : 'chip-neutral'}`}>
-                        {bet.outcome || '—'}
-                      </div>
+                      {bet.outcome ? (
+                        <AdminBadge variant={bet.outcome === 'won' ? 'success' : 'danger'}>
+                          {bet.outcome}
+                        </AdminBadge>
+                      ) : (
+                        <span className="admin-muted">—</span>
+                      )}
                     </div>
                   </div>
                   {bet.status !== 'resolved' && (
                     <div className="bet-card-row" style={{marginTop: '1rem'}}>
-                      <button 
-                        className="btn" 
-                        style={{width: '100%', padding: '0.75rem'}}
+                      <button
+                        className="admin-button admin-button--secondary"
+                        style={{width: '100%'}}
                         onClick={() => {
                           setEditingBet(bet);
                           setEditingBetOutcome('');
@@ -1767,103 +1762,59 @@ function AdminPanel() {
 
           {editingBet && (
             <div className="modal-overlay" onClick={() => setEditingBet(null)}>
-              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <h3 style={{marginBottom: '1.5rem'}}>Manage Pick #{editingBet.id}</h3>
-                
-                <div style={{marginBottom: '1.5rem'}}>
+              <div className="modal-content admin-modal" onClick={(e) => e.stopPropagation()}>
+                <h3>Manage Pick #{editingBet.id}</h3>
+
+                <div className="admin-modal__section">
                   <p><strong>User:</strong> {editingBet.user_id}</p>
                   <p><strong>Selection:</strong> {editingBet.selected_team}</p>
                   <p><strong>Stake:</strong> {formatCurrency(editingBet.amount)}</p>
                   <p><strong>Odds:</strong> {editingBet.odds}x</p>
                 </div>
 
-                <div style={{marginBottom: '1rem'}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 'bold'}}>
-                    Adjust Selection (Optional)
-                  </label>
+                <div className="admin-modal__section">
+                  <label>Adjust Selection (Optional)</label>
                   <input
                     type="text"
                     placeholder="Enter team/option name"
                     value={editingBetTeam}
                     onChange={(e) => setEditingBetTeam(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      borderRadius: '6px',
-                      border: '1px solid #444',
-                      background: '#1a1a1a',
-                      color: '#fff',
-                      marginBottom: '1rem'
-                    }}
+                    className="admin-input"
                   />
                 </div>
 
-                <div style={{marginBottom: '1.5rem'}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 'bold'}}>
-                    Pick Outcome
-                  </label>
-                  <div style={{display: 'flex', gap: '1rem'}}>
+                <div className="admin-modal__section">
+                  <label>Pick Outcome</label>
+                  <div className="admin-actions-inline">
                     <button
+                      type="button"
+                      className={`admin-button admin-button--secondary admin-button--toggle ${editingBetOutcome === 'won' ? 'is-active' : ''}`}
                       onClick={() => setEditingBetOutcome('won')}
-                      style={{
-                        flex: 1,
-                        padding: '0.75rem',
-                        borderRadius: '6px',
-                        border: editingBetOutcome === 'won' ? '2px solid #66bb6a' : '1px solid #444',
-                        background: editingBetOutcome === 'won' ? 'rgba(102, 187, 106, 0.2)' : 'var(--color-surface)',
-                        color: editingBetOutcome === 'won' ? '#66bb6a' : '#b0b0b0',
-                        cursor: 'pointer',
-                        fontWeight: 'bold'
-                      }}
                     >
-                      ✓ WON
+                      Won
                     </button>
                     <button
+                      type="button"
+                      className={`admin-button admin-button--secondary admin-button--toggle ${editingBetOutcome === 'lost' ? 'is-active' : ''}`}
                       onClick={() => setEditingBetOutcome('lost')}
-                      style={{
-                        flex: 1,
-                        padding: '0.75rem',
-                        borderRadius: '6px',
-                        border: editingBetOutcome === 'lost' ? '2px solid #ef5350' : '1px solid #444',
-                        background: editingBetOutcome === 'lost' ? 'rgba(239, 83, 80, 0.2)' : 'var(--color-surface)',
-                        color: editingBetOutcome === 'lost' ? '#ef5350' : '#b0b0b0',
-                        cursor: 'pointer',
-                        fontWeight: 'bold'
-                      }}
                     >
-                      ✗ LOST
+                      Lost
                     </button>
                   </div>
                 </div>
 
-                <div style={{display: 'flex', gap: '1rem'}}>
+                <div className="admin-modal__actions">
                   <button
+                    type="button"
+                    className="admin-button admin-button--primary"
                     onClick={() => handleUpdateBet(editingBet.id)}
-                    style={{
-                      flex: 1,
-                      padding: '0.75rem',
-                      borderRadius: '6px',
-                      background: '#1e88e5',
-                      color: '#fff',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontWeight: 'bold'
-                    }}
                   >
                     Save Changes
                   </button>
                   <button
+                    type="button"
+                    className="admin-button admin-button--secondary"
                     onClick={() => setEditingBet(null)}
-                    style={{
-                      flex: 1,
-                      padding: '0.75rem',
-                      borderRadius: '6px',
-                      background: '#555',
-                      color: '#fff',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontWeight: 'bold'
-                    }}
                   >
                     Cancel
                   </button>
@@ -1875,80 +1826,54 @@ function AdminPanel() {
       )}
 
       {tab === 'users' && (
-        <div className="card">
-          <h3>👥 User Management</h3>
-          <div style={{background: 'rgba(33, 150, 243, 0.1)', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid rgba(33, 150, 243, 0.3)'}}>
-            <p style={{margin: '0 0 5px 0', color: '#64b5f6'}}>
-              <strong>📊 Total Users:</strong> {users.length}
-            </p>
-            <p style={{margin: '0 0 5px 0', color: '#64b5f6'}}>
-              <strong>🧑‍💼 Admins:</strong> {users.filter(u => u.is_admin).length}
-            </p>
-            <p style={{margin: '0', color: '#64b5f6'}}>
-              <strong>💰 Total Balance:</strong> {formatCurrency(users.reduce((sum, u) => sum + (u.balance || 0), 0))}
-            </p>
-          </div>
+        <div className="admin-section">
+          <AdminCard>
+            <h3 className="admin-section__title">User Management</h3>
+            <div className="admin-card-grid admin-user-stats">
+              <AdminCard className="admin-stat-card">
+                <div className="admin-stat-label">Total Users</div>
+                <div className="admin-stat-value">{users.length}</div>
+              </AdminCard>
+              <AdminCard className="admin-stat-card">
+                <div className="admin-stat-label">Admins</div>
+                <div className="admin-stat-value">{users.filter(u => u.is_admin).length}</div>
+              </AdminCard>
+              <AdminCard className="admin-stat-card">
+                <div className="admin-stat-label">Total Balance</div>
+                <div className="admin-stat-value">{formatCurrency(users.reduce((sum, u) => sum + (u.balance || 0), 0))}</div>
+              </AdminCard>
+            </div>
 
-          <div style={{marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
-            <input
-              type="text"
-              placeholder="🔍 Search users by name or email..."
-              value={userSearch}
-              onChange={(e) => setUserSearch(e.target.value)}
-              style={{
-                flex: '1',
-                minWidth: '200px',
-                padding: '10px 15px',
-                border: '1px solid #666',
-                borderRadius: '8px',
-                background: '#1a1a1a',
-                color: '#fff',
-                fontSize: '0.95em'
-              }}
+            <AdminToolbar
+              left={
+                <input
+                  type="text"
+                  placeholder="Search users by name or email..."
+                  value={userSearch}
+                  onChange={(e) => setUserSearch(e.target.value)}
+                  className="admin-search-input"
+                />
+              }
+              right={
+                userSearch ? (
+                  <button
+                    type="button"
+                    className="admin-button admin-button--secondary"
+                    onClick={() => setUserSearch('')}
+                  >
+                    Clear
+                  </button>
+                ) : null
+              }
             />
-            {userSearch && (
-              <button 
-                onClick={() => setUserSearch('')}
-                style={{
-                  padding: '10px 15px',
-                  background: '#666',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: '600'
-                }}
-              >
-                Clear
-              </button>
-            )}
-          </div>
 
-          <button 
-            onClick={() => setShowEmailList(true)}
-            style={{
-              marginBottom: '20px',
-              padding: '10px 20px',
-              background: 'linear-gradient(135deg, #66bb6a, #4caf50)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            📧 Export All Emails
-          </button>
-
-          <div className="users-table-wrapper">
-            <table className="users-table">
+            <AdminTable>
               <thead>
                 <tr>
                   <th>Username</th>
                   <th>Email</th>
                   <th>Balance</th>
-                  <th>Status</th>
+                  <th>Role</th>
                   <th>Bets Placed</th>
                   <th>Joined</th>
                   <th>Actions</th>
@@ -1956,7 +1881,7 @@ function AdminPanel() {
               </thead>
               <tbody>
                 {users
-                  .filter(u => 
+                  .filter(u =>
                     userSearch === '' ||
                     u.username.toLowerCase().includes(userSearch.toLowerCase()) ||
                     u.email.toLowerCase().includes(userSearch.toLowerCase())
@@ -1966,57 +1891,50 @@ function AdminPanel() {
                     const userWinnings = allBets
                       .filter(b => b.user_id === u.id && b.outcome === 'won')
                       .reduce((sum, b) => sum + (b.potential_win - b.amount), 0);
-                  
-                  return (
-                    <tr key={u.id} style={{borderLeft: u.is_admin ? '4px solid #1f4e99' : 'none'}}>
-                      <td>
-                        <div style={{fontWeight: '600', color: u.is_admin ? '#1f4e99' : '#b8c5d6'}}>
-                          {u.is_admin && '👑 '}{u.username}
-                        </div>
-                      </td>
-                      <td style={{fontSize: '0.9em', color: '#888'}}>{u.email}</td>
-                      <td>
-                        <span style={{fontWeight: 'bold', color: '#66bb6a', fontSize: '1.1em'}}>
-                          {formatCurrency(u.balance)}
-                        </span>
-                      </td>
-                      <td>
-                        <span style={{padding: '4px 12px', borderRadius: '20px', fontSize: '0.8em', fontWeight: '600', background: u.is_admin ? 'rgba(31, 78, 153, 0.2)' : 'rgba(102, 187, 106, 0.2)', color: u.is_admin ? '#1f4e99' : '#66bb6a'}}>
-                          {u.is_admin ? '👑 Admin' : '👤 User'}
-                        </span>
-                      </td>
-                      <td>
-                        <div style={{fontSize: '0.9em'}}>
-                          <div style={{color: '#b8c5d6'}}>{userBetsCount} bets</div>
-                          <div style={{color: userWinnings >= 0 ? '#66bb6a' : '#ef5350', fontSize: '0.85em'}}>
+
+                    return (
+                      <tr key={u.id}>
+                        <td>
+                          <div className="admin-card-title">{u.is_admin && '👑 '}{u.username}</div>
+                        </td>
+                        <td className="admin-muted">{u.email}</td>
+                        <td>{formatCurrency(u.balance)}</td>
+                        <td>
+                          <AdminBadge variant={u.is_admin ? 'info' : 'neutral'}>
+                            {u.is_admin ? 'Admin' : 'User'}
+                          </AdminBadge>
+                        </td>
+                        <td>
+                          <div>{userBetsCount} bets</div>
+                          <div className={userWinnings >= 0 ? 'admin-muted' : 'admin-muted'}>
                             {userWinnings >= 0 ? '+' : ''}{formatCurrency(userWinnings)}
                           </div>
-                        </div>
-                      </td>
-                      <td style={{fontSize: '0.9em', color: '#888'}}>
-                        {new Date(u.created_at).toLocaleDateString()}
-                      </td>
-                      <td>
-                        <button 
-                          className="btn"
-                          style={{background: '#9c27b0', padding: '6px 10px', fontSize: '0.8em', whiteSpace: 'nowrap'}}
-                          onClick={() => {
-                            setSelectedUser(u.id);
-                            setNewBalance(u.balance.toString());
-                          }}
-                        >
-                          ⚙️ Options
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                        <td className="admin-muted">
+                          {new Date(u.created_at).toLocaleDateString()}
+                        </td>
+                        <td>
+                          <AdminActionsMenu label="Actions">
+                            <button
+                              type="button"
+                              className="admin-actions-menu__item"
+                              onClick={() => {
+                                setSelectedUser(u.id);
+                                setNewBalance(u.balance.toString());
+                              }}
+                            >
+                              User Options
+                            </button>
+                          </AdminActionsMenu>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
-            </table>
-          </div>
+            </AdminTable>
 
           {/* Mobile Users List */}
-          <div className="users-mobile-list">
+            <div className="users-mobile-list">
             {users
               .filter(u => 
                 userSearch === '' ||
@@ -2038,9 +1956,9 @@ function AdminPanel() {
                       </h4>
                       <p className="user-card-email">{u.email}</p>
                     </div>
-                    <span className={`user-card-badge ${u.is_admin ? 'admin' : 'user'}`}>
-                      {u.is_admin ? '👑 Admin' : '👤 User'}
-                    </span>
+                    <AdminBadge variant={u.is_admin ? 'info' : 'neutral'}>
+                      {u.is_admin ? 'Admin' : 'User'}
+                    </AdminBadge>
                   </div>
 
                   <div className="user-card-body">
@@ -2072,115 +1990,109 @@ function AdminPanel() {
                   </div>
 
                   <div className="user-card-actions">
-                    <button 
-                      className="btn"
-                      style={{background: '#9c27b0', flex: '1'}}
+                    <button
+                      className="admin-button admin-button--secondary"
+                      style={{flex: '1'}}
                       onClick={() => {
                         setSelectedUser(u.id);
                         setNewBalance(u.balance.toString());
                       }}
                     >
-                      ⚙️ Options
+                      User Options
                     </button>
                   </div>
                 </div>
               );
             })}
-          </div>
+            </div>
 
           {selectedUser && (
             <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
-              <div className="modal-content user-options-modal" onClick={(e) => e.stopPropagation()}>
-                <h3 style={{marginBottom: '20px', color: '#1f4e99'}}>⚙️ User Options</h3>
-                <div style={{marginBottom: '20px', background: 'rgba(30, 136, 229, 0.1)', padding: '15px', borderRadius: '8px', border: '1px solid rgba(30, 136, 229, 0.3)'}}>
-                  <p style={{margin: '5px 0', color: '#b8c5d6'}}>
+              <div className="modal-content admin-modal user-options-modal" onClick={(e) => e.stopPropagation()}>
+                <h3>User Options</h3>
+                <div className="admin-modal__section admin-card">
+                  <p>
                     <strong>Username:</strong> {users.find(u => u.id === selectedUser)?.username}
                   </p>
-                  <p style={{margin: '5px 0', color: '#b8c5d6'}}>
-                    <strong>Current Balance:</strong> <span style={{color: '#66bb6a', fontWeight: 'bold'}}>{formatCurrency(users.find(u => u.id === selectedUser)?.balance || 0)}</span>
+                  <p>
+                    <strong>Current Balance:</strong> {formatCurrency(users.find(u => u.id === selectedUser)?.balance || 0)}
                   </p>
-                  <p style={{margin: '0', color: '#b8c5d6'}}>
-                    <strong>Status:</strong> {users.find(u => u.id === selectedUser)?.is_admin ? '👑 Admin' : '👤 Regular User'}
+                  <p>
+                    <strong>Status:</strong> {users.find(u => u.id === selectedUser)?.is_admin ? 'Admin' : 'User'}
                   </p>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="balance">💰 Update Balance</label>
+                <div className="form-group admin-modal__section">
+                  <label htmlFor="balance">Update Balance</label>
                   <input
                     id="balance"
                     type="number"
                     step="0.01"
                     value={newBalance}
                     onChange={(e) => setNewBalance(e.target.value)}
-                    className="mobile-input"
+                    className="admin-input"
                   />
                 </div>
 
-                <div className="form-group" style={{marginBottom: '20px'}}>
+                <div className="form-group admin-modal__section">
                   <label className="mobile-checkbox-label">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={users.find(u => u.id === selectedUser)?.is_admin || false}
                       onChange={() => handleToggleAdminStatus(selectedUser, users.find(u => u.id === selectedUser)?.is_admin || false)}
                       className="mobile-checkbox"
                     />
-                    <span style={{color: '#b8c5d6', fontWeight: '500'}}>👑 Make Admin</span>
+                    <span>Make Admin</span>
                   </label>
                 </div>
 
-                <div className="modal-buttons-mobile">
-                  <button 
-                    className="btn btn-mobile" 
-                    style={{background: '#66bb6a'}}
+                <div className="admin-modal__actions">
+                  <button
+                    className="admin-button admin-button--primary"
                     onClick={() => handleUpdateUserBalance(selectedUser)}
                   >
-                    ✅ Save Balance
+                    Save Balance
                   </button>
-                  <button 
-                    className="btn btn-mobile"
-                    style={{background: '#ff9800'}}
+                  <button
+                    className="admin-button admin-button--secondary"
                     onClick={() => handleResetPassword(selectedUser)}
                   >
-                    🔒 Reset Password
+                    Reset Password
                   </button>
-                  <button 
-                    className="btn btn-mobile btn-secondary"
-                    style={{background: '#ef5350'}}
+                  <button
+                    className="admin-button admin-button--secondary"
                     onClick={() => setSelectedUser(null)}
                   >
-                    ❌ Close
+                    Close
                   </button>
                 </div>
 
-                {/* Delete User Button */}
-                <div className="delete-section-mobile">
-                  <button 
-                    className="btn btn-delete-mobile"
+                <div className="admin-modal__section">
+                  <button
+                    className="admin-button admin-button--destructive"
                     onClick={() => handleDeleteUser(selectedUser)}
                   >
-                    🗑️ Delete Account Permanently
+                    Delete Account Permanently
                   </button>
-                  <p className="delete-warning-mobile">
-                    ⚠️ This action cannot be undone!
-                  </p>
+                  <p className="admin-muted">This action cannot be undone.</p>
                 </div>
 
                 {/* User Bets and Actions */}
-                <div style={{marginTop: 10}}>
-                  <h4 style={{color: '#1f4e99', marginBottom: 8}}>🎲 Bets & Actions</h4>
+                <div className="admin-modal__section">
+                  <h4>Bets & Actions</h4>
                   {userHistoryLoading ? (
-                    <div style={{color: '#b8c5d6'}}>Loading bet and action history...</div>
+                    <div className="admin-muted">Loading bet and action history...</div>
                   ) : (
                     <>
                       <div style={{marginBottom: 16}}>
                         <strong>Bets:</strong>
-                        <div style={{maxHeight: 180, overflowY: 'auto', background: '#181c2f', borderRadius: 6, padding: 8, marginTop: 4}}>
+                        <div className="admin-table-wrapper" style={{maxHeight: 180}}>
                           {userBets.length === 0 ? (
-                            <div style={{color: '#b8c5d6'}}>No bets found.</div>
+                            <div className="admin-muted">No bets found.</div>
                           ) : (
-                            <table style={{width: '100%', fontSize: '0.95em'}}>
+                            <table className="admin-table">
                               <thead>
-                                <tr style={{color: '#64b5f6'}}>
+                                <tr>
                                   <th>Date</th>
                                   <th>Game/Prop</th>
                                   <th>Selection</th>
@@ -2209,13 +2121,13 @@ function AdminPanel() {
                       </div>
                       <div>
                         <strong>Actions:</strong>
-                        <div style={{maxHeight: 120, overflowY: 'auto', background: '#181c2f', borderRadius: 6, padding: 8, marginTop: 4}}>
+                        <div className="admin-table-wrapper" style={{maxHeight: 120}}>
                           {userTransactions.length === 0 ? (
-                            <div style={{color: '#b8c5d6'}}>No actions found.</div>
+                            <div className="admin-muted">No actions found.</div>
                           ) : (
-                            <table style={{width: '100%', fontSize: '0.95em'}}>
+                            <table className="admin-table">
                               <thead>
-                                <tr style={{color: '#64b5f6'}}>
+                                <tr>
                                   <th>Date</th>
                                   <th>Type</th>
                                   <th>Amount</th>
@@ -2242,6 +2154,7 @@ function AdminPanel() {
               </div>
             </div>
           )}
+          </AdminCard>
         </div>
       )}
 
@@ -2251,182 +2164,65 @@ function AdminPanel() {
 
       {/* Game Status Management Modal */}
       {gameStatusModal && (
-        <div 
-          className="modal-overlay" 
-          onClick={() => setGameStatusModal(null)}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-            backdropFilter: 'blur(5px)'
-          }}
-        >
-          <div 
-            className="modal-content" 
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: 'linear-gradient(135deg, #1e2139 0%, #161b2e 100%)',
-              padding: '2rem',
-              borderRadius: '14px',
-              border: '2px solid rgba(31, 78, 153, 0.3)',
-              boxShadow: '0 12px 48px rgba(0, 0, 0, 0.5), 0 0 40px rgba(31, 78, 153, 0.15)',
-              maxWidth: '500px',
-              width: '90%',
-              maxHeight: '85vh',
-              overflowY: 'auto'
-            }}
-          >
-            <h3 style={{color: '#1f4e99', marginBottom: '1rem', textShadow: '0 2px 4px rgba(31, 78, 153, 0.2)'}}>
-              ⚙️ Manage Game Status
-            </h3>
-            <p style={{color: '#b8c5d6', marginBottom: '1.5rem', fontSize: '1rem'}}>
-              <strong style={{color: '#1f4e99'}}>{gameStatusModal.homeTeam} vs {gameStatusModal.awayTeam}</strong>
+        <div className="modal-overlay" onClick={() => setGameStatusModal(null)}>
+          <div className="modal-content admin-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Manage Game Status</h3>
+            <p className="admin-muted">
+              {gameStatusModal.homeTeam} vs {gameStatusModal.awayTeam}
             </p>
-            
-            <div className="form-group" style={{marginBottom: '1.5rem'}}>
-              <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>Game Status</label>
-              <select 
+
+            <div className="form-group admin-modal__section">
+              <label>Game Status</label>
+              <select
                 value={gameStatusModal.status}
-                onChange={(e) => setGameStatusModal({...gameStatusModal, status: e.target.value})}
-                style={{
-                  width: '100%',
-                  padding: '0.8rem',
-                  background: '#0f1419',
-                  border: '2px solid rgba(31, 78, 153, 0.2)',
-                  borderRadius: '8px',
-                  color: '#1f4e99',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
+                onChange={(e) => setGameStatusModal({ ...gameStatusModal, status: e.target.value })}
               >
-                <option value="upcoming" style={{background: '#0f1419', color: '#1f4e99'}}>📅 Scheduled</option>
-                <option value="in_progress" style={{background: '#0f1419', color: '#1f4e99'}}>🏀 In Progress</option>
-                <option value="completed" style={{background: '#0f1419', color: '#1f4e99'}}>✅ Completed</option>
+                <option value="upcoming">Scheduled</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
               </select>
             </div>
 
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem'}}>
+            <div className="admin-form-row">
               <div className="form-group">
-                <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
-                  {gameStatusModal.homeTeam} Score
-                </label>
+                <label>{gameStatusModal.homeTeam} Score</label>
                 <input
                   type="number"
                   value={gameStatusModal.homeScore}
-                  onChange={(e) => setGameStatusModal({...gameStatusModal, homeScore: e.target.value})}
+                  onChange={(e) => setGameStatusModal({ ...gameStatusModal, homeScore: e.target.value })}
                   placeholder="0"
-                  style={{
-                    width: '100%',
-                    padding: '0.8rem',
-                    background: '#0f1419',
-                    border: '2px solid rgba(31, 78, 153, 0.2)',
-                    borderRadius: '8px',
-                    color: '#b8c5d6',
-                    fontSize: '1rem',
-                    transition: 'all 0.3s ease'
-                  }}
                 />
               </div>
               <div className="form-group">
-                <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
-                  {gameStatusModal.awayTeam} Score
-                </label>
+                <label>{gameStatusModal.awayTeam} Score</label>
                 <input
                   type="number"
                   value={gameStatusModal.awayScore}
-                  onChange={(e) => setGameStatusModal({...gameStatusModal, awayScore: e.target.value})}
+                  onChange={(e) => setGameStatusModal({ ...gameStatusModal, awayScore: e.target.value })}
                   placeholder="0"
-                  style={{
-                    width: '100%',
-                    padding: '0.8rem',
-                    background: '#0f1419',
-                    border: '2px solid rgba(31, 78, 153, 0.2)',
-                    borderRadius: '8px',
-                    color: '#b8c5d6',
-                    fontSize: '1rem',
-                    transition: 'all 0.3s ease'
-                  }}
                 />
               </div>
             </div>
 
             {gameStatusModal.status === 'completed' && (
-              <div className="form-group" style={{marginBottom: '2rem'}}>
-                <label style={{color: '#1f4e99', marginBottom: '0.5rem', display: 'block', fontWeight: '600'}}>
-                  🏆 Winner (resolves bets)
-                </label>
-                <select 
+              <div className="form-group admin-modal__section">
+                <label>Winner (resolves bets)</label>
+                <select
                   value={gameStatusModal.winner}
-                  onChange={(e) => setGameStatusModal({...gameStatusModal, winner: e.target.value})}
-                  style={{
-                    width: '100%',
-                    padding: '0.8rem',
-                    background: '#0f1419',
-                    border: '2px solid rgba(102, 187, 106, 0.3)',
-                    borderRadius: '8px',
-                    color: '#66bb6a',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
+                  onChange={(e) => setGameStatusModal({ ...gameStatusModal, winner: e.target.value })}
                 >
-                  <option value="" style={{background: '#0f1419', color: '#888'}}>-- Select Winner --</option>
-                  <option value={gameStatusModal.homeTeam} style={{background: '#0f1419', color: '#66bb6a'}}>
-                    {gameStatusModal.homeTeam} (Home)
-                  </option>
-                  <option value={gameStatusModal.awayTeam} style={{background: '#0f1419', color: '#66bb6a'}}>
-                    {gameStatusModal.awayTeam} (Away)
-                  </option>
+                  <option value="">-- Select Winner --</option>
+                  <option value={gameStatusModal.homeTeam}>{gameStatusModal.homeTeam} (Home)</option>
+                  <option value={gameStatusModal.awayTeam}>{gameStatusModal.awayTeam} (Away)</option>
                 </select>
               </div>
             )}
 
-            <div style={{display: 'flex', gap: '1rem', marginTop: '2rem'}}>
-              <button 
-                className="btn" 
-                onClick={handleUpdateGameStatus}
-                style={{
-                  flex: 1,
-                  background: 'linear-gradient(135deg, #66bb6a 0%, #43a047 100%)',
-                  color: 'white',
-                  padding: '0.9rem 1.5rem',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  fontSize: '1rem',
-                  boxShadow: '0 4px 12px rgba(102, 187, 106, 0.3)'
-                }}
-              >
-                ✅ Update Game
+            <div className="admin-modal__actions">
+              <button className="admin-button admin-button--primary" onClick={handleUpdateGameStatus}>
+                Update Game
               </button>
-              <button 
-                className="btn btn-secondary" 
-                onClick={() => setGameStatusModal(null)}
-                style={{
-                  flex: 1,
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: '#b8c5d6',
-                  padding: '0.9rem 1.5rem',
-                  border: '2px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  fontSize: '1rem'
-                }}
-              >
+              <button className="admin-button admin-button--secondary" onClick={() => setGameStatusModal(null)}>
                 Cancel
               </button>
             </div>
@@ -2436,86 +2232,34 @@ function AdminPanel() {
 
       {/* Email List Modal */}
       {showEmailList && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.7)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            background: '#1a1f2e',
-            borderRadius: '12px',
-            padding: '2rem',
-            maxWidth: '600px',
-            width: '90%',
-            maxHeight: '80vh',
-            overflow: 'auto',
-            border: '1px solid rgba(31, 78, 153, 0.3)',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
-          }}>
-            <h2 style={{marginTop: 0, color: '#1f4e99', marginBottom: '1rem'}}>📧 All User Emails</h2>
-            <p style={{color: '#888a9b', marginBottom: '1.5rem', fontSize: '0.9rem'}}>
+        <div className="modal-overlay" onClick={() => setShowEmailList(false)}>
+          <div className="modal-content admin-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>All User Emails</h3>
+            <p className="admin-muted">
               {users.length} email{users.length !== 1 ? 's' : ''} ready to copy
             </p>
-            
-            <textarea 
+
+            <textarea
               readOnly
               value={users.map(u => u.email).join('\n')}
-              style={{
-                width: '100%',
-                height: '300px',
-                padding: '1rem',
-                background: 'rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(31, 78, 153, 0.2)',
-                borderRadius: '8px',
-                color: '#e9f1ff',
-                fontFamily: 'monospace',
-                fontSize: '0.95rem',
-                resize: 'none',
-                boxSizing: 'border-box'
-              }}
+              className="admin-input"
+              style={{ height: '300px', resize: 'none', fontFamily: 'monospace' }}
             />
-            
-            <div style={{display: 'flex', gap: '10px', marginTop: '1.5rem', flexWrap: 'wrap'}}>
+
+            <div className="admin-modal__actions">
               <button
+                className="admin-button admin-button--primary"
                 onClick={() => {
                   const text = users.map(u => u.email).join('\n');
                   navigator.clipboard.writeText(text);
                   alert('Emails copied to clipboard!');
                 }}
-                style={{
-                  flex: 1,
-                  padding: '10px 20px',
-                  background: 'linear-gradient(135deg, #1f4e99, #3b82f6)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  minWidth: '120px'
-                }}
               >
-                📋 Copy All
+                Copy All
               </button>
               <button
+                className="admin-button admin-button--secondary"
                 onClick={() => setShowEmailList(false)}
-                style={{
-                  flex: 1,
-                  padding: '10px 20px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: '#b8c5d6',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  minWidth: '120px'
-                }}
               >
                 Close
               </button>
