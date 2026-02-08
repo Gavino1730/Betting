@@ -154,6 +154,34 @@ function AdminPanel() {
     }
   };
 
+  const seedGamesFromSchedule = async () => {
+    if (!window.confirm('Seed games from the current team schedules? This may create duplicate games if run multiple times.')) {
+      return;
+    }
+    try {
+      setError('');
+      const response = await apiClient.post('/games/seed-from-schedule');
+      alert(response.data?.message || 'Games seeded successfully');
+      fetchGames();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to seed games from schedule');
+    }
+  };
+
+  const toggleAllVisibility = async (isVisible) => {
+    if (!window.confirm(`Are you sure you want to ${isVisible ? 'show' : 'hide'} all games?`)) {
+      return;
+    }
+    try {
+      setError('');
+      const response = await apiClient.put('/games/bulk/toggle-visibility', { isVisible });
+      alert(response.data?.message || `All games ${isVisible ? 'shown' : 'hidden'}`);
+      fetchGames();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to toggle visibility for all games');
+    }
+  };
+
   const handleCreateGame = async (e) => {
     e.preventDefault();
     try {

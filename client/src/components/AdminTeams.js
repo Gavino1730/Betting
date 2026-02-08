@@ -280,9 +280,9 @@ function AdminTeams() {
   const handleEditScheduleGame = (idx) => {
     const game = selectedTeam.schedule[idx];
     setEditingGameIdx(idx);
-    setEditingGameData({ 
-                  <h3 className="admin-section__title">Team Roster</h3>
-      score: game.score || '-' 
+    setEditingGameData({
+      result: game.result || '',
+      score: game.score || '-'
     });
   };
 
