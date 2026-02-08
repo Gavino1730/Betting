@@ -1,7 +1,6 @@
 # Cloudflare Pages redirects for SPA routing
 
-# Redirect www to non-www
-https://www.valiantpicks.com/* https://valiantpicks.com/:splat 301
+# Redirects for www -> apex must be configured in Cloudflare DNS or Pages settings.
 
 # SEO files should be served as-is
 /robots.txt /robots.txt 200
@@ -13,6 +12,9 @@ https://www.valiantpicks.com/* https://valiantpicks.com/:splat 301
 # Assets should be served as-is
 /assets/* /assets/:splat 200
 /static/* /static/:splat 200
+
+# Serve index.html explicitly to avoid rewrite loops
+/index.html /index.html 200
 
 # All other routes should serve index.html (SPA routing)
 /* /index.html 200
