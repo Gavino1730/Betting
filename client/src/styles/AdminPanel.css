@@ -28,7 +28,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--admin-border-strong);
   transition: 0.3s;
   border-radius: 26px;
 }
@@ -46,7 +46,7 @@
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+  background-color: rgba(59, 130, 246, 0.6);
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
@@ -56,7 +56,7 @@
 .toggle-label {
   font-size: 0.95rem;
   font-weight: 500;
-  color: #e0e0e0;
+  color: var(--admin-muted);
 }
 
 /* Modal Overlay */
@@ -220,7 +220,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--admin-border-strong);
   transition: 0.3s;
   border-radius: 24px;
 }
@@ -238,7 +238,7 @@
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background-color: #66bb6a;
+  background-color: rgba(59, 130, 246, 0.6);
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
@@ -254,7 +254,7 @@
 .admin-games {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .admin-games-toolbar {
@@ -300,13 +300,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
+  min-width: 18px;
+  height: 18px;
   padding: 0 6px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: #c9cfdd;
-  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #c0c8d6;
+  font-size: 0.7rem;
   font-weight: 600;
 }
 
@@ -366,6 +366,12 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
+.admin-bulk-bar .admin-button--destructive {
+  background: rgba(180, 35, 24, 0.08);
+  border-color: rgba(180, 35, 24, 0.35);
+  color: #f2b3b3;
+}
+
 .admin-bulk-count {
   color: #c9cfdd;
   font-size: 0.85rem;
@@ -422,23 +428,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 12px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  background: var(--admin-panel);
 }
 
 .admin-section-header--sticky {
   position: sticky;
-  top: 12px;
-  z-index: 5;
-  background: #12172b;
-  padding-top: 12px;
+  top: 64px;
+  z-index: 4;
+  background: var(--admin-panel);
 }
 
 .admin-section-title {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #e0e6f2;
 }
@@ -448,7 +455,7 @@
   border: none;
   color: #e0e6f2;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -458,26 +465,26 @@
 
 .admin-empty-state {
   text-align: center;
-  padding: 28px 12px;
+  padding: 22px 12px;
   color: #9aa3b2;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .admin-game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 16px;
-  grid-auto-rows: 220px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  grid-auto-rows: 190px;
 }
 
 .admin-game-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: rgba(17, 21, 38, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 14px;
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  padding: 10px 12px;
   height: 100%;
 }
 
@@ -485,20 +492,20 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: start;
-  gap: 10px;
+  gap: 8px;
 }
 
 .admin-game-card__title {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .admin-game-card__teams {
   display: inline-flex;
   flex-wrap: wrap;
   gap: 6px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #e9edf6;
 }
@@ -509,15 +516,34 @@
 }
 
 .admin-game-card__meta {
-  font-size: 0.8rem;
-  color: #9aa3b2;
+  font-size: 0.75rem;
+  color: var(--admin-muted);
 }
 
 .admin-game-card__badges {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
   justify-content: flex-end;
+  align-items: center;
+}
+
+.admin-game-card__badges .admin-badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  letter-spacing: 0.02em;
+}
+
+.admin-game-card__badges .admin-badge--success {
+  background: rgba(29, 122, 70, 0.12);
+  border-color: rgba(29, 122, 70, 0.3);
+  color: #8fd9b0;
+}
+
+.admin-game-card__badges .admin-badge--warning {
+  background: rgba(179, 106, 9, 0.12);
+  border-color: rgba(179, 106, 9, 0.3);
+  color: #e9c07b;
 }
 
 .badge {
@@ -550,23 +576,38 @@
 
 .admin-game-card__body {
   display: grid;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.admin-game-card__row--split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-game-card__field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .admin-game-card__row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
-  color: #b3bccd;
+  font-size: 0.75rem;
+  color: var(--admin-muted);
 }
 
-.admin-game-card__row .label {
-  color: #8f98a8;
+.admin-game-card__row .label,
+.admin-game-card__field .label {
+  color: var(--admin-muted-strong);
   font-weight: 500;
 }
 
-.admin-game-card__row .value {
+.admin-game-card__row .value,
+.admin-game-card__field .value {
   color: #d5dbe6;
   font-weight: 500;
 }
@@ -574,14 +615,32 @@
 .admin-game-card__actions {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--admin-border);
 }
 
 .admin-game-card__actions--compact {
   padding-top: 0;
   border-top: none;
+}
+
+.admin-game-card__actions .admin-button {
+  padding: 5px 10px;
+  font-size: 0.82rem;
+}
+
+.admin-game-card__actions .admin-actions-menu__summary {
+  padding: 5px 10px;
+  font-size: 0.82rem;
+}
+
+.admin-game-card__actions .toggle-switch {
+  opacity: 0.85;
+}
+
+.admin-game-card__actions .toggle-switch:hover {
+  opacity: 1;
 }
 
 .admin-overflow {
@@ -622,45 +681,61 @@
 }
 
 .admin-completed-section {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 12px;
-  margin-top: 12px;
+  border-top: 1px solid var(--admin-border);
+  padding-top: 8px;
+  margin-top: 10px;
+  opacity: 0.85;
+}
+
+.admin-section-header--completed {
+  background: var(--admin-panel);
+  border-color: var(--admin-border);
+}
+
+.admin-section-header--completed .admin-section-title,
+.admin-section-header--completed .admin-section-toggle {
+  color: var(--admin-text);
+}
+
+.admin-section-header--completed .count-badge {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--admin-muted);
 }
 
 .admin-completed-list {
   display: grid;
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .admin-completed-row {
   display: grid;
   grid-template-columns: auto 2fr 1fr auto auto;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(17, 21, 38, 0.75);
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--admin-radius);
+  border: 1px solid var(--admin-border);
+  background: var(--admin-panel);
 }
 
 .admin-completed-main {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .admin-completed-winner {
-  font-size: 0.85rem;
-  color: #cbd3e3;
+  font-size: 0.8rem;
+  color: var(--admin-muted-strong);
   font-weight: 500;
 }
 
 .admin-checkbox {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
+  gap: 6px;
+  font-size: 0.78rem;
   color: #aab3c2;
 }
 
@@ -678,19 +753,19 @@
 }
 
 .admin-toggle-compact {
-  width: 42px;
-  height: 20px;
+  width: 36px;
+  height: 18px;
 }
 
 .admin-toggle-compact .toggle-slider:before {
-  height: 14px;
-  width: 14px;
+  height: 12px;
+  width: 12px;
   left: 3px;
   bottom: 3px;
 }
 
 .admin-toggle-compact input:checked + .toggle-slider:before {
-  transform: translateX(20px);
+  transform: translateX(16px);
 }
 
 @media (max-width: 768px) {

@@ -22,6 +22,7 @@
   background: var(--admin-bg);
   min-height: 100vh;
   color: var(--admin-text);
+  scroll-behavior: smooth;
 }
 
 .admin-container {
@@ -45,13 +46,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 16px 0;
+  gap: 12px;
+  padding: 12px 0;
 }
 
 .admin-header__title h1 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: var(--admin-text);
 }
@@ -59,46 +60,48 @@
 .admin-header__title p {
   margin: 4px 0 0;
   color: var(--admin-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .admin-header__actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .admin-tabs {
-  display: flex;
-  gap: 10px;
+  display: inline-flex;
+  gap: 0;
   align-items: center;
   flex-wrap: wrap;
-  padding: 12px 0 20px;
-  border-bottom: 1px solid var(--admin-border);
+  padding: 4px;
+  margin: 12px 0 18px;
+  border: 1px solid var(--admin-border);
+  border-radius: 999px;
+  background: var(--admin-panel);
 }
 
 .admin-tab {
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   color: var(--admin-muted);
-  padding: 8px 14px;
+  padding: 6px 12px;
   border-radius: 999px;
   font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .admin-tab:hover {
   color: var(--admin-text);
-  border-color: var(--admin-border-strong);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .admin-tab.active {
   color: var(--admin-text);
-  background: rgba(43, 93, 187, 0.15);
-  border-color: rgba(43, 93, 187, 0.4);
+  background: rgba(255, 255, 255, 0.09);
 }
 
 .admin-section {
@@ -121,16 +124,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin: 16px 0 20px;
+  margin: 12px 0 16px;
 }
 
 .admin-toolbar__left,
 .admin-toolbar__right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -145,9 +148,10 @@
 .admin-segmented__btn {
   background: transparent;
   border: none;
-  padding: 8px 16px;
+  padding: 6px 12px;
   color: var(--admin-muted);
   font-weight: 600;
+  font-size: 0.82rem;
   cursor: pointer;
 }
 
@@ -160,9 +164,10 @@
   border: 1px solid var(--admin-border-strong);
   background: transparent;
   color: var(--admin-text);
-  padding: 8px 14px;
+  padding: 6px 12px;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -201,8 +206,8 @@
 }
 
 .admin-button--compact {
-  padding: 6px 10px;
-  font-size: 0.85rem;
+  padding: 5px 10px;
+  font-size: 0.8rem;
 }
 
 .admin-card {
@@ -342,16 +347,21 @@
 .admin-actions-menu__summary {
   list-style: none;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 8px;
-  border: 1px solid var(--admin-border-strong);
-  background: var(--admin-panel);
+  border: 1px solid var(--admin-border);
+  background: transparent;
   color: var(--admin-text);
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .admin-actions-menu__summary::-webkit-details-marker {
   display: none;
+}
+
+.admin-actions-menu__summary:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .admin-actions-menu__panel {
@@ -388,6 +398,15 @@
 
 .admin-actions-menu__item:hover {
   background: rgba(255, 255, 255, 0.06);
+}
+
+.admin-tab:focus-visible,
+.admin-segmented__btn:focus-visible,
+.admin-button:focus-visible,
+.admin-actions-menu__summary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
 }
 
 .admin-actions-menu__item--destructive {
@@ -493,10 +512,10 @@
 }
 
 .admin-game-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 8px;
 }
 
 .admin-game-card__title h4 {
@@ -506,21 +525,20 @@
 }
 
 .admin-game-card__meta {
-  margin-top: 12px;
-  display: grid;
-  gap: 6px;
+  margin-top: 0;
+  display: block;
   color: var(--admin-muted);
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
 .admin-game-card__actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   flex-wrap: wrap;
   border-top: 1px solid var(--admin-border);
-  padding-top: 12px;
-  margin-top: 12px;
+  padding-top: 8px;
+  margin-top: 8px;
 }
 
 .admin-toggle-label {
@@ -572,7 +590,7 @@
   .admin-game-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
+    gap: 12px;
   }
 
   .admin-game-card,
@@ -588,7 +606,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 10px 12px;
     background: var(--admin-panel);
     border: 1px solid var(--admin-border);
     border-radius: var(--admin-radius);
@@ -596,7 +614,7 @@
 
   .admin-bulk-bar {
     margin: 16px 0;
-    padding: 12px 14px;
+    padding: 10px 12px;
     border: 1px solid var(--admin-border);
     border-radius: var(--admin-radius);
     background: var(--admin-panel);

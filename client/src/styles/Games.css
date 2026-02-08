@@ -63,7 +63,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 1.1rem;
-  scroll-margin-top: 90px;
+  scroll-margin-top: calc(var(--navbar-height) + 72px);
 }
 
 .pick-form-panel.boys-game {
@@ -2484,6 +2484,35 @@
 
 
 @media (max-width: 768px) {
+  .games-page {
+    gap: 0.85rem;
+  }
+
+  .place-picks-layout {
+    order: 2;
+  }
+
+  .prop-picks-section {
+    order: 3;
+  }
+
+  .info-accordions {
+    order: 4;
+  }
+
+  .games-page .page-header {
+    padding: 0.65rem 0 0.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .games-page .page-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .games-page .page-subtitle {
+    font-size: 0.95rem;
+  }
+
   .place-picks-layout {
     gap: 1rem;
   }
@@ -2494,19 +2523,30 @@
 
   .games-page .filter-buttons {
     position: sticky;
-    top: 0;
-    z-index: 5;
-    padding: 0.35rem;
+    top: calc(var(--navbar-height) + env(safe-area-inset-top));
+    z-index: 7;
+    padding: 0.25rem;
     margin-bottom: 0.5rem;
     width: 100%;
-    background: rgba(18, 22, 36, 0.95);
-    backdrop-filter: blur(6px);
+    background: rgba(18, 22, 36, 0.96);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    gap: 0.15rem;
   }
 
   .games-page .filter-btn {
-    min-height: 44px;
-    padding: 0.4rem 0.9rem;
-    font-size: 0.78rem;
+    min-height: 36px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.74rem;
+    border-radius: 999px;
+  }
+
+  .games-page .filter-btn.active {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #f2f6ff;
+    box-shadow: none;
   }
 
   .games-list {
@@ -2514,20 +2554,41 @@
   }
 
   .game-card-btn {
-    padding: 0.75rem 0.85rem;
-    min-height: auto;
+    padding: 0.7rem 0.8rem;
+    min-height: 86px;
     box-shadow: none;
     border-radius: 10px;
+    background: rgba(20, 24, 36, 0.92);
+    border-color: rgba(255, 255, 255, 0.08);
   }
 
   .game-card-btn.active {
-    border-color: rgba(31, 78, 153, 0.5);
-    background: rgba(24, 31, 52, 0.95);
+    border-color: rgba(31, 78, 153, 0.35);
+    background: rgba(22, 28, 42, 0.96);
     box-shadow: none;
   }
 
+  .game-card-btn.active::before {
+    width: 2px;
+    background: rgba(31, 78, 153, 0.45);
+  }
+
+  .game-card-btn.active.girls-game::before {
+    background: rgba(194, 24, 91, 0.4);
+  }
+
+  .game-card-btn.boys-game,
+  .game-card-btn.girls-game {
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .game-card-header {
-    margin-bottom: 0.45rem;
+    display: none;
+  }
+
+  .game-card-location,
+  .game-badge {
+    display: none;
   }
 
   .team-name-text {
@@ -2540,21 +2601,21 @@
   }
 
   .pick-form-panel {
-    padding: 0.9rem;
+    padding: 0.75rem;
     border-radius: 10px;
   }
 
   .pick-form-header {
-    margin-bottom: 0.7rem;
-    padding-bottom: 0.6rem;
+    margin-bottom: 0.55rem;
+    padding-bottom: 0.45rem;
   }
 
   .selected-game-name {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
   }
 
   .expanded-bet-form {
-    gap: 0.8rem;
+    gap: 0.6rem;
   }
 
   .form-group label {
@@ -2563,18 +2624,18 @@
   }
 
   .field-help {
-    font-size: 0.78rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.76rem;
+    margin-bottom: 0.35rem;
   }
 
   .team-selection {
     grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
 
   .team-btn {
-    min-height: 44px;
-    padding: 0.75rem;
+    min-height: 52px;
+    padding: 0.65rem;
     border-radius: 10px;
     box-shadow: none;
   }
@@ -2608,11 +2669,19 @@
   }
 
   .confidence-btn {
-    min-height: 44px;
-    padding: 0.5rem 0.35rem;
+    min-height: 40px;
+    padding: 0.4rem 0.25rem;
     border-radius: 0;
     border: none;
     border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .confidence-label {
+    font-size: 0.78rem;
+  }
+
+  .confidence-multiplier {
+    font-size: 0.75rem;
   }
 
   .confidence-btn:last-child {
@@ -2661,6 +2730,7 @@
     padding-left: 0.9rem;
     padding-right: 0.9rem;
     padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem);
+    z-index: 6;
   }
 
   .pick-form-submit {

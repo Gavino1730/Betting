@@ -1157,14 +1157,16 @@ function AdminPanel() {
                     </div>
                   </div>
 
-                  <div className="admin-game-card__body">
-                    <div className="admin-game-card__row">
-                      <span className="label">Type</span>
-                      <span className="value">{game.team_type}</span>
-                    </div>
-                    <div className="admin-game-card__row">
-                      <span className="label">Status</span>
-                      <span className="value">{game.status || 'Scheduled'}</span>
+                  <div className="admin-game-card__body admin-game-card__body--split">
+                    <div className="admin-game-card__row admin-game-card__row--split">
+                      <div className="admin-game-card__field">
+                        <span className="label">Type</span>
+                        <span className="value">{game.team_type}</span>
+                      </div>
+                      <div className="admin-game-card__field">
+                        <span className="label">Status</span>
+                        <span className="value">{game.status || 'Scheduled'}</span>
+                      </div>
                     </div>
                   </div>
 
