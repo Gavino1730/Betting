@@ -1749,7 +1749,7 @@ function AdminPanel() {
                         padding: '0.75rem',
                         borderRadius: '6px',
                         border: editingBetOutcome === 'won' ? '2px solid #66bb6a' : '1px solid #444',
-                        background: editingBetOutcome === 'won' ? 'rgba(102, 187, 106, 0.2)' : '#2a2a2a',
+                        background: editingBetOutcome === 'won' ? 'rgba(102, 187, 106, 0.2)' : 'var(--color-surface)',
                         color: editingBetOutcome === 'won' ? '#66bb6a' : '#b0b0b0',
                         cursor: 'pointer',
                         fontWeight: 'bold'
@@ -1764,7 +1764,7 @@ function AdminPanel() {
                         padding: '0.75rem',
                         borderRadius: '6px',
                         border: editingBetOutcome === 'lost' ? '2px solid #ef5350' : '1px solid #444',
-                        background: editingBetOutcome === 'lost' ? 'rgba(239, 83, 80, 0.2)' : '#2a2a2a',
+                        background: editingBetOutcome === 'lost' ? 'rgba(239, 83, 80, 0.2)' : 'var(--color-surface)',
                         color: editingBetOutcome === 'lost' ? '#ef5350' : '#b0b0b0',
                         cursor: 'pointer',
                         fontWeight: 'bold'

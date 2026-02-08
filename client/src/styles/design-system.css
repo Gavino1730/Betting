@@ -37,6 +37,13 @@
   --card-shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.26);
   --card-border: var(--color-border);
   --icon-color: rgba(255, 255, 255, 0.9);
+
+  --header-bg: #0f1722;
+  --header-border: rgba(255, 255, 255, 0.1);
+  --header-text: #eef2f7;
+  --header-muted: rgba(238, 242, 247, 0.7);
+  --header-hover: rgba(255, 255, 255, 0.06);
+  --header-active: rgba(255, 255, 255, 0.1);
 }
 
 .ds-container,

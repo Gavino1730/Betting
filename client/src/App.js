@@ -52,6 +52,20 @@ const LoadingSpinner = () => (
   </div>
 );
 
+const NavLink = ({ label, pageKey, currentPage, onNavigate, className }) => {
+  const isActive = currentPage === pageKey;
+  return (
+    <button
+      type="button"
+      onClick={() => onNavigate(pageKey)}
+      className={`nav-link${isActive ? ' active' : ''}${className ? ` ${className}` : ''}`}
+      aria-current={isActive ? 'page' : undefined}
+    >
+      {label}
+    </button>
+  );
+};
+
 function GiftBalanceWatcher({ user, updateUser }) {
   const { showToast } = useToast();
   const checkIntervalRef = useRef(null);
@@ -124,9 +138,12 @@ function AppContent() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const mobileMenuRef = useRef(null);
   const mobileMenuCloseRef = useRef(null);
   const mobileMenuToggleRef = useRef(null);
+  const userMenuRef = useRef(null);
+  const userMenuButtonRef = useRef(null);
   const profilePollRef = useRef({ timeoutId: null, delay: 15000, inFlight: false });
   const previousNotificationIds = useRef(new Set());
   
@@ -218,6 +235,42 @@ function AppContent() {
       }
     };
   }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    if (!userMenuOpen) {
+      return undefined;
+    }
+
+    const handleOutsideClick = (event) => {
+      const menuElement = userMenuRef.current;
+      const triggerElement = userMenuButtonRef.current;
+
+      if (!menuElement || !triggerElement) {
+        return;
+      }
+
+      if (!menuElement.contains(event.target) && !triggerElement.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setUserMenuOpen(false);
+        if (userMenuButtonRef.current) {
+          userMenuButtonRef.current.focus();
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [userMenuOpen]);
 
   const fetchUnreadCount = useCallback(async () => {
     try {
@@ -361,6 +414,7 @@ function AppContent() {
   const handlePageChange = (newPage) => {
     navigate(`/${newPage}`);
     setMobileMenuOpen(false); // Close mobile menu on navigation
+    setUserMenuOpen(false);
   };
 
   if (!token) {
@@ -409,38 +463,21 @@ function AppContent() {
             <span>Valiant Picks</span>
           </div>
           <div className="nav-center">
-            <button onClick={() => handlePageChange('dashboard')} className={page === 'dashboard' ? 'active' : ''}>
-              Dashboard
-            </button>
-            <button onClick={() => handlePageChange('games')} className={`place-picks-btn${page === 'games' ? ' active' : ''}`}>
-              Place Picks
-            </button>
-            <button onClick={() => handlePageChange('teams')} className={page === 'teams' ? 'active' : ''}>
-              Teams
-            </button>
-            <button onClick={() => handlePageChange('bets')} className={page === 'bets' ? 'active' : ''}>
-              My Picks
-            </button>
-            <button onClick={() => handlePageChange('leaderboard')} className={page === 'leaderboard' ? 'active' : ''}>
-              Leaderboard
-            </button>
-            <button onClick={() => handlePageChange('howto')} className={page === 'howto' ? 'active' : ''}>
-              How to Use
-            </button>
-            {user && (user.is_admin || user.isAdminUser) && (
-              <button onClick={() => handlePageChange('admin')} className={`nav-admin ${page === 'admin' ? 'active' : ''}`}>
-                Admin
-              </button>
-            )}
+            <NavLink label="Dashboard" pageKey="dashboard" currentPage={page} onNavigate={handlePageChange} />
+            <NavLink label="Place Picks" pageKey="games" currentPage={page} onNavigate={handlePageChange} />
+            <NavLink label="Teams" pageKey="teams" currentPage={page} onNavigate={handlePageChange} />
+            <NavLink label="My Picks" pageKey="bets" currentPage={page} onNavigate={handlePageChange} />
+            <NavLink label="Leaderboard" pageKey="leaderboard" currentPage={page} onNavigate={handlePageChange} />
+            <NavLink label="How to Use" pageKey="howto" currentPage={page} onNavigate={handlePageChange} />
           </div>
           <div className="nav-right">
-            <div className="balance-display" aria-label="Account balance">
+            <div className="balance-display balance-pill" aria-label="Account balance">
               <span className="balance-label">Balance</span>
               <span className="balance-amount">{formatCurrency(currentUser?.balance || 0)}</span>
             </div>
             <button 
               onClick={() => handlePageChange('notifications')} 
-              className={`notification-icon-btn ${page === 'notifications' ? 'active' : ''}`}
+              className={`notification-icon-btn nav-icon-button${page === 'notifications' ? ' active' : ''}`}
               aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
             >
               🔔
@@ -448,12 +485,45 @@ function AppContent() {
                 <span className="notification-badge" aria-hidden="true">{unreadCount}</span>
               )}
             </button>
-            <div className="user-info" title={currentUser?.username || 'User'}>
-              <span className="username">{currentUser?.username || 'User'}</span>
+            <div className="nav-user">
+              <button
+                type="button"
+                className="nav-user-trigger"
+                onClick={() => setUserMenuOpen((prev) => !prev)}
+                aria-haspopup="menu"
+                aria-expanded={userMenuOpen}
+                ref={userMenuButtonRef}
+                title={currentUser?.username || 'User'}
+              >
+                <span className="nav-username">{currentUser?.username || 'User'}</span>
+                <span className="nav-user-chevron" aria-hidden="true">▾</span>
+              </button>
+              <div
+                className={`nav-user-menu${userMenuOpen ? ' open' : ''}`}
+                role="menu"
+                aria-hidden={!userMenuOpen}
+                ref={userMenuRef}
+              >
+                {user && (user.is_admin || user.isAdminUser) && (
+                  <button
+                    type="button"
+                    className="nav-user-item nav-user-item--muted"
+                    role="menuitem"
+                    onClick={() => handlePageChange('admin')}
+                  >
+                    Admin
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="nav-user-item"
+                  role="menuitem"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
             </div>
-            <button onClick={handleLogout} className="logout-btn" aria-label="Log out">
-              Logout
-            </button>
           </div>
           
           {/* Mobile Menu Toggle */}
