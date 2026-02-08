@@ -1,4 +1,5 @@
 const { supabase } = require('../supabase');
+const { handleSupabaseError } = require('../utils/supabaseErrorHandler');
 
 class Bet {
   static async create(userId, gameId, confidence, selectedTeam, amount, odds) {
@@ -18,10 +19,15 @@ class Bet {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        handleSupabaseError(error, 'creating bet');
+      }
       return data;
     } catch (err) {
-      throw new Error(`Error creating bet: ${err.message}`);
+      if (err.message.includes('Database temporarily unavailable')) {
+        throw err;
+      }
+      handleSupabaseError(err, 'creating bet');
     }
   }
 
@@ -50,13 +56,14 @@ class Bet {
       const { data, error } = await query;
 
       if (error) {
-        console.error('Supabase error in findByUserId:', error);
-        throw error;
+        handleSupabaseError(error, 'fetching user bets', '[Bet.findByUserId] ');
       }
       return data || [];
     } catch (err) {
-      console.error('findByUserId exception:', err);
-      throw new Error(`Error fetching user bets: ${err.message}`);
+      if (err.message.includes('Database temporarily unavailable')) {
+        throw err;
+      }
+      handleSupabaseError(err, 'fetching user bets', '[Bet.findByUserId] ');
     }
   }
 
@@ -141,10 +148,15 @@ class Bet {
         `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        handleSupabaseError(error, 'fetching all bets');
+      }
       return data || [];
     } catch (err) {
-      throw new Error(`Error fetching all bets: ${err.message}`);
+      if (err.message.includes('Database temporarily unavailable')) {
+        throw err;
+      }
+      handleSupabaseError(err, 'fetching all bets');
     }
   }
 

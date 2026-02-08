@@ -451,20 +451,19 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
       <div className="dashboard-grid school-grid">
         {/* Left Column */}
         <div className="dashboard-main-column">
-          {/* Spin Wheel Modal */}
-          <SpinWheel 
-            isOpen={showSpinWheel} 
-            onClose={() => setShowSpinWheel(false)}
-            onPrizeWon={handleSpinWheelPrize} 
-          />
+          {/* Welcome Banner */}
+          <div className="card welcome-banner">
+            <h2>Welcome back, {user?.username || 'Bettor'}! 🎉</h2>
+            <p>Your current balance: <strong style={{color: '#4caf50', fontSize: '1.2rem'}}>{formatCurrency(balance)}</strong></p>
+            <p>Ready to make some picks? Check out the upcoming games and start winning!</p>
+          </div>
 
-          {/* Place a Pick CTA - TEMPORARILY HIDDEN
+          {/* Place a Pick CTA */}
           <div className="card pick-cta-card">
-            <h3>🎲 Want to Place Your Picks?</h3>
+            <h3>🎲 Place Your Picks</h3>
             <p style={{fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.75rem'}}>
-              All betting has moved to the <strong style={{color: '#4caf50'}}>Place Picks</strong> page!
+              View upcoming games and make your predictions on Valiant sports!
             </p>
-            <p>Click below to view upcoming games and make your predictions on Valiant sports.</p>
             <button 
               className="btn btn-primary btn-large"
               onClick={() => onNavigate && onNavigate('games')}
@@ -489,12 +488,7 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
             >
               🎰 Spin Daily Wheel - Win up to 10,000 VB!
             </button>
-            <div className="balance-display">
-              <span className="balance-label">Your Balance:</span>
-              <span className="balance-amount">{formatCurrency(balance)}</span>
-            </div>
           </div>
-          */}
 
           {/* Spin Wheel Modal */}
           <SpinWheel 

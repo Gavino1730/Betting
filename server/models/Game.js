@@ -1,4 +1,5 @@
 const { supabase } = require('../supabase');
+const { handleSupabaseError } = require('../utils/supabaseErrorHandler');
 
 const Game = {
   create: async (gameData) => {
@@ -57,10 +58,15 @@ const Game = {
         .select('*')
         .order('game_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        handleSupabaseError(error, 'fetching games');
+      }
       return data || [];
     } catch (err) {
-      throw new Error(`Error fetching games: ${err.message}`);
+      if (err.message.includes('Database temporarily unavailable')) {
+        throw err;
+      }
+      handleSupabaseError(err, 'fetching games');
     }
   },
 

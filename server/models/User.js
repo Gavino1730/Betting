@@ -1,5 +1,6 @@
 const { supabase } = require('../supabase');
 const bcrypt = require('bcryptjs');
+const { handleSupabaseError } = require('../utils/supabaseErrorHandler');
 
 class User {
   static async create(username, email, password) {
@@ -26,10 +27,15 @@ class User {
         .eq('id', id)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {
+        handleSupabaseError(error, 'finding user');
+      }
       return data;
     } catch (err) {
-      throw new Error(`Error finding user: ${err.message}`);
+      if (err.message.includes('Database temporarily unavailable')) {
+        throw err;
+      }
+      handleSupabaseError(err, 'finding user');
     }
   }
 
