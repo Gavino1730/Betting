@@ -573,3 +573,73 @@
     font-size: 10px;
   }
 }
+
+/* Admin Teams neutral overrides */
+.admin-teams {
+  background: transparent;
+  color: var(--admin-text);
+}
+
+.team-editor {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  box-shadow: none;
+}
+
+.editor-tabs {
+  background: var(--admin-panel);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.editor-tab {
+  color: var(--admin-muted);
+}
+
+.editor-tab.active {
+  color: var(--admin-text);
+  border-bottom-color: var(--admin-primary);
+  background: rgba(43, 93, 187, 0.12);
+}
+
+.message {
+  background: var(--admin-panel);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+}
+
+.message.success {
+  border-color: rgba(29, 122, 70, 0.5);
+  color: #7ee2a8;
+}
+
+.message.error {
+  border-color: rgba(180, 35, 24, 0.5);
+  color: #fca5a5;
+}
+
+.team-info-display,
+.add-game-form,
+.add-player-form,
+.schedule-list,
+.roster-list {
+  background: var(--admin-panel);
+  border: 1px solid var(--admin-border);
+  box-shadow: none;
+}
+
+.schedule-list th {
+  background: var(--admin-panel);
+  color: var(--admin-muted);
+}
+
+.schedule-list td,
+.team-info-display p,
+.roster-list p {
+  color: var(--admin-muted);
+}
+
+.player-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  box-shadow: none;
+}

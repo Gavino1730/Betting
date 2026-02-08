@@ -78,76 +78,7 @@ function AdminPanel() {
     { key: 'teams', label: 'Manage Teams', icon: '🛠️' }
   ];
 
-  useEffect(() => {
-                {allBets.map(bet => (
-                  <tr key={bet.id}>
-                    <td>{bet.id}</td>
-                    <td>{bet.users?.username || bet.user_id}</td>
-                    <td>
-                      {bet.games ? (
-                        <div style={{fontSize: '0.9em'}}>
-                          <div style={{fontWeight: '500'}}>{bet.games.home_team} vs {bet.games.away_team}</div>
-                          <div style={{fontSize: '0.8em', color: '#66bb6a', marginTop: '3px', fontWeight: '600'}}>
-                            {bet.games.team_type?.includes('Girls') ? '🏀 Girls' : '🏀 Boys'}
-                          </div>
-                        </div>
-                      ) : bet.prop_bets ? (
-                        <div style={{fontSize: '0.9em'}}>
-                          <div style={{fontWeight: '500'}}>{bet.prop_bets.title}</div>
-                          <div style={{fontSize: '0.8em', color: '#42a5f5', marginTop: '3px', fontWeight: '600'}}>
-                            🎯 {bet.prop_bets.team_type || 'General'}
-                          </div>
-                        </div>
-                      ) : (
-                        'Unknown Bet'
-                      )}
-                    </td>
-                    <td>{bet.selected_team}</td>
-                    <td>{formatCurrency(bet.amount)}</td>
-                    <td>{bet.odds}x</td>
-                    <td>
-                      <AdminBadge variant={bet.status === 'resolved' ? 'success' : 'warning'}>
-                        {bet.status === 'resolved' ? 'Completed' : bet.status || 'pending'}
-                      </AdminBadge>
-                    </td>
-                    <td>
-                      {bet.outcome ? (
-                        <AdminBadge variant={bet.outcome === 'won' ? 'success' : 'danger'}>
-                          {bet.outcome}
-                        </AdminBadge>
-                      ) : '—'}
-                    </td>
-                    <td>
-                      {bet.status !== 'resolved' && (
-                        <button
-                          className="admin-button admin-button--secondary admin-button--compact"
-                          onClick={() => {
-                            setEditingBet(bet);
-                            setEditingBetOutcome('');
-                            setEditingBetTeam(bet.selected_team);
-                          }}
-                        >
-                          Manage
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-    if (!window.confirm('⚠️ Are you ABSOLUTELY SURE you want to DELETE ALL GAMES? This cannot be undone!')) {
-      return;
-    }
-    if (!window.confirm('This will permanently delete all games. Type YES in the next dialog to confirm.')) {
-      return;
-    }
-    try {
-      setError('');
-      const response = await apiClient.delete('/games/bulk/delete-all');
-      alert(response.data.message || 'All games deleted');
-      fetchGames();
-    } catch (err) {
-      alert(err.response?.data?.error || 'Failed to delete games');
-    }
-  };
+
 
   const fetchAllBets = async () => {
     try {
@@ -192,6 +123,34 @@ function AdminPanel() {
       setError('');
     } catch (err) {
       setError('Failed to fetch prop picks: ' + (err.response?.data?.error || err.message));
+    }
+  };
+
+  useEffect(() => {
+    fetchAllBets();
+    fetchUsers();
+    fetchGames();
+    fetchPropBets();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('adminPanelTab', tab);
+  }, [tab]);
+
+  const deleteAllGames = async () => {
+    if (!window.confirm('⚠️ Are you ABSOLUTELY SURE you want to DELETE ALL GAMES? This cannot be undone!')) {
+      return;
+    }
+    if (!window.confirm('This will permanently delete all games. Type YES in the next dialog to confirm.')) {
+      return;
+    }
+    try {
+      setError('');
+      const response = await apiClient.delete('/games/bulk/delete-all');
+      alert(response.data.message || 'All games deleted');
+      fetchGames();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete games');
     }
   };
 

@@ -567,3 +567,107 @@
     color: var(--admin-text);
   }
 }
+
+  /* Admin page specifics */
+  .admin-game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .admin-game-card,
+  .admin-completed-row {
+    background: var(--admin-card);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius);
+    box-shadow: none;
+  }
+
+  .admin-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--admin-panel);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius);
+  }
+
+  .admin-bulk-bar {
+    margin: 16px 0;
+    padding: 12px 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius);
+    background: var(--admin-panel);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .admin-empty-state {
+    border: 1px dashed var(--admin-border);
+    border-radius: var(--admin-radius);
+    padding: 24px;
+    text-align: center;
+    color: var(--admin-muted);
+  }
+
+  .admin-search-input {
+    min-width: 260px;
+    width: 100%;
+  }
+
+  .admin-stat-card {
+    text-align: left;
+  }
+
+  .admin-stat-label {
+    color: var(--admin-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .admin-stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  .admin-button--toggle.is-active {
+    border-color: rgba(59, 130, 246, 0.6);
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--admin-text);
+  }
+
+  .admin-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .admin-option-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .admin-option-field {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .admin-option-field--odds {
+    max-width: 180px;
+  }
+
+  .toggle-switch .toggle-slider {
+    background-color: var(--admin-border-strong);
+  }
+
+  .toggle-switch input:checked + .toggle-slider {
+    background-color: rgba(59, 130, 246, 0.6);
+  }

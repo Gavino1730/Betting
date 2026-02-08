@@ -109,7 +109,7 @@ function AdminTeams() {
     fetchTeams();
   }, [fetchTeams]);
 
-  // Ensure schedule is properly parsed when selectedTeam changes
+                  <h3 className="admin-section__title">Team Information</h3>
   useEffect(() => {
     if (selectedTeam && selectedTeam.schedule) {
       try {
@@ -226,7 +226,7 @@ function AdminTeams() {
       updatedTeam.players.push({ ...newPlayer, number: parseInt(newPlayer.number) });
       setSelectedTeam(updatedTeam);
       setNewPlayer({ number: '', name: '', position: '', grade: '', height: '', bio: '' });
-      setError('Player added successfully');
+                  <h3 className="admin-section__title">Game Schedule</h3>
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to add player');
     }
@@ -281,7 +281,7 @@ function AdminTeams() {
     const game = selectedTeam.schedule[idx];
     setEditingGameIdx(idx);
     setEditingGameData({ 
-      result: game.result || 'Scheduled', 
+                  <h3 className="admin-section__title">Team Roster</h3>
       score: game.score || '-' 
     });
   };
@@ -315,26 +315,36 @@ function AdminTeams() {
     setEditingGameData({ result: '', score: '' });
   };
 
-  if (loading) return <div className="admin-teams"><p>Loading teams...</p></div>;
+  if (loading) {
+    return (
+      <div className="admin-teams admin-section">
+        <AdminCard>Loading teams...</AdminCard>
+      </div>
+    );
+  }
   
   // Ensure teams is always an array
   const teamsToDisplay = Array.isArray(teams) ? teams : [];
   
   if (!teamsToDisplay || teamsToDisplay.length === 0) {
-    return <div className="admin-teams"><p>No teams available</p></div>;
+    return (
+      <div className="admin-teams admin-section">
+        <AdminCard>No teams available</AdminCard>
+      </div>
+    );
   }
 
   return (
-    <div className="admin-teams">
-      <h2>Manage Basketball Teams</h2>
+    <div className="admin-teams admin-section">
+      <h2 className="admin-section__title">Manage Basketball Teams</h2>
 
       <div className="teams-selector">
-        <h3>Select Team</h3>
-        <div className="team-buttons">
+        <div className="admin-segmented" role="tablist" aria-label="Team selection">
           {teamsToDisplay.map(team => (
             <button
               key={team.id}
-              className={`team-btn ${String(selectedTeam?.id) === String(team.id) ? 'active' : ''}`}
+              type="button"
+              className={`admin-segmented__btn ${String(selectedTeam?.id) === String(team.id) ? 'active' : ''}`}
               onClick={() => handleSelectTeam(team)}
             >
               {team.name}
@@ -344,7 +354,7 @@ function AdminTeams() {
       </div>
 
       {selectedTeam && (
-        <div className="team-editor">
+        <AdminCard className="team-editor">
           <div className="editor-tabs">
             <button
               className={`editor-tab ${activeTab === 'info' ? 'active' : ''}`}
@@ -460,10 +470,10 @@ function AdminTeams() {
                     />
                   </div>
                   <div className="form-actions">
-                    <button type="button" className="btn-save" onClick={handleSaveTeamInfo}>
+                    <button type="button" className="admin-button admin-button--primary" onClick={handleSaveTeamInfo}>
                       Save Changes
                     </button>
-                    <button type="button" className="btn-cancel" onClick={() => {
+                    <button type="button" className="admin-button admin-button--secondary" onClick={() => {
                       setEditMode(false);
                       setFormData(selectedTeam);
                     }}>
@@ -481,7 +491,7 @@ function AdminTeams() {
                   <p><strong>Coach Bio:</strong> {formData.coach_bio}</p>
                   <p><strong>Team Description:</strong> {formData.description}</p>
                   {formData.team_motto && <p><strong>Motto:</strong> {formData.team_motto}</p>}
-                  <button className="btn-edit" onClick={() => setEditMode(true)}>
+                  <button className="admin-button admin-button--secondary" onClick={() => setEditMode(true)}>
                     Edit Team Info
                   </button>
                 </div>
@@ -492,9 +502,9 @@ function AdminTeams() {
           {activeTab === 'schedule' && (
             <div className="tab-content">
               <h3>Game Schedule</h3>
-              <div style={{background: 'rgba(33, 150, 243, 0.1)', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid rgba(33, 150, 243, 0.3)'}}>
-                <p style={{margin: 0, color: '#64b5f6'}}>
-                  📋 <strong>Edit Schedule:</strong> Click on a game row to edit the result and score. Games are seeded from schedules or manually created.
+              <div className="admin-alert">
+                <p className="admin-muted">
+                  Edit Schedule: Click on a game row to edit the result and score. Games are seeded from schedules or manually created.
                 </p>
               </div>
 
@@ -525,12 +535,11 @@ function AdminTeams() {
                           <td>{game.opponent}</td>
                           <td>{game.location}</td>
                           <td>
-                            <button 
-                              className="btn" 
-                              style={{background: '#1e88e5', padding: '6px 12px', fontSize: '0.8em'}}
+                            <button
+                              className="admin-button admin-button--secondary admin-button--compact"
                               onClick={() => handleEditScheduleGame(idx)}
                             >
-                              ✏️ Edit
+                              Edit
                             </button>
                           </td>
                         </tr>
@@ -585,7 +594,7 @@ function AdminTeams() {
                     value={newPlayer.bio}
                     onChange={(e) => setNewPlayer({ ...newPlayer, bio: e.target.value })}
                   />
-                  <button className="btn-add" onClick={handleAddPlayer}>Add Player</button>
+                  <button className="admin-button admin-button--primary" onClick={handleAddPlayer}>Add Player</button>
                 </div>
               </div>
 
@@ -605,8 +614,8 @@ function AdminTeams() {
                             <p><strong>Grade:</strong> <input type="number" value={editingPlayer.grade} onChange={(e) => setEditingPlayer({ ...editingPlayer, grade: e.target.value })} /></p>
                             <p><strong>Height:</strong> <input type="text" value={editingPlayer.height} onChange={(e) => setEditingPlayer({ ...editingPlayer, height: e.target.value })} /></p>
                             <p><strong>Bio:</strong> <textarea value={editingPlayer.bio} onChange={(e) => setEditingPlayer({ ...editingPlayer, bio: e.target.value })} rows="3" style={{width: '100%'}} /></p>
-                            <button className="btn-save" style={{marginRight: '5px', marginBottom: '5px'}} onClick={handleSaveEditPlayer}>Save</button>
-                            <button className="btn-cancel" onClick={handleCancelEditPlayer}>Cancel</button>
+                            <button className="admin-button admin-button--primary" onClick={handleSaveEditPlayer}>Save</button>
+                            <button className="admin-button admin-button--secondary" onClick={handleCancelEditPlayer}>Cancel</button>
                           </>
                         ) : (
                           <>
@@ -618,8 +627,8 @@ function AdminTeams() {
                             <p><strong>Grade:</strong> {player.grade}</p>
                             <p><strong>Height:</strong> {player.height}</p>
                             <p><strong>Bio:</strong> {player.bio}</p>
-                            <button className="btn-edit" style={{marginRight: '5px', marginBottom: '5px'}} onClick={() => handleEditPlayer(player)}>Edit Player</button>
-                            <button className="btn-delete-player" onClick={() => handleDeletePlayer(player.number)}>Remove Player</button>
+                            <button className="admin-button admin-button--secondary" onClick={() => handleEditPlayer(player)}>Edit Player</button>
+                            <button className="admin-button admin-button--destructive admin-button--compact" onClick={() => handleDeletePlayer(player.number)}>Remove Player</button>
                           </>
                         )}
                       </div>
@@ -631,21 +640,20 @@ function AdminTeams() {
               </div>
             </div>
           )}
-        </div>
+        </AdminCard>
       )}
 
       {/* Edit Game Modal */}
       {editingGameIdx !== null && selectedTeam && (
-        <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000}}>
-          <div style={{background: '#161b2e', padding: '30px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', minWidth: '350px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)'}}>
-            <h3 style={{marginTop: 0, marginBottom: '20px', color: '#1f4e99'}}>Edit Game Result</h3>
-            
-            <div style={{marginBottom: '20px'}}>
-              <label style={{display: 'block', marginBottom: '8px', color: '#b8c5d6', fontWeight: '600'}}>Result</label>
-              <select 
+        <div className="modal-overlay" onClick={handleCancelEditGame}>
+          <div className="modal-content admin-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Edit Game Result</h3>
+
+            <div className="admin-modal__section">
+              <label>Result</label>
+              <select
                 value={editingGameData.result}
                 onChange={(e) => setEditingGameData({ ...editingGameData, result: e.target.value })}
-                style={{width: '100%', padding: '10px', background: '#1e2139', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', color: '#fff', fontSize: '1em'}}
               >
                 <option value="Scheduled">Scheduled</option>
                 <option value="W">Won (W)</option>
@@ -653,29 +661,22 @@ function AdminTeams() {
               </select>
             </div>
 
-            <div style={{marginBottom: '20px'}}>
-              <label style={{display: 'block', marginBottom: '8px', color: '#b8c5d6', fontWeight: '600'}}>Score</label>
-              <input 
+            <div className="admin-modal__section">
+              <label>Score</label>
+              <input
                 type="text"
                 placeholder="e.g., 85-72"
                 value={editingGameData.score}
                 onChange={(e) => setEditingGameData({ ...editingGameData, score: e.target.value })}
-                style={{width: '100%', padding: '10px', background: '#1e2139', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', color: '#fff', fontSize: '1em', boxSizing: 'border-box'}}
               />
             </div>
 
-            <div style={{display: 'flex', gap: '10px'}}>
-              <button 
-                onClick={handleSaveScheduleGame}
-                style={{flex: 1, padding: '10px', background: '#66bb6a', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1em'}}
-              >
-                ✅ Save
+            <div className="admin-modal__actions">
+              <button className="admin-button admin-button--primary" onClick={handleSaveScheduleGame}>
+                Save
               </button>
-              <button 
-                onClick={handleCancelEditGame}
-                style={{flex: 1, padding: '10px', background: '#ef5350', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1em'}}
-              >
-                ❌ Cancel
+              <button className="admin-button admin-button--secondary" onClick={handleCancelEditGame}>
+                Cancel
               </button>
             </div>
           </div>
