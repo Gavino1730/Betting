@@ -3,6 +3,11 @@
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
   animation: fadeIn 0.4s ease;
+  overflow-anchor: none;
+}
+
+.how-to-use .card {
+  contain: none;
 }
 
 .tutorial-section {
@@ -41,6 +46,7 @@
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .section-icon {
@@ -89,6 +95,7 @@
   border-radius: 12px;
   padding: 1rem;
   align-items: flex-start;
+  min-width: 0;
 }
 
 .info-icon {
@@ -128,6 +135,7 @@
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 12px;
   padding: 1rem 1.25rem;
+  min-width: 0;
 }
 
 .step-number {
@@ -482,6 +490,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
+  line-height: 1.4;
 }
 
 .faq-item summary::-webkit-details-marker {
@@ -624,6 +634,7 @@
 
   .steps-list li {
     padding: 0.9rem 1rem;
+    gap: 0.75rem;
   }
 
   .step-number {
@@ -671,5 +682,65 @@
 
   .cta-buttons {
     flex-direction: column;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header.compact h1 {
+    font-size: 1.6rem;
+  }
+
+  .page-header.compact .page-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .section-card {
+    padding: 1rem;
+  }
+
+  .section-icon {
+    font-size: 1.35rem;
+  }
+
+  .tutorial-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .info-item {
+    flex-direction: column;
+  }
+
+  .steps-list li {
+    flex-direction: column;
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+  }
+
+  .section-summary {
+    padding: 0.9rem 1rem;
+  }
+
+  .compact-box {
+    padding: 0.75rem 1rem 1rem;
+  }
+
+  .collapsible-section > p,
+  .collapsible-section > .bonus-tiers,
+  .collapsible-section > .bonus-example,
+  .collapsible-section > .tips-list,
+  .collapsible-section > .nav-guide-list {
+    padding: 0 1rem 1rem;
+  }
+
+  .faq-item {
+    padding: 0.7rem 0.9rem;
   }
 }
