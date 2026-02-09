@@ -144,6 +144,7 @@ function AppContent() {
   const mobileMenuToggleRef = useRef(null);
   const userMenuRef = useRef(null);
   const userMenuButtonRef = useRef(null);
+  const navbarRef = useRef(null);
   const profilePollRef = useRef({ timeoutId: null, delay: 15000, inFlight: false });
   const previousNotificationIds = useRef(new Set());
   
@@ -417,6 +418,31 @@ function AppContent() {
     setUserMenuOpen(false);
   };
 
+  useEffect(() => {
+    if (!navbarRef.current) {
+      return undefined;
+    }
+
+    const updateNavbarHeight = () => {
+      if (!navbarRef.current) return;
+      const height = navbarRef.current.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--navbar-height', `${height}px`);
+    };
+
+    updateNavbarHeight();
+
+    const resizeObserver = new ResizeObserver(updateNavbarHeight);
+    resizeObserver.observe(navbarRef.current);
+    window.addEventListener('resize', updateNavbarHeight);
+    window.addEventListener('orientationchange', updateNavbarHeight);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateNavbarHeight);
+      window.removeEventListener('orientationchange', updateNavbarHeight);
+    };
+  }, [token]);
+
   if (!token) {
     return (
       <ToastProvider>
@@ -449,7 +475,7 @@ function AppContent() {
         gameInfo={rivalryWeekConfig.gameInfo}
       />
 
-      <nav className="navbar">
+      <nav className="navbar" ref={navbarRef}>
         <div className="nav-inner">
           <div className="nav-brand" onClick={() => handlePageChange('dashboard')} style={{ cursor: 'pointer' }}>
             <img 
