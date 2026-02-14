@@ -40,6 +40,8 @@ const BetList = lazyWithRetry(() => import('./components/BetList'));
 const Leaderboard = lazyWithRetry(() => import('./components/Leaderboard'));
 const Teams = lazyWithRetry(() => import('./components/Teams'));
 const Games = lazyWithRetry(() => import('./components/Games'));
+const Bracket = lazyWithRetry(() => import('./components/Bracket'));
+const BracketLeaderboard = lazyWithRetry(() => import('./components/BracketLeaderboard'));
 const Notifications = lazyWithRetry(() => import('./components/Notifications'));
 const HowToUse = lazyWithRetry(() => import('./components/HowToUse'));
 const About = lazyWithRetry(() => import('./components/About'));
@@ -493,6 +495,7 @@ function AppContent() {
             <NavLink label="Place Picks" pageKey="games" currentPage={page} onNavigate={handlePageChange} />
             <NavLink label="Teams" pageKey="teams" currentPage={page} onNavigate={handlePageChange} />
             <NavLink label="My Picks" pageKey="bets" currentPage={page} onNavigate={handlePageChange} />
+            <NavLink label="Bracket" pageKey="bracket" currentPage={page} onNavigate={handlePageChange} />
             <NavLink label="Leaderboard" pageKey="leaderboard" currentPage={page} onNavigate={handlePageChange} />
             <NavLink label="How to Use" pageKey="howto" currentPage={page} onNavigate={handlePageChange} />
           </div>
@@ -644,6 +647,13 @@ function AppContent() {
             My Picks
           </button>
           <button 
+            onClick={() => handlePageChange('bracket')} 
+            className={page === 'bracket' ? 'active' : ''}
+          >
+            <span className="menu-icon">🎯</span>
+            Bracket
+          </button>
+          <button 
             onClick={() => handlePageChange('leaderboard')} 
             className={page === 'leaderboard' ? 'active' : ''}
           >
@@ -712,6 +722,8 @@ function AppContent() {
             <Route path="/games" element={<Games user={currentUser} updateUser={updateUser} />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/bets" element={<BetList />} />
+            <Route path="/bracket" element={<Bracket updateUser={updateUser} />} />
+            <Route path="/bracket-leaderboard" element={<BracketLeaderboard />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/howto" element={<HowToUse onNavigate={handlePageChange} />} />

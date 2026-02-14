@@ -1,0 +1,238 @@
+.bracket-page {
+  padding: 32px 24px 48px;
+  background: radial-gradient(circle at top, rgba(0, 79, 158, 0.12), rgba(245, 245, 245, 0.95));
+  min-height: calc(100vh - 140px);
+}
+
+.bracket-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.bracket-header h1 {
+  margin: 0;
+  color: #003d7a;
+}
+
+.bracket-subtitle {
+  margin: 4px 0 0;
+  color: #4c5d73;
+}
+
+.bracket-meta {
+  display: flex;
+  gap: 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.bracket-meta__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bracket-meta__item .label {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b7a90;
+}
+
+.bracket-meta__item .value {
+  font-weight: 600;
+  color: #0b2b4f;
+}
+
+.bracket-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.bracket-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #004f9e;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.bracket-entry-summary {
+  display: flex;
+  gap: 16px;
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #003d7a;
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.bracket-alert {
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  background: #ffffff;
+  border: 1px solid #d5deea;
+  color: #0b2b4f;
+}
+
+.bracket-alert--error {
+  border-color: #ffb3b3;
+  background: #fff5f5;
+  color: #8b0000;
+}
+
+.bracket-alert--success {
+  border-color: #b7e4c7;
+  background: #f1fff5;
+  color: #1b6b3a;
+}
+
+.bracket-alert--info {
+  border-color: #cfe2ff;
+  background: #eef5ff;
+  color: #0a4a96;
+}
+
+.bracket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.bracket-round {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.bracket-round h2 {
+  margin: 0 0 16px;
+  color: #003d7a;
+  font-size: 18px;
+}
+
+.bracket-matchup {
+  border: 1px solid #e6edf5;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #f9fbff;
+}
+
+.bracket-matchup__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7a90;
+  margin-bottom: 8px;
+}
+
+.bracket-team {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: #ffffff;
+  color: #0b2b4f;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.bracket-team:last-child {
+  margin-bottom: 0;
+}
+
+.bracket-team .seed {
+  font-size: 12px;
+  color: #6b7a90;
+}
+
+.bracket-team.selected {
+  border-color: #004f9e;
+  box-shadow: 0 8px 18px rgba(0, 79, 158, 0.2);
+  transform: translateY(-1px);
+}
+
+.bracket-team:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.bracket-placeholder {
+  padding: 12px;
+  color: #6b7a90;
+  font-style: italic;
+}
+
+.winner-badge {
+  background: #003d7a;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.bracket-submit {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.bracket-submit-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 999px;
+  background: #004f9e;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(0, 79, 158, 0.2);
+}
+
+.bracket-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .bracket-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bracket-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .bracket-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

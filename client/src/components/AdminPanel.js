@@ -8,6 +8,7 @@ import AdminTable from './admin/AdminTable';
 import AdminCard from './admin/AdminCard';
 import AdminBadge from './admin/AdminBadge';
 import AdminActionsMenu from './admin/AdminActionsMenu';
+import AdminBrackets from './admin/AdminBrackets';
 import '../styles/AdminPanel.css';
 import '../styles/AdminDesignSystem.css';
 import { formatCurrency } from '../utils/currency';
@@ -74,6 +75,7 @@ function AdminPanel() {
     { key: 'games', label: 'Manage Games', icon: '🏀' },
     { key: 'propbets', label: 'Prop Picks', icon: '🎯' },
     { key: 'bets', label: 'View All Picks', icon: '📋' },
+    { key: 'brackets', label: 'Brackets', icon: '🏆' },
     { key: 'users', label: 'Manage Users', icon: '🧑‍💼' },
     { key: 'teams', label: 'Manage Teams', icon: '🛠️' }
   ];
@@ -816,6 +818,10 @@ function AdminPanel() {
       title: 'View All Picks',
       subtitle: 'Review and manage all user picks.'
     },
+    brackets: {
+      title: 'Manage Brackets',
+      subtitle: 'Seed teams, advance winners, and manage payouts.'
+    },
     users: {
       title: 'Manage Users',
       subtitle: 'Roles, balances, and account actions.'
@@ -855,6 +861,7 @@ function AdminPanel() {
       </button>
     ),
     bets: null,
+    brackets: null,
     teams: null
   };
 
@@ -887,6 +894,9 @@ function AdminPanel() {
         </button>
         <button className={`admin-tab ${tab === 'bets' ? 'active' : ''}`} onClick={() => setTab('bets')}>
           View All Picks
+        </button>
+        <button className={`admin-tab ${tab === 'brackets' ? 'active' : ''}`} onClick={() => setTab('brackets')}>
+          Brackets
         </button>
         <button className={`admin-tab ${tab === 'users' ? 'active' : ''}`} onClick={() => setTab('users')}>
           Manage Users
@@ -2169,6 +2179,10 @@ function AdminPanel() {
           )}
           </AdminCard>
         </div>
+      )}
+
+      {tab === 'brackets' && (
+        <AdminBrackets />
       )}
 
       {tab === 'teams' && (
