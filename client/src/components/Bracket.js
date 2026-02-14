@@ -273,19 +273,19 @@ function Bracket({ updateUser }) {
       )}
 
       <div className="bracket-grid">
-        {/* Round 1 */}
-        <div className="bracket-round">
+        {/* Round 1 - 8 games */}
+        <div className="bracket-round bracket-round--r1">
           <h2>{ROUND_LABELS[1]}</h2>
           <div className="bracket-games">
-            {getR1Games().map((game) => {
+            {getR1Games().map((game, idx) => {
               const winner = game.winner_team_id;
               const selected = picks.round1[makeGameKey(game.game_number)];
               return (
-                <div key={game.id} className="bracket-game">
+                <div key={game.id} className="bracket-game" data-game-idx={idx}>
                   <div className="game-label">G{game.game_number}</div>
-                  {[game.team1_id, game.team2_id].map((teamId, idx) => (
+                  {[game.team1_id, game.team2_id].map((teamId, tidx) => (
                     <button
-                      key={teamId || idx}
+                      key={teamId || tidx}
                       className={`team-btn ${selected === teamId ? 'selected' : ''}`}
                       onClick={() => applyRound1Pick(game.game_number, teamId)}
                       disabled={!teamId || bracketLocked || !!entry}
@@ -301,8 +301,8 @@ function Bracket({ updateUser }) {
           </div>
         </div>
 
-        {/* Round 2 */}
-        <div className="bracket-round">
+        {/* Round 2 - 4 games */}
+        <div className="bracket-round bracket-round--r2">
           <h2>{ROUND_LABELS[2]}</h2>
           <div className="bracket-games">
             {[1, 2, 3, 4].map((gameNum) => {
@@ -312,7 +312,7 @@ function Bracket({ updateUser }) {
               const selected = picks.round2[makeGameKey(gameNum)];
 
               return (
-                <div key={gameNum} className="bracket-game">
+                <div key={gameNum} className="bracket-game" data-game-idx={gameNum - 1}>
                   <div className="game-label">G{gameNum}</div>
                   {options.length === 0 && <div className="bracket-placeholder">—</div>}
                   {options.map((teamId) => (
@@ -332,8 +332,8 @@ function Bracket({ updateUser }) {
           </div>
         </div>
 
-        {/* Round 3 */}
-        <div className="bracket-round">
+        {/* Round 3 - 2 games (Final Four) */}
+        <div className="bracket-round bracket-round--r3">
           <h2>{ROUND_LABELS[3]}</h2>
           <div className="bracket-games">
             {[1, 2].map((gameNum) => {
@@ -343,7 +343,7 @@ function Bracket({ updateUser }) {
               const selected = picks.round3[makeGameKey(gameNum)];
 
               return (
-                <div key={gameNum} className="bracket-game">
+                <div key={gameNum} className="bracket-game" data-game-idx={gameNum - 1}>
                   <div className="game-label">G{gameNum}</div>
                   {options.length === 0 && <div className="bracket-placeholder">—</div>}
                   {options.map((teamId) => (
@@ -364,7 +364,7 @@ function Bracket({ updateUser }) {
         </div>
 
         {/* Round 4 (Championship) */}
-        <div className="bracket-round">
+        <div className="bracket-round bracket-round--r4">
           <h2>{ROUND_LABELS[4]}</h2>
           <div className="bracket-games">
             {(() => {
@@ -374,8 +374,8 @@ function Bracket({ updateUser }) {
               const selected = picks.round4.game1;
 
               return (
-                <div className="bracket-game">
-                  <div className="game-label">Championship</div>
+                <div className="bracket-game championship-game">
+                  <div className="championship-icon">🏆</div>
                   {options.length === 0 && <div className="bracket-placeholder">—</div>}
                   {options.map((teamId) => (
                     <button
