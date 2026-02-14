@@ -267,34 +267,8 @@ function Bracket({ updateUser }) {
             className="bracket-link"
             onClick={() => navigate('/actual-bracket')}
           >
-            View Results
+            View Live Bracket
           </button>
-          <button
-            type="button"
-            className="bracket-link"
-            onClick={() => navigate('/bracket-leaderboard')}
-          >
-            View Leaderboard
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!bracket) {
-    return (
-      <div className="bracket-page">
-        <div className="bracket-header">
-          <h1>Championship Bracket</h1>
-          <p className="bracket-subtitle">Bracket coming soon.</p>
-        </div>
-        <div className="bracket-actions">
-          <button
-            type="button"
-            className="bracket-link"
-            onClick={() => navigate('/actual-bracket')}
-          >
-            View Results
           </button>
           <button
             type="button"
@@ -345,7 +319,7 @@ function Bracket({ updateUser }) {
           className="bracket-link"
           onClick={() => navigate('/actual-bracket')}
         >
-          View Results
+          View Live Bracket
         </button>
         <button
           type="button"
