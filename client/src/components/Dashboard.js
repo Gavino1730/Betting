@@ -369,6 +369,61 @@ function Dashboard({ user, onNavigate, updateUser, fetchUserProfile }) {
         )}
       </div>
 
+      {/* Playoff Celebration Banner */}
+      <div className="playoff-banner">
+        <div className="playoff-banner-content">
+          <div className="playoff-header">
+            <span className="playoff-icon">🏆</span>
+            <h2>It's Playoff Time!</h2>
+            <span className="playoff-icon">🏆</span>
+          </div>
+          
+          <p className="playoff-intro">Congratulations to our championship teams on incredible regular seasons!</p>
+          
+          <p className="playoff-slogan">It's a good day to be a Valiant! 💙</p>
+          
+          <div className="playoff-teams">
+            <div className="playoff-team boys-team">
+              <h3>👦 Boys Basketball</h3>
+              <p className="playoff-champ">League Champions!</p>
+              <div className="team-stats">
+                <div className="stat">
+                  <span className="stat-label">Overall Record</span>
+                  <span className="stat-value">23-2</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">League Record</span>
+                  <span className="stat-value">13-1</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">Overall Ranking</span>
+                  <span className="stat-value">#3</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="playoff-team girls-team">
+              <h3>👧 Girls Basketball</h3>
+              <p className="playoff-champ">League Champions!</p>
+              <div className="team-stats">
+                <div className="stat">
+                  <span className="stat-label">Overall Record</span>
+                  <span className="stat-value">19-5</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">League Record</span>
+                  <span className="stat-value">11-1</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">Overall Ranking</span>
+                  <span className="stat-value">#7</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Recent Winners Section - TEMPORARILY HIDDEN
       {recentWinners.length > 0 && (
         <div className="recent-winners-banner">

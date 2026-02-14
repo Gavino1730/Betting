@@ -2878,6 +2878,184 @@
   font-weight: 600;
 }
 
+/* Playoff Celebration Banner */
+.playoff-banner {
+  background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #1a472a 100%);
+  border: 3px solid #66bb6a;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 32px rgba(102, 187, 106, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: slideDown 0.4s ease;
+}
+
+.playoff-banner-content {
+  text-align: center;
+}
+
+.playoff-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.playoff-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #66bb6a;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(102, 187, 106, 0.3);
+}
+
+.playoff-icon {
+  font-size: 2.5rem;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.playoff-intro {
+  font-size: 1.1rem;
+  color: #c8e6c9;
+  margin: 0 0 1.5rem 0;
+  font-weight: 500;
+}
+
+.playoff-slogan {
+  font-size: 1.4rem;
+  color: #66bb6a;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.playoff-teams {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.playoff-team {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(102, 187, 106, 0.3);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.playoff-team:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 187, 106, 0.2);
+  border-color: rgba(102, 187, 106, 0.6);
+}
+
+.playoff-team h3 {
+  font-size: 1.3rem;
+  color: #81c784;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+}
+
+.playoff-champ {
+  font-size: 0.95rem;
+  color: #66bb6a;
+  font-weight: 600;
+  font-style: italic;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.team-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.team-stats .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.team-stats .stat-label {
+  font-size: 0.8rem;
+  color: #a5d6a7;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.team-stats .stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #66bb6a;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .playoff-banner {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .playoff-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .playoff-icon {
+    font-size: 2rem;
+  }
+
+  .playoff-slogan {
+    font-size: 1.1rem;
+  }
+
+  .playoff-teams {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .playoff-team {
+    padding: 1rem;
+  }
+
+  .playoff-team h3 {
+    font-size: 1.1rem;
+  }
+
+  .team-stats {
+    gap: 0.5rem;
+  }
+
+  .team-stats .stat-value {
+    font-size: 1.3rem;
+  }
+}
+
 /* Upcoming Section */
 .upcoming-section h3 {
   color: #4a90e2;

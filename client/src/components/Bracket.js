@@ -373,43 +373,45 @@ function Bracket({ updateUser }) {
       {!entry && !bracketLocked && (
         <div className="bracket-instructions">
           <div className="instructions-header">
-            <h3>How to Use This Bracket</h3>
-            <p className="instructions-intro">Make your tournament predictions by selecting teams to advance through each round.</p>
+            <h3>How to Pick Your Bracket</h3>
+            <p className="instructions-intro">Pick the teams you think will win each game. Correct picks earn you points and Valiant Bucks!</p>
           </div>
           
           <div className="instructions-grid">
             <div className="instruction-card">
               <div className="instruction-number">1</div>
-              <h4>Select Teams in Round 1</h4>
-              <p>Click on any team name in the first column to select your pick. Only teams you pick will be eligible to advance.</p>
+              <h4>Click a Team to Pick It</h4>
+              <p>Click on the team name you want to advance. You'll pick winners for all 8 games in Round 1 first. Your picks turn blue when selected.</p>
             </div>
             
             <div className="instruction-card">
               <div className="instruction-number">2</div>
-              <h4>Watch Picks Cascade</h4>
-              <p>As you make picks in Round 1, your selected teams will automatically appear as options in the Quarterfinals.</p>
+              <h4>Move to Next Rounds</h4>
+              <p>After picking all Round 1 winners, those teams appear in Quarterfinals. Keep picking until all 4 rounds are done. You need 15 total picks.</p>
             </div>
             
             <div className="instruction-card">
               <div className="instruction-number">3</div>
-              <h4>Complete All Rounds</h4>
-              <p>Continue making picks through each round. You must complete all 8 Round 1 picks, 4 Quarterfinal picks, 2 Semifinal picks, and 1 Championship pick.</p>
+              <h4>How You Get Paid</h4>
+              <p><strong>Each correct pick earns:</strong> Round 1: 5 pts • Quarterfinals: 10 pts • Semifinals: 20 pts • Championship: 40 pts
+              <br/><strong>Example:</strong> 10 correct picks = 100 points × ${bracket?.payout_per_point || 0} per point = ${10 * (bracket?.payout_per_point || 0)} Valiant Bucks
+              <br/><strong>Max possible:</strong> All 15 picks correct = 160 points × ${bracket?.payout_per_point || 0} per point = ${160 * (bracket?.payout_per_point || 0)} Valiant Bucks</p>
             </div>
             
             <div className="instruction-card">
               <div className="instruction-number">4</div>
-              <h4>Submit Your Bracket</h4>
-              <p>Once all picks are complete, click "Submit Bracket" at the bottom. Your picks are locked and cannot be changed.</p>
+              <h4>Submit When Done</h4>
+              <p>When all 15 picks are complete, click "Submit Bracket". Once you submit, you can't change your picks. The payout is based on how many you get right!</p>
             </div>
           </div>
 
           <div className="bracket-tips">
-            <h4>💡 Tips</h4>
+            <h4>💡 Quick Tips</h4>
             <ul>
-              <li><strong>Team Seeds:</strong> Lower numbers (1-4) are stronger teams, higher numbers (13-16) are underdogs</li>
-              <li><strong>Balance Your Picks:</strong> Mix upsets with safer choices to maximize points</li>
-              <li><strong>Check the Leaderboard:</strong> See other players' scores and learn from top performers</li>
-              <li><strong>Blue Highlights:</strong> Selected teams show in blue so you can easily track your picks</li>
+              <li><strong>Balance Risk:</strong> Mix safe teams (seed 1-4) with some upsets to score big</li>
+              <li><strong>Higher seeds beat lower seeds more:</strong> Seed 1 usually beats seed 16, but upsets happen!</li>
+              <li><strong>Check the Leaderboard:</strong> See how other players picked - learn from the top scorers</li>
+              <li><strong>Entry fee:</strong> Make sure you have enough Valiant Bucks for the entry fee shown above</li>
             </ul>
           </div>
         </div>
