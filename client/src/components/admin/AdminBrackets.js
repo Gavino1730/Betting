@@ -79,26 +79,27 @@ function AdminBrackets() {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchBrackets = async () => {
-      try {
-        const response = await apiClient.get('/brackets/admin');
-        const list = response.data || [];
-        setBrackets(list);
-        if (!selectedBracketId && list.length > 0) {
-          setSelectedBracketId(list[0].id);
-        }
-      } catch (err) {
-        setError(err.response?.data?.error || 'Failed to load brackets');
+  const fetchBrackets = useCallback(async () => {
+    try {
+      const response = await apiClient.get('/brackets/admin');
+      const list = response.data || [];
+      setBrackets(list);
+      if (!selectedBracketId && list.length > 0) {
+        setSelectedBracketId(list[0].id);
       }
-    };
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to load brackets');
+    }
+  }, [selectedBracketId]);
 
+  useEffect(() => {
     const init = async () => {
       setLoading(true);
       await fetchBrackets();
       setLoading(false);
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
