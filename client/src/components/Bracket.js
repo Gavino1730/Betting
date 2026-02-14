@@ -272,6 +272,52 @@ function Bracket({ updateUser }) {
         <div className="bracket-alert bracket-alert--info">Bracket entries are locked.</div>
       )}
 
+      {/* Instructions Section */}
+      {!entry && !bracketLocked && (
+        <div className="bracket-instructions">
+          <div className="instructions-header">
+            <h3>How to Use This Bracket</h3>
+            <p className="instructions-intro">Make your tournament predictions by selecting teams to advance through each round.</p>
+          </div>
+          
+          <div className="instructions-grid">
+            <div className="instruction-card">
+              <div className="instruction-number">1</div>
+              <h4>Select Teams in Round 1</h4>
+              <p>Click on any team name in the first column to select your pick. Only teams you pick will be eligible to advance.</p>
+            </div>
+            
+            <div className="instruction-card">
+              <div className="instruction-number">2</div>
+              <h4>Watch Picks Cascade</h4>
+              <p>As you make picks in Round 1, your selected teams will automatically appear as options in Round 2.</p>
+            </div>
+            
+            <div className="instruction-card">
+              <div className="instruction-number">3</div>
+              <h4>Complete All Rounds</h4>
+              <p>Continue making picks through each round. You must complete all 8 Round 1 picks, 4 Round 2 picks, 2 Round 3 picks, and 1 Championship pick.</p>
+            </div>
+            
+            <div className="instruction-card">
+              <div className="instruction-number">4</div>
+              <h4>Submit Your Bracket</h4>
+              <p>Once all picks are complete, click "Submit Bracket" at the bottom. Your picks are locked and cannot be changed.</p>
+            </div>
+          </div>
+
+          <div className="bracket-tips">
+            <h4>💡 Tips</h4>
+            <ul>
+              <li><strong>Team Seeds:</strong> Lower numbers (1-4) are stronger teams, higher numbers (13-16) are underdogs</li>
+              <li><strong>Balance Your Picks:</strong> Mix upsets with safer choices to maximize points</li>
+              <li><strong>Check the Leaderboard:</strong> See other players' scores and learn from top performers</li>
+              <li><strong>Blue Highlights:</strong> Selected teams show in blue so you can easily track your picks</li>
+            </ul>
+          </div>
+        </div>
+      )}
+
       <div className="bracket-grid">
         {/* Round 1 - 8 games */}
         <div className="bracket-round bracket-round--r1">
@@ -395,6 +441,36 @@ function Bracket({ updateUser }) {
         </div>
       </div>
 
+      {/* Progress Indicator */}
+      {!entry && (
+        <div className="bracket-progress">
+          <div className="progress-item">
+            <span className="progress-label">Round 1</span>
+            <span className={`progress-count ${Object.keys(picks.round1).length === 8 ? 'complete' : ''}`}>
+              {Object.keys(picks.round1).length}/8
+            </span>
+          </div>
+          <div className="progress-item">
+            <span className="progress-label">Round 2</span>
+            <span className={`progress-count ${Object.keys(picks.round2).length === 4 ? 'complete' : ''}`}>
+              {Object.keys(picks.round2).length}/4
+            </span>
+          </div>
+          <div className="progress-item">
+            <span className="progress-label">Round 3</span>
+            <span className={`progress-count ${Object.keys(picks.round3).length === 2 ? 'complete' : ''}`}>
+              {Object.keys(picks.round3).length}/2
+            </span>
+          </div>
+          <div className="progress-item">
+            <span className="progress-label">Championship</span>
+            <span className={`progress-count ${picks.round4.game1 !== undefined ? 'complete' : ''}`}>
+              {picks.round4.game1 !== undefined ? '1' : '0'}/1
+            </span>
+          </div>
+        </div>
+      )}
+
       {!entry && (
         <div className="bracket-submit">
           <button
@@ -405,6 +481,9 @@ function Bracket({ updateUser }) {
           >
             {submitLoading ? 'Submitting...' : 'Submit Bracket'}
           </button>
+          {!canSubmit && (
+            <p className="submit-hint">Complete all picks to submit your bracket</p>
+          )}
         </div>
       )}
     </div>
