@@ -7,7 +7,7 @@ import '../../styles/AdminDesignSystem.css';
 const roundLabels = {
   1: 'Quarterfinals',
   2: 'Semifinals',
-  3: 'Finals'
+  3: 'Championship'
 };
 
 const makeSeedDefaults = () => {
@@ -24,6 +24,7 @@ function AdminBrackets() {
   const [bracket, setBracket] = useState(null);
   const [teams, setTeams] = useState(makeSeedDefaults());
   const [games, setGames] = useState([]);
+  const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -66,6 +67,11 @@ function AdminBrackets() {
       });
       setTeams(seededTeams);
       setGames(response.data.games || []);
+      
+      // Fetch bracket entries
+      const entriesResponse = await apiClient.get(`/brackets/${id}/leaderboard`);
+      setEntries(entriesResponse.data || []);
+      
       setSettingsForm({
         name: response.data.bracket.name || '',
         season: response.data.bracket.season || '',
@@ -178,22 +184,20 @@ function AdminBrackets() {
     }
   };
 
-  const handleDeleteBracket = async () => {
+  const handleDeleteEntry = async (entryId, username) => {
     if (!selectedBracketId) return;
     
-    if (!window.confirm(`Are you sure you want to delete the bracket "${bracket?.name}"? This action cannot be undone.`)) {
+    if (!window.confirm(`Are you sure you want to delete the bracket entry for ${username}? Their entry fee will be refunded.`)) {
       return;
     }
 
     try {
-      await apiClient.delete(`/brackets/${selectedBracketId}`);
-      setMessage('Bracket deleted successfully');
+      await apiClient.delete(`/brackets/${selectedBracketId}/entries/${entryId}`);
+      setMessage('Entry deleted and entry fee refunded');
       setError('');
-      setBracket(null);
-      setSelectedBracketId('');
-      await fetchBrackets();
+      await fetchBracketDetails(selectedBracketId);
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to delete bracket');
+      setError(err.response?.data?.error || 'Failed to delete entry');
     }
   };
 
@@ -333,16 +337,7 @@ function AdminBrackets() {
                   <option value="completed">Completed</option>
                 </select>
               </div>
-              <div className="admin-toolbar">
-                <button type="submit" className="admin-button admin-button--primary">Save Settings</button>
-                <button 
-                  type="button" 
-                  className="admin-button admin-button--destructive" 
-                  onClick={handleDeleteBracket}
-                >
-                  Delete Bracket
-                </button>
-              </div>
+              <button type="submit" className="admin-button admin-button--primary">Save Settings</button>
             </form>
           </AdminCard>
 
@@ -411,6 +406,45 @@ function AdminBrackets() {
                 ))}
               </div>
             ))}
+          </AdminCard>
+
+          <AdminCard className="admin-section">
+            <h3 className="admin-section__title">User Entries ({entries.length})</h3>
+            {entries.length === 0 ? (
+              <p className="admin-text">No entries yet</p>
+            ) : (
+              <div className="admin-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Points</th>
+                      <th>Payout</th>
+                      <th>Submitted</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {entries.map((entry) => (
+                      <tr key={entry.id}>
+                        <td>{entry.users?.username || 'Unknown'}</td>
+                        <td>{entry.points || 0}</td>
+                        <td>${entry.payout || 0}</td>
+                        <td>{new Date(entry.created_at).toLocaleDateString()}</td>
+                        <td>
+                          <button
+                            className="admin-button admin-button--compact admin-button--destructive"
+                            onClick={() => handleDeleteEntry(entry.id, entry.users?.username || 'User')}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </AdminCard>
         </>
       )}

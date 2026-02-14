@@ -120,7 +120,7 @@ SELECT bracket_id, round, game_number, team1_id, team2_id, 'scheduled'
 FROM quarterfinal_pairs
 ON CONFLICT DO NOTHING;
 
--- Create empty semifinal and final games (will be auto-populated when quarterfinals have winners)
+-- Create empty semifinal games (round 2, will be auto-populated when quarterfinals have winners)
 WITH bracket_id AS (
   SELECT id FROM brackets WHERE name = '3A State Bracket' AND season = '2026' ORDER BY created_at DESC LIMIT 1
 )
@@ -128,6 +128,7 @@ INSERT INTO bracket_games (bracket_id, round, game_number, team1_id, team2_id, s
 SELECT b.id, 2, n, NULL, NULL, 'scheduled' FROM bracket_id b, generate_series(1, 2) n
 ON CONFLICT DO NOTHING;
 
+-- Create empty championship game (round 3, will be auto-populated when semifinals have winners)
 WITH bracket_id AS (
   SELECT id FROM brackets WHERE name = '3A State Bracket' AND season = '2026' ORDER BY created_at DESC LIMIT 1
 )

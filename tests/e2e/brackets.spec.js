@@ -200,7 +200,7 @@ test.describe('Bracket Functionality', () => {
     expect(roundText).toBeGreaterThanOrEqual(0);
   });
 
-  test('admin should be able to delete bracket', async ({ page }) => {
+  test('admin should be able to delete user bracket entries', async ({ page }) => {
     // Note: This test assumes admin account exists
     await login(page, 'admin@valiantpicks.com', 'AdminPassword123!');
     await dismissOnboarding(page);
@@ -219,7 +219,7 @@ test.describe('Bracket Functionality', () => {
       await page.waitForLoadState('domcontentloaded');
       await page.waitForTimeout(500);
       
-      // Look for a bracket to delete
+      // Look for a bracket to manage
       const selectDropdown = page.locator('select').first();
       const dropdownExists = await selectDropdown.isVisible({ timeout: 2000 }).catch(() => false);
       
@@ -228,29 +228,26 @@ test.describe('Bracket Functionality', () => {
         await selectDropdown.selectOption({ index: 1 });
         await page.waitForTimeout(500);
         
-        // Look for delete button
-        const deleteButton = page.locator('button:has-text(/Delete/i)').first();
-        const deleteButtonExists = await deleteButton.isVisible({ timeout: 2000 }).catch(() => false);
+        // Look for User Entries section
+        const entriesSection = page.locator('text=/User Entries/i').first();
+        const entriesSectionExists = await entriesSection.isVisible({ timeout: 2000 }).catch(() => false);
         
-        if (deleteButtonExists) {
-          await deleteButton.click();
-          await page.waitForTimeout(500);
+        if (entriesSectionExists) {
+          // Look for delete button in the entries table
+          const deleteButton = page.locator('button:has-text(/Delete/i)').first();
+          const deleteButtonExists = await deleteButton.isVisible({ timeout: 2000 }).catch(() => false);
           
-          // Handle confirmation dialog if present
-          const confirmButton = page.locator('button:has-text(/OK|Yes|Confirm/i)').first();
-          const confirmExists = await confirmButton.isVisible({ timeout: 2000 }).catch(() => false);
-          
-          if (confirmExists) {
-            await confirmButton.click();
-            await page.waitForTimeout(1000);
-          } else {
-            // If no confirm dialog, might need to confirm in the browser alert
+          if (deleteButtonExists) {
+            await deleteButton.click();
+            await page.waitForTimeout(500);
+            
+            // Handle confirmation dialog if present
             page.on('dialog', dialog => dialog.accept());
+            
+            // Should show success message
+            const successMessage = await page.locator('text=/deleted|refunded|success/i').isVisible({ timeout: 2000 }).catch(() => false);
+            expect(successMessage).toBeDefined();
           }
-          
-          // Should show success message
-          const successMessage = await page.locator('text=/deleted|success/i').isVisible({ timeout: 2000 }).catch(() => false);
-          expect(successMessage).toBeDefined();
         }
       }
     }

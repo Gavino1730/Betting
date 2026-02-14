@@ -6,9 +6,9 @@ import '../styles/Bracket.css';
 
 
 const ROUND_LABELS = {
-  1: 'Quarterfinals',
-  2: 'Semifinals',
-  3: 'Finals',
+  1: 'Round 1',
+  2: 'Quarterfinals',
+  3: 'Semifinals',
   4: 'Championship'
 };
 
@@ -335,20 +335,20 @@ function Bracket({ updateUser }) {
           <div className="instructions-grid">
             <div className="instruction-card">
               <div className="instruction-number">1</div>
-              <h4>Select Teams in Quarterfinals</h4>
+              <h4>Select Teams in Round 1</h4>
               <p>Click on any team name in the first column to select your pick. Only teams you pick will be eligible to advance.</p>
             </div>
             
             <div className="instruction-card">
               <div className="instruction-number">2</div>
               <h4>Watch Picks Cascade</h4>
-              <p>As you make picks in the Quarterfinals, your selected teams will automatically appear as options in the Semifinals.</p>
+              <p>As you make picks in Round 1, your selected teams will automatically appear as options in the Quarterfinals.</p>
             </div>
             
             <div className="instruction-card">
               <div className="instruction-number">3</div>
               <h4>Complete All Rounds</h4>
-              <p>Continue making picks through each round. You must complete all 8 Quarterfinal picks, 4 Semifinal picks, 2 Finals picks, and 1 Championship pick.</p>
+              <p>Continue making picks through each round. You must complete all 8 Round 1 picks, 4 Quarterfinal picks, 2 Semifinal picks, and 1 Championship pick.</p>
             </div>
             
             <div className="instruction-card">
@@ -430,7 +430,7 @@ function Bracket({ updateUser }) {
           </div>
         </div>
 
-        {/* Round 3 - 2 games (Final Four) */}
+        {/* Round 3 - 2 games (Semifinals) */}
         <div className="bracket-round bracket-round--r3">
           <h2>{ROUND_LABELS[3]}</h2>
           <div className="bracket-games">
@@ -497,19 +497,19 @@ function Bracket({ updateUser }) {
       {!entry && (
         <div className="bracket-progress">
           <div className="progress-item">
-            <span className="progress-label">Quarterfinals</span>
+            <span className="progress-label">Round 1</span>
             <span className={`progress-count ${Object.keys(picks.round1).length === 8 ? 'complete' : ''}`}>
               {Object.keys(picks.round1).length}/8
             </span>
           </div>
           <div className="progress-item">
-            <span className="progress-label">Semifinals</span>
+            <span className="progress-label">Quarterfinals</span>
             <span className={`progress-count ${Object.keys(picks.round2).length === 4 ? 'complete' : ''}`}>
               {Object.keys(picks.round2).length}/4
             </span>
           </div>
           <div className="progress-item">
-            <span className="progress-label">Finals</span>
+            <span className="progress-label">Semifinals</span>
             <span className={`progress-count ${Object.keys(picks.round3).length === 2 ? 'complete' : ''}`}>
               {Object.keys(picks.round3).length}/2
             </span>

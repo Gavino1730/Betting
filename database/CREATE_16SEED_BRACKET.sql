@@ -148,11 +148,11 @@ SELECT
   'scheduled'
 FROM bracket_data b, round1_games rg;
 
--- Create Round 2 games (4 games) - semifinals
--- Winners from games 1&2 → Semifinal 1
--- Winners from games 3&4 → Semifinal 2
--- Winners from games 5&6 → Semifinal 3
--- Winners from games 7&8 → Semifinal 4
+-- Create Round 2 games (4 games) - quarterfinals
+-- Winners from games 1&2 → Quarterfinal 1
+-- Winners from games 3&4 → Quarterfinal 2
+-- Winners from games 5&6 → Quarterfinal 3
+-- Winners from games 7&8 → Quarterfinal 4
 
 WITH bracket_data AS (
   SELECT id FROM brackets WHERE name = '3A State Bracket' AND season = '2026'
@@ -162,7 +162,7 @@ SELECT b.id, 2, n, 'scheduled'
 FROM bracket_data b
 CROSS JOIN generate_series(1, 4) n;
 
--- Create Round 3 games (2 games) - finals
+-- Create Round 3 games (2 games) - semifinals
 WITH bracket_data AS (
   SELECT id FROM brackets WHERE name = '3A State Bracket' AND season = '2026'
 )

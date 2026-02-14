@@ -456,11 +456,23 @@ router.get('/:id/entries/me', authenticateToken, async (req, res) => {
   }
 });
 
-router.delete('/:id', authenticateToken, adminOnly, async (req, res) => {
-  const bracketId = req.params.id;
+router.delete('/:bracketId/entries/:entryId', authenticateToken, adminOnly, async (req, res) => {
+  const { bracketId, entryId } = req.params;
 
   try {
-    // Get bracket details
+    // Get the entry
+    const { data: entry, error: entryError } = await supabase
+      .from('bracket_entries')
+      .select('*')
+      .eq('id', entryId)
+      .eq('bracket_id', bracketId)
+      .single();
+
+    if (entryError || !entry) {
+      return res.status(404).json({ error: 'Bracket entry not found' });
+    }
+
+    // Get bracket for refund info
     const { data: bracket, error: bracketError } = await supabase
       .from('brackets')
       .select('*')
@@ -471,62 +483,28 @@ router.delete('/:id', authenticateToken, adminOnly, async (req, res) => {
       return res.status(404).json({ error: 'Bracket not found' });
     }
 
-    // Get all bracket entries to reverse entry fees if applicable
-    const { data: entries, error: entriesError } = await supabase
-      .from('bracket_entries')
-      .select('user_id')
-      .eq('bracket_id', bracketId);
-
-    if (entriesError && entriesError.code !== 'PGRST116') throw entriesError;
-
-    // Reverse entry fees for all users who entered
-    if (entries && entries.length > 0 && Number(bracket.entry_fee || 0) > 0) {
-      for (const entry of entries) {
-        await User.updateBalance(entry.user_id, Number(bracket.entry_fee));
-        await Transaction.create(
-          entry.user_id,
-          'bracket_refund',
-          Number(bracket.entry_fee),
-          `${bracket.name} bracket deleted - entry fee refunded`
-        );
-      }
+    // Refund entry fee if applicable
+    if (Number(bracket.entry_fee || 0) > 0) {
+      await User.updateBalance(entry.user_id, Number(bracket.entry_fee));
+      await Transaction.create(
+        entry.user_id,
+        'bracket_refund',
+        Number(bracket.entry_fee),
+        `User bracket entry removed from ${bracket.name} - entry fee refunded`
+      );
     }
 
-    // Delete bracket entries
-    const { error: deleteEntriesError } = await supabase
+    // Delete the entry
+    const { error: deleteError } = await supabase
       .from('bracket_entries')
       .delete()
-      .eq('bracket_id', bracketId);
+      .eq('id', entryId);
 
-    if (deleteEntriesError) throw deleteEntriesError;
+    if (deleteError) throw deleteError;
 
-    // Delete bracket games
-    const { error: deleteGamesError } = await supabase
-      .from('bracket_games')
-      .delete()
-      .eq('bracket_id', bracketId);
-
-    if (deleteGamesError) throw deleteGamesError;
-
-    // Delete bracket teams
-    const { error: deleteTeamsError } = await supabase
-      .from('bracket_teams')
-      .delete()
-      .eq('bracket_id', bracketId);
-
-    if (deleteTeamsError) throw deleteTeamsError;
-
-    // Delete bracket
-    const { error: deleteBracketError } = await supabase
-      .from('brackets')
-      .delete()
-      .eq('id', bracketId);
-
-    if (deleteBracketError) throw deleteBracketError;
-
-    res.json({ message: `Bracket "${bracket.name}" deleted successfully` });
+    res.json({ message: 'Bracket entry deleted and entry fee refunded' });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to delete bracket: ' + err.message });
+    res.status(500).json({ error: 'Failed to delete bracket entry: ' + err.message });
   }
 });
 
@@ -585,7 +563,7 @@ router.post('/:id/entries', authenticateToken, async (req, res) => {
     // Validate Round 1: All 8 picks must be valid (one of the team1/team2 for that game)
     const round1Games = gamesByRound[1] || [];
     if (round1Games.length !== 8) {
-      return res.status(400).json({ error: 'Invalid bracket structure - expected 8 quarterfinal games' });
+      return res.status(400).json({ error: 'Invalid bracket structure - expected 8 Round 1 games' });
     }
 
     const round1Picks = {};
@@ -604,7 +582,7 @@ router.post('/:id/entries', authenticateToken, async (req, res) => {
     // Game 1: from R1 games 1-2, Game 2: from R1 games 3-4, Game 3: from R1 games 5-6, Game 4: from R1 games 7-8
     const round2Games = gamesByRound[2] || [];
     if (round2Games.length !== 4) {
-      return res.status(400).json({ error: 'Invalid bracket structure - expected 4 semifinal games' });
+      return res.status(400).json({ error: 'Invalid bracket structure - expected 4 quarterfinal games' });
     }
 
     const round2Picks = {};
@@ -631,7 +609,7 @@ router.post('/:id/entries', authenticateToken, async (req, res) => {
     // Game 1: from R2 games 1-2, Game 2: from R2 games 3-4
     const round3Games = gamesByRound[3] || [];
     if (round3Games.length !== 2) {
-      return res.status(400).json({ error: 'Invalid bracket structure - expected 2 final games' });
+      return res.status(400).json({ error: 'Invalid bracket structure - expected 2 semifinal games' });
     }
 
     const round3Picks = {};
