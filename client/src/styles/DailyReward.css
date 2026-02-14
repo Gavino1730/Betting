@@ -15,14 +15,15 @@
 }
 
 .daily-reward-modal {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+  background: linear-gradient(135deg, #0b1c2f 0%, #13253b 100%);
   padding: 40px;
   border-radius: 20px;
   text-align: center;
   max-width: 450px;
-  box-shadow: 0 20px 60px rgba(0, 79, 158, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: slideDown 0.5s ease;
-  border: 3px solid #004f9e;
+  border: 3px solid rgba(0, 79, 158, 0.6);
+  color: #e6eef8;
 }
 
 .reward-icon {
@@ -32,7 +33,7 @@
 }
 
 .daily-reward-modal h2 {
-  color: #004f9e;
+  color: #9cc6ff;
   font-size: 2rem;
   margin-bottom: 20px;
 }
@@ -43,20 +44,20 @@
   align-items: center;
   margin-bottom: 30px;
   padding: 20px;
-  background: rgba(0, 79, 158, 0.1);
+  background: rgba(0, 79, 158, 0.2);
   border-radius: 15px;
 }
 
 .streak-count {
   font-size: 4rem;
   font-weight: bold;
-  color: #004f9e;
+  color: #9cc6ff;
   line-height: 1;
 }
 
 .streak-label {
   font-size: 1.2rem;
-  color: #666;
+  color: #c7d2df;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -83,10 +84,10 @@
 .total-reward {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #004f9e;
+  color: #dbe9ff;
   margin-bottom: 30px;
   padding: 15px;
-  background: rgba(40, 167, 69, 0.1);
+  background: rgba(40, 167, 69, 0.18);
   border-radius: 10px;
 }
 
@@ -132,8 +133,8 @@
 
 .close-button {
   background: transparent;
-  color: #666;
-  border: 2px solid #ddd;
+  color: #d3dbe6;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   padding: 12px 30px;
   font-size: 1rem;
   border-radius: 25px;
@@ -143,8 +144,8 @@
 }
 
 .close-button:hover {
-  border-color: #004f9e;
-  color: #004f9e;
+  border-color: #9cc6ff;
+  color: #9cc6ff;
 }
 
 .claimed-message {
@@ -172,7 +173,7 @@
 
 .claimed-message p {
   font-size: 1.5rem;
-  color: #004f9e;
+  color: #9cc6ff;
   font-weight: bold;
 }
 

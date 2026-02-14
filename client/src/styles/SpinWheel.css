@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: transparent;
+  background: rgba(7, 16, 30, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
 
 /* Modal Container */
 .spin-wheel-modal {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  background: linear-gradient(180deg, #0b1c2f 0%, #0f2338 100%);
   border-radius: 30px;
   max-width: 650px;
   width: 100%;
@@ -29,7 +29,7 @@
   position: relative;
   z-index: 100000;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
-              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+              0 0 0 1px rgba(255, 255, 255, 0.08) inset;
   animation: slideUp 0.4s ease;
 }
 
@@ -41,7 +41,7 @@
   background: transparent;
   border: none;
   font-size: 2rem;
-  color: #666;
+  color: #c7d2df;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -54,8 +54,8 @@
 }
 
 .spin-wheel-close:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: #004f9e;
+  background: rgba(255, 255, 255, 0.1);
+  color: #9cc6ff;
   transform: rotate(90deg);
 }
 
@@ -64,6 +64,7 @@
   margin: 0 auto;
   padding: 30px 20px;
   text-align: center;
+  color: #e6eef8;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -80,7 +81,7 @@
 }
 
 .spins-remaining {
-  color: #555;
+  color: #c7d2df;
   font-size: 1.1rem;
   margin-bottom: 30px;
   font-weight: 600;
@@ -216,12 +217,13 @@
 }
 
 .result-content {
-  background: linear-gradient(180deg, #ffffff 0%, #fffef8 100%);
+  background: linear-gradient(180deg, #0b1c2f 0%, #122840 100%);
   padding: 50px;
   border-radius: 30px;
   text-align: center;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
               0 0 0 3px rgba(255, 215, 0, 0.5) inset;
+  color: #e6eef8;
   animation: slideUp 0.5s ease, resultPulse 0.5s ease;
   position: relative;
   overflow: hidden;

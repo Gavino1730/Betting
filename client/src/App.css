@@ -170,17 +170,23 @@ body {
   width: 44px;
   height: 44px;
   background: transparent !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border: none !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
+  box-shadow: none !important;
 }
 
 .notification-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.12) !important;
-  border-color: rgba(255, 255, 255, 0.32) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.notification-icon-btn.active {
+  background: transparent !important;
+  border-color: transparent !important;
 }
 
 .nav-center button:hover,
