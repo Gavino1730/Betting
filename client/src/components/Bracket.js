@@ -213,6 +213,15 @@ function Bracket({ updateUser }) {
           <h1>Championship Bracket</h1>
           <p>Loading bracket...</p>
         </div>
+        <div className="bracket-actions">
+          <button
+            type="button"
+            className="bracket-link"
+            onClick={() => navigate('/bracket-leaderboard')}
+          >
+            View Leaderboard
+          </button>
+        </div>
       </div>
     );
   }
@@ -223,6 +232,15 @@ function Bracket({ updateUser }) {
         <div className="bracket-header">
           <h1>Championship Bracket</h1>
           <p className="bracket-subtitle">Bracket coming soon.</p>
+        </div>
+        <div className="bracket-actions">
+          <button
+            type="button"
+            className="bracket-link"
+            onClick={() => navigate('/bracket-leaderboard')}
+          >
+            View Leaderboard
+          </button>
         </div>
       </div>
     );
