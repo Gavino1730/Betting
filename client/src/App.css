@@ -189,6 +189,18 @@ body {
   border-color: transparent !important;
 }
 
+.nav-right .notification-icon-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.nav-right .notification-icon-btn:hover,
+.nav-right .notification-icon-btn.active {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
 .nav-center button:hover,
 .nav-right button:hover {
   background: rgba(255, 255, 255, 0.14) !important;
@@ -350,7 +362,7 @@ body {
     font-weight: 600;
   }
 
-  .nav-icon-button {
+  .nav-icon-button:not(.notification-icon-btn) {
     background: transparent !important;
     border: 1px solid var(--header-border) !important;
     color: var(--header-text) !important;
@@ -359,11 +371,11 @@ body {
     border-radius: 10px;
   }
 
-  .nav-icon-button:hover {
+  .nav-icon-button:not(.notification-icon-btn):hover {
     background: var(--header-hover) !important;
   }
 
-  .nav-icon-button.active {
+  .nav-icon-button:not(.notification-icon-btn).active {
     background: var(--header-active) !important;
   }
 

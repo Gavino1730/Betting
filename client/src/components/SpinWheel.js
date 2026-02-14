@@ -93,10 +93,13 @@ const SpinWheel = ({ isOpen, onClose, onPrizeWon }) => {
       // To align the segment with the top pointer, we need to rotate by negative of the segment center angle
       // This brings the segment center to 0 degrees (top)
       const targetAngle = -segmentCenterAngle;
-      
-      // Spin multiple times + target angle
+
+      // Spin multiple times + adjust from current rotation so the final angle matches the target
       const spins = 5 + Math.random() * 3; // 5-8 full rotations
-      const totalRotation = rotation + (spins * 360) + targetAngle;
+      const normalizedCurrent = ((rotation % 360) + 360) % 360;
+      const normalizedTarget = ((targetAngle % 360) + 360) % 360;
+      const delta = (normalizedTarget - normalizedCurrent + 360) % 360;
+      const totalRotation = rotation + (spins * 360) + delta;
 
       setRotation(totalRotation);
 
