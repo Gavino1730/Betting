@@ -1942,6 +1942,7 @@ html {
   }
 }
 
+@media (max-width: 600px) {
   .dashboard-intro {
     margin-bottom: 1.5rem;
     padding: 1.3rem;
