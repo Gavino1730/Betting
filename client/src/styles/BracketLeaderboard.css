@@ -120,23 +120,32 @@
 @media (max-width: 768px) {
   .bracket-leaderboard {
     padding: 24px 16px 40px;
+    min-height: calc(100vh - 120px);
   }
 
   .leaderboard-header {
     gap: 12px;
     margin-bottom: 16px;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .bracket-leaderboard h1 {
     font-size: 24px;
+    letter-spacing: -0.3px;
   }
 
   .leaderboard-header .subtitle {
     font-size: 14px;
   }
 
+  .leaderboard-header .subtitle--deadline {
+    font-size: 13px;
+  }
+
   .leaderboard-actions {
     width: 100%;
+    gap: 10px;
   }
 
   .bracket-link {
@@ -144,10 +153,12 @@
     justify-content: center;
     padding: 12px 16px;
     font-size: 14px;
+    border-radius: 8px;
   }
 
   .leaderboard-table {
     padding: 12px;
+    border-radius: 12px;
   }
 
   .leaderboard-row {
@@ -159,51 +170,95 @@
 
   .leaderboard-row--header {
     font-size: 11px;
+    gap: 6px;
+  }
+
+  .bracket-alert {
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 12px;
   }
 }
 
 @media (max-width: 480px) {
   .bracket-leaderboard {
     padding: 16px 12px 32px;
+    min-height: calc(100vh - 120px);
+  }
+
+  .leaderboard-header {
+    gap: 10px;
+    margin-bottom: 14px;
   }
 
   .bracket-leaderboard h1 {
     font-size: 20px;
+    margin-bottom: 4px;
   }
 
   .leaderboard-header .subtitle {
     font-size: 13px;
+    margin-top: 2px;
+  }
+
+  .leaderboard-header .subtitle--small {
+    font-size: 11px;
+  }
+
+  .leaderboard-header .subtitle--deadline {
+    font-size: 12px;
+    margin-top: 4px;
   }
 
   .leaderboard-actions {
     flex-direction: column;
     width: 100%;
+    gap: 8px;
   }
 
   .bracket-link {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px 14px;
     font-size: 14px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
   }
 
   .leaderboard-table {
-    padding: 10px;
+    padding: 10px 8px;
+    border-radius: 10px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .leaderboard-row {
     grid-template-columns: 40px minmax(100px, 1fr) 70px 90px;
     gap: 6px;
-    padding: 10px 4px;
+    padding: 10px 6px;
     font-size: 13px;
   }
 
   .leaderboard-row--header {
     font-size: 10px;
+    gap: 4px;
+  }
+
+  .leaderboard-row--empty {
+    padding: 10px 6px;
+    font-size: 13px;
   }
 
   .bracket-alert {
     padding: 10px 12px;
     font-size: 13px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .align-right {
+    text-align: right;
   }
 }

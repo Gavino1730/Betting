@@ -465,6 +465,8 @@
   align-items: stretch;
   position: relative;
   min-width: 920px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Top progression path indicator */
@@ -1207,6 +1209,7 @@
   .bracket-header {
     margin-bottom: 20px;
     padding-bottom: 16px;
+    gap: 12px;
   }
 
   .bracket-header h1 {
@@ -1238,6 +1241,7 @@
     min-height: auto;
     overflow-x: visible;
     min-width: auto;
+    min-width: unset;
   }
 
   .bracket-round--r1,
@@ -1294,11 +1298,14 @@
   .team-btn {
     padding: 14px 12px;
     font-size: 13px;
-    min-height: 48px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
   }
 
   .team-seed {
     font-size: 12px;
+    min-width: 24px;
   }
 
   .game-label {
@@ -1403,6 +1410,24 @@
   .bracket-meta__item .value {
     font-size: 16px;
   }
+
+  .bracket-start-cta {
+    width: 100%;
+  }
+
+  .bracket-start-button {
+    padding: 14px 32px;
+    font-size: 16px;
+  }
+
+  .quick-picks-label {
+    font-size: 11px;
+  }
+
+  .quick-pick-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1410,11 +1435,22 @@
     padding: 16px 10px 32px;
   }
 
+  .bracket-header {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
   .bracket-header h1 {
     font-size: 22px;
+    letter-spacing: -0.3px;
   }
 
   .bracket-subtitle {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .bracket-deadline {
     font-size: 13px;
   }
 
@@ -1424,18 +1460,21 @@
 
   .bracket-round h2 {
     font-size: 12px;
+    padding-bottom: 8px;
   }
 
-  /* Maintain readable font sizes and touch targets */
+  /* Ensure excellent touch targets on very small screens */
   .team-btn {
     padding: 12px 10px;
     font-size: 12px;
     min-height: 44px;
+    gap: 8px;
   }
 
   .team-seed {
     min-width: 20px;
     font-size: 11px;
+    min-width: 18px;
   }
 
   .team-name {
@@ -1444,6 +1483,7 @@
 
   .game-label {
     font-size: 10px;
+    margin-bottom: 4px;
   }
 
   .championship-icon {
@@ -1458,6 +1498,7 @@
 
   .instructions-header {
     margin-bottom: 16px;
+    padding-bottom: 12px;
   }
 
   .instructions-header h3 {
@@ -1525,6 +1566,7 @@
   .bracket-submit-btn {
     padding: 14px 20px;
     font-size: 15px;
+    min-width: 100%;
   }
 
   .submit-hint {
@@ -1547,6 +1589,7 @@
 
   .beta-warning {
     padding: 14px;
+    margin: 12px 0 20px;
   }
 
   .beta-icon {
@@ -1559,6 +1602,90 @@
 
   .beta-text p {
     font-size: 12px;
+    margin-top: 6px;
+  }
+
+  .bracket-meta {
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .bracket-meta__item {
+    min-width: 120px;
+  }
+
+  .bracket-meta__item .label {
+    font-size: 10px;
+  }
+
+  .bracket-meta__item .value {
+    font-size: 15px;
+  }
+
+  .bracket-entry-summary {
+    padding: 12px 14px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .bracket-alert {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .bracket-success {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .bracket-success__header h3 {
+    font-size: 18px;
+  }
+
+  .bracket-success__header p {
+    font-size: 13px;
+  }
+
+  .bracket-start-cta {
+    padding: 16px 12px;
+    margin-bottom: 16px;
+  }
+
+  .bracket-start-button {
+    padding: 12px 28px;
+    font-size: 15px;
+  }
+
+  .bracket-start-subtext {
+    font-size: 12px;
+  }
+
+  .quick-picks-label {
+    font-size: 11px;
+  }
+
+  .quick-pick-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .bracket-leaderboard-tease {
+    padding: 12px 14px;
+    margin: 16px 0 20px;
+  }
+
+  .bracket-leaderboard-tease h4 {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .bracket-leaderboard-tease p {
+    font-size: 13px;
+  }
+
+  .round-hint {
+    font-size: 11px;
+    margin: 4px 0 4px;
   }
 }
 
@@ -1739,6 +1866,7 @@
   .actual-bracket-info {
     padding: 12px 16px;
     font-size: 13px;
+    margin-bottom: 20px;
   }
 
   .legend-items {
@@ -1748,6 +1876,12 @@
 
   .actual-bracket-legend {
     padding: 16px;
+    margin-top: 32px;
+  }
+
+  .actual-bracket-legend h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
   }
 
   .team-display {
@@ -1758,6 +1892,60 @@
   .champion-label {
     font-size: 10px;
     padding: 3px 8px;
+  }
+
+  .bracket-games {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actual-bracket-info {
+    padding: 12px 14px;
+    font-size: 12px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+
+  .actual-bracket-legend {
+    padding: 14px;
+    margin-top: 24px;
+    border-radius: 10px;
+  }
+
+  .actual-bracket-legend h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .legend-items {
+    gap: 8px;
+  }
+
+  .legend-box {
+    width: 35px;
+    height: 28px;
+  }
+
+  .legend-item {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .team-display {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .team-display .team-seed {
+    font-size: 12px;
+    min-width: 20px;
+  }
+
+  .champion-label {
+    font-size: 9px;
+    padding: 2px 6px;
   }
 }
 
@@ -1906,6 +2094,7 @@ svg.bracket-svg path.selected-path {
 @media (max-width: 768px) {
   .bracket-container {
     padding: 16px 0;
+    margin-bottom: 24px;
   }
   
   .bracket-seed-container {
@@ -1915,6 +2104,7 @@ svg.bracket-svg path.selected-path {
   .bracket-seed-team {
     padding: 12px 14px;
     font-size: 14px;
+    min-height: 46px;
   }
   
   .bracket-round-title {
@@ -1925,20 +2115,31 @@ svg.bracket-svg path.selected-path {
   .bracket-container .react-brackets {
     gap: 24px;
   }
+
+  svg.bracket-svg {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
+  .bracket-container {
+    padding: 12px 0;
+    margin-bottom: 20px;
+  }
+
   .bracket-seed-container {
     min-width: 160px;
   }
   
   .bracket-seed-team {
     padding: 10px 12px;
-    font-size: 13px;
+    font-size: 12px;
+    min-height: 44px;
   }
 
   .bracket-round-title {
     font-size: 15px;
+    margin-bottom: 10px;
   }
 
   .winner-badge {
@@ -1946,6 +2147,11 @@ svg.bracket-svg path.selected-path {
   }
 
   .bracket-container .react-brackets {
-    gap: 20px;
+    gap: 18px;
+  }
+
+  .team-name {
+    font-size: 11px;
+    min-width: 0;
   }
 }
