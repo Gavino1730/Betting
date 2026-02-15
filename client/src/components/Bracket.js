@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bracket as BracketDisplay, Seed, SeedItem } from 'react-brackets';
 import apiClient from '../utils/axios';
 import { formatCurrency } from '../utils/currency';
 import '../styles/Bracket.css';
@@ -100,6 +99,16 @@ function Bracket({ updateUser }) {
     return game.winner_team_id === pickTeamId;
   };
 
+  const getTeamName = (teamId) => {
+    const team = teamById[teamId];
+    return team ? team.name : 'TBD';
+  };
+
+  const getTeamSeed = (teamId) => {
+    const team = teamById[teamId];
+    return team ? team.seed : '?';
+  };
+
   const applyRound1Pick = (gameNumber, teamId) => {
     setPicks((prev) => ({
       ...prev,
@@ -188,64 +197,27 @@ function Bracket({ updateUser }) {
     }
   };
 
-  // Transform game data into react-brackets format
-  const transformedRounds = useMemo(() => {
-    if (!bracket || games.length === 0) return [];
-    
-    const rounds = [];
-    
-    // Round 1-4
-    for (let round = 1; round <= 4; round++) {
-      const roundGames = gamesByRound[round] || [];
-      const seeds = roundGames.sort((a, b) => a.game_number - b.game_number).map((game) => {
-        const team1 = teamById[game.team1_id];
-        const team2 = teamById[game.team2_id];
-        
-        return {
-          id: game.id,
-          gameNumber: game.game_number,
-          round,
-          teams: [
-            {
-              id: game.team1_id,
-              name: team1 ? `${team1.seed}. ${team1.name}` : 'TBD',
-              seed: team1?.seed || '?'
-            },
-            {
-              id: game.team2_id,
-              name: team2 ? `${team2.seed}. ${team2.name}` : 'TBD',
-              seed: team2?.seed || '?'
-            }
-          ],
-          winner: game.winner_team_id
-        };
-      });
-      
-      rounds.push({
-        title: ROUND_LABELS[round],
-        seeds
-      });
-    }
-    
-    return rounds;
-  }, [games, gamesByRound, teamById, bracket]);
+  const placeholderByRound = {
+    2: 'Awaiting Round 1 Picks',
+    3: 'Awaiting Quarterfinal Picks',
+    4: 'Awaiting Semifinal Picks'
+  };
 
-  // Custom seed component for interactive picking
-  const CustomSeed = ({ seed, breakpoint, roundIndex }) => {
-    const round = roundIndex + 1;
-    const gameNumber = seed.gameNumber;
+  const renderGame = (game, round) => {
+    if (!game) return null;
+
+    const gameNumber = game.game_number;
     const bracketLocked = bracket?.status !== 'open';
     const isDisabled = bracketLocked || !!entry;
-    
-    // Get the current pick for this game
     const roundKey = `round${round}`;
     const pickKey = makeGameKey(gameNumber);
     const selectedTeamId = picks[roundKey]?.[pickKey];
-    
-    // Handle team selection
+    const teamIds = [game.team1_id, game.team2_id];
+    const hasTeams = teamIds.some(Boolean);
+
     const handleTeamClick = (teamId) => {
       if (isDisabled || !teamId) return;
-      
+
       if (round === 1) {
         applyRound1Pick(gameNumber, teamId);
       } else if (round === 2) {
@@ -256,40 +228,42 @@ function Bracket({ updateUser }) {
         applyRound4Pick(teamId);
       }
     };
-    
-    // Check if pick is correct/incorrect (for submitted entries)
+
     const getPickStatus = (teamId) => {
-      if (!entry) return '';
+      if (!entry || !teamId) return '';
       const isCorrect = isPickCorrect(round, gameNumber, teamId);
       if (isCorrect === true) return 'correct';
       if (isCorrect === false) return 'incorrect';
       return '';
     };
-    
+
     return (
-      <Seed mobileBreakpoint={breakpoint}>
-        <SeedItem>
-          <div className="bracket-seed-container">
-            {seed.teams.map((team, idx) => {
-              const isSelected = selectedTeamId === team.id;
-              const pickStatus = getPickStatus(team.id);
-              const isWinner = seed.winner === team.id;
-              
-              return (
-                <button
-                  key={idx}
-                  className={`bracket-seed-team ${isSelected ? 'selected' : ''} ${pickStatus}`}
-                  onClick={() => handleTeamClick(team.id)}
-                  disabled={isDisabled || team.name === 'TBD'}
-                >
-                  <span className="team-name">{team.name}</span>
-                  {isWinner && <span className="winner-badge">✓</span>}
-                </button>
-              );
-            })}
-          </div>
-        </SeedItem>
-      </Seed>
+      <div key={game.id} className={`bracket-game ${round === 4 ? 'championship-game' : ''}`}>
+        {round === 4 && <div className="championship-icon">🏆</div>}
+        <div className="game-label">Game {gameNumber}</div>
+        {!hasTeams && (
+          <div className="bracket-placeholder">{placeholderByRound[round] || 'Awaiting teams'}</div>
+        )}
+        {hasTeams &&
+          teamIds.map((teamId, idx) => {
+            const isSelected = selectedTeamId === teamId;
+            const pickStatus = getPickStatus(teamId);
+            const isWinner = game.winner_team_id === teamId;
+
+            return (
+              <button
+                key={teamId || idx}
+                className={`team-btn ${isSelected ? 'selected' : ''} ${pickStatus}`}
+                onClick={() => handleTeamClick(teamId)}
+                disabled={isDisabled || !teamId}
+              >
+                <span className="team-seed">#{getTeamSeed(teamId)}</span>
+                <span className="team-name">{getTeamName(teamId)}</span>
+                {isWinner && <span className="winner-badge">✓</span>}
+              </button>
+            );
+          })}
+      </div>
     );
   };
 
@@ -429,13 +403,17 @@ function Bracket({ updateUser }) {
         </div>
       )}
 
-      {/* Bracket Display using react-brackets library */}
-      <div className="bracket-container">
-        <BracketDisplay
-          rounds={transformedRounds}
-          renderSeedComponent={CustomSeed}
-          roundTitleComponent={(title) => <div className="bracket-round-title">{title}</div>}
-        />
+      <div className="bracket-grid">
+        {[1, 2, 3, 4].map((round) => (
+          <div key={round} className={`bracket-round bracket-round--r${round}`}>
+            <h2>{ROUND_LABELS[round]}</h2>
+            <div className="bracket-games">
+              {(gamesByRound[round] || [])
+                .sort((a, b) => a.game_number - b.game_number)
+                .map((game) => renderGame(game, round))}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Progress Indicator */}
