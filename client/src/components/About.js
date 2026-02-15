@@ -3,52 +3,72 @@ import '../styles/About.css';
 
 function About() {
   const stats = {
-    revisions: 325,
+    revisions: 661,
     developer: 'Gavin Galan',
+    github: {
+      repo: 'https://github.com/Gavino1730/Betting',
+      commits: 661,
+      branches: 'main',
+      license: 'MIT'
+    },
     files: {
-      javascript: 45,
-      css: 17,
+      javascript: 76,
+      css: 29,
+      sql: 8,
       json: 4,
-      images: 5,
-      markdown: 2,
-      sql: 1,
-      html: 1
+      markdown: 15,
+      tests: 9,
+      shell: 4
     },
     languages: [
-      { name: 'JavaScript', percentage: 60, count: 45, color: '#F7DF1E' },
-      { name: 'CSS', percentage: 21, count: 17, color: '#264de4' },
-      { name: 'JSON', percentage: 5, count: 4, color: '#292929' },
-      { name: 'Markdown', percentage: 5, count: 2, color: '#083fa1' },
-      { name: 'Other', percentage: 9, count: 5, color: '#888a9b' }
+      { name: 'JavaScript', percentage: 52, count: 76, color: '#F7DF1E' },
+      { name: 'CSS', percentage: 20, count: 29, color: '#264de4' },
+      { name: 'Markdown', percentage: 10, count: 15, color: '#083fa1' },
+      { name: 'SQL', percentage: 5, count: 8, color: '#e38c00' },
+      { name: 'Tests', percentage: 6, count: 9, color: '#16a34a' },
+      { name: 'Other', percentage: 7, count: 8, color: '#888a9b' }
     ],
     components: [
-      { category: 'React Components', count: 15 },
-      { category: 'CSS Stylesheets', count: 17 },
-      { category: 'API Routes', count: 8 },
-      { category: 'Database Models', count: 8 },
-      { category: 'Middleware', count: 2 },
-      { category: 'Utilities', count: 5 }
+      { category: 'React Components', count: 35 },
+      { category: 'CSS Stylesheets', count: 29 },
+      { category: 'API Routes', count: 12 },
+      { category: 'Database Models', count: 10 },
+      { category: 'Middleware', count: 3 },
+      { category: 'E2E Tests', count: 9 },
+      { category: 'Utilities', count: 8 },
+      { category: 'SQL Scripts', count: 8 }
     ],
     stack: [
-      { name: 'React', version: '18.2.0', role: 'Frontend' },
-      { name: 'Express.js', version: '-', role: 'Backend' },
-      { name: 'PostgreSQL', version: '-', role: 'Database' },
-      { name: 'Supabase', version: '-', role: 'Database Service' },
+      { name: 'React', version: '18.2.0', role: 'Frontend Framework' },
+      { name: 'Express.js', version: '4.x', role: 'Backend API' },
+      { name: 'PostgreSQL', version: '14+', role: 'Database' },
+      { name: 'Supabase', version: 'Cloud', role: 'Database Platform' },
       { name: 'JWT + bcryptjs', version: '-', role: 'Authentication' },
-      { name: 'Axios', version: '-', role: 'HTTP Client' },
-      { name: 'CSS3', version: '-', role: 'Styling' }
+      { name: 'Axios', version: '1.x', role: 'HTTP Client' },
+      { name: 'Playwright', version: '1.57', role: 'E2E Testing' },
+      { name: 'Node.js', version: '18+', role: 'Runtime' }
     ],
     deployment: {
-      backend: 'v1.0.0 - Production',
-      frontend: 'v1.0.0 - Production',
-      database: 'PostgreSQL 14+ (Supabase)'
+      backend: 'v1.0.0 - Production (Railway)',
+      frontend: 'v1.0.0 - Production (Cloudflare Pages)',
+      database: 'PostgreSQL 14+ (Supabase Cloud)',
+      domain: 'valiantpicks.com'
     },
     timeline: {
       startDate: 'December 17, 2025',
       endDate: 'January 4, 2026',
       daysElapsed: 18,
       totalFiles: 52337,
-      totalFolders: 7731
+      totalFolders: 7731,
+      trackedFiles: 145
+    },
+    features: {
+      routes: 12,
+      models: 10,
+      components: 35,
+      pages: 15,
+      adminFeatures: 8,
+      userFeatures: 12
     }
   };
 
@@ -98,22 +118,49 @@ function About() {
           </div>
         </section>
 
-        {/* Git Stats */}
+        {/* Git Stats with GitHub */}
         <section className="about-section">
           <h2>📈 Development History</h2>
           <div className="sole-creator">
             <div className="creator-title">✨ Entirely Created By</div>
             <div className="creator-name">{stats.developer}</div>
-            <div className="creator-subtitle">All {stats.revisions} revisions across {Object.values(stats.files).reduce((a, b) => a + b, 0)} tracked files</div>
+            <div className="creator-subtitle">All {stats.revisions} commits across {stats.timeline.trackedFiles} tracked files</div>
+          </div>
+          <div className="github-section">
+            <div className="github-badge">
+              <span className="github-icon">🔗</span>
+              <a href={stats.github.repo} target="_blank" rel="noopener noreferrer" className="github-link">
+                GitHub Repository
+              </a>
+            </div>
+            <div className="github-details">
+              <span className="github-stat">
+                <strong>{stats.github.commits}</strong> commits
+              </span>
+              <span className="github-stat">
+                <strong>{stats.github.license}</strong> License
+              </span>
+              <span className="github-stat">
+                <strong>Open Source</strong> Available
+              </span>
+            </div>
           </div>
           <div className="about-grid">
             <div className="stat-card highlight">
               <div className="stat-number">{stats.revisions}</div>
-              <div className="stat-label">Total Revisions</div>
+              <div className="stat-label">Total Commits</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">{Object.values(stats.files).reduce((a, b) => a + b, 0)}</div>
+              <div className="stat-number">{stats.timeline.trackedFiles}</div>
               <div className="stat-label">Tracked Files</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-number">{stats.features.routes}</div>
+              <div className="stat-label">API Routes</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-number">{stats.features.components}</div>
+              <div className="stat-label">Components</div>
             </div>
           </div>
         </section>
@@ -185,24 +232,29 @@ function About() {
               <div className="file-count">{stats.files.css}</div>
             </div>
             <div className="file-card">
-              <div className="file-icon">⚙️</div>
-              <div className="file-name">JSON</div>
-              <div className="file-count">{stats.files.json}</div>
-            </div>
-            <div className="file-card">
-              <div className="file-icon">📊</div>
-              <div className="file-name">Images</div>
-              <div className="file-count">{stats.files.images}</div>
-            </div>
-            <div className="file-card">
               <div className="file-icon">📝</div>
               <div className="file-name">Markdown</div>
               <div className="file-count">{stats.files.markdown}</div>
             </div>
             <div className="file-card">
+              <div className="file-icon">🧪</div>
+              <div className="file-name">E2E Tests</div>
+              <div className="file-count">{stats.files.tests}</div>
+            </div>
+            <div className="file-card">
               <div className="file-icon">🗄️</div>
               <div className="file-name">SQL</div>
               <div className="file-count">{stats.files.sql}</div>
+            </div>
+            <div className="file-card">
+              <div className="file-icon">⚙️</div>
+              <div className="file-name">JSON</div>
+              <div className="file-count">{stats.files.json}</div>
+            </div>
+            <div className="file-card">
+              <div className="file-icon">💻</div>
+              <div className="file-name">Shell Scripts</div>
+              <div className="file-count">{stats.files.shell}</div>
             </div>
           </div>
         </section>
@@ -247,8 +299,16 @@ function About() {
 
         {/* Deployment */}
         <section className="about-section">
-          <h2>🔄 Versions</h2>
+          <h2>� Production Deployment</h2>
           <div className="deployment-cards">
+            <div className="deploy-card">
+              <div className="deploy-label">Live Site</div>
+              <div className="deploy-value">
+                <a href="https://valiantpicks.com" target="_blank" rel="noopener noreferrer" className="deploy-link">
+                  {stats.deployment.domain}
+                </a>
+              </div>
+            </div>
             <div className="deploy-card">
               <div className="deploy-label">Backend API</div>
               <div className="deploy-value">{stats.deployment.backend}</div>
@@ -269,46 +329,67 @@ function About() {
           <h2>✨ Project Overview</h2>
           <div className="summary-content">
             <p>
-              <strong>Valiant Picks</strong> is a full-stack sports betting web application developed from the ground up by <strong>Gavin Galan</strong>. 
-              Built for Valiants sports, this application enables users to place confidence-based bets on games with virtual Valiant Bucks, 
-              manage teams and player rosters, track betting history, and compete on a public leaderboard.
+              <strong>Valiant Picks</strong> is a comprehensive full-stack sports betting web application developed entirely from the ground up by <strong>Gavin Galan</strong>. 
+              Built for the Valiants sports community, this production-ready application enables users to place confidence-based bets on games with virtual Valiant Bucks, 
+              manage teams and player rosters, track betting history, compete on public leaderboards, and participate in tournament brackets.
             </p>
             
+            <h3>Development Scale</h3>
+            <p>
+              The project represents a substantial solo development effort with <strong>{stats.github.commits} commits</strong> across <strong>{stats.timeline.trackedFiles} tracked files</strong> 
+              over {stats.timeline.daysElapsed} days. The codebase includes {stats.features.components} React components, {stats.features.routes} API routes, 
+              {stats.features.models} database models, and {stats.files.tests} comprehensive E2E tests built with Playwright. The complete source code is available on 
+              <a href={stats.github.repo} target="_blank" rel="noopener noreferrer" className="inline-link"> GitHub</a> under the {stats.github.license} license.
+            </p>
+
             <h3>Technical Architecture</h3>
             <p>
               The application follows a modern full-stack monorepo architecture with a React 18.2.0 frontend hosted on Cloudflare Pages and an Express.js 
-              backend deployed on Railway. Data is persisted in a PostgreSQL database through Supabase, ensuring reliability and scalability. Authentication 
-              is handled via JWT tokens with bcryptjs password hashing, providing secure user sessions. The entire codebase spans <strong>79 tracked files</strong> 
-              across <strong>325 commits</strong>, demonstrating consistent development and iteration.
+              backend deployed on Railway. Data is persisted in a PostgreSQL 14+ database through Supabase, ensuring reliability and scalability. Authentication 
+              is handled via JWT tokens with bcryptjs password hashing, providing secure user sessions. The production site is live at 
+              <a href="https://valiantpicks.com" target="_blank" rel="noopener noreferrer" className="inline-link"> valiantpicks.com</a> with SSL encryption 
+              and optimized performance through Cloudflare's CDN.
             </p>
 
             <h3>Key Capabilities</h3>
             <p>
-              Users can authenticate, browse available games, place bets with three confidence levels (Low 1.2x, Medium 1.5x, High 2.0x), track their betting 
-              history, view real-time leaderboards, and explore team rosters with detailed player information. Admin users gain access to a comprehensive dashboard 
-              for managing games, teams, players, bets, and user balances. The application supports prop bets with custom odds, automatic bet resolution upon game 
-              completion, and transaction history tracking for complete financial transparency.
+              Users can authenticate with secure JWT tokens, browse available games across multiple sports, place bets with three confidence levels 
+              (Low 1.2x, Medium 1.5x, High 2.0x), track their comprehensive betting history, view real-time leaderboards with position tracking, 
+              explore team rosters with detailed player information, participate in tournament brackets, claim daily rewards and achievements, 
+              spin the reward wheel, and receive real-time push notifications. Admin users gain access to a comprehensive dashboard for managing 
+              games, teams, players, bets, brackets, user balances, and proposition bets with custom odds systems.
             </p>
 
             <h3>User Experience</h3>
             <p>
               The frontend is fully responsive across five breakpoints (1024px+, 768px, 520px, 480px, and below) ensuring seamless experiences on desktop, tablet, 
-              and mobile devices. Features include a mobile slide-out navigation menu, real-time balance updates, animated notifications, onboarding modals for new 
-              users, and intuitive forms for placing bets. The interface uses a professional color scheme anchored by #004f9e Valiant blue with careful attention 
-              to accessibility and visual hierarchy.
+              and mobile devices. Features include a mobile slide-out navigation menu, real-time balance updates with animated counters, toast notifications, 
+              onboarding modals for new users, comprehensive error handling with error boundaries, skeleton loading states, tooltips and confirmations, 
+              and intuitive forms with validation feedback. The interface uses a professional color scheme anchored by #004f9e Valiant blue with careful 
+              attention to accessibility and visual hierarchy.
             </p>
 
             <h3>Data & Security</h3>
             <p>
-              The database includes 8 core models (User, Game, Team, Bet, PropBet, Notification, Player, Transaction) with Row-Level Security (RLS) policies 
-              for data protection. All API endpoints are protected with JWT middleware, and user inputs are validated server-side. The system maintains referential 
-              integrity through foreign keys, prevents overbetting by validating user balances, and automatically calculates and credits winnings upon bet resolution.
+              The database includes 10 core models (User, Game, Team, Bet, PropBet, Notification, Player, Transaction, Achievement, WheelSpin, DailyLogin, Bracket) 
+              with Row-Level Security (RLS) policies for data protection. All API endpoints are protected with JWT middleware at the route level, and user inputs 
+              are validated both client-side and server-side with Joi schemas. The system maintains referential integrity through foreign keys and cascading deletes, 
+              prevents overbetting by validating user balances before bet placement, automatically calculates and credits winnings upon bet resolution, tracks all 
+              financial transactions with audit trails, and logs errors to the database for monitoring and debugging.
+            </p>
+
+            <h3>Testing & Quality Assurance</h3>
+            <p>
+              The project includes {stats.files.tests} comprehensive E2E test suites built with Playwright covering authentication flows, game management, 
+              bet placement and resolution, admin panel functionality, team management, transaction tracking, bracket management, and reward systems. 
+              Tests run across multiple browsers (Chromium, Firefox, WebKit) to ensure cross-browser compatibility. The test infrastructure includes 
+              helper utilities for test data management and automated test result exports.
             </p>
 
             <div className="summary-highlights">
               <div className="highlight-item">
                 <span className="highlight-icon">🎯</span>
-                <span>Full-stack monorepo with clear separation of concerns</span>
+                <span>{stats.github.commits} commits across {stats.timeline.trackedFiles} tracked files</span>
               </div>
               <div className="highlight-item">
                 <span className="highlight-icon">📱</span>
@@ -316,7 +397,7 @@ function About() {
               </div>
               <div className="highlight-item">
                 <span className="highlight-icon">🔐</span>
-                <span>JWT + RLS security with server-side validation</span>
+                <span>JWT + RLS security with comprehensive validation</span>
               </div>
               <div className="highlight-item">
                 <span className="highlight-icon">⚡</span>
@@ -324,12 +405,28 @@ function About() {
               </div>
               <div className="highlight-item">
                 <span className="highlight-icon">🎲</span>
-                <span>Confidence-based betting system with live odds</span>
+                <span>Confidence-based betting with live odds and brackets</span>
               </div>
               <div className="highlight-item">
                 <span className="highlight-icon">📊</span>
                 <span>Real-time leaderboards and transaction tracking</span>
               </div>
+              <div className="highlight-item">
+                <span className="highlight-icon">🧪</span>
+                <span>{stats.files.tests} E2E test suites with Playwright automation</span>
+              </div>
+              <div className="highlight-item">
+                <span className="highlight-icon">🔗</span>
+                <span>Open source on GitHub with {stats.github.license} license</span>
+              </div>
+            </div>
+
+            <div className="github-cta">
+              <p>Want to explore the code or contribute to the project?</p>
+              <a href={stats.github.repo} target="_blank" rel="noopener noreferrer" className="github-button">
+                <span className="github-icon">⭐</span>
+                View on GitHub
+              </a>
             </div>
           </div>
         </section>
