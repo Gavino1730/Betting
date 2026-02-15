@@ -32,7 +32,7 @@
 
 .beta-text strong {
   display: block;
-  color: #ffb74d;
+  color: var(--color-warning);
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 6px;
@@ -40,7 +40,7 @@
 
 .beta-text p {
   margin: 0;
-  color: #b8c5d6;
+  color: var(--color-text-secondary);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -53,19 +53,19 @@
   gap: 16px;
   margin-bottom: 28px;
   padding-bottom: 24px;
-  border-bottom: 2px solid rgba(31, 78, 153, 0.4);
+  border-bottom: 2px solid var(--color-border);
 }
 
 .bracket-header h1 {
   margin: 0;
-  color: #e9f1ff;
+  color: var(--color-text-primary);
   font-size: 42px;
   font-weight: 700;
 }
 
 .bracket-subtitle {
   margin: 4px 0 0;
-  color: #64b5f6;
+  color: var(--color-brand-strong);
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -74,11 +74,11 @@
 .bracket-meta {
   display: flex;
   gap: 24px;
-  background: var(--color-surface);
-  border-radius: 12px;
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-md);
   padding: 16px 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  border: 1.5px solid rgba(31, 78, 153, 0.35);
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid var(--color-border);
 }
 
 .bracket-meta__item {
@@ -91,13 +91,13 @@
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #9fb4d6;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
 .bracket-meta__item .value {
   font-weight: 700;
-  color: #64b5f6;
+  color: var(--color-brand-strong);
   font-size: 18px;
 }
 
@@ -111,41 +111,41 @@
 }
 
 .bracket-link {
-  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  background: var(--color-brand);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 14px 24px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.25);
+  box-shadow: var(--shadow-sm);
 }
 
 .bracket-link:hover {
-  background: #1565c0;
-  box-shadow: 0 8px 20px rgba(30, 136, 229, 0.35);
+  background: var(--color-brand-strong);
+  box-shadow: var(--card-shadow-hover);
   transform: translateY(-2px);
 }
 
 .bracket-entry-summary {
-  background: rgba(102, 187, 106, 0.1);
-  border: 1.5px solid rgba(102, 187, 106, 0.4);
-  border-radius: 8px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1.5px solid var(--color-success);
+  border-radius: var(--radius-md);
   padding: 12px 20px;
   display: flex;
   gap: 24px;
   font-size: 14px;
-  color: #a6e3b3;
+  color: #81c784;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+  box-shadow: var(--shadow-sm);
 }
 
 .bracket-alert {
   margin-bottom: 20px;
   padding: 16px 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 15px;
   animation: slideDown 0.3s ease-out;
   font-weight: 500;
@@ -153,20 +153,20 @@
 
 .bracket-alert--error {
   background: rgba(239, 83, 80, 0.12);
-  border: 1.5px solid rgba(239, 83, 80, 0.35);
-  color: #f3a2a2;
+  border: 1.5px solid var(--color-danger);
+  color: #ef9a9a;
 }
 
 .bracket-alert--success {
-  background: rgba(102, 187, 106, 0.12);
-  border: 1.5px solid rgba(102, 187, 106, 0.4);
-  color: #a6e3b3;
+  background: rgba(76, 175, 80, 0.12);
+  border: 1.5px solid var(--color-success);
+  color: #81c784;
 }
 
 .bracket-alert--info {
-  background: rgba(30, 136, 229, 0.12);
-  border: 1.5px solid rgba(30, 136, 229, 0.4);
-  color: #64b5f6;
+  background: rgba(11, 94, 215, 0.12);
+  border: 1.5px solid var(--color-brand);
+  color: var(--color-info);
 }
 
 @keyframes slideDown {
@@ -182,12 +182,12 @@
 
 /* Instructions Section */
 .bracket-instructions {
-  background: var(--color-surface);
-  border: 1.5px solid rgba(31, 78, 153, 0.35);
-  border-radius: 14px;
+  background: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 28px;
   margin-bottom: 28px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-sm);
   animation: slideDown 0.4s ease-out;
 }
 
@@ -195,12 +195,12 @@
   text-align: center;
   margin-bottom: 28px;
   padding-bottom: 16px;
-  border-bottom: 1.5px solid rgba(31, 78, 153, 0.25);
+  border-bottom: 1.5px solid var(--color-border);
 }
 
 .instructions-header h3 {
   margin: 0 0 8px;
-  color: #64b5f6;
+  color: var(--color-brand-strong);
   font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -208,7 +208,7 @@
 
 .instructions-intro {
   margin: 0;
-  color: #9fb4d6;
+  color: var(--color-text-secondary);
   font-size: 15px;
   font-weight: 500;
 }
@@ -221,9 +221,9 @@
 }
 
 .instruction-card {
-  background: linear-gradient(135deg, rgba(31, 78, 153, 0.12) 0%, rgba(31, 78, 153, 0.06) 100%);
-  border: 1.5px solid rgba(31, 78, 153, 0.25);
-  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(11, 94, 215, 0.08) 0%, rgba(11, 94, 215, 0.03) 100%);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 20px;
   transition: all 0.2s ease;
   position: relative;
@@ -237,12 +237,12 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #64b5f6;
+  background: var(--color-brand);
 }
 
 .instruction-card:hover {
-  border-color: rgba(31, 78, 153, 0.4);
-  box-shadow: 0 4px 16px rgba(31, 78, 153, 0.2);
+  border-color: var(--color-brand);
+  box-shadow: var(--card-shadow-hover);
   transform: translateY(-2px);
 }
 
@@ -252,18 +252,18 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  background: var(--color-brand);
   color: white;
   border-radius: 50%;
   font-weight: 700;
   font-size: 14px;
   margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+  box-shadow: var(--shadow-sm);
 }
 
 .instruction-card h4 {
   margin: 0 0 10px;
-  color: #e9f1ff;
+  color: var(--color-text-primary);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -271,21 +271,21 @@
 
 .instruction-card p {
   margin: 0;
-  color: #b8c5d6;
+  color: var(--color-text-secondary);
   font-size: 14px;
   line-height: 1.6;
 }
 
 .bracket-tips {
-  background: rgba(255, 152, 0, 0.12);
-  border: 1.5px solid rgba(255, 152, 0, 0.35);
-  border-radius: 10px;
+  background: rgba(247, 201, 91, 0.1);
+  border: 1.5px solid var(--color-warning);
+  border-radius: var(--radius-md);
   padding: 16px 20px;
 }
 
 .bracket-tips h4 {
   margin: 0 0 12px;
-  color: #ffb74d;
+  color: var(--color-warning);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -299,7 +299,7 @@
 
 .bracket-tips li {
   margin-bottom: 8px;
-  color: #b8c5d6;
+  color: var(--color-text-secondary);
   font-size: 14px;
   line-height: 1.5;
   position: relative;
@@ -310,7 +310,7 @@
   content: '→';
   position: absolute;
   left: 0;
-  color: #ffb74d;
+  color: var(--color-warning);
   font-weight: bold;
 }
 
@@ -319,7 +319,7 @@
 }
 
 .bracket-tips strong {
-  color: #e9f1ff;
+  color: var(--color-text-primary);
   font-weight: 600;
 }
 
@@ -757,34 +757,35 @@
 }
 
 .bracket-submit-btn {
-  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  background: var(--color-brand);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 18px 54px;
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 24px rgba(30, 136, 229, 0.35);
+  box-shadow: var(--shadow-sm);
   min-width: 240px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
 .bracket-submit-btn:hover:not(:disabled) {
-  box-shadow: 0 12px 32px rgba(30, 136, 229, 0.45);
+  background: var(--color-brand-strong);
+  box-shadow: var(--card-shadow-hover);
   transform: translateY(-3px);
 }
 
 .bracket-submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .submit-hint {
   margin: 0;
-  color: #9fb4d6;
+  color: var(--color-text-secondary);
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -796,12 +797,12 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
-  background: var(--color-surface);
-  border: 1.5px solid rgba(31, 78, 153, 0.25);
-  border-radius: 12px;
+  background: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
   position: relative;
 }
 
@@ -813,7 +814,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 18px;
-  color: rgba(100, 181, 246, 0.25);
+  color: var(--color-border);
   font-weight: 700;
   z-index: 1;
 }
@@ -833,24 +834,24 @@
   justify-content: center;
   gap: 6px;
   padding: 12px;
-  background: linear-gradient(135deg, rgba(31, 78, 153, 0.08) 0%, rgba(31, 78, 153, 0.04) 100%);
-  border: 1.5px solid rgba(31, 78, 153, 0.2);
-  border-radius: 8px;
+  background: rgba(11, 94, 215, 0.05);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
   transition: all 0.2s ease;
   position: relative;
   z-index: 2;
 }
 
 .progress-item:hover {
-  border-color: rgba(31, 78, 153, 0.35);
-  background: rgba(31, 78, 153, 0.12);
+  border-color: var(--color-brand);
+  background: rgba(11, 94, 215, 0.08);
   transform: translateY(-2px);
 }
 
 .progress-label {
   font-size: 12px;
   font-weight: 700;
-  color: #9fb4d6;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -858,12 +859,12 @@
 .progress-count {
   font-size: 20px;
   font-weight: 700;
-  color: #64b5f6;
+  color: var(--color-brand-strong);
   transition: all 0.2s ease;
 }
 
 .progress-count.complete {
-  color: #66bb6a;
+  color: var(--color-success);
   font-size: 22px;
 }
 
@@ -1534,3 +1535,189 @@
   }
 }
 
+/* React Brackets Library Styles */
+.bracket-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 24px 0;
+  margin-bottom: 32px;
+  background: var(--color-bg);
+}
+
+/* Round title styling */
+.bracket-round-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-brand-strong);
+  text-align: center;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Seed container (the matchup box) */
+.bracket-seed-container {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.bracket-seed-container:hover {
+  border-color: var(--color-brand);
+  box-shadow: 0 8px 20px rgba(11, 94, 215, 0.15);
+}
+
+/* Team buttons inside seed */
+.bracket-seed-team {
+  width: 100%;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bracket-seed-team:last-child {
+  border-bottom: none;
+}
+
+.bracket-seed-team:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-brand-strong);
+}
+
+.bracket-seed-team:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  color: var(--color-text-secondary);
+}
+
+/* Selected team */
+.bracket-seed-team.selected {
+  background: linear-gradient(135deg, rgba(11, 94, 215, 0.2) 0%, rgba(29, 124, 255, 0.15) 100%);
+  border-bottom-color: var(--color-brand);
+  color: var(--color-brand-strong);
+  font-weight: 700;
+}
+
+.bracket-seed-team.selected:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(11, 94, 215, 0.3) 0%, rgba(29, 124, 255, 0.2) 100%);
+}
+
+/* Correct pick (winner) */
+.bracket-seed-team.correct {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(56, 142, 60, 0.15) 100%);
+  border-bottom-color: var(--color-success);
+  color: #66bb6a;
+  font-weight: 700;
+}
+
+.bracket-seed-team.correct:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.25) 0%, rgba(56, 142, 60, 0.2) 100%);
+}
+
+/* Incorrect pick */
+.bracket-seed-team.incorrect {
+  background: linear-gradient(135deg, rgba(239, 83, 80, 0.15) 0%, rgba(211, 47, 47, 0.1) 100%);
+  border-bottom-color: var(--color-danger);
+  color: #e57373;
+  opacity: 0.75;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.bracket-seed-team.incorrect:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(239, 83, 80, 0.2) 0%, rgba(211, 47, 47, 0.15) 100%);
+}
+
+/* Winner badge */
+.winner-badge {
+  font-size: 18px;
+  color: var(--color-success);
+  font-weight: 700;
+  animation: popIn 0.3s ease-out;
+}
+
+.team-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Connecting lines from react-brackets library */
+svg.bracket-svg path {
+  stroke: var(--color-border);
+  stroke-width: 2;
+}
+
+svg.bracket-svg path.selected-path {
+  stroke: var(--color-brand);
+  stroke-width: 3;
+}
+
+/* Enhance react-brackets default styling */
+.bracket-container .react-brackets {
+  display: flex;
+  gap: 32px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .bracket-container {
+    padding: 16px 0;
+  }
+  
+  .bracket-seed-container {
+    min-width: 180px;
+  }
+  
+  .bracket-seed-team {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  
+  .bracket-round-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .bracket-container .react-brackets {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bracket-seed-container {
+    min-width: 160px;
+  }
+  
+  .bracket-seed-team {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .bracket-round-title {
+    font-size: 15px;
+  }
+
+  .winner-badge {
+    font-size: 16px;
+  }
+
+  .bracket-container .react-brackets {
+    gap: 20px;

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Bracket as BracketDisplay, Seed, SeedItem } from 'react-brackets';
 import apiClient from '../utils/axios';
 import { formatCurrency } from '../utils/currency';
 import '../styles/Bracket.css';
@@ -90,11 +91,6 @@ function Bracket({ updateUser }) {
     loadBracket();
   }, []);
 
-  const getTeamName = (teamId) => {
-    const team = teamById[teamId];
-    return team ? team.name : 'TBD';
-  };
-
   const isPickCorrect = (round, gameNumber, pickTeamId) => {
     if (!entry || !entry.picks) return null;
     
@@ -102,34 +98,6 @@ function Bracket({ updateUser }) {
     if (!game || !game.winner_team_id) return null;
     
     return game.winner_team_id === pickTeamId;
-  };
-
-  const getPickStatusClass = (round, gameNumber, teamId) => {
-    if (!entry) return '';
-    
-    const isCorrect = isPickCorrect(round, gameNumber, teamId);
-    if (isCorrect === true) return 'correct';
-    if (isCorrect === false) return 'incorrect';
-    return '';
-  };
-
-  const getActualWinner = (round, gameNumber) => {
-    const game = gamesByRound[round]?.find((g) => g.game_number === gameNumber);
-    if (!game || !game.winner_team_id) return null;
-    return game.winner_team_id;
-  };
-
-  const getGameLabel = (game, round) => {
-    if (!game) return 'TBD';
-    
-    const team1 = teamById[game.team1_id];
-    const team2 = teamById[game.team2_id];
-    
-    if (team1 && team2) {
-      return `${team1.seed} vs ${team2.seed}`;
-    }
-    
-    return 'TBD';
   };
 
   const applyRound1Pick = (gameNumber, teamId) => {
@@ -177,40 +145,6 @@ function Bracket({ updateUser }) {
     }));
   };
 
-  // Get available options for each round based on previous picks
-  const getR1Games = () => gamesByRound[1]?.sort((a, b) => a.game_number - b.game_number) || [];
-
-  const getR2Options = (gameNumber) => {
-    // Round 2 Game 1: from R1 games 1-2 winners
-    // Round 2 Game 2: from R1 games 3-4 winners
-    // Round 2 Game 3: from R1 games 5-6 winners
-    // Round 2 Game 4: from R1 games 7-8 winners
-    const mappings = {
-      1: [1, 2],
-      2: [3, 4],
-      3: [5, 6],
-      4: [7, 8]
-    };
-    const gameNums = mappings[gameNumber] || [];
-    return gameNums.map((gNum) => picks.round1[makeGameKey(gNum)]).filter(Boolean);
-  };
-
-  const getR3Options = (gameNumber) => {
-    // Round 3 Game 1: from R2 games 1-2 winners
-    // Round 3 Game 2: from R2 games 3-4 winners
-    const mappings = {
-      1: [1, 2],
-      2: [3, 4]
-    };
-    const gameNums = mappings[gameNumber] || [];
-    return gameNums.map((gNum) => picks.round2[makeGameKey(gNum)]).filter(Boolean);
-  };
-
-  const getR4Options = () => {
-    // Championship: from R3 games 1-2 winners
-    return [picks.round3[makeGameKey(1)], picks.round3[makeGameKey(2)]].filter(Boolean);
-  };
-
   const canSubmit = useMemo(() => {
     return (
       Object.keys(picks.round1).length === 8 &&
@@ -252,6 +186,111 @@ function Bracket({ updateUser }) {
     } finally {
       setSubmitLoading(false);
     }
+  };
+
+  // Transform game data into react-brackets format
+  const transformedRounds = useMemo(() => {
+    if (!bracket || games.length === 0) return [];
+    
+    const rounds = [];
+    
+    // Round 1-4
+    for (let round = 1; round <= 4; round++) {
+      const roundGames = gamesByRound[round] || [];
+      const seeds = roundGames.sort((a, b) => a.game_number - b.game_number).map((game) => {
+        const team1 = teamById[game.team1_id];
+        const team2 = teamById[game.team2_id];
+        
+        return {
+          id: game.id,
+          gameNumber: game.game_number,
+          round,
+          teams: [
+            {
+              id: game.team1_id,
+              name: team1 ? `${team1.seed}. ${team1.name}` : 'TBD',
+              seed: team1?.seed || '?'
+            },
+            {
+              id: game.team2_id,
+              name: team2 ? `${team2.seed}. ${team2.name}` : 'TBD',
+              seed: team2?.seed || '?'
+            }
+          ],
+          winner: game.winner_team_id
+        };
+      });
+      
+      rounds.push({
+        title: ROUND_LABELS[round],
+        seeds
+      });
+    }
+    
+    return rounds;
+  }, [games, gamesByRound, teamById, bracket]);
+
+  // Custom seed component for interactive picking
+  const CustomSeed = ({ seed, breakpoint, roundIndex }) => {
+    const round = roundIndex + 1;
+    const gameNumber = seed.gameNumber;
+    const bracketLocked = bracket?.status !== 'open';
+    const isDisabled = bracketLocked || !!entry;
+    
+    // Get the current pick for this game
+    const roundKey = `round${round}`;
+    const pickKey = makeGameKey(gameNumber);
+    const selectedTeamId = picks[roundKey]?.[pickKey];
+    
+    // Handle team selection
+    const handleTeamClick = (teamId) => {
+      if (isDisabled || !teamId) return;
+      
+      if (round === 1) {
+        applyRound1Pick(gameNumber, teamId);
+      } else if (round === 2) {
+        applyRound2Pick(gameNumber, teamId);
+      } else if (round === 3) {
+        applyRound3Pick(gameNumber, teamId);
+      } else if (round === 4) {
+        applyRound4Pick(teamId);
+      }
+    };
+    
+    // Check if pick is correct/incorrect (for submitted entries)
+    const getPickStatus = (teamId) => {
+      if (!entry) return '';
+      const isCorrect = isPickCorrect(round, gameNumber, teamId);
+      if (isCorrect === true) return 'correct';
+      if (isCorrect === false) return 'incorrect';
+      return '';
+    };
+    
+    return (
+      <Seed mobileBreakpoint={breakpoint}>
+        <SeedItem>
+          <div className="bracket-seed-container">
+            {seed.teams.map((team, idx) => {
+              const isSelected = selectedTeamId === team.id;
+              const pickStatus = getPickStatus(team.id);
+              const isWinner = seed.winner === team.id;
+              
+              return (
+                <button
+                  key={idx}
+                  className={`bracket-seed-team ${isSelected ? 'selected' : ''} ${pickStatus}`}
+                  onClick={() => handleTeamClick(team.id)}
+                  disabled={isDisabled || team.name === 'TBD'}
+                >
+                  <span className="team-name">{team.name}</span>
+                  {isWinner && <span className="winner-badge">✓</span>}
+                </button>
+              );
+            })}
+          </div>
+        </SeedItem>
+      </Seed>
+    );
   };
 
   if (loading) {
@@ -390,151 +429,13 @@ function Bracket({ updateUser }) {
         </div>
       )}
 
-      <div className="bracket-grid">
-        {/* Round 1 - 8 games */}
-        <div className="bracket-round bracket-round--r1">
-          <h2>{ROUND_LABELS[1]}</h2>
-          <div className="bracket-games">
-            {getR1Games().map((game, idx) => {
-              const winner = game.winner_team_id;
-              const selected = picks.round1[makeGameKey(game.game_number)];
-              return (
-                <div key={game.id} className="bracket-game" data-game-idx={idx}>
-                  <div className="game-label">{getGameLabel(game, 1)}</div>
-                  {[game.team1_id, game.team2_id].map((teamId, tidx) => (
-                    <button
-                      key={teamId || tidx}
-                      className={`team-btn ${selected === teamId ? 'selected' : ''} ${getPickStatusClass(1, game.game_number, teamId)}`}
-                      onClick={() => applyRound1Pick(game.game_number, teamId)}
-                      disabled={!teamId || bracketLocked || !!entry}
-                    >
-                      <span className="team-seed">#{teamById[teamId]?.seed || '?'}</span>
-                      <span className="team-name">{getTeamName(teamId)}</span>
-                      {winner === teamId && <span className="winner-badge">✓</span>}
-                    </button>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Round 2 - 4 games */}
-        <div className="bracket-round bracket-round--r2">
-          <h2>{ROUND_LABELS[2]}</h2>
-          <div className="bracket-games">
-            {[1, 2, 3, 4].map((gameNum) => {
-              const options = getR2Options(gameNum);
-              const game = gamesByRound[2]?.find((g) => g.game_number === gameNum);
-              const winner = game?.winner_team_id;
-              const selected = picks.round2[makeGameKey(gameNum)];
-              const actualWinner = getActualWinner(2, gameNum);
-              const showActualWinner = entry && actualWinner && selected && selected !== actualWinner;
-
-              return (
-                <div key={gameNum} className="bracket-game" data-game-idx={gameNum - 1}>
-                  <div className="game-label">{getGameLabel(game, 2)}</div>
-                  {options.length === 0 && <div className="bracket-placeholder">—</div>}
-                  {options.map((teamId) => (
-                    <button
-                      key={teamId}
-                      className={`team-btn ${selected === teamId ? 'selected' : ''} ${getPickStatusClass(2, gameNum, teamId)}`}
-                      onClick={() => applyRound2Pick(gameNum, teamId)}
-                      disabled={bracketLocked || !!entry}
-                    >
-                      <span className="team-name">{getTeamName(teamId)}</span>
-                      {winner === teamId && <span className="winner-badge">✓</span>}
-                    </button>
-                  ))}
-                  {showActualWinner && (
-                    <div className="actual-winner-display">
-                      <span className="actual-winner-label">Actual Winner:</span>
-                      <span className="actual-winner-name">{getTeamName(actualWinner)}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Round 3 - 2 games (Semifinals) */}
-        <div className="bracket-round bracket-round--r3">
-          <h2>{ROUND_LABELS[3]}</h2>
-          <div className="bracket-games">
-            {[1, 2].map((gameNum) => {
-              const options = getR3Options(gameNum);
-              const game = gamesByRound[3]?.find((g) => g.game_number === gameNum);
-              const winner = game?.winner_team_id;
-              const selected = picks.round3[makeGameKey(gameNum)];
-              const actualWinner = getActualWinner(3, gameNum);
-              const showActualWinner = entry && actualWinner && selected && selected !== actualWinner;
-
-              return (
-                <div key={gameNum} className="bracket-game" data-game-idx={gameNum - 1}>
-                  <div className="game-label">{getGameLabel(game, 3)}</div>
-                  {options.length === 0 && <div className="bracket-placeholder">—</div>}
-                  {options.map((teamId) => (
-                    <button
-                      key={teamId}
-                      className={`team-btn ${selected === teamId ? 'selected' : ''} ${getPickStatusClass(3, gameNum, teamId)}`}
-                      onClick={() => applyRound3Pick(gameNum, teamId)}
-                      disabled={bracketLocked || !!entry}
-                    >
-                      <span className="team-name">{getTeamName(teamId)}</span>
-                      {winner === teamId && <span className="winner-badge">✓</span>}
-                    </button>
-                  ))}
-                  {showActualWinner && (
-                    <div className="actual-winner-display">
-                      <span className="actual-winner-label">Actual Winner:</span>
-                      <span className="actual-winner-name">{getTeamName(actualWinner)}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Round 4 (Championship) */}
-        <div className="bracket-round bracket-round--r4">
-          <h2>{ROUND_LABELS[4]}</h2>
-          <div className="bracket-games">
-            {(() => {
-              const options = getR4Options();
-              const game = gamesByRound[4]?.[0];
-              const winner = game?.winner_team_id;
-              const selected = picks.round4.game1;
-              const actualWinner = getActualWinner(4, 1);
-              const showActualWinner = entry && actualWinner && selected && selected !== actualWinner;
-
-              return (
-                <div className="bracket-game championship-game">
-                  <div className="championship-icon">🏆</div>
-                  {options.length === 0 && <div className="bracket-placeholder">—</div>}
-                  {options.map((teamId) => (
-                    <button
-                      key={teamId}
-                      className={`team-btn ${selected === teamId ? 'selected' : ''} ${getPickStatusClass(4, 1, teamId)}`}
-                      onClick={() => applyRound4Pick(teamId)}
-                      disabled={bracketLocked || !!entry}
-                    >
-                      <span className="team-name">{getTeamName(teamId)}</span>
-                      {winner === teamId && <span className="winner-badge">✓</span>}
-                    </button>
-                  ))}
-                  {showActualWinner && (
-                    <div className="actual-winner-display championship-winner">
-                      <span className="actual-winner-label">Actual Champion:</span>
-                      <span className="actual-winner-name">{getTeamName(actualWinner)}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-          </div>
-        </div>
+      {/* Bracket Display using react-brackets library */}
+      <div className="bracket-container">
+        <BracketDisplay
+          rounds={transformedRounds}
+          renderSeedComponent={CustomSeed}
+          roundTitleComponent={(title) => <div className="bracket-round-title">{title}</div>}
+        />
       </div>
 
       {/* Progress Indicator */}
