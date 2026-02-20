@@ -84,6 +84,12 @@ export const withErrorLogging = (fn, context = {}) => {
 export const setupGlobalErrorHandler = () => {
   // Catch unhandled promise rejections
   window.addEventListener('unhandledrejection', (event) => {
+    const message = event.reason?.message || '';
+    // Suppress chunk load errors (handled by lazyWithRetry)
+    if (message.includes('Loading chunk') || event.reason?.name === 'ChunkLoadError') {
+      event.preventDefault();
+      return;
+    }
     logError(event.reason || new Error('Unhandled promise rejection'), {
       severity: 'critical',
       type: 'unhandledRejection'
@@ -92,6 +98,12 @@ export const setupGlobalErrorHandler = () => {
 
   // Catch global errors
   window.addEventListener('error', (event) => {
+    const message = event.error?.message || event.message || '';
+    // Suppress chunk load errors and "undefined" JSON parse errors (already fixed at source)
+    if (message.includes('Loading chunk') || message.includes('"undefined" is not valid JSON')) {
+      event.preventDefault();
+      return;
+    }
     logError(event.error || new Error(event.message), {
       severity: 'critical',
       type: 'globalError',

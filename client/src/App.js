@@ -23,11 +23,26 @@ const lazyWithRetry = (componentImport) => {
         const lastRefresh = sessionStorage.getItem('lastChunkRefresh');
         const now = Date.now();
         
-        // Only refresh if we haven't refreshed in the last 10 seconds
-        if (!lastRefresh || (now - parseInt(lastRefresh)) > 10000) {
+        // Only refresh if we haven't refreshed in the last 30 seconds
+        if (!lastRefresh || (now - parseInt(lastRefresh)) > 30000) {
           sessionStorage.setItem('lastChunkRefresh', now.toString());
           window.location.reload();
+          // Return a never-resolving promise to prevent error propagation during reload
+          return new Promise(() => {});
         }
+        // Already refreshed recently - return a fallback component instead of throwing
+        return { default: () => {
+          const React = require('react');
+          return React.createElement('div', { 
+            style: { padding: '2rem', textAlign: 'center', color: '#666' } 
+          }, 
+            React.createElement('p', null, 'This page failed to load. Please clear your browser cache and refresh.'),
+            React.createElement('button', {
+              onClick: () => { sessionStorage.removeItem('lastChunkRefresh'); window.location.reload(); },
+              style: { marginTop: '1rem', padding: '8px 16px', backgroundColor: '#004f9e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }
+            }, 'Refresh Now')
+          );
+        }};
       }
       throw error;
     })
@@ -159,8 +174,13 @@ function AppContent() {
     if (token && !user) {
       // Load user from localStorage if not in state
       const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      if (storedUser && storedUser !== 'undefined') {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          // Corrupted localStorage value - clean up
+          localStorage.removeItem('user');
+        }
       }
     }
   }, [token, user]);
@@ -331,8 +351,10 @@ function AppContent() {
     try {
       const response = await apiClient.get('/users/profile');
       const updatedUser = response.data;
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      if (updatedUser && updatedUser.id) {
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
       return updatedUser;
     } catch (err) {
       // Fail silently - will retry
@@ -395,11 +417,13 @@ function AppContent() {
   }, [token, fetchUnreadCount, fetchAndCheckNotifications, fetchUserProfile]);
 
   const updateUser = (userData) => {
+    if (!userData) return;
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const handleLogin = (newToken, userData) => {
+    if (!newToken || !userData) return;
     setToken(newToken);
     setUser(userData);
     localStorage.setItem('token', newToken);
@@ -455,7 +479,17 @@ function AppContent() {
   }
 
   // Get user data from state or localStorage
-  const currentUser = user || (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null);
+  let currentUser = user;
+  if (!currentUser) {
+    try {
+      const stored = localStorage.getItem('user');
+      if (stored && stored !== 'undefined') {
+        currentUser = JSON.parse(stored);
+      }
+    } catch (e) {
+      localStorage.removeItem('user');
+    }
+  }
 
   // Rivalry Week Configuration - Toggle enabled to true/false
   const rivalryWeekConfig = {

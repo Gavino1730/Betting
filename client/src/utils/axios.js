@@ -30,8 +30,12 @@ const refreshToken = async () => {
       const newToken = response.data.token;
       const userData = response.data.user;
 
-      localStorage.setItem('token', newToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      if (newToken) {
+        localStorage.setItem('token', newToken);
+      }
+      if (userData) {
+        localStorage.setItem('user', JSON.stringify(userData));
+      }
 
       return newToken;
     } catch (error) {

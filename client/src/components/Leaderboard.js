@@ -15,7 +15,15 @@ function Leaderboard() {
   const [activeOnly, setActiveOnly] = useState(false);
 
   const PAGE_SIZE = 25;
-  const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+  let currentUser = null;
+  try {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser && storedUser !== 'undefined') {
+      currentUser = JSON.parse(storedUser);
+    }
+  } catch (e) {
+    localStorage.removeItem('user');
+  }
 
   useEffect(() => {
     fetchData();

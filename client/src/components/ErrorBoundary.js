@@ -14,6 +14,12 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
     
+    // Don't log chunk load errors or JSON parse of "undefined" - these are handled elsewhere
+    const message = error?.message || '';
+    if (message.includes('Loading chunk') || error?.name === 'ChunkLoadError' || message.includes('"undefined" is not valid JSON')) {
+      return;
+    }
+    
     // Log error to backend
     logError(error, {
       severity: 'critical',
