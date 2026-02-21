@@ -4,13 +4,13 @@ const { expect } = require('@playwright/test');
 const TEST_USER = {
   username: process.env.TEST_USER_USERNAME || 'testuser',
   email: process.env.TEST_USER_EMAIL || 'testuser@valiantpicks.com',
-  password: process.env.TEST_USER_PASSWORD || 'TestPassword123!',
+  password: process.env.TEST_USER_PASSWORD || 'test12345',
 };
 
 const TEST_ADMIN = {
-  username: process.env.TEST_ADMIN_USERNAME || 'admin',
+  username: process.env.TEST_ADMIN_USERNAME || 'testadmin',
   email: process.env.TEST_ADMIN_EMAIL || 'admin@valiantpicks.com',
-  password: process.env.TEST_ADMIN_PASSWORD || 'AdminPassword123!',
+  password: process.env.TEST_ADMIN_PASSWORD || 'admin12345',
 };
 
 // ── Dismiss ALL overlays (onboarding, spin-wheel, daily-reward) ────────────
