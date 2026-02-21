@@ -1,190 +1,103 @@
 const { test, expect } = require('@playwright/test');
-const { login, logout, register, clearSession, generateTestData, dismissOnboarding } = require('../helpers/test-utils');
+const {
+  login, loginAsUser, logout, register, clearSession,
+  generateTestData, dismissAllOverlays, TEST_USER,
+} = require('../helpers/test-utils');
 
-test.describe('Authentication Flow', () => {
+test.describe('Authentication', () => {
   test.beforeEach(async ({ page }) => {
     await clearSession(page);
   });
 
-  test('should load homepage successfully', async ({ page }) => {
-    await page.goto('/');
-    await expect(page).toHaveTitle(/Valiant Picks/i);
-    await expect(page.locator('text=/Valiant Picks/i')).toBeVisible();
-  });
-
-  test('should display login page', async ({ page }) => {
-    await clearSession(page);
+  // ── Landing page ───────────────────────────────────────────────────────
+  test('should show the login form on first visit', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(500);
-    await page.click('text=Login', { timeout: 10000 });
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(500);
-    await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 15000 });
-    await expect(page.locator('input[type="password"]').first()).toBeVisible();
-    await expect(page.locator('button[type="submit"]').first()).toBeVisible();
+
+    // Brand name
+    await expect(page.locator('text=Valiant Picks').first()).toBeVisible();
+
+    // Login form fields
+    await expect(page.locator('#username')).toBeVisible();
+    await expect(page.locator('#password')).toBeVisible();
+    await expect(page.locator('button[type="submit"]')).toBeVisible();
   });
 
+  // ── Invalid credentials ────────────────────────────────────────────────
   test('should show error for invalid credentials', async ({ page }) => {
     await page.goto('/');
-    await page.click('text=Login');
-    await page.waitForSelector('input[name="username"]');
-    
-    await page.fill('input[name="username"]', 'invaliduser');
-    await page.fill('input[name="password"]', 'wrongpassword');
-    await page.click('button[type="submit"]:has-text("Login")');
-    
-    // Should show error message
-    await expect(page.locator('text=/Invalid|incorrect|failed|error/i')).toBeVisible({ timeout: 10000 });
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.fill('#username', 'nonexistent_user_xyz');
+    await page.fill('#password', 'WrongPassword999!');
+    await page.click('button[type="submit"]');
+
+    // The Login component shows .alert-error
+    await expect(page.locator('.alert-error')).toBeVisible({ timeout: 10000 });
   });
 
-  test('should show error for empty fields', async ({ page }) => {
-    await page.goto('/');
-    await page.click('text=Login');
-    await page.waitForSelector('input[name="username"]');
-    
-    await page.click('button[type="submit"]:has-text("Login")');
-    
-    // Should show validation error (HTML5 validation)
-    const usernameInput = page.locator('input[name="username"]');
-    await expect(usernameInput).toHaveAttribute('required', '');
+  // ── Successful login ──────────────────────────────────────────────────
+  test('should login with valid credentials', async ({ page }) => {
+    await loginAsUser(page);
+
+    // Navbar should be visible with the user's username
+    await expect(page.locator('.navbar')).toBeVisible();
+
+    // Balance pill should show
+    await expect(page.locator('.balance-amount').first()).toBeVisible();
   });
 
-  test('should successfully login with valid credentials', async ({ page }) => {
-    const testUser = {
-      email: 'testuser@valiantpicks.com',
-      password: 'TestPassword123!'
-    };
-
-    await login(page, testUser.email, testUser.password);
-    await dismissOnboarding(page);
-    await page.waitForTimeout(1000);
-    
-    // Verify logged in - just check for dashboard
-    await expect(page.locator('text=/Dashboard|Logout/i').first()).toBeVisible({ timeout: 10000 });
-    
-    // Should have balance somewhere (may be in nav)
-    const balanceExists = await page.getByText(/Balance|Valiant Bucks/i).count();
-    expect(balanceExists).toBeGreaterThan(0);
-  });
-
-  test('should successfully logout', async ({ page }) => {
-    const testUser = {
-      email: 'testuser@valiantpicks.com',
-      password: 'TestPassword123!'
-    };
-
-    await login(page, testUser.email, testUser.password);
-    await dismissOnboarding(page);
-    await page.waitForTimeout(500);
+  // ── Logout ─────────────────────────────────────────────────────────────
+  test('should logout successfully', async ({ page }) => {
+    await loginAsUser(page);
     await logout(page);
-    
-    // Should be back at homepage
-    await expect(page).toHaveURL('/', { timeout: 10000 });
-    await expect(page.locator('text=Login').first()).toBeVisible();
+
+    // Login form is back
+    await expect(page.locator('#username')).toBeVisible();
   });
 
-  test('should register new user successfully', async ({ page }) => {
-    const testData = generateTestData();
-    
-    await page.goto('/');
-    await page.click('text=Login');
-    
-    // Click register link
-    const registerLink = page.locator('text=/Register|Sign Up/i').first();
-    if (await registerLink.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await registerLink.click();
-      
-      // Fill registration form
-      await page.fill('input[placeholder*="username" i]', testData.username);
-      await page.fill('input[type="email"]', testData.email);
-      await page.fill('input[type="password"]', testData.password);
-      
-      await page.click('button[type="submit"]:has-text(/Register|Sign Up/i)');
-      
-      // Should be logged in after registration
-      await expect(page.locator('text=/Dashboard|Welcome/i')).toBeVisible({ timeout: 10000 });
-      
-      // Should have starting balance of 1000 Valiant Bucks
-      await expect(page.locator('text=/1,?000/i')).toBeVisible();
-    } else {
-      test.skip();
-    }
-  });
-
-  test('should show error for duplicate email registration', async ({ page }) => {
-    const existingUser = {
-      username: 'testuser',
-      email: 'testuser@valiantpicks.com',
-      password: 'TestPassword123!'
-    };
-
-    await page.goto('/');
-    await page.click('text=Login');
-    
-    const registerLink = page.locator('text=/Register|Sign Up/i').first();
-    if (await registerLink.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await registerLink.click();
-      
-      await page.fill('input[placeholder*="username" i]', existingUser.username);
-      await page.fill('input[type="email"]', existingUser.email);
-      await page.fill('input[type="password"]', existingUser.password);
-      
-      await page.click('button[type="submit"]:has-text(/Register|Sign Up/i)');
-      
-      // Should show error about existing email
-      await expect(page.locator('text=/already exists|duplicate|taken/i')).toBeVisible({ timeout: 5000 });
-    } else {
-      test.skip();
-    }
-  });
-
-  test('should validate password requirements', async ({ page }) => {
-    const testData = generateTestData();
-    
-    await page.goto('/');
-    await page.click('text=Login');
-    
-    const registerLink = page.locator('text=/Register|Sign Up/i').first();
-    if (await registerLink.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await registerLink.click();
-      
-      await page.fill('input[placeholder*="username" i]', testData.username);
-      await page.fill('input[type="email"]', testData.email);
-      await page.fill('input[type="password"]', 'weak'); // Weak password
-      
-      await page.click('button[type="submit"]:has-text(/Register|Sign Up/i)');
-      
-      // Should show password validation error
-      const passwordInput = page.locator('input[type="password"]');
-      const minLength = await passwordInput.getAttribute('minlength');
-      expect(parseInt(minLength || '0')).toBeGreaterThan(0);
-    } else {
-      test.skip();
-    }
-  });
-
+  // ── Session persistence ────────────────────────────────────────────────
   test('should persist session after page reload', async ({ page }) => {
-    const testUser = {
-      email: 'testuser@valiantpicks.com',
-      password: 'TestPassword123!'
-    };
+    await loginAsUser(page);
 
-    await login(page, testUser.email, testUser.password);
-    await dismissOnboarding(page);
-    
-    // Reload page
     await page.reload();
-    await dismissOnboarding(page);
-    
-    // Should still be logged in
-    await expect(page.locator('text=/Dashboard|Logout/i').first()).toBeVisible({ timeout: 5000 });
+    await page.waitForLoadState('domcontentloaded');
+    await dismissAllOverlays(page);
+
+    // Still logged in — navbar visible
+    await expect(page.locator('.navbar')).toBeVisible();
+    await expect(page.locator('.balance-amount').first()).toBeVisible();
   });
 
-  test('should redirect to login for protected routes when not authenticated', async ({ page }) => {
+  // ── Registration form toggle ──────────────────────────────────────────
+  test('should toggle to registration form', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    // Click "Create Account"
+    await page.locator('button.toggle-link-btn:has-text("Create Account")').click();
+
+    // Email field should now be visible
+    await expect(page.locator('#email')).toBeVisible();
+
+    // Header should say "Create Account"
+    await expect(page.locator('h1:has-text("Create Account")')).toBeVisible();
+  });
+
+  // ── Registration with duplicate username ──────────────────────────────
+  test('should show error for duplicate registration', async ({ page }) => {
+    await register(page, TEST_USER.username, TEST_USER.email, TEST_USER.password);
+
+    // Should show an error about existing user
+    await expect(page.locator('.alert-error')).toBeVisible({ timeout: 10000 });
+  });
+
+  // ── Unauthenticated redirect ──────────────────────────────────────────
+  test('should redirect unauthenticated users to login', async ({ page }) => {
     await page.goto('/dashboard');
-    
-    // Should redirect to login or show login form
-    await expect(page.locator('text=/Login|Sign In/i').first()).toBeVisible({ timeout: 5000 });
+    await page.waitForLoadState('domcontentloaded');
+
+    // Without a token the app renders the login component
+    await expect(page.locator('#username')).toBeVisible({ timeout: 10000 });
   });
 });

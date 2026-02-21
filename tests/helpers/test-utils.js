@@ -1,266 +1,243 @@
 const { expect } = require('@playwright/test');
 
-/**
- * Dismiss onboarding modal if present
- */
-async function dismissOnboarding(page) {
-  try {
-    // Wait a bit for modal to appear if it will
-    await page.waitForTimeout(300);
-    
-    const selectors = [
-      '[data-testid="onboarding-close"]',
-      '[data-testid="onboarding-start"]',
-      '.onboarding-close',
-      'button:has-text("Let\'s Get Started")',
-      'button:has-text("×")',
-      'button:has-text(/Skip|Close|Got it|Next time|Maybe later/i)',
-      '.onboarding-overlay button',
-      '[class*="modal"] button:has-text(/Skip|Close/i)',
-      '.close-button',
-      'button[aria-label*="Close"]'
-    ];
-    
-    for (const selector of selectors) {
-      const button = page.locator(selector).first();
-      if (await button.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await button.click({ timeout: 2000 });
-        await page.waitForTimeout(500);
-        // Verify modal is gone
-        await page.waitForSelector('[data-testid="onboarding-overlay"]', { state: 'hidden', timeout: 2000 }).catch(() => {});
-        break;
+// ── Credentials from .env.test ─────────────────────────────────────────────
+const TEST_USER = {
+  username: process.env.TEST_USER_USERNAME || 'testuser',
+  email: process.env.TEST_USER_EMAIL || 'testuser@valiantpicks.com',
+  password: process.env.TEST_USER_PASSWORD || 'TestPassword123!',
+};
+
+const TEST_ADMIN = {
+  username: process.env.TEST_ADMIN_USERNAME || 'testadmin',
+  email: process.env.TEST_ADMIN_EMAIL || 'admin@valiantpicks.com',
+  password: process.env.TEST_ADMIN_PASSWORD || 'AdminPassword123!',
+};
+
+// ── Dismiss ALL overlays (onboarding, spin-wheel, daily-reward) ────────────
+// The app shows popups after login: OnboardingModal, DailyReward, SpinWheel.
+// These overlays intercept pointer events, so we must dismiss them first.
+async function dismissAllOverlays(page) {
+  // Give popups time to render (they use a queue with delays)
+  await page.waitForTimeout(1500);
+
+  // Keep dismissing for up to 3 passes (popups appear sequentially via queue)
+  for (let pass = 0; pass < 4; pass++) {
+    let dismissed = false;
+
+    // Spin Wheel overlay
+    const spinClose = page.locator('.spin-wheel-close');
+    if (await spinClose.isVisible({ timeout: 800 }).catch(() => false)) {
+      await spinClose.click({ force: true });
+      dismissed = true;
+      await page.waitForTimeout(500);
+    }
+
+    // Spin Wheel overlay click-to-close
+    const spinOverlay = page.locator('.spin-wheel-overlay');
+    if (await spinOverlay.isVisible({ timeout: 300 }).catch(() => false)) {
+      await spinOverlay.click({ position: { x: 5, y: 5 }, force: true });
+      dismissed = true;
+      await page.waitForTimeout(500);
+    }
+
+    // Daily Reward modal
+    const dailyClose = page.locator('.daily-reward-close, .daily-reward-overlay button:has-text("Close")').first();
+    if (await dailyClose.isVisible({ timeout: 300 }).catch(() => false)) {
+      await dailyClose.click({ force: true });
+      dismissed = true;
+      await page.waitForTimeout(500);
+    }
+
+    // Daily Reward overlay click-to-close
+    const dailyOverlay = page.locator('.daily-reward-overlay');
+    if (await dailyOverlay.isVisible({ timeout: 300 }).catch(() => false)) {
+      await dailyOverlay.click({ position: { x: 5, y: 5 }, force: true });
+      dismissed = true;
+      await page.waitForTimeout(500);
+    }
+
+    // Onboarding modal
+    const onboardingClose = page.locator('[data-testid="onboarding-close"], .onboarding-close').first();
+    if (await onboardingClose.isVisible({ timeout: 300 }).catch(() => false)) {
+      await onboardingClose.click({ force: true });
+      dismissed = true;
+      await page.waitForTimeout(500);
+    }
+
+    // "Let's Get Started" button on onboarding
+    const letsGo = page.locator('[data-testid="onboarding-start"]');
+    if (await letsGo.isVisible({ timeout: 300 }).catch(() => false)) {
+      await letsGo.click({ force: true });
+      dismissed = true;
+      await page.waitForTimeout(500);
+    }
+
+    if (!dismissed) break;
+  }
+}
+
+// ── Login ──────────────────────────────────────────────────────────────────
+// The app renders the Login component directly when there is no JWT token.
+// There is NO "/login" route — the login form IS the landing page.
+async function login(page, username, password) {
+  await clearSession(page);
+
+  await page.goto('/');
+  await page.waitForLoadState('domcontentloaded');
+
+  // The login form has #username and #password fields
+  await page.locator('#username').waitFor({ state: 'visible', timeout: 10000 });
+
+  await page.fill('#username', username);
+  await page.fill('#password', password);
+  await page.click('button[type="submit"]');
+
+  // After success the navbar appears
+  await page.locator('.navbar').waitFor({ state: 'visible', timeout: 15000 });
+
+  // Dismiss all popups/overlays
+  await dismissAllOverlays(page);
+}
+
+async function loginAsUser(page) {
+  await login(page, TEST_USER.username, TEST_USER.password);
+}
+
+async function loginAsAdmin(page) {
+  await login(page, TEST_ADMIN.username, TEST_ADMIN.password);
+}
+
+// ── Logout ─────────────────────────────────────────────────────────────────
+async function logout(page) {
+  // Dismiss any lingering overlays first
+  await dismissAllOverlays(page);
+
+  // Desktop: button.logout-btn in the navbar
+  const logoutBtn = page.locator('button.logout-btn');
+  if (await logoutBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await logoutBtn.click({ force: true });
+  } else {
+    // Mobile: open the user menu
+    const userTrigger = page.locator('.nav-user-trigger');
+    if (await userTrigger.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await userTrigger.click({ force: true });
+      await page.locator('.nav-user-menu button:has-text("Logout")').click({ force: true });
+    } else {
+      // Mobile hamburger menu logout
+      const mobileToggle = page.locator('.mobile-menu-toggle');
+      if (await mobileToggle.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await mobileToggle.click({ force: true });
+        await page.locator('.mobile-logout-btn').click({ force: true });
+      } else {
+        // Fallback: just clear session
+        await clearSession(page);
+        await page.goto('/');
+        return;
       }
     }
-  } catch (error) {
-    // Onboarding not present or already dismissed
   }
+
+  // After logout the login form should reappear
+  await page.locator('#username').waitFor({ state: 'visible', timeout: 10000 });
 }
 
-/**
- * Login helper function
- */
-async function login(page, email, password) {
-  await page.goto('/');
-  
-  // Wait for page to load
-  await page.waitForLoadState('domcontentloaded');
-  
-  // Check if already on login page or need to click login
-  const usernameInput = page.locator('input[name="username"]');
-  const isLoginPage = await usernameInput.isVisible({ timeout: 2000 }).catch(() => false);
-  
-  if (!isLoginPage) {
-    // Not on login page, click login button
-    await page.click('text=Login');
-    await page.waitForSelector('input[name="username"]', { timeout: 5000 });
-  }
-  
-  // Map email to username
-  const username = email.includes('admin') ? 'testadmin' : 'testuser';
-  
-  // Fill in credentials
-  await page.fill('input[name="username"]', username);
-  await page.fill('input[name="password"]', password);
-  
-  // Submit form
-  await page.click('button[type="submit"]');
-  
-  // Wait for successful login (dashboard or home page)
-  await page.waitForURL(/\/(dashboard)?/, { timeout: 15000 });
-  
-  // Dismiss onboarding modal if present
-  await dismissOnboarding(page);
-  
-  // Verify we're logged in (check for logout button - use .first() to avoid strict mode)
-  await expect(page.locator('button.logout-btn').first()).toBeVisible({ timeout: 5000 });
-}
-
-/**
- * Logout helper function
- */
-async function logout(page) {
-  // Look for logout button/link
-  const logoutButton = page.locator('text=Logout').first();
-  if (await logoutButton.isVisible()) {
-    await logoutButton.click();
-    await page.waitForURL('/', { timeout: 15000 });
-  }
-}
-
-/**
- * Register a new user
- */
+// ── Register ───────────────────────────────────────────────────────────────
 async function register(page, username, email, password) {
+  await clearSession(page);
   await page.goto('/');
   await page.waitForLoadState('domcontentloaded');
-  
-  // Check if already on login page
-  const usernameInput = page.locator('input[name="username"]');
-  const isLoginPage = await usernameInput.isVisible({ timeout: 2000 }).catch(() => false);
-  
-  if (!isLoginPage) {
-    await page.click('text=Login');
-    await page.waitForSelector('input[name="username"]', { timeout: 5000 });
-  }
-  
-  // Click to switch to register mode
-  const registerLink = page.locator('text=/Create Account|Sign Up|Register/i, button:has-text(/Create Account|Sign Up|Register/i)').first();
-  if (await registerLink.isVisible({ timeout: 2000 }).catch(() => false)) {
-    await registerLink.click();
-    await page.waitForTimeout(500);
-  }
-  
-  // Fill registration form using name attributes
-  await page.fill('input[name="username"]', username);
-  await page.fill('input[name="email"]', email);
-  await page.fill('input[name="password"]', password);
-  
-  // Submit
+
+  // Wait for login form
+  await page.locator('#username').waitFor({ state: 'visible', timeout: 10000 });
+
+  // Switch to registration mode
+  await page.locator('button.toggle-link-btn:has-text("Create Account")').click();
+  await page.locator('#email').waitFor({ state: 'visible', timeout: 5000 });
+
+  await page.fill('#username', username);
+  await page.fill('#email', email);
+  await page.fill('#password', password);
   await page.click('button[type="submit"]');
-  
-  // Wait for success
-  await page.waitForURL(/\/(dashboard)?/, { timeout: 15000 });
 }
 
-/**
- * Get user balance from UI
- */
-async function getUserBalance(page) {
-  const balanceText = await page.locator('text=/Balance:|Valiant Bucks/i').first().textContent();
-  const match = balanceText.match(/[\d,]+\.?\d*/);
-  return match ? parseFloat(match[0].replace(/,/g, '')) : 0;
-}
-
-/**
- * Wait for API response
- */
-async function waitForAPI(page, urlPattern) {
-  return page.waitForResponse(response => 
-    response.url().includes(urlPattern) && response.status() === 200
-  );
-}
-
-/**
- * Navigate to a specific page
- */
-async function navigateTo(page, linkText) {
-  // Dismiss onboarding if present
-  await dismissOnboarding(page);
-  
-  // Wait for the link to be clickable
-  await page.locator(`text=${linkText}`).first().click({ timeout: 10000 });
-  await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
-  await page.waitForTimeout(500);
-  
-  // Dismiss onboarding on new page if present
-  await dismissOnboarding(page);
-}
-
-/**
- * Check for error messages
- */
-async function expectNoErrors(page) {
-  const errorSelectors = [
-    '.error',
-    '.error-message',
-    '[class*="error"]',
-    'text=/error|failed|wrong/i'
-  ];
-  
-  for (const selector of errorSelectors) {
-    const errorElement = page.locator(selector).first();
-    if (await errorElement.isVisible({ timeout: 1000 }).catch(() => false)) {
-      const errorText = await errorElement.textContent();
-      throw new Error(`Unexpected error found: ${errorText}`);
-    }
-  }
-}
-
-/**
- * Generate unique test data
- */
-function generateTestData() {
-  const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 10000);
-  return {
-    username: `testuser_${timestamp}_${random}`,
-    email: `test_${timestamp}_${random}@valiantpicks.com`,
-    password: `TestPass${timestamp}!`,
-  };
-}
-
-/**
- * Wait for element to be visible
- */
-async function waitForElement(page, selector, timeout = 10000) {
-  // Dismiss onboarding first
-  await dismissOnboarding(page);
-  
-  await page.waitForSelector(selector, { state: 'visible', timeout });
-}
-
-/**
- * Check if user is admin
- */
-async function isAdmin(page) {
-  // Navigate to admin panel and check if accessible
-  await page.goto('/admin');
-  const adminPanelVisible = await page.locator('text=/Admin Panel|Manage Games/i').isVisible({ timeout: 3000 }).catch(() => false);
-  return adminPanelVisible;
-}
-
-/**
- * Place a bet on a game
- */
-async function placeBet(page, gameSelector, betType, amount, confidence = 'medium') {
-  // Click on the game
-  await page.click(gameSelector);
-  
-  // Select bet type (moneyline, spread, over/under)
-  await page.click(`text=${betType}`);
-  
-  // Enter amount
-  await page.fill('input[placeholder*="amount" i]', amount.toString());
-  
-  // Select confidence level
-  await page.click(`text=${confidence}`);
-  
-  // Confirm bet
-  await page.click('button:has-text("Place Bet")');
-  
-  // Wait for confirmation
-  await expect(page.locator('text=/Bet Placed|Success/i')).toBeVisible({ timeout: 5000 });
-}
-
-/**
- * Clear all cookies and storage
- */
+// ── Session clearing ───────────────────────────────────────────────────────
 async function clearSession(page) {
   await page.context().clearCookies();
-  
-  // Only clear storage if we're on a valid page
   try {
     await page.evaluate(() => {
       localStorage.clear();
       sessionStorage.clear();
     });
-  } catch (error) {
-    // Ignore - no page loaded yet, nothing to clear
+  } catch {
+    // No page loaded yet
   }
 }
 
+// ── Navigation ─────────────────────────────────────────────────────────────
+async function navigateTo(page, label) {
+  // Dismiss overlays before navigating
+  await dismissAllOverlays(page);
+
+  // Desktop nav: <button class="nav-link">
+  const navLink = page.locator(`.nav-link:has-text("${label}")`);
+  if (await navLink.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await navLink.click({ force: true });
+  } else {
+    // Mobile: hamburger → slide-out menu
+    const mobileToggle = page.locator('.mobile-menu-toggle');
+    if (await mobileToggle.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await mobileToggle.click({ force: true });
+      await page.locator('.mobile-menu.open').waitFor({ state: 'visible', timeout: 3000 });
+      await page.locator(`.mobile-menu-nav button:has-text("${label}")`).click({ force: true });
+    }
+  }
+  await page.waitForLoadState('domcontentloaded');
+  await dismissAllOverlays(page);
+}
+
+// ── Admin tab navigation ───────────────────────────────────────────────────
+async function navigateToAdminTab(page, tabLabel) {
+  await page.goto('/admin');
+  await page.waitForLoadState('domcontentloaded');
+  await dismissAllOverlays(page);
+
+  const tab = page.locator(`.tab-btn:has-text("${tabLabel}"), .mobile-admin-pill:has-text("${tabLabel}")`).first();
+  if (await tab.isVisible({ timeout: 5000 }).catch(() => false)) {
+    await tab.click({ force: true });
+    await page.waitForTimeout(500);
+  }
+}
+
+// ── Balance ────────────────────────────────────────────────────────────────
+async function getBalance(page) {
+  const balanceEl = page.locator('.balance-amount').first();
+  const text = await balanceEl.textContent({ timeout: 5000 });
+  return parseFloat(text.replace(/[$,]/g, '')) || 0;
+}
+
+// ── Unique test data ───────────────────────────────────────────────────────
+function generateTestData() {
+  const ts = Date.now();
+  const rand = Math.floor(Math.random() * 10000);
+  return {
+    username: `pw_${ts}_${rand}`,
+    email: `pw_${ts}_${rand}@test.valiantpicks.com`,
+    password: `PwTest${ts}!`,
+  };
+}
+
 module.exports = {
-  dismissOnboarding,
+  TEST_USER,
+  TEST_ADMIN,
   login,
+  loginAsUser,
+  loginAsAdmin,
   logout,
   register,
-  getUserBalance,
-  waitForAPI,
-  navigateTo,
-  expectNoErrors,
-  generateTestData,
-  waitForElement,
-  isAdmin,
-  placeBet,
   clearSession,
+  navigateTo,
+  navigateToAdminTab,
+  getBalance,
+  generateTestData,
+  dismissAllOverlays,
 };

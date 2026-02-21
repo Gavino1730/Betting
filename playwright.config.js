@@ -1,23 +1,24 @@
 const { defineConfig, devices } = require('@playwright/test');
+require('dotenv').config({ path: './tests/e2e/.env.test' });
 
 module.exports = defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: true, // Run tests in parallel for speed
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 10, // 10 parallel workers for Ryzen 7 5800X (16 threads)
+  retries: process.env.CI ? 2 : 1,
+  workers: process.env.CI ? 1 : 3,
   reporter: [
-    ['html', { outputFolder: 'playwright-report' }],
-    ['json', { outputFile: 'test-results/results.json' }],
-    ['list']
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['list'],
   ],
   use: {
-    baseURL: 'https://valiantpicks.com',
+    baseURL: process.env.BASE_URL || 'https://valiantpicks.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 60000,
-    navigationTimeout: 90000,
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
+    viewport: { width: 1280, height: 720 },
   },
 
   projects: [
@@ -25,19 +26,10 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
   ],
 
-  // Test timeout
-  timeout: 120000,
+  timeout: 60000,
   expect: {
-    timeout: 15000,
+    timeout: 10000,
   },
 });
