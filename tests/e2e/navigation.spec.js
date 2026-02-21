@@ -281,9 +281,8 @@ test.describe('Mobile Menu', () => {
     await hamburger.click({ force: true });
     await page.locator('.mobile-menu.open').waitFor({ state: 'visible', timeout: 3000 });
 
-    const gamesBtn = page.locator('.mobile-menu-nav button:has-text("Place Picks")');
-    await gamesBtn.scrollIntoViewIfNeeded();
-    await gamesBtn.click({ force: true });
+    const gamesBtn = page.getByRole('button', { name: 'Place Picks' });
+    await gamesBtn.dispatchEvent('click');
     await page.waitForURL(/\/games/, { timeout: 10000 }).catch(() => {});
     await page.waitForLoadState('domcontentloaded');
     await dismissAllOverlays(page);
@@ -301,9 +300,8 @@ test.describe('Mobile Menu', () => {
     await hamburger.click({ force: true });
     await page.locator('.mobile-menu.open').waitFor({ state: 'visible', timeout: 3000 });
 
-    const teamsBtn = page.locator('.mobile-menu-nav button:has-text("Teams")');
-    await teamsBtn.scrollIntoViewIfNeeded();
-    await teamsBtn.click({ force: true });
+    const teamsBtn = page.getByRole('button', { name: 'Teams' });
+    await teamsBtn.dispatchEvent('click');
     await page.waitForURL(/\/teams/, { timeout: 10000 }).catch(() => {});
     await page.waitForLoadState('domcontentloaded');
     await dismissAllOverlays(page);

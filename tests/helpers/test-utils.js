@@ -199,7 +199,7 @@ async function navigateToAdminTab(page, tabLabel) {
   await page.waitForLoadState('domcontentloaded');
   await dismissAllOverlays(page);
 
-  const tab = page.locator(`.tab-btn:has-text("${tabLabel}"), .mobile-admin-pill:has-text("${tabLabel}")`).first();
+  const tab = page.locator(`.admin-tab:has-text("${tabLabel}"), .admin-mobile-pill:has-text("${tabLabel}")`).first();
   if (await tab.isVisible({ timeout: 5000 }).catch(() => false)) {
     await tab.click({ force: true });
     await page.waitForTimeout(500);
@@ -221,7 +221,7 @@ async function checkAdminAccess(page) {
   await page.waitForLoadState('domcontentloaded');
   await dismissAllOverlays(page);
 
-  const tabBtns = page.locator('.tab-btn, .mobile-admin-pill');
+  const tabBtns = page.locator('.admin-tab, .admin-mobile-pill');
   return tabBtns.first().isVisible({ timeout: 5000 }).catch(() => false);
 }
 
